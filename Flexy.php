@@ -21,6 +21,10 @@
 /**
 *   @package    HTML_Template_Flexy
 */
+// prevent disaster when used with xdebug! 
+@ini_set('xdebug.max_nesting_level', 1000);
+
+
 
 require_once 'PEAR.php'; 
 /*
