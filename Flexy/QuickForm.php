@@ -165,7 +165,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
                 $ret[$form] = new HTML_Template_Flexy_QuickForm;
                 array_shift($array[0]);
                 // create it..
-                call_user_func_array(array($ret,'HTML_QuickForm'), $array[0]);
+                call_user_func_array(array($ret[$form],'HTML_QuickForm'), $array[0]);
                 // set the defaults.
                 if (isset($defaults[$form])) {
                     $ret[$form]->setDefaults($defaults[$form]);
