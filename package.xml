@@ -21,7 +21,7 @@
      o Uses namespaced attributes to add looping/conditionals  
   - Extremely Fast, 
      o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
-     o uses compiled templates so many times faster on blocks and loops than 
+     o uses compiled templates, as a result it is many times faster on blocks and loops than 
        than Regex templates (eg. IT/phplib)
   - Full dynamic element support (like ASP.NET), so you can pick elements to replace at runtime
   
