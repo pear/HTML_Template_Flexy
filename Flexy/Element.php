@@ -456,8 +456,10 @@ class HTML_Template_Flexy_Element {
             $suffix = $suffix->toHtml();
         }
         //echo "AFTER<PRE>";print_R($ret);
+        // tags that never should have closers  
+        $close = in_array(strtoupper($ret->tag),array("INPUT","IMG")) ? '' : "</{$ret->tag}>{$suffix}" ;
         
-        return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() . "</{$ret->tag}>{$suffix}" ;
+        return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() .$close;
         
          
     } // end func toHtml

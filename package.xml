@@ -68,7 +68,8 @@
       Last Beta releases - (eg. it's a RC Release -  stable will be within a month!!! hopefully)
       
       Security: *** THIS AFFECTS __ALL__ PREVIOUS RELEASES ****
-        setOptions and setValue with textareas did not htmlspecialchars escape text automatically -
+        HTML_Template_Flexy_Element::setOptions and HTML_Template_Flexy_Element::setValue 
+        with textareas did not htmlspecialchars escape text automatically -
         opening up potential for cross site scripting posibliities..
         
       Bugs:

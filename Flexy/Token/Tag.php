@@ -130,13 +130,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if (isset($value[1])) {
             $this->attributes = $value[1];
         }
+        
         foreach(array_keys($this->attributes) as $k) {
             $this->ucAttributes[strtoupper($k)] =&  $this->attributes[$k];
         }
        
     }
     
-    
+  
     
     /**
     * getAttribute = reads an attribute value and strips the quotes 

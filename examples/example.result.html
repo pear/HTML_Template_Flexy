@@ -175,7 +175,7 @@ Example error messages..
 <h2>Parsed</h2>
 
 
-<form name="test">    Input<input name="test123"></input>    Checkbox <input name="test123a" id="test123ab" type="checkbox" checked></input>    Hidden <input name="test123ab" type="hidden" value="123"></input>    <textarea name="fred">some text</textarea>    <select name="aaa1">
+<form name="test">    Input<input name="test123">    Checkbox <input name="test123a" id="test123ab" type="checkbox" checked>    Hidden <input name="test123ab" type="hidden" value="123">    <textarea name="fred">some text</textarea>    <select name="aaa1">
         <option>aa</option>
 	<option selected>bb</option>
         <option>cc</option>
@@ -198,25 +198,24 @@ Example error messages..
         <option value="2000">2000</option>
         <option value="2001" selected>2001</option>
         <option value="2002">2002</option>
-    </select>    
-    
-    <input type="file" name="testupload"></input></form>
+    </select>    <input type="submit" name="_submit[4]" value="Next &gt;&gt;">    <input type="submit" name="_submit[5]" value="Next &gt;&gt;">    
+    <input type="file" name="testupload"></form>
 
-<img name="picture" id="picture" width="400" height="400" src="any.gif"></img>
+<img name="picture" id="picture" width="400" height="400" src="any.gif">
 
 <H1>Internal Methods Testing<H1>
  
 
 
 <BODY>
-  <form name="XXXX">    <input name="yyy"></input>    <select name="zzz">
+  <form name="XXXX">    <input name="yyy">    <select name="zzz">
        <option value="aaaa">AAAAA</option>
     </select>  </form>
 </BODY>
 <!-- alot of wysiwig editor bork on this - best to use the syntax above (eg. no XTML /> closers.) -->
 
 <BODY>
-  <form name="XXXX">    <input name="yyy"></input>    <select name="zzz">
+  <form name="XXXX">    <input name="yyy">    <select name="zzz">
        <option value="aaaa">AAAAA</option>
     </select>  </form>
 </BODY>
@@ -258,11 +257,11 @@ Comments:
 
 
 Bug 1120:
-<form action="test"><input name="testing" value="test"></input><input type="submit" value="x" name="_submit[2]"></input></form>
+<form action="test"><input name="testing" value="test"><input type="submit" value="x" name="_submit[2]"></form>
 
 <form action="">
 <input name="testing" value="">
-<input type="submit" name="_submit[1]"></input></form>
+<input type="submit" name="_submit[1]"></form>
 
 <p>&nbsp;</p>
 </body>

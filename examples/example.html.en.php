@@ -250,7 +250,8 @@ Example error messages..
     
     
     <?php echo $this->elements['List']->toHtml();?>
-    
+    <?php echo $this->elements['_submit[4]']->toHtml();?>
+    <?php echo $this->elements['_submit[5]']->toHtml();?>
     
     <?php echo $this->elements['testupload']->toHtml();?>
 </form>

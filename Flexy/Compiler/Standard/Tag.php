@@ -678,7 +678,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         
         $ret->tag = strtolower($element->tag);
-        $ret->attributes = $element->getAttributes();
+        
+        $ats = $element->getAttributes();
+        foreach(array_keys($ats)  as $a) { 
+            $ret->attributes[$a] = $this->unHtmlEntities($ats[$a]);
+        }
         if (!$element->children) {
             return $ret;
         }
@@ -693,7 +697,28 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         return $ret;
     }
         
-    
+      /**
+    * do the reverse of htmlspecialchars on an attribute..
+    *
+    * copied from get-html-translation-table man page 
+    * 
+    * @param   mixed       from attribute values
+    *
+    * @return   string          return 
+    * @access   public
+    * @see      see also methods.....
+    */
+  
+    function unHtmlEntities ($in)  
+    {
+        if (!is_string($in)) {
+            return $in;
+        }
+        $trans_tbl = get_html_translation_table (HTML_ENTITIES);
+        $trans_tbl = array_flip ($trans_tbl);
+        $ret = strtr ($in, $trans_tbl);
+        return preg_replace('/&#(\d+);/me', "chr('\\1')",$ret);
+    }
 
 }
 
