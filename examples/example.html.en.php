@@ -42,12 +42,19 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
   
 
 -->
+
+
+
+
+
+<!--  testing -- inside of a -- comment -->
+
  
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='javascript'>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+<script language='text/javascript'>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
 </script>
 
 
@@ -68,6 +75,8 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 <?php echo htmlspecialchars($t->array['entry']);?>
 <?php echo htmlspecialchars($t->multi['array'][0]);?>
 <?php echo htmlspecialchars($t->object['array']->with['objects']);?>
+Long string with NL2BR + HTMLSPECIALCHARS
+<?php echo nl2br(htmlspecialchars($t->longstring));?>
 
 Everything: <?php echo '<pre>'; echo htmlspecialchars(print_r($t,true)); echo '</pre>';;?>
 an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); echo '</pre>';;?>
@@ -219,6 +228,12 @@ Example error messages..
     </select>
     <?php echo $this->elements['aaa3']->toHtml();?>
     
+    
+    
+    
+    <?php echo $this->elements['List']->toHtml();?>
+    
+    
     <?php echo $this->elements['testupload']->toHtml();?>
 </form>
 
@@ -241,307 +256,20 @@ $x->outputObject($t);
 
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='javascript'>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+<script language='text/javascript'>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
 </script>
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='javascript'>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
-<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+<script language='text/javascript'>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
+<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
 </script>
 
 
 <p>&nbsp;</p>
 </body>
 </html>
-Array
-(
-)
-Array
-(
-    [test] => html_template_flexy_element Object
-        (
-            [tag] => form
-            [attributes] => Array
-                (
-                    [name] => test
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [test123] => html_template_flexy_element Object
-        (
-            [tag] => input
-            [attributes] => Array
-                (
-                    [name] => test123
-                    [ruleA] => Test Text is a required field|required
-                    [ruleB] => Test TextArea must be at least 5 characters|minlength|5
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [test123a] => html_template_flexy_element Object
-        (
-            [tag] => input
-            [attributes] => Array
-                (
-                    [name] => test123a
-                    [id] => test123ab
-                    [type] => checkbox
-                    [checked] => 1
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [test123ab] => html_template_flexy_element Object
-        (
-            [tag] => input
-            [attributes] => Array
-                (
-                    [name] => test123ab
-                    [type] => hidden
-                    [value] => 123
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [fred] => html_template_flexy_element Object
-        (
-            [tag] => textarea
-            [attributes] => Array
-                (
-                    [name] => fred
-                )
-
-            [children] => Array
-                (
-                    [0] => some text
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [aaa1] => html_template_flexy_element Object
-        (
-            [tag] => select
-            [attributes] => Array
-                (
-                    [name] => aaa1
-                )
-
-            [children] => Array
-                (
-                    [0] => 
-        
-                    [1] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => aa
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [2] => 
-	
-                    [3] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                    [selected] => 1
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => bb
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [4] => 
-        
-                    [5] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => cc
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [6] => 
-    
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [aaa3] => html_template_flexy_element Object
-        (
-            [tag] => select
-            [attributes] => Array
-                (
-                    [name] => aaa3
-                    [static] => 1
-                )
-
-            [children] => Array
-                (
-                    [0] => 
-        
-                    [1] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => aa
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [2] => 
-	
-                    [3] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                    [selected] => 1
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => bb
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [4] => 
-        
-                    [5] => html_template_flexy_element Object
-                        (
-                            [tag] => option
-                            [attributes] => Array
-                                (
-                                )
-
-                            [children] => Array
-                                (
-                                    [0] => cc
-                                )
-
-                            [override] => 
-                            [prefix] => 
-                            [suffix] => 
-                            [value] => 
-                        )
-
-                    [6] => 
-
-    
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-    [testupload] => html_template_flexy_element Object
-        (
-            [tag] => input
-            [attributes] => Array
-                (
-                    [type] => file
-                    [name] => testupload
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
-)
