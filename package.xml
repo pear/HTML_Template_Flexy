@@ -47,6 +47,10 @@
   
   - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
   
+  ** The long term plan for Flexy is to be integrated as a backend for the 
+  Future Template Package (A BC wrapper will be made available - as I need 
+  to use it too!)
+  
   
 </description>
   <license>PHP License</license>
@@ -61,29 +65,25 @@
  
 
     <release>
-     <version>0.9.0</version>
-      <date>2004-05-06</date>
+     <version>0.9.1</version>
+      <date>2004-06-17</date>
       <notes><![CDATA[
-      minor BC break release:
+      Feature addition release
       
-      Moving to stable Planned Sometime after Late May 2004
+      support for function blocks
+      &lt;flexy:function name=&quot;myfunction&quot;&gt; define a  block here  &lt;/flexy:function&gt;
+      &lt;flexy:function call=&quot;myfunction&quot;&gt; calls the function &lt;/flexy:function&gt;
+      &lt;flexy:function call=&quot;{somevar}&quot;&gt; variable function calls &lt;/flexy:function&gt;
       
-      BC Break on Gettext string storage.
-        * during parsing of the template  flexy builds an array of strings that
-          can be used to automate translation.
-          The strings in this array used to be escaped (similar to addslashes).
-          
-          This proved to be a bad decision (As the unescaping and escaping got too messy)
-           - the strings are now stored as they are found. (albiet still trimmed)
-          
-      New Features:
-        * strings from option tags, and value of input tags are added to gettext array.
-        * ability to generate namespaced options (eg. for XUL)
-          $x = new HTML_Template_Flexy_Element('html:select');
-          $x->setOptions(array(1=>'test'));
-          
-       
+      support for static template compiles
+      options[compiler] = raw
       
+      plugin support and user defined modifiers using plugins
+      {this.plugin(#name#,var,var):h}
+      {var:formatdate}  (calls plugin 
+      {var:formatnumber}
+      
+      Assign API support using setData() and setDataByRef()
         
       ]]></notes>
       <state>beta</state>
@@ -100,7 +100,11 @@
           <!-- The HTML Element and a factory helper class for it. -->
           <file>Element.php</file>
           <file>Factory.php</file>
-          
+          <file>Assign.php</file>
+          <file>Plugin.php</file>
+          <dir name="Plugin" role="php">
+              <file>Savant.php</file>
+          </dir>
           <!-- Very simple smarty API emulator .. -->
           <file>SmartyAPI.php</file>
           
@@ -176,6 +180,7 @@
             <file>raw_php.html</file> 
             <file>raw_text.html</file> 
             <file>variables.html</file> 
+            <file>function.html</file> 
           </dir>
           <dir name="smarty" role="test">
           <!-- short test script to convert smarty templates int flexy ones  -->
@@ -197,6 +202,36 @@
    <changelog>
    
    
+    <release>
+     <version>0.9.0</version>
+      <date>2004-05-06</date>
+      <notes><![CDATA[
+      minor BC break release:
+      
+      Moving to stable Planned Sometime after Late May 2004
+      
+      BC Break on Gettext string storage.
+        * during parsing of the template  flexy builds an array of strings that
+          can be used to automate translation.
+          The strings in this array used to be escaped (similar to addslashes).
+          
+          This proved to be a bad decision (As the unescaping and escaping got too messy)
+           - the strings are now stored as they are found. (albiet still trimmed)
+          
+      New Features:
+        * strings from option tags, and value of input tags are added to gettext array.
+        * ability to generate namespaced options (eg. for XUL)
+          $x = new HTML_Template_Flexy_Element('html:select');
+          $x->setOptions(array(1=>'test'));
+          
+       
+      
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
     <release>
      <version>0.8.2</version>
       <date>2004-05-05</date>
