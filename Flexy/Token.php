@@ -206,6 +206,7 @@ class HTML_Template_Flexy_Token {
             
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
                 //echo "ERROR";
+                print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
                 PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,
                     null,PEAR_ERROR_DIE);
             }
