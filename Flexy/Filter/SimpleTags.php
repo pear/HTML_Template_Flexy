@@ -316,16 +316,20 @@ class HTML_Template_Flexy_Filter_SimpleTags
     *                           include($compileDir . "/". $t->abcdef . ".en.php");
     *                       ?>
     *
-    *
+    * include abcdef.en.php (Eg. hard coded compiled template
     * {include:#abcdef#}    => <?php
     *                       if(file_exists($compileDir . "/abcdef.en.php"))
     *                           include($compileDir . "/abcdef.en.php");
     *                       ?>
     *                        
-    *  
+    *  include raw
     * {t_include:#abcdef.html#}    => <?php
     *                       if(file_exists($templateDir . "/abcdef.html"))
     *                           include($compileDir . "/abcdef.html");
+    *                       ?>
+    *  Compile and include
+    * {q_include:#abcdef.html#}    => <?php
+    *                      HTML_Template_Flexy::staticQuickTemplate('abcedef.html',$t);
     *                       ?>
     *                        
     *
@@ -357,7 +361,12 @@ class HTML_Template_Flexy_Filter_SimpleTags
             "'<?php if (file_exists(\"" .  $this->engine->options['templateDir'] .
             "/\\1\")) include(\"" .  $this->engine->options['templateDir'] . "/\\1\");?>'",
             $input);    
-            
+        
+        $input = preg_replace(
+            "/".$this->start."q_include:#([a-z0-9_.]+)#".$this->stop."/ie",
+            "'<?php  HTML_Template_Flexy::staticQuickTemplate(\"\\1\",\$t); ?>'",
+            $input);    
+           
         return $input;
     }
 

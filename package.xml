@@ -34,8 +34,15 @@
        <version>0.1</version>
       <date>2002-08-23</date>
       <notes>First PEAR release,
-      Renamed to HTML_Flexy_Template to conform to PEAR standards
-      Added more phpdoc comments to filters
+      - Renamed to HTML_Flexy_Template to conform to PEAR standards
+      - Added more phpdoc comments to filters
+      - Removed getTemplateDir method (legacy/unused)
+      - Added multilanguage support options['locale'] - in theory a i18n filter could be added.
+        Othewise it just checks to see if a template/compiled template with ????.{locale}.???
+        exists
+      - added staticQuickTemplate($template,$object) for quickly including subtemplates.
+      - added {q_include(#aaaaa.html#)} to simpletags to support quicktemplate.
+      - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
       </notes>
       <state>beta</state>
      

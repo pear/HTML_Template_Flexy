@@ -50,7 +50,8 @@ class HTML_Template_Flexy
                             'templateDir'   =>  '',
                             'forceCompile'  =>  false,  // only suggested for debugging
                             'filters'       => array(),
-                            'debug'         => false
+                            'debug'         => false,
+                            'locale'          => 'en'
                             
                         );
 
@@ -176,22 +177,26 @@ class HTML_Template_Flexy
         ob_end_clean();
         return $data;
     }
-    
-    
     /**
-    *   gets the template directory
+    * static version which does new, compile and output all in one go.
+    *
+    *   See outputObject($t) for more details.
     *
     *   @version    01/12/14
     *   @access     public
-    *   @author     Wolfram Kriesing <wolfram@kriesing.de>
-    *   @return     string      path
+    *   @author     Alan Knowles
+    *   @param      object object to output as $t
+    *   @param      filename of template
+    *   @return     string - result
     */
-    function getTemplateDir()
+    function &staticQuickTemplate($file,&$t) 
     {
-        return $this->options['templateDir'];
+        $template = new HTML_Template_Flexy;
+        $template->compile($file);
+        $template->outputObject($t);
     }
-
     
+      
     /**
     *   here all the replacing, filtering and writing of the compiled file is done
     *   well this is not much work, but still its in here :-)
@@ -243,13 +248,17 @@ class HTML_Template_Flexy
         if (!@$this->options['locale']) {
             $this->options['locale']='en';
         }
-        // if the compileDir doesnt start with a / then its under the template dir
-        if ( $this->options['compileDir']{0} != '/' ) {
-            $this->options['compileDir'] =  $this->options['templateDir'].'/'.$this->options['compileDir'];
+        // on windows the base directory will be C:!
+        // so you have to hard code the path (no relatives on windows
+        if (DIRECTORY_SEPARATOR == "/") {
+            // if the compileDir doesnt start with a / then its under the template dir    
+            if ( $this->options['compileDir']{0} !=  DIRECTORY_SEPARATOR ) {
+                $this->options['compileDir'] =  $this->options['templateDir'].'/'.$this->options['compileDir'];
+            }
         }
 
         // remove the slash if there is one in front, just to be clean
-        if ( $file[0] == '/' ) {
+        if ( $file{0} == DIRECTORY_SEPARATOR  ) {
             $file = substr($file,1);
         }
 
@@ -273,9 +282,9 @@ class HTML_Template_Flexy
         // we just keep the directory structure as the application uses it, so we dont get into conflict with names
         // i dont see no reason for hashing the directories or the filenames
         if( $directory!='.' )  { // it is '.' also if no dir is given
-            $path = explode('/',$directory);
+            $path = explode(DIRECTORY_SEPARATOR ,$directory);
             foreach( $path as $aDir ) {
-                $compileDest = $compileDest."/$aDir";
+                $compileDest = $compileDest. DIRECTORY_SEPARATOR . $aDir;
                 if( !@is_dir($compileDest) ) {
                     umask(0000);                        // make that the users of this group (mostly 'nogroup') can erase the compiled templates too
                     if( !@mkdir($compileDest,0770) ) {
@@ -286,18 +295,32 @@ class HTML_Template_Flexy
                 }
             }
         }
-
-        $this->currentTemplate = $this->options['templateDir'].'/'.$file;
+        
+        /* 
+        
+            incomming file looks like xxxxxxxx.yyyy
+            if xxxxxxxx.{locale}.yyy exists - use that...
+        */
+        $parts = array();
+        if (preg_match('/(.*)(\.[a-z]+)$/i',$file,$parts)) {
+            $newfile = $parts[1].'.'.$this->options['locale'] .$parts[2];
+            if (@file_exists($this->options['templateDir']. DIRECTORY_SEPARATOR .$newfile)) {
+                $file = $newfile;
+            }
+        }
+        
+        
+        $this->currentTemplate = $this->options['templateDir'].DIRECTORY_SEPARATOR .$file;
         
         if( !@file_exists($this->currentTemplate ))  {
             // check if the compile dir has been created
-            PEAR::RaiseError(     "Template {$this->currentTemplate} does not exist<br>",  null, PEAR_ERROR_DIE);
+            PEAR::RaiseError("Template {$this->currentTemplate} does not exist<br>",  null, PEAR_ERROR_DIE);
         }
          
  
         
         
-        $this->compiledTemplate = $compileDest.'/'.$filename.'.'.$this->options['locale'].'.php';
+        $this->compiledTemplate = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
 
   
         $recompile = false;
