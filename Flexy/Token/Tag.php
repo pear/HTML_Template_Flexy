@@ -250,7 +250,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 explode(',',$foreach),
                 $this->line);
         // does it have a closetag?
-        
+        if (!$this->close) {
+            PEAR::raiseError(
+                "An flexy:if attribute was found in &lt;{$this->name} tag without a corresponding &lt;/{$this->name}
+                    tag on Line {$this->line} &lt;{$this->tag}&gt;",
+                 null, PEAR_ERROR_DIE);
+        }
         $this->close->postfix = array($this->factory("End", '', $this->line));
         $this->clearAttribute('FOREACH');
         $this->clearAttribute('FLEXY:FOREACH');
@@ -306,7 +311,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         
         // does it have a closetag?
-        
+        if (!$this->close) {
+            PEAR::raiseError(
+                "An flexy:if attribute was found in &lt;{$this->name} tag without a corresponding &lt;/{$this->name}
+                    tag on Line {$this->line} &lt;{$this->tag}&gt;",
+                 null, PEAR_ERROR_DIE);
+        }
         $this->close->postfix = array($this->factory("End",'', $this->line));
         $this->clearAttribute('IF');
         $this->clearAttribute('FLEXY:IF');
