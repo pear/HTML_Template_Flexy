@@ -95,7 +95,9 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
            
             
             $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'][] = $value;
-            $value = gettext($value);
+            if (function_exists('gettext')) {
+                $value = gettext($value);
+            }
             $value = strtr($value,$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean']);
         
             return $front .  $value  . $rear;
@@ -109,7 +111,9 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
             
         }
         $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'][] = $value;
-        $value = gettext($value);
+        if (function_exists('gettext')) {
+            $value = gettext($value);
+        }
         $value = strtr($value,$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean']);
         
         

@@ -22,7 +22,7 @@
 *   @package    HTML_Template_Flexy
 */
 
- 
+require_once 'PEAR.php'; 
 /*
 * Global variable - used to store active options when compiling a template.
 */
