@@ -46,6 +46,7 @@ class HTML_Template_Flexy_Factory {
                 $ret = HTML_Template_Flexy_Factory::fromArrayPrefixed($k,$v,$ret);
             }
             
+            
             if (!isset($ret[$k])) {
                 $ret[$k] = new HTML_Template_Flexy_Element();
             }
@@ -71,12 +72,19 @@ class HTML_Template_Flexy_Factory {
         foreach($ar as $k=>$v) {
             if (is_array($v)) {
                 $ret = HTML_Template_Flexy_Factory::fromArrayPrefixed($prefix.'['.$k.']',$v,$ret);
+                if (!isset($ret[$prefix.'['.$k.'][]'])) {
+                    $ret[$prefix.'['.$k.'][]'] = new HTML_Template_Flexy_Element();
+                }
+                $ret[$prefix.'['.$k.'][]']->setValue($v);
             }
             
             if (!isset($ret[$prefix.'['.$k.']'])) {
                 $ret[$prefix.'['.$k.']'] = new HTML_Template_Flexy_Element();
             }
             $ret[$prefix.'['.$k.']']->setValue($v);
+            
+            
+            
         }
         return $ret;
     }

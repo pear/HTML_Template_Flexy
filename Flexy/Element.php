@@ -206,9 +206,17 @@ class HTML_Template_Flexy_Element {
                         if (isset($this->attributes['checked'])) {
                             unset($this->attributes['checked']);
                         }
-                        if ($this->attributes['value'] == $value) {
+                        //print_r($this); echo "SET TO "; serialize($value);
+                        if (substr($this->attributes['name'],-2) == '[]') {
+                            if (is_array($value) && in_array($this->attributes['value'],$value))  {
+                                $this->attributes['checked'] = true;
+                            }
+                            
+                        } else if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] = true;
                         }
+                        
+                        
                         return;
                     case 'radio':
                         if (isset($this->attributes['checked'])) {
@@ -446,6 +454,7 @@ class HTML_Template_Flexy_Element {
     {
         
         if ($overlay !== false) {
+            // FIXME!!!
             $this->mergeElement($overlay);
         }
         

@@ -356,8 +356,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
              Dynamic tags require an ID value",
              null, PEAR_ERROR_DIE);
         }
-        if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id]) && (strtolower($this->element->getAttribute('type')) == 'checkbox' )) {
-        
+         
+        if ((strtolower($this->element->getAttribute('type')) == 'checkbox' ) && 
+                (substr($this->element->getAttribute('name'),-2) == '[]') &&
+                ($this->element->getAttribute('id') === false)) {
+            $mergeWithName =  true;
             $id = 'tmpId'. (++$tmpId);
             $this->element->attributes['id'] = $id;
             $this->element->ucAttributes['ID'] = $id;

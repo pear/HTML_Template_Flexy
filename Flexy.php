@@ -216,7 +216,7 @@ class HTML_Template_Flexy
         $this->elements = $this->getElements();
         
         // overlay elements..
-       
+        //echo "<PRE>"; print_R($this->elements);
         foreach($elements as $k=>$v) {
             if (!$v) {
                 unset($this->elements[$k]);
@@ -227,7 +227,7 @@ class HTML_Template_Flexy
             }
             $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
         }
-        
+     
       
         
         // we use PHP's error handler to hide errors in the template.
@@ -540,7 +540,7 @@ class HTML_Template_Flexy
     function mergeElement($original,$new)
     {
      
-        
+        //echo "<PRE>MERGING ORIGINAL with NEW\n";print_r($original);print_r($new);
         // changing tags.. - should this be valid?
         // hidden is one use of this....
         if (!$original) {
@@ -575,7 +575,7 @@ class HTML_Template_Flexy
         $original->prefix = $new->prefix;
         $original->suffix = $new->suffix;  
         if ($new->value !== null) {
-            //echo "<PRE>";print_r($original);
+            //echo "<PRE>set";print_r($original); print_r($new->value);
             $original->setValue($new->value);
         } 
        
