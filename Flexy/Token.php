@@ -212,8 +212,14 @@ class HTML_Template_Flexy_Token {
             
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
                 //echo "ERROR";
-                print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
-                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,
+                
+                //print_r($tokenizer);
+                echo "<PRE>" . 
+                    htmlspecialchars(substr($tokenizer->yy_buffer,0,$tokenizer->yy_buffer_end)) . 
+                    "<font color='red'>". htmlspecialchars(substr($tokenizer->yy_buffer,$tokenizer->yy_buffer_end,100)) . 
+                    ".......</font></PRE>";
+                // print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
+                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline,
                     null,PEAR_ERROR_DIE);
             }
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {

@@ -847,7 +847,6 @@ FLEXY_MODIFIER      = [hur]
 // let the previous method handle closing, with the modifier.
 
 <IN_FLEXYMETHOD>"#"{FLEXY_LITERAL}("#,"|"#") {
-   
      
     $t = $this->yytext();
     if ($t{strlen($t)-1} == ",") {
