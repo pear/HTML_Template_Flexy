@@ -32,7 +32,14 @@ require_once 'HTML/Template/Flexy/Tokenizer.php';
 class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     
     
-    
+        
+    /**
+    * The current template (Full path)
+    *
+    * @var string
+    * @access public
+    */
+    var $currentTemplate;
     /**
     * The compile method.
     * 
@@ -49,6 +56,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // and that can then manage all the tokens in one place..
         global $_HTML_TEMPLATE_FLEXY_COMPILER;
         
+        $this->currentTemplate  = $flexy->currentTemplate;
+        
+        
         $gettextStrings = &$_HTML_TEMPLATE_FLEXY_COMPILER['gettextStrings'];
         $gettextStrings = array(); // reset it.
         
@@ -62,42 +72,18 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         // replace this with a singleton??
         
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = array();
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput']  = '';
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['compiledTemplate']  = $flexy->compiledTemplate;
-        
-        if (is_array($this->options['Translation2'])) {
-            require_once 'Translation2.php';
-            $this->options['Translation2'] = new Translation2(
-                $this->options['Translation2']['driver'],
-                @$this->options['Translation2']['options']
-            );
-        }
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']  = $this->options;
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements']        = array();
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']        = $flexy->currentTemplate;
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput']    = '';
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['compiledTemplate']= $flexy->compiledTemplate;
         
         
-        if (is_a($this->options['Translation2'],'Translation2')) {
-            $this->options['Translation2']->setLang($this->options['locale']);
-            // fixme - needs to be more specific to which template to use..
-            foreach ($this->options['templateDir'] as $tt) {
-                $n = basename($flexy->currentTemplate);
-                if (substr($flexy->currentTemplate,0,strlen($tt)) == $tt) {
-                    $n = substr($flexy->currentTemplate,strlen($tt)+1);
-                }
-                //echo $n;
-            }
-            $this->options['Translation2']->setPageID($n);
-        } else {
-            setlocale(LC_ALL, $this->options['locale']);
-        }
+        // initialize Translation 2, and 
+        $this->initializeTranslator();
         
         
-        
-        
-        
-        
-        
+        // load the template!
         $data = $string;
         $res = false;
         if ($string === false) {
@@ -105,39 +91,20 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
          
             // PRE PROCESS {_(.....)} translation markers.
-        $got_gettext_markup = false;
+        
         
         
         
         if (strpos($data,'{_(') !== false) {
-            $matches = array();
-            $lmatches = explode ('{_(', $data);
-            array_shift($lmatches);
-            // shift the first..
-            foreach ($lmatches as $k) {
-                if (false === strpos($k,')_}')) {
-                    continue;
-                }
-                $x = explode(')_}',$k);
-                $matches[] = $x[0];
-            }
+            $data = $this->preProcessTranslation($data);
         
-        
-           //echo '<PRE>';print_r($matches);
-            // we may need to do some house cleaning here...
-            $gettextStrings = $matches;
-            $got_gettext_markup = true;
-            
-            
-            // replace them now..  
-            // ** leaving in the tag (which should be ignored by the parser..
-            // we then get rid of the tags during the toString method in this class.
-            foreach($matches as $v) {
-                $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
-            }
             
         }
-            
+        
+        // Tree generation!!!
+        
+        
+        
         if (isset($_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)])) {
             $res = $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)];
         } else {
@@ -251,6 +218,86 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         return true;
     }
+    
+    
+    /**
+    * Initilalize the translation methods.
+    *
+    * Loads Translation2 if required.
+    * 
+     *
+    * @return   none 
+    * @access   public 
+    */
+    function initializeTranslator() {
+    
+        if (is_array($this->options['Translation2'])) {
+            require_once 'Translation2.php';
+            $this->options['Translation2'] = new Translation2(
+                $this->options['Translation2']['driver'],
+                @$this->options['Translation2']['options']
+            );
+        }
+        
+        
+        if (is_a($this->options['Translation2'],'Translation2')) {
+            $this->options['Translation2']->setLang($this->options['locale']);
+            // fixme - needs to be more specific to which template to use..
+            foreach ($this->options['templateDir'] as $tt) {
+                $n = basename($this->currentTemplate);
+                if (substr($this->currentTemplate,0,strlen($tt)) == $tt) {
+                    $n = substr($this->currentTemplate,strlen($tt)+1);
+                }
+                //echo $n;
+            }
+            $this->options['Translation2']->setPageID($n);
+        } else {
+            setlocale(LC_ALL, $this->options['locale']);
+        }
+        
+    }
+    
+    
+    
+    /**
+    * do the early tranlsation of {_(......)_} text
+    *
+    * 
+    * @param    input string
+    * @return   output string
+    * @access   public 
+    */
+    function preProcessTranslation($data) {
+        $matches = array();
+        $lmatches = explode ('{_(', $data);
+        array_shift($lmatches);
+        // shift the first..
+        foreach ($lmatches as $k) {
+            if (false === strpos($k,')_}')) {
+                continue;
+            }
+            $x = explode(')_}',$k);
+            $matches[] = $x[0];
+        }
+    
+    
+       //echo '<PRE>';print_r($matches);
+        // we may need to do some house cleaning here...
+        $_HTML_TEMPLATE_FLEXY_COMPILER['gettextStrings'] = $matches;
+        
+        
+        // replace them now..  
+        // ** leaving in the tag (which should be ignored by the parser..
+        // we then get rid of the tags during the toString method in this class.
+        foreach($matches as $v) {
+            $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
+        }
+        return $data;
+    }    
+
+    
+    
+    
     
     /**
     * Flag indicating compiler is inside {_( .... )_} block, and should not
