@@ -62,6 +62,12 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
                 $prefix = 'echo urlencode(';
                 $suffix = ')';
                 break;
+            case 'r':
+                $prefix = 'echo \'<pre>\'; echo htmlspecialchars(print_r(';
+                $suffix = ',true)); echo \'</pre>\';';
+                break;                
+                
+                
             default:
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?

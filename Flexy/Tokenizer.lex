@@ -189,23 +189,23 @@ REFC    = ";"
 STAGO   = "<"
 TAGC    = ">"
 
-NAME_START_CHARACTER	= ({LCLETTER}|{UCLETTER})
-NAME_CHARACTER		    = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
+NAME_START_CHARACTER    = ({LCLETTER}|{UCLETTER})
+NAME_CHARACTER          = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
 NAME_CHARACTER_WITH_NAMESPACE  = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR}|":")
 
-NAME		            = ({NAME_START_CHARACTER}{NAME_CHARACTER}*)
-NSNAME		            = ({NAME_START_CHARACTER}{NAME_CHARACTER_WITH_NAMESPACE}*)
-NUMBER		            = {DIGIT}+
+NAME                    = ({NAME_START_CHARACTER}{NAME_CHARACTER}*)
+NSNAME                  = ({NAME_START_CHARACTER}{NAME_CHARACTER_WITH_NAMESPACE}*)
+NUMBER                  = {DIGIT}+
 NUMBER_TOKEN            = {DIGIT}+{NAME_CHARACTER}*
-NAME_TOKEN	            = {NAME_CHARACTER}+
+NAME_TOKEN              = {NAME_CHARACTER}+
 
-SPACE	                = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})
-SPACES		            = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})+
+SPACE                   = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})
+SPACES                  = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})+
 
-WHITESPACE		        = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})*
+WHITESPACE              = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})*
 
-REFERENCE_END	        = ({REFC}|{RE})
-LITERAL		            = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
+REFERENCE_END           = ({REFC}|{RE})
+LITERAL                 = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
 
  
 
@@ -275,8 +275,8 @@ FLEXY_MODIFIER      = [hur]
 
  
 
-<YYINITIAL>{ETAGO}{TAGC}			{
-	/* </> -- empty end tag */		
+<YYINITIAL>{ETAGO}{TAGC}        {
+    /* </> -- empty end tag */  
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
@@ -284,7 +284,7 @@ FLEXY_MODIFIER      = [hur]
 
 }
             
-<YYINITIAL>{MDO}{NAME}{WHITESPACE}			{
+<YYINITIAL>{MDO}{NAME}{WHITESPACE}      {
     /* <!DOCTYPE -- markup declaration */
     if ($this->ignoreHTML) {
         return $this->returnSimple();
@@ -296,7 +296,7 @@ FLEXY_MODIFIER      = [hur]
 }
 
   
-<YYINITIAL>{MDO}{TAGC}			{ 
+<YYINITIAL>{MDO}{TAGC}      {
     /* <!> */
     if ($this->ignoreHTML) {
         return $this->returnSimple();
@@ -356,7 +356,7 @@ FLEXY_MODIFIER      = [hur]
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
  
-				 
+
   
 <YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}		{
     //<name -- start tag */
