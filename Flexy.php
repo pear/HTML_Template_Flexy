@@ -95,13 +95,19 @@ class HTML_Template_Flexy
     var $gettextStringsFilename;
     /**
     * The quickform wrapper object - only used when forms are available..
-    * Not quite sure how to deal with multiple forms in one template - probably better to 
-    * just use muliple templates for multiple forms.
     *
     * @var object HTML_Template_Flexy_QuickForm
     * @access public
     */
     var $quickform;
+    /**
+    * Array of quickforms used on the page (1 form - one quickform)
+    * use setActiveQuickform(name|id) to activate $template->quickform->elements[]
+    *
+    * @var array of  HTML_Template_Flexy_QuickForm s
+    * @access public
+    */
+    var $quickforms;
     /**
     *   Constructor 
     *
