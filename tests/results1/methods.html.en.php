@@ -18,29 +18,27 @@
 <h2>Full Method testing</h2>
 
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc($t->abc,$t->def,$t->hij));?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc($t->abc,"def","hij"));?>
 
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc($t->abc,$t->def,"hij"));?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc("abc",$t->def,$t->hij));?>
 
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo $t->abc($t->abc,$t->def,$t->hij);?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo $t->abc($t->abc,"def","hij");?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo $t->abc($t->abc,$t->def,"hij");?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo $t->abc("abc",$t->def,$t->hij);?>
 
 
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc($t->abc,$t->def,$t->hij));?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc($t->abc,"def","hij"));?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc($t->abc,$t->def,"hij"));?>
-
 <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc("abc",$t->def,$t->hij));?>
+
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc(123,$t->def,$t->hij));?>
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc($t->abc,123,123));?>
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo htmlspecialchars($t->abc($t->abc,$t->def,123));?>
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'abc'))) echo urlencode($t->abc("abc",123,$t->hij));?>
+
 
 <h2>Real life method testing </h2>
 Invoice number: <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'getelem'))) echo htmlspecialchars($t->getelem($t->invoice,"number"));?> Place: 

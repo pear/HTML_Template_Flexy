@@ -1130,6 +1130,26 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     
 }
  
+<IN_FLEXYMETHOD>{DIGIT}+(","|")}"|"):"{FLEXY_MODIFIER}"}") {
+    
+    $t = $this->yytext();
+    if ($t{strlen($t)-1} == ",") {
+        // add argument
+        $this->flexyArgs[] = '#' . substr($t,0,-1) . '#';
+        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    }
+    if ($c = strpos($t,':')) {
+        $this->flexyMethod .= substr($t,$c,-1);
+        $t = '#' . substr($t,0,$c-1) . '#';
+    } else {
+        $t = '#' . substr($t,0,-2) . '#';
+    }
+    
+    $this->flexyArgs[] = $t;
+    $this->value = $this->createToken('Method', array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->yybegin(YYINITIAL);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
 
 
 // methods inside quotes..

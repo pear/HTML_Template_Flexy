@@ -18,29 +18,27 @@
 <h2>Full Method testing</h2>
 
 {abc(abc,def,hij)}
-
 {abc(abc,#def#,#hij#)}
 
 {abc(abc,def,#hij#)}
-
 {abc(#abc#,def,hij)}
 
 {abc(abc,def,hij):h}
-
 {abc(abc,#def#,#hij#):h}
-
 {abc(abc,def,#hij#):h}
-
 {abc(#abc#,def,hij):h}
 
 
 {abc(abc,def,hij):u}
-
 {abc(abc,#def#,#hij#):u}
-
 {abc(abc,def,#hij#):u}
-
 {abc(#abc#,def,hij):u}
+
+{abc(123,def,hij)}
+{abc(abc,#123#,123):u}
+{abc(abc,def,123)}
+{abc(#abc#,123,hij):u}
+
 
 <h2>Real life method testing </h2>
 Invoice number: {t.getelem(t.invoice,#number#)} Place: 
