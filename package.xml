@@ -100,8 +100,17 @@
           <!-- Very simple smarty API emulator .. -->
           <file>SmartyAPI.php</file>
           
+          
+          <!-- a translation toolkit -->
+          <file>Translator.php</file>
+          <dir name="templates" role="php">
+             <file>translator.html</file>
+          </dir>
+          
+          
           <!-- a compile all script -->
           <file>compileAll.php</file>
+          
           
           <!-- The tokenizer and related Tokens -->
           <file>Tokenizer.php</file>
