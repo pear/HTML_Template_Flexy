@@ -65,26 +65,13 @@
  
 
     <release>
-     <version>1.0.0</version>
-      <date>2004-08-07</date>
+     <version>1.0.1</version>
+      <date>2004-08-09</date>
       <notes><![CDATA[
-      The Long Awaited Gold Release.
+      Minor Bug Fix Release
        
-      Bug Fixes:
-        #1675 - CRLF fixes on windows
-        #------ Elements with matching key = value where incorrectly rendered.
-        
-      Tweaks:
-        * minor changes to simple Smarty Template Converter/Processor
-        * Default Compiler is now called Flexy
-        * Added Translator tool to package (see Translator.php source for usage)
-        * Translator Tool includes clearTemplateCache - removes all files.
-        * Some error message improvements
-        * Added Tree.php - A HTML to Tree par ser, which can be used to process HTML,
-            or will eventually replace the Tree parsing code in the compiler.
-            tests/treeTest.php shows example usage
-        * HTML_Template_Flexy_Element used with <FORM> tags, now honours override property
-        * Minor reduction in size of parser Nodes
+      Bugs
+        #------ Fix Missing include of Token.php 
         
       ]]></notes>
       <state>stable</state>
@@ -224,6 +211,41 @@
    
      
    <changelog>
+
+
+
+
+ <release>
+     <version>1.0.0</version>
+      <date>2004-08-07</date>
+      <notes><![CDATA[
+      The Long Awaited Gold Release.
+                                                                                                                        
+      Bug Fixes:
+        #1675 - CRLF fixes on windows
+        #------ Elements with matching key = value where incorrectly rendered.
+                                                                                                                        
+      Tweaks:
+        * minor changes to simple Smarty Template Converter/Processor
+        * Default Compiler is now called Flexy
+        * Added Translator tool to package (see Translator.php source for usage)
+        * Translator Tool includes clearTemplateCache - removes all files.
+        * Some error message improvements
+        * Added Tree.php - A HTML to Tree par ser, which can be used to process HTML,
+            or will eventually replace the Tree parsing code in the compiler.
+            tests/treeTest.php shows example usage
+        * HTML_Template_Flexy_Element used with <FORM> tags, now honours override property
+        * Minor reduction in size of parser Nodes
+                                                                                                                        
+      ]]></notes>
+      <state>stable</state>
+     </release>
+
+
+
+
+
+
     <release>
      <version>0.9.2</version>
       <date>2004-06-24</date>

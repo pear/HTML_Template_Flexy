@@ -887,6 +887,57 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         $ret = strtr ($in, $trans_tbl);
         return preg_replace('/&#(\d+);/me', "chr('\\1')",$ret);
     }
+    
+    
+     /**
+    * Deal with XUL MenuItems
+    *
+    * @return   string | false = html output or ignore (just output the tag)
+    * @access   public
+    */
+  
+    function parseTagMenuList() 
+    {
+        
+        // does it contain any flexy tags??
+        foreach($this->element->children as $obj) {
+            if (!is_a($obj,'HTML_Template_Flexy_Token_Tag')) {
+                continue;
+            }
+            if ($obj->tag  != 'menupopup') {
+                continue;
+            }
+            foreach ($obj->children as $iobj) {
+                if (!is_a($iobj,'HTML_Template_Flexy_Token_Tag')) {
+                    continue;
+                }
+                if ($iobj->tag  != 'menuitem') {
+                    continue;
+                }
+                if ($iobj->getAttribute('FLEXY:FOREACH')) {
+                    return false;
+                }
+                if ($iobj->getAttribute('FLEXY:IF')) {
+                    return false;
+                }
+                // Now do any of the attributes contain vars?
+                foreach($iobj->attributes as $k=>$v) {
+                    if (is_array($v) || is_object($v)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        
+        return $this->compiler->appendPhp(
+            $this->getElementPhp( $this->element->getAttribute('ID')));
+    }
+    
+    
+    
+      
+    
 
 }
 

@@ -497,7 +497,14 @@ class HTML_Template_Flexy_Element {
             $tag = $bits[1];
         }
         // tags that never should have closers  
-        $close = in_array(strtoupper($tag),array("INPUT","IMG")) ? '' : "</{$ret->tag}>";
+        $close = "</{$ret->tag}>";
+        if (in_array(strtoupper($tag),array("INPUT","IMG"))) {
+            $close = '';
+        }
+        if (isset($this->attributes['/'])) {
+            $close = '';
+        }
+
         $close .= $suffix ;
        
         return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() .$close;
