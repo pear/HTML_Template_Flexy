@@ -10,7 +10,7 @@
                         <treecol flex="1" id="trcGroupName" label="Group Name" persist="width ordinal hidden" />
                 </treecols>
                 <treechildren>
-                        <?php if (is_array($t->sresult)  || is_object($t->sresult)) foreach($t->sresult as $id => $data) {?><treeitem>
+                        <?php if ($this->options['strict'] || (is_array($t->sresult)  || is_object($t->sresult))) foreach($t->sresult as $id => $data) {?><treeitem>
                                 <treerow>
                                         <treecell label="<?php echo htmlspecialchars($data->name);?>" />
                                         <treecell label="<?php echo htmlspecialchars($data->group_name);?>" />
