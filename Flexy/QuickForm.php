@@ -110,6 +110,9 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
         $data = unserialize(file_get_contents($filename));
         foreach($data->_elements as $e=>$object) {
             $dd = (array) $object;
+            if (!isset($dd['__PHP_Incomplete_Class_Name'])) {
+                continue;
+            }
             $class = $dd['__PHP_Incomplete_Class_Name'];
             if (class_exists($class)) {
                 continue;

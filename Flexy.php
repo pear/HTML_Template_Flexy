@@ -210,7 +210,9 @@ class HTML_Template_Flexy
         
         if (!$this->quickform && file_exists($this->quickformFile)) {
             $this->setQuickForm($t);
-            $this->setQuickForm($t->data);
+            if (isset($t->data)) {
+                $this->setQuickForm($t->data);
+            }
         }
         
          // we use PHP's error handler to hide errors in the template.
@@ -363,7 +365,7 @@ class HTML_Template_Flexy
         @unlink($this->gettextStringsFile);
         
         if($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] &&
-            ($cfp = fopen( $this->gettextStringsFile, 'w') ) ) {
+            ($cfp = fopen( $this->getTextStringsFile, 'w') ) ) {
             
             fwrite($cfp,serialize(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'])));
             fclose($cfp);
