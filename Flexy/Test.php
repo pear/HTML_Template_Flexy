@@ -82,67 +82,12 @@ class HTML_Template_Flexy_Test {
             //echo strlen($data);
             $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
             $tokenizer->debug=1;
-            $i=0;
-            $l = -1;
-            $tokenizer->value = '';
-            $res = array();
-            while ($t = $tokenizer->yylex()) {  
-                //if ($tokenizer->value === '') {
-                //    continue;
-               // }
-                
-                if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
-                    $this->error(0,'GOT ERROR');
-                }
-                if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
-                    continue;
-                }
-               
-                $i++;
-                $res[$i] = $tokenizer->value;
-                $res[$i]->id = $i;
-                //print_r($res[$i]);
-                
-                $tokenizer->value = '';
-                
-            }
-            $stack = array();
-            for($i=0;$i<count($res);$i++) {
-                if (!@$res[$i]->tag) {
-                    continue;
-                }
-                if ($res[$i]->tag{0} == '/') { // it's a close tag..
-                    //echo "GOT END TAG: {$res[$i]->tag}\n";
-                    $tag = strtoupper(substr($res[$i]->tag,1));
-                    if (!isset($stack[$tag]['pos'])) {
-                        continue; // unmatched
-                    }
-                    $npos = $stack[$tag]['pos'];
-                    //echo "matching it to {$stack[$tag][$npos]}\n";
-                    $res[$stack[$tag][$npos]]->close = &$res[$i];
-                    $stack[$tag]['pos']--;
-                    if ($stack[$tag]['pos'] < 0) {
-                        // too many closes - just ignore it..
-                        $stack[$tag]['pos'] = 0;
-                    }
-                    continue;
-                }
-                // new entry on stack..
-                $tag = strtoupper($res[$i]->tag);
-                
-                if (!isset($stack[$tag])) {
-                    $npos = $stack[$tag]['pos'] = 0;
-                } else {
-                    $npos = ++$stack[$tag]['pos'];
-                }
-                $stack[$tag][$npos] = $i;
-            }
-                
+            $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
+            
             
             new Gtk_VarDump($res);
-            foreach($res as $v) {
-                echo $v->toHTML();
-            }
+            echo $res->toString();
+            
         }
         
         

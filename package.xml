@@ -52,6 +52,17 @@
                 <file>example.ini</file>
                 <file>Tokenizer.php</file>
                 <file>Token.php</file>
+                <dir name="Token" role="php">
+                    <file>Tag.php</file>
+                    <file>EndTag.php</file>
+                    <file>If.php</file>
+                    <file>Else.php</file>
+                    <file>End.php</file>
+                    <file>Foreach.php</file>
+                    <file>Include.php</file>
+                    <file>Var.php</file>
+                    <file>Method.php</file>
+                </dir>
                 <file>Test.php</file>
                 <dir name="Filter" role="php">
                     <file>BodyOnly.php</file>

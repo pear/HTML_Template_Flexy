@@ -27,11 +27,12 @@
 
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'] = 0;
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'] = array();
-
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeForm'] = '';
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['tokens'] = array();
 /**
 * Base Class for all Tokens.
 *
-* @abstract Provides the static Create Method, and default toHTML() methods
+* @abstract Provides the static Create Method, and default toString() methods
 *
 */
 
@@ -51,10 +52,18 @@ class HTML_Template_Flexy_Token {
     * @access public
     */
     var $value;
+    /**
+    * the line the token is from
+    *
+    * @var int
+    * @access public
+    */
+    
+    
     var $line;
     
     /**
-    * Create a Token
+    * factory a Token
     *
     * Standard factory method.. - with object vars.
     * ?? rename me to factory?
@@ -67,8 +76,17 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
   
-    function create($token,$value,$line) {
+    function factory($token,$value,$line) {
+        // try not to reload the same class to often
+        static $loaded = array();
+        
+        if (!isset($loaded[$token])) {
+            @include 'HTML/Template/Flexy/Token/'.$token.'.php';
+            $loaded[$token] = true;
+        }
+            
         $c = 'HTML_Template_Flexy_Token_'.$token;
+        
         $t = new HTML_Template_Flexy_Token;
         if (class_exists($c)) {
             $t = new $c;
@@ -100,13 +118,211 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
       
-    function toHTML() {
+    function toString() {
         if (is_array($this->value)) {
             var_dump($this);
             exit;
         }
-        return $this->value;
+        $ret = $this->value;
+        $ret .= $this->childrentoString();
+        if ($this->close) {
+            $ret .= $this->close->toString();
+        }
+        
+        return $ret;
     }
+    
+    /**
+    * generate HTML from children after doing flexy manipulations..
+    *
+    * @return   string   HTML
+    * @access   public
+    */
+    function childrentoString() {
+        if (!$this->children) {
+            return '';
+        }
+        if ($this->ignoreChildren) {
+            return;
+        }
+        $ret = '';
+        //echo "output $this->id";
+        //new Gtk_VarDump($this);
+        foreach ($this->children as $child) {
+            if (!$child) {
+                continue;
+            }
+            $ret .= $child->toString();
+        }
+        return $ret;
+    }
+    
+    
+    
+    /* ======================================================= */
+    /* Token Managmenet = parse and store all the tokens in 
+     * an associative array and tree.
+     */
+   
+    /**
+    * Run a Tokenizer and Store its results
+    * It should build a DOM Tree of the HTML
+    * 
+    * @param   object    Tokenizer to run.. - Theoretically other Tokenizers could be done for email,rtf etc.
+    *
+    * @access   public
+    * @return   base token (really a dummy token, which contains the tree)
+    * @static
+    */
+  
+    function buildTokens($tokenizer) 
+    {
+    
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        // first record is a filler - to stick all the children on !
+        // reset my globals..
+  
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = array(new HTML_Template_Flexy_Token);
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->id =0;
+        $i=1;
+        
+        
+        // step one just tokenize it.
+        while ($t = $tokenizer->yylex()) {  
+            
+            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
+                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,
+                    null,PEAR_ERROR_DIE);
+            }
+            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
+                continue;
+            }
+           
+            $i++;
+            $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = $tokenizer->value;
+            $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $i;
+            //print_r($res[$i]);
+             
+        }
+        $res = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'];
+        // connect parent and child tags.
+        $stack = array();
+        $total = $i +1;
+        for($i=1;$i<$total;$i++) {
+            //echo "Checking TAG $i\n";
+            if (!@$res[$i]->tag) {
+                continue;
+            }
+            if ($res[$i]->tag{0} == '/') { // it's a close tag..
+                //echo "GOT END TAG: {$res[$i]->tag}\n";
+                $tag = strtoupper(substr($res[$i]->tag,1));
+                if (!isset($stack[$tag]['pos'])) {
+                    continue; // unmatched
+                }
+                $npos = $stack[$tag]['pos'];
+                //echo "matching it to {$stack[$tag][$npos]}\n";
+                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$tag][$npos]]->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
+                $stack[$tag]['pos']--;
+                if ($stack[$tag]['pos'] < 0) {
+                    // too many closes - just ignore it..
+                    $stack[$tag]['pos'] = 0;
+                }
+                continue;
+            }
+            // new entry on stack..
+            $tag = strtoupper($res[$i]->tag);
+            
+            if (!isset($stack[$tag])) {
+                $npos = $stack[$tag]['pos'] = 0;
+            } else {
+                $npos = ++$stack[$tag]['pos'];
+            }
+            $stack[$tag][$npos] = $i;
+        }
+                
+        // create a dummy close for the end
+        $i = $total;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = new HTML_Template_Flexy_Token;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $total;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$total];
+        
+        // now is it possible to connect children...
+        // now we need to GLOBALIZE!! - 
+        
+        
+        $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = $res;
+        
+        HTML_Template_Flexy_Token::buildChildren(0);
+        //new Gtk_VarDump($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]);
+       
+        return $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0];
+    }
+    /**
+    * Matching closing tag for a Token
+    *
+    * @var object|none  optional closing tag
+    * @access public 
+    */
+    
+  
+    var $close;
+           
+    /**
+    * array of children to each object. 
+    *
+    * @var array
+    * @access public|private
+    */
+    
+  
+    var $children = array();
+    
+    /**
+    * Build the child array for each element.
+    * 
+    * @param   object    Tokenizer to run.. - Theoretically other Tokenizers could be done for email,rtf etc.
+    *
+    * @access   public
+    * @static
+    */
+    function buildChildren($id) 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        $base = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$id];
+        $base->children = array();
+        $start = $base->id +1;
+        $end = $base->close->id;
+        for ($i=$start; $i<$end; $i++) {
+            $base->children[] = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
+            
+                // if the close id is greater than my id - ignore it! - 
+                if ($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close->id > $end) {
+                    continue;
+                }
+                HTML_Template_Flexy_Token::buildChildren($i);
+                $i = $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close->id;
+            }
+        }
+    }
+            
+            
+            
+    /**
+    * Flag to ignore children - Used to block output for select/text area etc.
+    *
+    * @var boolean ingore children
+    * @access public
+    */
+    
+  
+    var $ignoreChildren = false;
+    
+    
+    
+     
     /* ======================================================== */
     /* variable STATE management 
     *
@@ -120,7 +336,7 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
     function reset() {
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'] = 0;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
     }
     
     /**
@@ -128,11 +344,14 @@ class HTML_Template_Flexy_Token {
     *
     * @access   public
     */
-    function pushState() {
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state']++;
-        $s = $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'];
+    function pushState() 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
         
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'][$s] = array(); // initialize statevars
+        $_HTML_TEMPLATE_FLEXY_TOKEN['state']++;
+        $s = $_HTML_TEMPLATE_FLEXY_TOKEN['state'];
+        
+        $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s] = array(); // initialize statevars
     }
     /**
     * tell the generator you are entering a block
@@ -140,10 +359,13 @@ class HTML_Template_Flexy_Token {
     * @return  boolean  parse error - out of bounds
     * @access   public
     */
-    function pullState() {
-        $s = $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'];
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'][$s] = array(); // initialize statevars
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state']--;
+    function pullState() 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        $s = $_HTML_TEMPLATE_FLEXY_TOKEN['state'];
+        $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s] = array(); // initialize statevars
+        $_HTML_TEMPLATE_FLEXY_TOKEN['state']--;
         if ($s<0) {
             return false;
         }
@@ -177,12 +399,15 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
     
-    function findVar($string) {
+    function findVar($string) 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+    
         if ($string == 't') {
             return '$t';
         }
-        for ($s = $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state']; $s > 0; $s--) {
-            if (in_array($string, $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'][$s])) {
+        for ($s = $_HTML_TEMPLATE_FLEXY_TOKEN['state']; $s > 0; $s--) {
+            if (in_array($string, $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s])) {
                 return '$'.$string;
             }
         }
@@ -195,573 +420,15 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
     
-    function pushVar($string) {
-        $s = $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'];
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'][$s][] = $string;
+    function pushVar($string) 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        $s = $_HTML_TEMPLATE_FLEXY_TOKEN['state'];
+        $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s][] = $string;
     }
     
      
 }
-
-/**
-* A standard HTML Tag = eg. Table/Body etc.
-*
-* @abstract 
-* This is the generic HTML tag 
-* a simple one will have some attributes and a name.
-*
-*/
-class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
-        
-    /**
-    * HTML Tag: eg. Body or /Body
-    *
-    * @var string
-    * @access public
-    */
-    var $tag = '';
-    /**
-    * Associative array of attributes.
-    *
-    * key is the left, value is the right..
-    * note:
-    *     values are raw (eg. include "")
-    *     valuse can be 
-    *                text = standard
-    *                array (a parsed value with flexy tags in)
-    *                object (normally some PHP code that generates the key as well..)
-    *
-    *
-    * @var array
-    * @access public
-    */
-
-    var $attributes = array();
-    /**
-    * postfix tokens 
-    * used to add code to end of tags
-    *
-    * @var array
-    * @access public
-    */
-    var $postfix = '';
-     /**
-    * prefix tokens 
-    * used to add code to beginning of tags TODO
-    *
-    * @var array
-    * @access public
-    */
-    var $prefix = '';
-    
-        
-    /**
-    * Alias to closing tag (built externally).
-    * used to add < ? } ? > code to dynamic tags.
-    * @var object alias
-    * @access public
-    */
-    var $close; // alias to closing tag.
-    
-    
-    
-    /**
-    * Setvalue - gets name, attribute as an array
-    * @see parent::setValue()
-    */
-  
-    function setValue($value) {
-        
-        $this->tag = $value[0];
-        $this->UCtag = strtoupper($value[0]);
-        if (isset($value[1])) {
-            $this->attributes = $value[1];
-        }
-        if (in_array($this->UCtag,array("INPUT","TEXTAREA"))) {
-            $this->toFormElement();
-        }
-    }
-    /**
-    * toHTML - display tag, attributes, postfix and any code in attributes.
-    * @see parent::toHTML()
-    */
-    function toHTML() {
-        $ret = '';
-        if ($foreach = $this->getAttribute('foreach')) {
-            $foreachObj =  $this->create('Foreach',
-                    explode(',',$foreach),
-                    $this->line);
-            $ret = $foreachObj->toHTML();
-            // does it have a closetag?
-            
-            $this->close->postfix = array($this->create("End",
-                    '',
-                    $this->line));
-        
-        }
-    
-        $ret .=  "<". $this->tag;
-        foreach ($this->attributes as $k=>$v) {
-            if ($v === null) {
-                $ret .= " $k";
-                continue;
-            }
-            if (is_string($v)) {
-                $ret .=  " {$k}={$v}";
-                continue;
-            }
-            if (is_object($v)) {
-                $ret .= " " .$v->toHTML();
-                continue;
-            }
-                
-            
-            $ret .=  " {$k}=";
-            foreach($v as $item) {
-                if (is_string($item)) {
-                    $ret .= $item;
-                    continue;
-                }
-                $ret .= $item->toHTML();
-            }
-        }
-        $ret .= ">";
-        if ($this->postfix) {
-            foreach ($this->postfix as $e) {
-                $ret .= $e->toHTML();
-            }
-        }
-        return $ret;
-    }
-    
-    /**
-    * toFormElement  = takes an input field and generates related PHP code.
-    *
-    * Eg. filling in the value with  $this->{fieldname}, adding in 
-    * echo $this->errors['fieldname'] at the end.
-    * TODO : formating using DIV tags, and support for 'required tag'
-    *
-    * @return   none
-    * @access   public
-    */
-  
-    function toFormElement() {
-        // form elements : format:
-        //value - fill out as PHP CODE
-        $name = $this->getAttribute('name');
-        $type = strtoupper($this->getAttribute('type'));
-        $thisvar = str_replace(']','',$name);
-        $thisvar = str_replace('[','.',$thisvar);
-        
-        switch ($type) {
-            case "CHECKBOX":
-                $this->attributes['checked'] = 
-                    $this->create("PHP",
-                    "<?php if (". $this->toVar($thisvar).") { ?>CHECKED<?php } ?>",
-                    $this->line);
-                break;
-                
-            case "SUBMIT":
-                return;
-            
-            default:
-                $this->attributes['value'] = array(
-                    "\"",
-                    $this->create("Var",$thisvar.":u",$this->line),
-                    "\"");
-               break;
-            
-        }
-        if ($type == "HIDDEN") {
-            return;
-        }
-        
-        $this->postfix = array(
-            $this->create("PHP", "<?php if (isset(\$this->errors['".urlencode($thisvar)."'])) { ".
-                "echo  htmlspecialchars(\$this->errors['".urlencode($thisvar). "']); } ?>",$this->line));
-        // this should use <div name="form.error"> or something...
-            
-        
-    }
-    /**
-    * getAttribute = reads an attribute value and strips the quotes 
-    *
-    * TODO : sort out case issues...
-    * does not handle valuse with flexytags in
-    *
-    * @return   none
-    * @access   string
-    */
-    function getAttribute($key) {
-        // really need to do a foreach/ strtoupper
-        if (!isset($this->attributes[$key])) {
-            return '';
-        }
-        $v = $this->attributes[$key];
-        switch($v{0}) {
-            case "\"":
-            case "'":
-                return substr($v,1,-1);
-            default:
-                return $v;
-        }
-    }
-    
-    
-        
-}
-
-
-/**
-* The closing HTML Tag = eg. /Table or /Body etc.
-*
-* @abstract 
-* This just extends the generic HTML tag 
-*
-*/
-
-class HTML_Template_Flexy_Token_EndTag extends HTML_Template_Flexy_Token_Tag { }
-
-
-/**
-* Class to handle If statements
-*
-*
-*/
-class HTML_Template_Flexy_Token_If extends HTML_Template_Flexy_Token{ 
-    /**
-    * Condition for the if statement.
-    * @var string // a variable
-    * @access public
-    */
-    
-    var $condition;
-    /**
-    * Setvalue - a string
-    * @see parent::setValue()
-    */
-    function setValue($value) {
-        //var_dump($value);
-        $this->condition=$value;
-    }
-    /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->toVar()
-    */
-    function toHTML() {
-        $ret = "<?php if(@".$this->toVar($this->condition) .")  { ?>";
-        $this->pushState();
-        return $ret;
-        
-    }
-
-}
-
-
-/**
-* Class to handle Else
-*
-*
-*/
-class HTML_Template_Flexy_Token_Else extends HTML_Template_Flexy_Token {
-    /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->pullState()
-    */
-    function toHTML() {
-        // pushpull states to make sure we are in an area.. - should really check to see 
-        // if the state it is pulling is a if...
-        if ($this->pullState() === false) {
-            echo "Unmatched End on Line {$this->line}";
-            return false;
-        }
-        $this->pushState();
-        return "<?php } else {?>";
-    }
-
-
-}
-
-
-
-/**
-* Class to handle End statements (eg. close brakets)
-*
-*
-*/
-class HTML_Template_Flexy_Token_End extends HTML_Template_Flexy_Token { 
-    /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->pullState()
-    */
-    function toHTML() {
-        // pushpull states to make sure we are in an area.. - should really check to see 
-        // if the state it is pulling is a if...
-        if ($this->pullState() === false) {
-            echo "Unmatched End on Line {$this->line}";
-            return false;
-        }
-         
-        return "<?php } ?>";
-    }
-
-}
-
-
-
-/**
-* Class to handle foreach statements
-*
-*
-*/
-class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
-    
-    /**
-    * variable to loop on. 
-    *
-    * @var string
-    * @access public
-    */
-    var $loopOn = '';
-    /**
-    * key value
-    *
-    * @var string
-    * @access public
-    */
-    var $key    = '';
-    /**
-    * optional value (in key=>value pair)
-    *
-    * @var string
-    * @access public
-    */
-    var $value  = ''; 
-    
-    /**
-    * Setvalue - a array of all three (last one optional)
-    * @see parent::setValue()
-    */
-  
-    function setValue($value) {
-        $this->loopOn=$value[0];
-        $this->key=$value[1];
-        $this->value=@$value[2];
-    }
-    /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->pullState()
-    */
-    function toHTML() {
-        $ret = "<?php if (is_array(".
-            $this->toVar($this->loopOn) . ")) " .
-            "foreach(".$this->toVar($this->loopOn). " ";
-        $ret .= "as \${$this->key}";
-        if ($this->value) {
-            $ret .=  " => \${$this->value}";
-        }
-        $ret .= ") { ?>";
-        
-        $this->pushState();
-        $this->pushVar($this->key);
-        $this->pushVar($this->value);
-        return $ret;
-    }
-
-}
-
-/**
-* Class to handle include statements
-* TODO!!!
-*
-* Include is an odd baby.. - since we are supposed to be dealing with compiled templates..
-* It is the responsibility of the appliacation to make sure it has compiled the 
-* included template.
-* Various types of Includes should be supported
-*       include:someobject.someval
-*                   - maps to if (isset(....) && file_exists(....))  include ( value . '.{lang}.html')
-*
-*       include: somevar
-*
-*
-*
-*/
-class HTML_Template_Flexy_Token_Include extends HTML_Template_Flexy_Token{ 
-
-    
-    
-    function toHTML() {
-        $v = $this->toVar($this->value);
-         
-        $options = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'];
-       
-        $ret = "<?php  if (isset($v) &&
-                    file_exists(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\")) 
-                    include(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\"); ?>";
-            
-        return $ret;     
-    
-    }
-
-
-
-
-}
-
-/**
-* Class to handle variable output
-*  *
-*
-*/
-
-class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token { 
-    
-    /**
-    * variable modifier (h = raw, u = urlencode, none = htmlspecialchars)
-    *
-    * @var char
-    * @access public
-    */
-    var $modifier;
-    /**
-    * Setvalue - at present raw text.. - needs sorting out..
-    * @see parent::setValue()
-    */
-    function setValue($value) {
-        // comes in as raw {xxxx}, {xxxx:h} or {xxx.yyyy:h}
-       
-        if (strpos($value,":")) {
-            list($value,$this->modifier) = explode(':',$value);
-        }
-        $this->value = $value;
-    }
-    /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->pullState()
-    */
-    function toHTML() {
-        // ignore modifier at present!!
-        return "<?php echo htmlspecialchars(" . $this->toVar($this->value) . "); ?>";
-    }
-
-}
-/**
-* Class to handle method calls
-*  *
-*
-*/
-
-class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token { 
-    /**
-    * variable modifier (h = raw, u = urlencode, none = htmlspecialchars)
-    * TODO
-    * @var char
-    * @access public
-    */
-    var $modifier;
-    /**
-    * Method name
-    *
-    * @var char
-    * @access public
-    */
-    var $method;
-    /**
-    * is it in if statement with a method?
-    *
-    * @var boolean
-    * @access public
-    */
-    var $isConditional;
-     /**
-    * arguments, either variables or literals eg. #xxxxx yyyy#
-    * 
-    * @var array
-    * @access public
-    */
-    var $args= array();
-    /**
-    * setvalue - at present array method, args (need to add modifier)
-    * @see parent::setValue()
-    */
-    
-    function setValue($value) {
-        //var_dump($value);
-        $method = $value[0];
-        if (substr($value[0],0,3) == 'if:') {
-            $this->isConditional = true;
-            $method = substr($value[0],3);
-        }
-        
-        if (strpos($method,":")) {
-            list($method,$this->modifier) = explode(':',$method);
-        }
-        $this->method = $method;
-        
-        $this->args = $value[1];
-        // modifier TODO!
-        
-    }
-     /**
-    * toHTML - generate PHP code 
-    * @see parent::toHTML(), $this->pullState()
-    */
-    
-    function toHTML() {
-        // ignore modifier at present!!
-        $prefix = 'echo ';
-        $suffix = '';
-        switch ($this->modifier) {
-            case 'h':
-                break;
-            case 'u':
-                $prefix = 'echo urlencode(';
-                $suffix = ')';
-            default:
-                $prefix = 'echo htmlspecialchars(';
-                // add language ?
-                $suffix = ')';
-        }
-        
-        
-        
-        if ($this->isConditional) {
-            $prefix = 'if (';
-            $this->pushState();
-            $suffix = ')';
-        }  
-        // should really check the variable part of method ...
-        
-        $ret = '<?php ' . $prefix;
-        $ret .=  $this->toVar($this->method) . "(";
-        $s =0;
-        
-        foreach($this->args as $a) {
-             
-            if ($s) {
-                $ret .= ",";
-            }
-            $ret .= $this->toVar($a);
-            $s =1;
-        }
-        $ret .= ")" . $suffix;
-        
-        if ($this->isConditional) {
-            $ret .= ' { ';
-        } else {
-            $ret .= ";";
-        }
-        $ret .= ' ?>';
-        
-        return $ret;
-            
-        
-        
-    }
-
-}
-
-
  
    
 ?>

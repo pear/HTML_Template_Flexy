@@ -186,21 +186,21 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{CRO}{NUMBER}{REFERENCE_END}?	 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::create('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 
 <YYINITIAL>{CRO}{NAME}{REFERENCE_END}?		{
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::create('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
   
 <YYINITIAL>{ERO}{NAME}{REFERENCE_END}?	{
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::create('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -231,7 +231,7 @@ FLEXY_MODIFIER      = [hur]
             
 <YYINITIAL>{MDO}{NAME}{WHITESPACE}			{
     /* <!DOCTYPE -- markup declaration */
-    $this->value = HTML_Template_Flexy_Token::create('Doctype',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -249,7 +249,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{MDO}{COM}			{
     /* <!--  -- comment declaration */
     
-    $this->value = HTML_Template_Flexy_Token::create('Comment',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -273,7 +273,7 @@ FLEXY_MODIFIER      = [hur]
     /* <? ...> -- processing instruction */
     // this is a little odd cause technically we dont allow it!!
     // really we only want to handle < ? xml 
-    $this->value = HTML_Template_Flexy_Token::create('PHP',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('PHP',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
  
@@ -301,7 +301,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>([^\<\&\{]|(<[^<&a-zA-Z!->?])|(&[^<&#a-zA-Z]))+|"{"     {
     //abcd -- data characters  
     // { added for flexy
-    $this->value = HTML_Template_Flexy_Token::create('Text',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -440,7 +440,7 @@ FLEXY_MODIFIER      = [hur]
 
   // <a name=foo ^>,</foo^> -- tag close */
 <IN_ATTR,IN_TAG>{TAGC}		{
-    $this->value = HTML_Template_Flexy_Token::create($this->tokenName,
+    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
     
@@ -464,7 +464,7 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_ATTR>{NET}{WHITESPACE}{TAGC}	{
     $this->attributes["/"] = null;
-    $this->value = HTML_Template_Flexy_Token::create($this->tokenName,
+    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
         
@@ -506,7 +506,7 @@ FLEXY_MODIFIER      = [hur]
 
   // end tag -- non-permissive */
 <IN_ENDTAG>{TAGC} { 
-    $this->value = HTML_Template_Flexy_Token::create($this->tokenName,
+    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
         array($this->tagName),
         $this->yyline);
         array($this->tagName);
@@ -526,7 +526,7 @@ FLEXY_MODIFIER      = [hur]
  
 <IN_COM>([^-]|-[^-])*{WHITESPACE}	{
     // <!^--...-->   -- comment */   
-    $this->value = HTML_Template_Flexy_Token::create('Comment',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
      
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -534,48 +534,48 @@ FLEXY_MODIFIER      = [hur]
  
 <IN_MD>{PERO}{NAME}{REFERENCE_END}?{WHITESPACE}		{
     // <!doctype ^%foo;> -- parameter entity reference */
-    $this->value = HTML_Template_Flexy_Token::create('EntityRef',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('EntityRef',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
 <IN_MD>{PERO}{SPACES}			{
     // <!entity ^% foo system "..." ...> -- parameter entity definition */
-    $this->value = HTML_Template_Flexy_Token::create('EntityPar',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('EntityPar',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
  
 <IN_MD>{NUMBER}{WHITESPACE}		{   
-    $this->value = HTML_Template_Flexy_Token::create('Number',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Number',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NAME}{WHITESPACE}			{ 
-    $this->value = HTML_Template_Flexy_Token::create('Name',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Name',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NUMBER_TOKEN}{WHITESPACE}		{ 
-    $this->value = HTML_Template_Flexy_Token::create('NumberT',$this->yytext(),$this->yyline);    
+    $this->value = HTML_Template_Flexy_Token::factory('NumberT',$this->yytext(),$this->yyline);    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NAME_TOKEN}{WHITESPACE}		{ 
-    $this->value = HTML_Template_Flexy_Token::create('NameT',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('NameT',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{LITERAL}{WHITESPACE}	        { 
-    $this->value = HTML_Template_Flexy_Token::create('Literal',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Literal',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
 <IN_COM>{COM}{TAGC}			{   
-    $this->value = HTML_Template_Flexy_Token::create('CloseTag',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{TAGC}			{   
-    $this->value = HTML_Template_Flexy_Token::create('CloseTag',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
@@ -585,7 +585,7 @@ FLEXY_MODIFIER      = [hur]
   
 <IN_MD>{DSO}			{
     // <!doctype foo ^[  -- declaration subset */
-    $this->value = HTML_Template_Flexy_Token::create('BeginDS',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('BeginDS',$this->yytext(),$this->yyline);
     $this->yybegin(IN_DS);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -600,20 +600,20 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_DS>{MSC}{TAGC}			{
     // ]]> -- marked section end */
-     $this->value = HTML_Template_Flexy_Token::create('DSEnd',$this->yytext(),$this->yyline);
+     $this->value = HTML_Template_Flexy_Token::factory('DSEnd',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
   
 <IN_DS>{DSC}			{ 
     // ] -- declaration subset close */
-    $this->value = HTML_Template_Flexy_Token::create('DSEndSubset',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('DSEndSubset',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <IN_DS>[^\]]+			{ 
-    $this->value = HTML_Template_Flexy_Token::create('Declaration',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Declaration',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -622,7 +622,7 @@ FLEXY_MODIFIER      = [hur]
    
  
 <YYINITIAL>"{if:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('If',substr($this->yytext(),4,-1),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('If',substr($this->yytext(),4,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -641,36 +641,36 @@ FLEXY_MODIFIER      = [hur]
 
 
 <YYINITIAL>"{foreach:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('Foreach',array(substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Foreach',array(substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}","{FLEXY_SIMPLEVAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <YYINITIAL>"{end:}" {
-    $this->value = HTML_Template_Flexy_Token::create('End', '',$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('End', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <YYINITIAL>"{else:}" {
-    $this->value = HTML_Template_Flexy_Token::create('Else', '',$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Else', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <YYINITIAL>"{include:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),9,-1),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Include', substr($this->yytext(),9,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 // needs to deal with \# - excaped #'s
 
 <YYINITIAL>"{include:#"{FLEXY_LITERAL}"#}" {
-    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),9,-1),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Include', substr($this->yytext(),9,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -686,11 +686,15 @@ FLEXY_MODIFIER      = [hur]
     $n = $this->yytext();
     if ($n{0} != '{') {
         $n = substr($n,3);
+    } else {
+        $n = substr($n,1);
     }
     if ($n{strlen($n)-1} != '}') {
         $n = substr($n,0,-3);
+    } else {
+        $n = substr($n,0,-1);
     }
-    $this->attrVal[] = HTML_Template_Flexy_Token::create('Var'  , $n, $this->yyline);
+    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Var'  , $n, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
@@ -699,7 +703,7 @@ FLEXY_MODIFIER      = [hur]
     $t =  $this->yytext();
     $t = substr($t,1,-1);
 
-    $this->value = HTML_Template_Flexy_Token::create('Var'  , $t, $this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Var'  , $t, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -726,7 +730,7 @@ FLEXY_MODIFIER      = [hur]
         $this->flexyMethod .= substr($t,1,-1);
     }
         
-    $this->value = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -750,7 +754,7 @@ FLEXY_MODIFIER      = [hur]
     }
     
     $this->flexyArgs[] = $t;
-    $this->value = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -763,7 +767,7 @@ FLEXY_MODIFIER      = [hur]
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
     $this->flexyArgs[] = substr($t,0,-1);
-    $this->value = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -801,7 +805,7 @@ FLEXY_MODIFIER      = [hur]
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
     $this->flexyArgs[] = substr($t,0,-2);
-    $this->attrVal[] = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin($this->flexyMethodState);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -814,7 +818,7 @@ FLEXY_MODIFIER      = [hur]
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
     $this->flexyArgs[] = substr($t,0,-1);
-    $this->attrVal[] = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin($this->flexyMethodState);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }

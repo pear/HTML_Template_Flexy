@@ -157,7 +157,7 @@ class HTML_Template_Flexy
         
         $_error_reporting = false;
         if (!$options['debug']) {
-            $_error_reporting = error_reporting();
+            $_error_reporting = error_reporting(E_ALL ^ E_NOTICE);
         }
         include($this->compiledTemplate);
         if ($_error_reporting !== false) {
@@ -255,76 +255,25 @@ class HTML_Template_Flexy
     { 
         // read the entire file into one variable
         
+        // note this should be moved to new HTML_Template_Flexy_Token
+        // and that can then manage all the tokens in one place..
+        
         require_once 'HTML/Template/Flexy/Tokenizer.php';
         
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
+        
+        
+        
         
         $data = file_get_contents($this->currentTemplate);
             //echo strlen($data);
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
         //$tokenizer->debug=1;
-        $i=0;
-        $res = array();
-        
-        while ($t = $tokenizer->yylex()) {  
-            //if ($tokenizer->value === '') {
-            //    continue;
-           // }
+        $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
             
-            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
-                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,null,PEAR_ERROR_DIE);
-            }
-            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
-                continue;
-            }
            
-            $i++;
-            $res[$i] = $tokenizer->value;
-            $res[$i]->id = $i;
-            //print_r($res[$i]);
-            
-            $tokenizer->value = '';
-            
-        }
-        // connect parent and child tags.
-        $stack = array();
-        for($i=0;$i<count($res);$i++) {
-            if (!@$res[$i]->tag) {
-                continue;
-            }
-            if ($res[$i]->tag{0} == '/') { // it's a close tag..
-                //echo "GOT END TAG: {$res[$i]->tag}\n";
-                $tag = strtoupper(substr($res[$i]->tag,1));
-                if (!isset($stack[$tag]['pos'])) {
-                    continue; // unmatched
-                }
-                $npos = $stack[$tag]['pos'];
-                //echo "matching it to {$stack[$tag][$npos]}\n";
-                $res[$stack[$tag][$npos]]->close = &$res[$i];
-                $stack[$tag]['pos']--;
-                if ($stack[$tag]['pos'] < 0) {
-                    // too many closes - just ignore it..
-                    $stack[$tag]['pos'] = 0;
-                }
-                continue;
-            }
-            // new entry on stack..
-            $tag = strtoupper($res[$i]->tag);
-            
-            if (!isset($stack[$tag])) {
-                $npos = $stack[$tag]['pos'] = 0;
-            } else {
-                $npos = ++$stack[$tag]['pos'];
-            }
-            $stack[$tag][$npos] = $i;
-        }
-                
-            
-        //new Gtk_VarDump($res);
-        $data = '';
-        foreach($res as $v) {
-            $data .=  $v->toHTML();
-        }
+        $data = $res->toString();
+        
         
         // error checking?
         if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
