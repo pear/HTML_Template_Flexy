@@ -525,11 +525,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $var;
         }
         
-        $prefix = 'if (isset('.$var.
-            ') && method_exists('.$var .",'{$method}')) " . $prefix;
+        if (($object == 'GLOBALS') && 
+            $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['globalfunctions']) {
+            // we should check if they something weird like: GLOBALS.xxxx[sdf](....)
+            $var = $method;
+        } else {
+            $prefix = 'if (isset('.$var.
+                ') && method_exists('.$var .",'{$method}')) " . $prefix;
+            $var = $element->toVar($element->method);
+        }
         
-        
-        $var = $element->toVar($element->method);
+
         if (is_a($var,'PEAR_Error')) {
             return $var;
         }

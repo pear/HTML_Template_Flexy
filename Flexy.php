@@ -119,7 +119,9 @@ class HTML_Template_Flexy
         'privates'      => false,       // allow access to _variables (eg. suido privates
         'globals'       => false,       // allow access to _GET/_POST/_REQUEST/GLOBALS/_COOKIES/_SESSION
 
-
+        'globalfunctions' => false,     // allow GLOBALS.date(#d/m/Y#) to have access to all PHP's methods
+                                        // warning dont use unless you trust the template authors
+                                        // exec() becomes exposed.
         
         'strict'        => false,       // All elements in the template must be defined - 
                                         // makes php E_NOTICE warnings appear when outputing template.
