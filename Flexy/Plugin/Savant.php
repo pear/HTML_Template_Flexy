@@ -24,8 +24,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param string $href The URL for the resulting <a href="">...</a> tag.
     * 
     * @param string $text The text surrounded by the <a>...</a> tag set.
@@ -62,8 +60,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $name The HTML "name=" value for the checkbox.
     * 
@@ -125,8 +121,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $name The HTML "name=" value of all the checkbox
     * <input>s. The name will get [] appended to it to make it an array
@@ -240,8 +234,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param int $iteration The iteration number for the cycle.
     * 
     * @param array $values The values to cycle through.
@@ -277,8 +269,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param string $datestring Any date-time string suitable for
     * strtotime().
     * 
@@ -288,15 +278,62 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
 
-    function dateformat($datestring, $format = '%d %b %Y')
+    function dateformat($datestring, $format = false)
     {
-        if (trim($datestring != '')) {
-            return strftime($format, strtotime($datestring));
-        } else {
+        if ($format === false) {
+            $format = isset($this->flexy->options['plugin.dateformat']) ?
+                $this->flexy->options['plugin.dateformat'] : '%d %b %Y';
+        }
+        if (trim($datestring) == '') {
             return '';
         }
+        
+        $date = strtotime($datestring);
+        if ($date > 1) {
+            return strftime($format, $date);    
+        }
+        require_once 'Date.php';
+        $date = new Date($date);
+        return $date->format($format);
+            
+    }
+   /**
+    * 
+    * Output a formatted number using number_format
+    * 
+    * 
+     * 
+    * @param string $datestring Any date-time string suitable for
+    * strtotime().
+    * 
+    * @param string $format The strftime() formatting string.
+    * 
+    * @return string
+    * 
+    */
+
+    function numberformat($number, $dec=false,$point=false,$thousands=false)
+    {
+        if (!strlen(trim($datestring))) {
+            return;
+        }
+        // numberformat int decimals, string dec_point, string thousands_sep
+        $dec = ($dec !== false) ? $dec : (
+            isset($this->flexy->options['plugin.numberformat.decimals']) ?
+                $this->flexy->options['plugin.numberformat.decimals'] : 2
+            );
+        $point = ($point !== false) ? $point : (
+            isset($this->flexy->options['plugin.numberformat.point']) ?
+                $this->flexy->options['plugin.numberformat.point'] : '.');
+        $thousands = ($thousands !== false) ? $thousands : (
+            isset($this->flexy->options['plugin.numberformat.thousands']) ?
+                $this->flexy->options['plugin.numberformat.thousands'] : ',');
+                
+        
+        return number_format($number,$dec,$point,$thousands);
     }
 
+    
     
     /**
     * 
@@ -310,8 +347,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $src The image source as a relative or absolute HREF.
     * 
@@ -409,8 +444,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param string $type The HTML "type=" value (e.g., 'text',
     * 'hidden', 'password').
     * 
@@ -446,8 +479,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $href The HREF leading to the JavaScript source
     * file.
@@ -485,8 +516,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $value The value to be printed.
     * 
@@ -543,8 +572,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param array $options An associative array of key-value pairs; the
     * key is the option value, the value is the option lable.
     * 
@@ -600,8 +627,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $name The HTML "name=" value of all the radio <input>s.
     * 
@@ -677,8 +702,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     * @access public
     * 
-    * @param object &$savant A reference to the calling Savant object.
-    * 
     * @param string $href The HREF leading to the stylesheet file.
     * 
     * @return string
@@ -707,8 +730,6 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @version $Id$
     * 
     * @access public
-    * 
-    * @param object &$savant A reference to the calling Savant object.
     * 
     * @param string $name The HTML "name=" value.
     * 
