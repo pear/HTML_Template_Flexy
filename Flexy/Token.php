@@ -31,6 +31,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeForm'] = '';
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['tokens'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeFormId'] = 0;
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['flexyIgnore'] = false;
 /**
 * Base Class for all Tokens.
 *
@@ -187,7 +188,9 @@ class HTML_Template_Flexy_Token {
         $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
         
         $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = false;
-        
+        if (@$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['flexyIgnore']) {
+            $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = true;
+        }
         $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId'] = 0;
         $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = '';
         

@@ -52,7 +52,7 @@
         - <flexy:include src="xxx.html"/> to include other templates
         - <flexy:toJavascript flexy:prefix="js_name_prefix_" jsvar="php_flexy_var" ....>
           uses HTML_Javascript_Convert to import PHP variables into Javascript.
-        
+        - new modifier :b (for NL2BR + HTMLSPECIALCHARS)
         
         Fixes
         - array syntax supported in attributes (eg. urlencoded)
