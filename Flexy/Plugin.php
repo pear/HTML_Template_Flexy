@@ -26,19 +26,38 @@
  
  
 class HTML_Template_Flexy_Plugin {
-
+    
+    /**
+    * reference to main engine..
+    *
+    * @var object HTML_Template_Flexy
+    * @access public
+    */
     var $flexy; // reference to flexy.
     var $pluginCache = array(); // store of instanced plugins..
     
+    /**
+    * Call a Plugin method.
+    *
+    * Look up in all the plugins to see if the method exists, if it does, call it.
+    * 
+    * 
+    * @param   array        name of method, arguments.
+    * 
+    *
+    * @return   string      hopefully
+    * @access   public
+    */
+  
     function call($args)
     {
         
-        $requested_name = $args[0];
+        $method = $args[0];
         // attempt to load the plugin on-the-fly
-        $result = $this->_loadPlugin($requested_name);
+        $class = $this->_loadPlugins($method);
         
-        if (is_a('PEAR_Error',$result)) {
-            return $result;
+        if (is_a('PEAR_Error',$class)) {
+            return $class;
         }
           
          
@@ -47,36 +66,44 @@ class HTML_Template_Flexy_Plugin {
         // array elements.
         array_shift($args);
         
-        // add a reference to this Savant instance to the arguments
-        // ***** Not sure if we need a reference to flexy, or the pluing manager!! ****
-        array_unshift($args, $this->flexy);
-        
-        
-        
-        
-        if (!isset($this->pluginCache[$classname])) {
-            $this->pluginCache[$classname] = & new $classname($this->flexy);
-        }
-        
-        return call_user_func_array(array($this->pluginCache[$classname],$method, $args);
+        return call_user_func_array(array($this->plugins[$classname],$method), $args);
     }
     
+    /**
+    * Load the plugins, and lookup which one provides the required method 
+    *
+    * 
+    * @param   string           Name
+    *
+    * @return   string|PEAR_Error   the class that provides it.
+    * @access   private
+    */
     
-    
-    
-    
-    
-    function _loadPlugin($name) {
+    function _loadPlugin($name) 
+    {
         // name can be:
         // ahref = maps to {class_prefix}_ahref::ahref
-        $class = $method = $name;
-        if ((strpos($name,':') !== false) {
-            list($class,$method) = explode('::',$name);
-        }
         
-        if (file_exists(dirname(__FILE__)."/Plugin/$class.php")) {
-            require_once dirname(__FILE__)."/Plugin/$class.php";
-            return array($class,$name);
+        if (empty($this->plugins)) {
+            foreach ($this->options['plugins'] as $p) {
+                if (is_array($p)) {
+                    include_once $p[0];
+                    $this->plugins[$p[1]] = new $p[1];
+                    $this->plugins[$p[1]]->flexy = &$this->flexy;
+                    continue;
+                }
+                require_once 'HTML/Template/Flexy/Plugins/'. $p[0] . '.php';
+                $class = "HTML_Template_Flexy_Plugins_{$p[0]}";
+                $this->plugins[$class] = new $class;
+                $this->plugins[$class]->flexy = &$this->flexy;
+            }
+        }
+                
+        
+        foreach ($this->plugins as $class=>$o) {
+            if (method_exists($o,$name)) {
+                return $class;
+            }
         }
         return HTML_Template_Flexy::raiseError('could not find plugin');
     }
