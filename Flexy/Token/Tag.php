@@ -274,45 +274,82 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         $e = false;
         
         
-        if ($_HTML_TEMPLATE_FLEXY['quickform']) {
-            $t =strtolower($type);
-            if (!$t) {
-                $t = 'text';
-            }
-            $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                $t, 
-                $name,
-                ''  , // the text.
-                $this->getAttributes()  // wrapper needed...
-            );
-        } else {
+        if (!$_HTML_TEMPLATE_FLEXY['quickform']) {
             return false;
         }
         
         switch ($type) {
             case "CHECKBOX":
+                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'checkbox' 
+                    $name,
+                    ''  , // label?
+                    '' , // test 
+                    $this->getAttributes()  // wrapper needed...
+                );
                 // technically this should be a bit more complex
                 // it needs to compare the 'value' field of the checkbox 
                 // against the current value.
                 $e->setChecked($this->getAttribute('CHECKED'));
                 break;
             
-            case "RESET":               
-            case "SUBMIT":
-            case "BUTTON":            
+            case "RESET":
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'reset' 
+                    $name,
+                    $this->getAttribute('VALUE') ,
+                    $this->getAttributes()  // wrapper needed...
+                );
                 break;
- 
+                
+            case "SUBMIT":
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'submit' 
+                    $name,
+                    $this->getAttribute('VALUE') , // the text.
+                    $this->getAttributes()  // wrapper needed...
+                );
+                break;
+                
+            case "BUTTON":            
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'text' 
+                    $name,
+                    $this->getAttribute('VALUE') ,
+                    $this->getAttributes()  // wrapper needed...
+                );
+                break;
+                
+            case "PASSWORD":     
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'password' 
+                    $name,
+                    '' ,
+                    $this->getAttributes()  // wrapper needed...
+                );
+                break;
+
 
 
 
             case "HIDDEN":
-             
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'hidden' 
+                    $name,
+                    $this->getAttribute('VALUE'),
+                    $this->getAttributes()  // wrapper needed...
+                );
                 $e->setValue($this->getAttribute('VALUE'));
                 // hidden elements are displayed after the form tag.
                 return '';
             
             default:
-                
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
+                    'text' 
+                    $name,
+                    ''  , // the text.
+                    $this->getAttributes()  // wrapper needed...
+                );
                 $e->setSize($this->getAttribute('SIZE'));
                 $e->setMaxLength($this->getAttribute('MAXLENGTH'));
                 $e->setValue($this->getAttribute('VALUE'));
