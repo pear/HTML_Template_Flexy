@@ -24,9 +24,6 @@
 // prevent disaster when used with xdebug! 
 @ini_set('xdebug.max_nesting_level', 1000);
 
-
-
-require_once 'PEAR.php'; 
 /*
 * Global variable - used to store active options when compiling a template.
 */
