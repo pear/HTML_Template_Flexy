@@ -89,7 +89,7 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
     
     function toJavascriptToString($element) {
         $ret = $this->compiler->appendPhp( "require_once 'HTML/Javascript/Convert.php';");
-        $ret .= $this->compiler->appendHTML("\n<script language='javascript'>\n");
+        $ret .= $this->compiler->appendHTML("\n<script language='text/javascript'>\n");
         $prefix = ''. $element->getAttribute('FLEXY:PREFIX');
         
         
@@ -152,4 +152,4 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
 
 }
 
-?>
+ 
