@@ -24,7 +24,7 @@
 //  Note overriden methods are not documented unless they differ majorly from
 //  The parent.
 //
-
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['base'] = 0; 
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'] = 0;
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeForm'] = '';
@@ -160,7 +160,7 @@ class HTML_Template_Flexy_Token {
         return $ret;
     }
     
-    
+   
     
     /* ======================================================= */
     /* Token Managmenet = parse and store all the tokens in 
@@ -185,7 +185,8 @@ class HTML_Template_Flexy_Token {
         
         // first record is a filler - to stick all the children on !
         // reset my globals..
-  
+        $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = 0;
+        
         $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'] = array();
         $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
         
@@ -215,6 +216,17 @@ class HTML_Template_Flexy_Token {
             $i++;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = $tokenizer->value;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $i;
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART'])) {
+                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART']);
+            }
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN'])) {
+                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
+                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN']);
+            }
+            
+            
             //print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]);
              
         }
@@ -271,7 +283,7 @@ class HTML_Template_Flexy_Token {
         HTML_Template_Flexy_Token::buildChildren(0);
         //new Gtk_VarDump($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]);
        
-        return $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0];
+        return $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$_HTML_TEMPLATE_FLEXY_TOKEN['base']];
     }
     /**
     * Matching closing tag for a Token

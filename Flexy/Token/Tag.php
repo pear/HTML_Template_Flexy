@@ -79,7 +79,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     */
     var $close; // alias to closing tag.
     
-    
+    /**
+    * flag to only output the children
+    *
+    * @var boolean
+    * @access public
+    */
+    var $startChildren = false;
     
     /**
     * Setvalue - gets name, attribute as an array
@@ -92,7 +98,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if (isset($value[1])) {
             $this->attributes = $value[1];
         }
-        // hey one day PHP will be case sensitive :)
+        
         
         
        
@@ -107,6 +113,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     function toString() {
         
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        
+        // if the FLEXYSTARTCHILDREN flag was set, only do children
+        // normally set in BODY tag.
+        if ($this->startChildren) {
+            return $this->childrenToString();
+        }
         
         $flexyignore = $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'];
         
@@ -428,6 +441,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
      
         if ($name = $this->getAttribute('NAME')) {
+            $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
+        }
+        // override with flexy object
+        if ($name = $this->getAttribute('FLEXYOBJECT')) {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
         }
         
