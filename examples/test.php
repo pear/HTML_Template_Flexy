@@ -30,6 +30,12 @@ $tmp->xyz = "testing 123";
 $elements['List'] = new HTML_Template_Flexy_Element('select');
 $elements['List']->setValue(2001);
 
+$elements['picture'] = new HTML_Template_Flexy_Element('img', "width='400' height='400' src='any.gif'");
+ 
+
+
+
+
 $data = $x->bufferedOutputObject($tmp,$elements);
 
 

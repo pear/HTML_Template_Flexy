@@ -252,6 +252,7 @@ Example error messages..
     <?php echo $this->elements['testupload']->toHtml();?>
 </form>
 
+<?php echo $this->elements['picture']->toHtml();?>
 
 
 <H1>Internal Methods Testing<H1>
