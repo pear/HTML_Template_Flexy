@@ -681,7 +681,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
            
             $id = $this->element->getAttribute('ID');
             if (!$id) {
-                return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
+                return HTML_Template_Flexy::raiseError("Error in {$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
                  Radio Input's require an ID tag..",
                  null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
