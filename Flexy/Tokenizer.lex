@@ -193,8 +193,8 @@ LCLETTER =	[a-z]
 UCLETTER =	[A-Z]
 
 
-LCNMCHAR	= [\.-]
-UCNMCHAR	= [\.-]
+LCNMCHAR	= [\._-]
+UCNMCHAR	= [\._-]
 RE		 = \n
 RS		 = \r
 SEPCHAR	 = \011
