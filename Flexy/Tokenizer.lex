@@ -18,7 +18,14 @@
 //
 // $Id$
 //
-//  The Source Lex file.
+//  The Source Lex file. (Tokenizer.lex) and the Generated one (Tokenizer.php)
+// You should always work with the .lex file and generate by
+//
+// #mono phpLex/phpLex.exe Tokenizer.lex
+//
+//
+// or the equivialant .NET runtime on windows...
+//
 //  Note need to change a few of these defines, and work out
 // how to modifiy the lexer to handle the changes..
 //
@@ -45,19 +52,18 @@ define("IN_DS"     ,10);
 define("IN_FLEXYMETHOD"     ,10);
 
 
-define ('YY_E_INTERNAL', 0);
-define ('YY_E_MATCH',  1);
-define ('YY_BUFFER_SIZE', 4096);
-define ('YY_F' , -1);
-define ('YY_NO_STATE', -1);
-define ('YY_NOT_ACCEPT' ,  0);
-define ('YY_START' , 1);
-define ('YY_END' , 2);
-define ('YY_NO_ANCHOR' , 4);
-define ('YY_BOL' , 257);
-define ('YY_EOF' , 258);
-//%implements  yyInput
-  
+define('YY_E_INTERNAL', 0);
+define('YY_E_MATCH',  1);
+define('YY_BUFFER_SIZE', 4096);
+define('YY_F' , -1);
+define('YY_NO_STATE', -1);
+define('YY_NOT_ACCEPT' ,  0);
+define('YY_START' , 1);
+define('YY_END' , 2);
+define('YY_NO_ANCHOR' , 4);
+define('YY_BOL' , 257);
+define('YY_EOF' , 258);
+   
 %%
 %namespace HTML_Template_Flexy_Tokenizer
 %public
@@ -80,21 +86,16 @@ define ('YY_EOF' , 258);
             echo "$k = $v\n";
         }
     }
+    
+    
 	function error($n,$s) {
         echo "Error $n: $s\n";
     }
      
     
      
-    
-    
-    
-        
-        
-     
    
-// %full removed to see if it helps?
-//   %char removed to see if it helps?
+
 %}
 
 %line
