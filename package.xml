@@ -65,26 +65,18 @@
  
 
     <release>
-     <version>0.9.1</version>
-      <date>2004-06-17</date>
+     <version>0.9.2</version>
+      <date>2004-06-24</date>
       <notes><![CDATA[
       Feature addition release
       
-      support for function blocks
-      <flexy:function name="myfunction"> define a  block here  </flexy:function>
-      <flexy:function call="myfunction"> calls the function </flexy:functio>
-      <flexy:function call="{somevar}"> variable function calls </flexy:function>
-      
-      support for static template compiles
-      options[compiler] = raw
-      
-      plugin support and user defined modifiers using plugins
-      {this.plugin(#name#,var,var):h}
-      {var:formatdate}  (calls plugin 
-      {var:formatnumber}
-      
-      Assign API support using setData() and setDataByRef()
+      support for id blocks
+        $flexy->compile('sometemplate.html#mytag');
+        will compile a file {compileDir}/sometemplate.html#mytag
+        which contains the tag and contents of <span id="mytag"> ... </span>
         
+      flexy:function call="xxx" checks that the user defined function block exists 
+      
       ]]></notes>
       <state>beta</state>
      </release>
@@ -181,6 +173,7 @@
             <file>raw_text.html</file> 
             <file>variables.html</file> 
             <file>function.html</file> 
+            <file>blocks.html</file> 
           </dir>
           <dir name="smarty" role="test">
           <!-- short test script to convert smarty templates int flexy ones  -->
@@ -202,6 +195,33 @@
    <changelog>
    
    
+
+    <release>
+     <version>0.9.1</version>
+      <date>2004-06-17</date>
+      <notes><![CDATA[
+      Feature addition release
+      
+      support for function blocks
+      <flexy:function name="myfunction"> define a  block here  </flexy:function>
+      <flexy:function call="myfunction"> calls the function </flexy:functio>
+      <flexy:function call="{somevar}"> variable function calls </flexy:function>
+      
+      support for static template compiles
+      options[compiler] = raw
+      
+      plugin support and user defined modifiers using plugins
+      {this.plugin(#name#,var,var):h}
+      {var:formatdate}  (calls plugin 
+      {var:formatnumber}
+      
+      Assign API support using setData() and setDataByRef()
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
     <release>
      <version>0.9.0</version>
       <date>2004-05-06</date>
