@@ -225,6 +225,13 @@ class HTML_Template_Flexy
         if (!$options['debug']) {
             $_error_reporting = error_reporting(E_ALL ^ E_NOTICE);
         }
+        if (!is_readable($this->compiledTemplate)) {
+              PEAR::raiseError( "Could not open the template: <b>'{$this->compiledTemplate}'</b><BR>".
+                            "Please check the file permisons on the directory and file ",
+                            null, PEAR_ERROR_DIE);
+        }
+        
+        
         include($this->compiledTemplate);
         if ($_error_reporting !== false) {
             error_reporting($_error_reporting);
@@ -421,7 +428,7 @@ class HTML_Template_Flexy
         $compileDest = $this->options['compileDir'];
         if ( !@is_dir($compileDest) ) {               // check if the compile dir has been created
             PEAR::raiseError(   "'compileDir' could not be accessed<br>".
-                                "1. please create the 'compileDir' which is: <b>'$compileDest'</b><br>2. give write-rights to it",
+                                "Please create the 'compileDir' which is: <b>'$compileDest'</b><br>2. give write-rights to it",
                                 null, PEAR_ERROR_DIE);
         }
 
@@ -441,7 +448,7 @@ class HTML_Template_Flexy
                     umask(0000);                        // make that the users of this group (mostly 'nogroup') can erase the compiled templates too
                     if( !@mkdir($compileDest,0770) ) {
                         PEAR::raiseError(   "couldn't make directory: <b>'$aDir'</b> under <b>'".$this->options['compileDir']."'</b><br>".
-                                            "1. please give write permission to the 'compileDir', so SimpleTemplate can create directories inside",
+                                            "Please give write permission to the 'compileDir', so HTML_Template_Flexy can create directories inside",
                                              null, PEAR_ERROR_DIE);
                     }
                 }
@@ -475,7 +482,9 @@ class HTML_Template_Flexy
         $this->compiledTemplate    = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
         $this->getTextStringsFile  = $compileDest.DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
         $this->quickformFile       = $compileDest.DIRECTORY_SEPARATOR .$filename.'.quickform.serial';
-  
+        
+        
+        
         $recompile = false;
         if( @$this->options['forceCompile'] ) {
             $recompile = true;
@@ -494,7 +503,7 @@ class HTML_Template_Flexy
         
             if( !is_writeable($compileDest)) {
                 PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
-                                "1. please give write and enter-rights to it",
+                                "Please give write and enter-rights to it",
                                 null, PEAR_ERROR_DIE);
             }
         
