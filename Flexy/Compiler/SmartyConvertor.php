@@ -18,12 +18,18 @@
 //
 // $Id$
 //
-//  Smarty Compilation wrapper
+//  Smarty Conversion compiler
+//  takes a smarty template, and converts it to a flexy one.
+//  then does a standard flexy compile.
+//
+//  really designed to be used with compileToString
+//  see
+// 
 //  Calls the relivent smarty compilers, then calls flexy to do the rest..
 
 require_once 'HTML/Template/Flexy/Compiler.php';
 
-class HTML_Template_Flexy_Compiler_SmartyEmulator extends HTML_Template_Flexy_Compiler {
+class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_Compiler {
     
     function compile(&$flexy,$string=false) 
     {
@@ -33,10 +39,15 @@ class HTML_Template_Flexy_Compiler_SmartyEmulator extends HTML_Template_Flexy_Co
         }
         
         
+        
         $data = $this->convertToFlexy($data);
+        echo $data;
+        exit;
+        if ($flexy->options['compileToString']) {
+            return $data;
+        }
         
         require_once 'HTML/Template/Flexy/Compiler/Standard.php';
-        
         $flexyCompiler = HTML_Template_Flexy_Compiler_Standard;
         $flexyCompiler->compile($flexy,$data);
         return true;
