@@ -90,7 +90,7 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
     }
     /**
     * include handler
-    * <flexy:include file="test.html">
+    * <flexy:include src="test.html">
     * 
     * @see parent::toString()
     */
