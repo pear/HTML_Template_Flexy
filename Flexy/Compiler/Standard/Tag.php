@@ -687,7 +687,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         return 
             $this->compiler->appendPhp('echo $this->elements[\''.$id.'\']->toHtmlnoClose();') .
             $this->element->compileChildren($this->compiler) .
-            $this->compiler->appendHtml( '</form>');
+            $this->compiler->appendHtml( "</{$copy->oTag}>");
     
     }       
        
