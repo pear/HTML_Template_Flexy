@@ -139,7 +139,7 @@ class HTML_Template_Flexy
         $a = &PEAR::getStaticProperty('Auth','singleton');
         
         /* expose o_ as $o */
-        $o = new stdClass;
+        $o = new StdClass;
         foreach (get_object_vars($t) as $k=>$v) {
             if ($k{0} != "o") {
                 continue;
