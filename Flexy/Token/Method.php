@@ -99,12 +99,27 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         
         
         
+        
+        
+        
         if ($this->isConditional) {
             $prefix = 'if (';
             $this->pushState();
             $suffix = ')';
         }  
-        // should really check the variable part of method ...
+        
+        
+        // check that method exists..
+        // if (method_exists($object,'method');
+        $bits = explode('.',$this->method);
+        $method = $bits[count($bits)-1];
+        unset($bits[count($bits)-1]);
+        $object = implode('.',$bits);
+        $prefix = 'if (isset('.$this->toVar($object).
+            ') && method_exists('.$this->toVar($object) .",'{$method}')) " . $prefix;
+        
+        
+        
         
         $ret = '<?php ' . $prefix;
         $ret .=  $this->toVar($this->method) . "(";

@@ -28,23 +28,20 @@
       <email>alan@akbkhome.com</email>
     </maintainer>
   </maintainers>
+  
+
   <release>
-       <version>0.2</version>
-      <date>2003-02-03</date>
-      <notes>First PEAR release,
-      - Introduction of Lex based Parser. - A real syntax checking 
-        Template generator
-      - Ability to do Coldfusion style HTML attributes like foreach="abc,b,c" in TR or any tag.
-      - Automatically converts form elements (INPUT, TEXTAREA, SELECT) contents to suitable PHP code
-        and adds error messages.
-      
-      - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
-      
-      Note: Filter features of original HTML_Template_Flexy are now depreciated.
-      Note: This is not backwards compatible with version 0.1!  
+       <version>0.3</version>
+      <date>2003-02-14</date>
+      <notes>
+      Bug fixes
+        - allow usage with only constructor options
       </notes>
       <state>beta</state>
      </release>
+     
+     
+     
     <filelist>
         <dir name="/" baseinstalldir="HTML/Template" role="php">
             <file>Flexy.php</file>
@@ -79,7 +76,25 @@
   
    <changelog>
    
-   
+   <release>
+       <version>0.2</version>
+      <date>2003-02-03</date>
+      <notes>
+      Major overhall of engine
+       
+      - Introduction of Lex based Parser. - A real syntax checking 
+        Template generator
+      - Ability to do Coldfusion style HTML attributes like foreach="abc,b,c" in TR or any tag.
+      - Automatically converts form elements (INPUT, TEXTAREA, SELECT) contents to suitable PHP code
+        and adds error messages.
+      
+      - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
+      
+      Note: Filter features of original HTML_Template_Flexy are now depreciated.
+      Note: This is not backwards compatible with version 0.1!  
+      </notes>
+      <state>beta</state>
+     </release>
    
    
      <release>

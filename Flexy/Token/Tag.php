@@ -237,14 +237,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             case "HIDDEN":
                 $this->attributes['VALUE'] = array(
                     "\"",
-                    $this->factory("Var",$thisvar.":u",$this->line),
+                    $this->factory("Var",$thisvar,$this->line),
                     "\"");
                 return;
             
             default:
                 $this->attributes['VALUE'] = array(
                     "\"",
-                    $this->factory("Var",$thisvar.":u",$this->line),
+                    $this->factory("Var",$thisvar,$this->line),
                     "\"");
                
                $this->postfix = $posterror;
