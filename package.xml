@@ -17,7 +17,7 @@
        can use phpdoc comments to list what variable you use.
   - Editable in WYSIWYG editors
      o you can create full featured templates, that doesnt get broken every time you edit with 
-       Dreamweaver(tm) or Mozzila editor
+       Dreamweaver(tm) or Mozilla editor
      o Uses namespaced attributes to add looping/conditionals  
   - Extremely Fast, 
      o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
@@ -81,7 +81,9 @@
         #---- - Plugins now show correct warning when loading fails.
         #---- - Plugins as modifiers work correctly 
                 (fixed previous bug if they started with h/r/t etc. they got ignored.)
-        
+                A very nice introduction to plugin's exists here:
+                http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
+                
         #3129 - add note that setRequired/setError/freeze are depreciated 
                 (they should really be examples, that end user can modify, rather than a method)
         #3145 - fixed missing ; in an error message.
