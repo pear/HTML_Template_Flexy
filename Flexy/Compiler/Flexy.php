@@ -926,6 +926,15 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     */
   
     function toStringTag($element) {
+        
+        $original = $element->getAttribute('ALT');
+        if (($element->tag == 'IMG') && is_string($original) && strlen($original)) {
+            $this->addStringToGettext($original);
+            $quote = $element->ucAttributes['ALT']{0};
+            $element->ucAttributes['ALT'] = $quote  . $this->translateString($original). $quote;
+        }
+        
+        
         if (strpos($element->tag,':') === false) {
             $namespace = 'Tag';
         } else {
