@@ -320,7 +320,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // doesnt really need strtolower etc. as php functions are not case sensitive!
         
         if ($this->element->getAttribute('FLEXY:DYNAMIC')) {
-            return $this->asElement( $this->getAttribute('ID'));
+            return $this->getElementPhp( $this->getAttribute('ID'));
             
         }
             
@@ -529,9 +529,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     /**
     * Convert flexy tokens to HTML_Template_Flexy_Elements.
     *
-    *
-    * @return   array
-    * @access   string
+    * @param    object token to convert into a element.
+    * @return   object HTML_Template_Flexy_Element
+    * @access   public
     */
     function toElement($element) {
         require_once 'HTML/Template/Flexy/Element.php';
