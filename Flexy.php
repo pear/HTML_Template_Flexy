@@ -22,6 +22,7 @@
 *   @package    HTML_Template_Flexy
 */
 
+ 
 /*
 * Global variable - used to store active options when compiling a template.
 */
@@ -54,11 +55,30 @@ class HTML_Template_Flexy
                             'forceCompile'  =>  false,  // only suggested for debugging
                             'filters'       => array(),
                             'debug'         => false,
-                            'locale'          => 'en',
-                            'useLegacy'  => false
-                            
+                            'locale'        => 'en',
+                            'useLegacy'     => false,  // use old preg_replace code
+                            'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
+                            'allowPHP'      => false   // allow PHP in template
                         );
 
+    
+    
+        
+    /**
+    * emailBoundary  - to use put {this.emailBoundary} in template
+    *
+    * @var string
+    * @access public
+    */
+    var $emailBoundary;
+    /**
+    * emaildate - to use put {this.emaildate} in template
+    *
+    * @var string
+    * @access public
+    */
+    var $emaildate;
+    
     /**
     *   Constructor 
     *
@@ -127,6 +147,9 @@ class HTML_Template_Flexy
             
         }
         
+        $this->emailBoundary = md5("FlexyMail".microtime());
+        $this->emailDate = date("D j M Y G:i:s O");
+        
         if ($this->options['useLegacy']) {
             
             $m = new StdClass;
@@ -156,8 +179,8 @@ class HTML_Template_Flexy
             
             
             /* usefull stuff for doing emails in Template Flexy */
-            $email_boundary = md5("FlexyMail".microtime());
-            $email_date = date("D j M Y G:i:s O");
+            $email_boundary = $this->emailBoundary;
+            $email_date = $this->emailDate;
         }
         // we use PHP's error handler to hide errors in the template.
         // this may be removed later, or replace with
@@ -221,7 +244,6 @@ class HTML_Template_Flexy
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
     *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param
     *   @return
     */
     function _classicParse()
@@ -254,7 +276,7 @@ class HTML_Template_Flexy
     *   @access     private
     *   @version    01/12/03
     *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param
+    *   @param      fixForEmail - post processes and replaces ?>\n with ?>\n\n
     *   @return
     */
 
@@ -279,10 +301,21 @@ class HTML_Template_Flexy
             //echo strlen($data);
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
         //$tokenizer->debug=1;
+        if ($this->options['nonHTML']) {
+            $tokenizer->ignoreHTML = true;
+        }
+        if ($this->options['allowPHP']) {
+            $tokenizer->ignorePHP = false;
+        }
+        
         $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
             
            
         $data = $res->toString();
+        
+        if ($this->options['nonHTML']) {
+           $data =  str_replace("?>\n","?>\n\n",$data);
+        }
         
         
         // error checking?
@@ -302,6 +335,7 @@ class HTML_Template_Flexy
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
     *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
+    *   @param      boolean $fixForMail - replace ?>\n with ?>\n\n
     *   @return
     */
     

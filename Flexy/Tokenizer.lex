@@ -80,8 +80,25 @@ define('YY_EOF' , 258);
 
 
 %{
-    
         
+    /**
+    * ignoreHTML flag
+    *
+    * @var      boolean  public
+    * @access   public
+    */
+    var $ignoreHTML = false;
+    /**
+    * ignorePHP flag - default is to remove all PHP code from template.
+    * although this may not produce a tidy result - eg. close ?> in comments
+    * it will have the desired effect of blocking injection of PHP from templates.
+    *
+    * @var      boolean  public
+    * @access   public
+    */
+    var $ignorePHP = true;
+    
+    
     function dump () {
         foreach(get_object_vars($this) as  $k=>$v) {
             if (is_string($v)) { continue; }
@@ -91,10 +108,22 @@ define('YY_EOF' , 258);
     }
     
     
-	function error($n,$s) {
-        echo "Error  $n on Line {$this->yyline}: $s\n";
+    function error($n,$s) {
+        echo "ERROR  $n on Line {$this->yyline}: $s\n";
     }
-     
+    /**
+    * return text
+    *
+    * Used mostly by the ignore HTML code. - really a macro :)
+    *
+    * @return   int   token ok.
+    * @access   public
+    */
+  
+    function returnSimple() {
+        $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+        return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    }
     
      
    
@@ -208,6 +237,10 @@ FLEXY_MODIFIER      = [hur]
 
   
 <YYINITIAL>{ETAGO}{NAME}?{WHITESPACE}"/"{STAGO} {
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
+   
     /* </name <  -- unclosed end tag */
     $this->error(0,"Unclosed  end tag");
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -216,6 +249,9 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{ETAGO}{NAME}{WHITESPACE} {
     /* </title> -- end tag */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
@@ -227,12 +263,18 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{ETAGO}{TAGC}			{
 	/* </> -- empty end tag */		
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(0,"empty end tag not handled");
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
             
 <YYINITIAL>{MDO}{NAME}{WHITESPACE}			{
     /* <!DOCTYPE -- markup declaration */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     
@@ -242,6 +284,9 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{MDO}{TAGC}			{ 
     /* <!> */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(1,"empty markup tag not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
@@ -250,7 +295,9 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{MDO}{COM}			{
     /* <!--  -- comment declaration */
-    
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -259,8 +306,10 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{MDO}{DSO}{WHITESPACE}			{
     /* <![ -- marked section */
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return $this->returnSimple();
+    
+    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"marked section not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -269,8 +318,11 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{MSC}{TAGC}		{ 
     /* ]]> -- marked section end */
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    
+    return $this->returnSimple();
+    
+    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"unmatched marked sections end"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -281,6 +333,14 @@ FLEXY_MODIFIER      = [hur]
     /* <? ...> -- processing instruction */
     // this is a little odd cause technically we dont allow it!!
     // really we only want to handle < ? xml 
+    $t = $this->yytext();
+    
+    // only allow 'xml'
+    if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
+        return HTML_TEMPLATE_NONE;
+    }
+    
+    
     $this->value = HTML_Template_Flexy_Token::factory('PHP',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
@@ -289,7 +349,10 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{STAGO}{NAME}{WHITESPACE}		{
     //<name -- start tag */
-     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -301,6 +364,9 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{STAGO}{TAGC}			{  
     // <> -- empty start tag */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(0,"empty tag"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
@@ -508,7 +574,7 @@ FLEXY_MODIFIER      = [hur]
 
 
 <IN_ATTR,IN_ATTRVAL,IN_TAG> .	{
-    $this->error(0,"ERROR: unexpected : character in tag: (".$this->yytext().") 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"Unexpected : character in tag: (".$this->yytext().") 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
@@ -783,7 +849,7 @@ FLEXY_MODIFIER      = [hur]
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <IN_FLEXYMETHOD> . {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 } 
 
@@ -853,6 +919,6 @@ FLEXY_MODIFIER      = [hur]
 
 
 <YYINITIAL,IN_TAG,IN_ATTR,IN_ATTRVAL> . {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 } 

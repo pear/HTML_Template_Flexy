@@ -415,6 +415,8 @@ class HTML_Template_Flexy_Token {
     }
     /**
     * do the stack lookup on the variable
+    * this relates to flexy
+    * t relates to the object being parsed.
     *
     * @return  string PHP variable 
     * @access   public
@@ -426,6 +428,9 @@ class HTML_Template_Flexy_Token {
     
         if (!$string || $string == 't') {
             return '$t';
+        }
+        if ($string == 'this') {
+            return '$this';
         }
         for ($s = $_HTML_TEMPLATE_FLEXY_TOKEN['state']; $s > 0; $s--) {
             if (in_array($string, $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s])) {

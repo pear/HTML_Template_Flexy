@@ -63,6 +63,22 @@ define('YY_EOF' , 258);
 class HTML_Template_Flexy_Tokenizer
 {
 
+    /**
+    * ignoreHTML flag
+    *
+    * @var      boolean  public
+    * @access   public
+    */
+    var $ignoreHTML = false;
+    /**
+    * ignorePHP flag - default is to remove all PHP code from template.
+    * although this may not produce a tidy result - eg. close ?> in comments
+    * it will have the desired effect of blocking injection of PHP from templates.
+    *
+    * @var      boolean  public
+    * @access   public
+    */
+    var $ignorePHP = true;
     function dump () {
         foreach(get_object_vars($this) as  $k=>$v) {
             if (is_string($v)) { continue; }
@@ -70,8 +86,20 @@ class HTML_Template_Flexy_Tokenizer
             echo "$k = $v\n";
         }
     }
-	function error($n,$s) {
-        echo "Error  $n on Line {$this->yyline}: $s\n";
+    function error($n,$s) {
+        echo "ERROR  $n on Line {$this->yyline}: $s\n";
+    }
+    /**
+    * return text
+    *
+    * Used mostly by the ignore HTML code. - really a macro :)
+    *
+    * @return   int   token ok.
+    * @access   public
+    */
+    function returnSimple() {
+        $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+        return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
 
 
@@ -1939,7 +1967,7 @@ class HTML_Template_Flexy_Tokenizer
                         switch ($yy_last_accept_state) {
 case 2:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 3:
@@ -1958,7 +1986,10 @@ case 4:
 case 5:
 {
     //<name -- start tag */
-     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -1968,6 +1999,9 @@ case 5:
 case 6:
 {  
     // <> -- empty start tag */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(0,"empty tag"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
@@ -1986,6 +2020,9 @@ case 8:
 case 9:
 {
     /* </title> -- end tag */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
@@ -1995,12 +2032,18 @@ case 9:
 case 10:
 {
 	/* </> -- empty end tag */		
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(0,"empty end tag not handled");
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 11:
 {
     /* <!DOCTYPE -- markup declaration */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -2008,14 +2051,18 @@ case 11:
 case 12:
 { 
     /* <!> */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->error(1,"empty markup tag not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 13:
 {
     /* <![ -- marked section */
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return $this->returnSimple();
+    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"marked section not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -2025,14 +2072,20 @@ case 14:
     /* <? ...> -- processing instruction */
     // this is a little odd cause technically we dont allow it!!
     // really we only want to handle < ? xml 
+    $t = $this->yytext();
+    // only allow 'xml'
+    if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
+        return HTML_TEMPLATE_NONE;
+    }
     $this->value = HTML_Template_Flexy_Token::factory('PHP',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 15:
 { 
     /* ]]> -- marked section end */
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return $this->returnSimple();
+    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"unmatched marked sections end"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -2054,6 +2107,9 @@ case 17:
 }
 case 18:
 {
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     /* </name <  -- unclosed end tag */
     $this->error(0,"Unclosed  end tag");
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
@@ -2061,6 +2117,9 @@ case 18:
 case 19:
 {
     /* <!--  -- comment declaration */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -2171,7 +2230,7 @@ case 33:
 }
 case 34:
 {
-    $this->error(0,"ERROR: unexpected : character in tag: (".$this->yytext().") 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"Unexpected : character in tag: (".$this->yytext().") 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 35:
@@ -2391,7 +2450,7 @@ case 66:
 }
 case 67:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 68:
@@ -2468,7 +2527,7 @@ case 74:
 }
 case 76:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 77:
@@ -2487,7 +2546,10 @@ case 78:
 case 79:
 {
     //<name -- start tag */
-     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -2509,6 +2571,9 @@ case 81:
 case 82:
 {
     /* </title> -- end tag */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
@@ -2518,6 +2583,9 @@ case 82:
 case 83:
 {
     /* <!DOCTYPE -- markup declaration */
+    if ($this->ignoreHTML) {
+        return $this->returnSimple();
+    }
     $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -2612,7 +2680,7 @@ case 98:
 }
 case 99:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 100:
@@ -2661,7 +2729,7 @@ case 107:
 }
 case 108:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 110:
@@ -2671,7 +2739,7 @@ case 110:
 }
 case 111:
 {
-    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    $this->error(0,"unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 113:

@@ -56,8 +56,12 @@
         - fixed {outputBody()} (no prefix var methods)
         - added url_rewrite for HREF and SRC tags - see example.ini for more details
         - added compileAll.php script for bulk compilation on servers that do not have
-        write access to the directories they are serving off.
-        
+          write access to the directories they are serving off.
+        - Added extra Option - nonHTML to not make tokens of HTML tags, and enable postprocessing 
+          of compiled template to replace ?&gt;\n with ?&gt;\n\n (aimed at email templates)
+        - Added extra Option - allowPHP to enable PHP code in template to be left alone. - defaults
+          to off (eg. no PHP allowed) - 
+                    
       </notes>
       <state>beta</state>
      </release>
