@@ -274,15 +274,15 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $this->postfix = array( $this->factory("Text","<B><font color=red>Invalid name used for flexy tag :$name: </font></b>",$this->line));
             return;
         }
-            
         
+        // this will be replaced with a configurable error object - eg FLEXYERROROBJECT="abcd"
         
-        $thisvar = str_replace(']','',$name);
-        $thisvar = str_replace('[','.',$thisvar);
+        $errorname = $this->toVar("flexyError." . $this->getAttribute('NAME'));
+        
         
         $posterror = array(
-            $this->factory("PHP", "<?php if (isset(\$this->errors['".urlencode($thisvar)."'])) { ".
-                "echo  htmlspecialchars(\$this->errors['".urlencode($thisvar). "']); } ?>",$this->line));
+            $this->factory("PHP", "<?php if (isset({$errorname})) { ".
+                "echo  htmlspecialchars({$errorname}); } ?>",$this->line));
         
         
         switch ($type) {
@@ -351,18 +351,24 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
             $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
         }
-         
-        $thisvar = str_replace(']','',$name);
-        $thisvar = str_replace('[','.',$thisvar);
+        
+        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?)*$/i',$name)) {
+            $this->postfix = array( $this->factory("Text","<B><font color=red>Invalid name used for flexy tag :$name: </font></b>",$this->line));
+            return;
+        }
+        
+        // this will be replaced with a configurable error object - eg FLEXYERROROBJECT="abcd"
+        
+        $errorname = $this->toVar("flexyError." . $this->getAttribute('NAME'));
+        
+   
         
         $posterror = array(
-            $this->factory("PHP", "<?php if (isset(\$this->errors['".urlencode($thisvar)."'])) { ".
-                "echo  htmlspecialchars(\$this->errors['".urlencode($thisvar). "']); } ?>",$this->line));
+            $this->factory("PHP", "<?php if (isset({$errorname})) { ".
+                "echo  htmlspecialchars({$errorname}); } ?>",$this->line));
         
         
-        $this->postfix = array(
-            $this->factory("Var",$thisvar ,$this->line)
-            );
+        $this->postfix = array( $this->factory("Var",$name ,$this->line) );
         $this->close->postfix = $posterror;
         $this->children = array();
         return;
