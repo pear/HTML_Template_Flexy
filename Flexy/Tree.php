@@ -18,7 +18,7 @@
 //
 // $Id$
 //
-// The Html Parser Component of Flexy
+// The Html Tree Component of Flexy
 // Designed to be used on it's own
 // 
 //
@@ -150,7 +150,7 @@ class HTML_Template_Flexy_Tree {
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
                 return HTML_Template_Flexy::raiseError(
                     array(
-                            "HTML_Template_Flexy_Parser::Syntax error in File: %s (Line %s)\n".
+                            "HTML_Template_Flexy_Tree::Syntax error in File: %s (Line %s)\n".
                             "Tokenizer Error: %s\n".
                             "Context:\n\n%s\n\n >>>>>> %s\n",
                         $this->options['filename'], $tokenizer->yyline ,
