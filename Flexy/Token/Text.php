@@ -126,7 +126,10 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         
         
     }
-        
+      
+    
+      
+      
     /**
     * List of argument tokens.
     *
@@ -236,7 +239,16 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         }
         return  preg_match('/[a-z]/i',$this->value);
     }
-
+    /**
+    * Convert flexy tokens to HTML_Elements. (in this case - it's just a string)
+    *
+    *
+    * @return   array
+    * @access   string
+    */
+    function toElement() {
+        return  $this->value;
+    }
 }
 
 
