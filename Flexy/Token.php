@@ -295,11 +295,12 @@ class HTML_Template_Flexy_Token {
                 if (!$res[$i]->isWord()) {
                     continue;
                 }
+                
                 $res[$i]->backSearch($res);
                 $i = $res[$i]->forwardSearch($res);
             }
         }
-         
+        
         
         
         // connect open  and close tags.

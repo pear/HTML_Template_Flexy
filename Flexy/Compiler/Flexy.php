@@ -838,11 +838,13 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         if (@$this->options['debug']) {
             echo __CLASS__.":TRANSLATING $string<BR>\n";
         }
+        
         if (function_exists('gettext') && !$this->options['textdomain']) {
             if (@$this->options['debug']) {
                 echo __CLASS__.":USING GETTEXT?<BR>";
             }
             $t = gettext($string);
+            
             if ($t != $string) {
                 return $t;
             }
@@ -850,8 +852,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             if ($tt != $prefix.$string) {
                 return $tt;
             }
-            // give up it's not translated anywhere...
-            return $t;
+                // give up it's not translated anywhere...
+            return $string;
              
         }
         if (!$this->options['textdomain'] || !$this->options['textdomainDir']) {
