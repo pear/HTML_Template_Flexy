@@ -297,114 +297,7 @@ class HTML_Template_Flexy
     
       
  
-
-    /**
-    *   parse - the new tokenizer based generator
-    *
-    *   @access     private
-    *   @version    01/12/03
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param      fixForEmail - post processes and replaces ?>\n with ?>\n\n
-    *   @return
-    */
-
-
-
-
-    function _parse() 
-    { 
-        // read the entire file into one variable
-        
-        // note this should be moved to new HTML_Template_Flexy_Token
-        // and that can then manage all the tokens in one place..
-        if (@$this->options['debug']) {
-            echo "compiling template $this->currentTemplate<BR>";
-            
-        }
-        require_once 'HTML/Template/Flexy/Tokenizer.php';
-        
-        
-        $this->_elements = array();
-        
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = &$this->_elements;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $this->currentTemplate;
-        
-        setlocale(LC_ALL, $this->options['locale']);
-        
-        $data = file_get_contents($this->currentTemplate);
-            //echo strlen($data);
-        $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
-        $tokenizer->fileName = $this->currentTemplate;
-        //$tokenizer->debug=1;
-        if ($this->options['nonHTML']) {
-            $tokenizer->ignoreHTML = true;
-        }
-        if ($this->options['allowPHP']) {
-            $tokenizer->ignorePHP = false;
-        }
-        
-        $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-            
-           
-        $data = $res->toString();
-        if (@$this->options['debug']) {
-            echo "<B>Result: </B>".htmlspecialchars($data)."<BR>";
-            
-        }
-
-        if ($this->options['nonHTML']) {
-           $data =  str_replace("?>\n","?>\n\n",$data);
-        }
-        
-        
-        // error checking?
-        if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
-            if (@$this->options['debug']) {
-                echo "<B>Writing: </B>".htmlspecialchars($data)."<BR>";
-                
-            }
-            fwrite($cfp,$data);
-            fclose($cfp);
-            @chmod($this->compiledTemplate,0775);
-            // make the timestamp of the two items match.
-            clearstatcache();
-            @touch($this->compiledTemplate, filemtime($this->currentTemplate));
-            
-        } else {
-            PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$this->compiledTemplate,null,PEAR_ERROR_DIE);
-        }
-        // gettext strings
-        if (file_exists($this->gettextStringsFile)) {
-            unlink($this->gettextStringsFile);
-        }
-        
-        if($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] &&
-            ($cfp = fopen( $this->getTextStringsFile, 'w') ) ) {
-            
-            fwrite($cfp,serialize(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'])));
-            fclose($cfp);
-        }
-        
-        // elements
-        if (file_exists($this->elementsFile)) {
-            unlink($this->elementsFile);
-        }
-        
-        if($this->_elements &&
-            ($cfp = fopen( $this->elementsFile, 'w') ) ) {
-            
-          
-            
-            fwrite($cfp,serialize($this->_elements));
-            fclose($cfp);
-            // now clear it.
-        
-        }
-        
-        return true;
-    }
-
+ 
     /**
     *   compile the template
     *
@@ -664,9 +557,8 @@ class HTML_Template_Flexy
         } 
        
         return $original;
-        //echo "<PRE>RESULT:";
-         //print_r($this);
-    } // end func updateAttributes 
+        
+    }  
      
      
     /**
