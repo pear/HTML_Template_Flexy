@@ -229,6 +229,11 @@ class HTML_Template_Flexy_Element {
                         return;
                     
                     default:
+                        // no other input accepts array as a value.
+                        if (is_array($value)) {
+                            return;
+                        }
+                    
                         $this->attributes['value'] = $value;
                         return;
                 }
@@ -309,7 +314,13 @@ class HTML_Template_Flexy_Element {
             case 'textarea':
                 $this->children = array($value);
                 return;
+            case '':  // dummy objects.
+                $this->value = $value;
+                return;
             default:
+                if (is_array($value)) {
+                    return;
+                }
                 $this->value = $value;
         }
             
