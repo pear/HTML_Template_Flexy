@@ -49,7 +49,7 @@ $options['compileDir']    =  dirname(__FILE__) .'/results1';
 
 $a = $_SERVER['argv'];
 array_shift($a);
-compileAll($options,$a);
+//compileAll($options,$a);
 
 // test allowPHP 
 $options['compileDir']    =  dirname(__FILE__) .'/results2';
@@ -96,6 +96,7 @@ fclose($fh);
 
 /* ----- functions examples ---------*/
 
+echo "Compiling Function examples\n";
 $x = new HTML_Template_Flexy($options);
 $x->compile('function.html');
 
@@ -108,6 +109,12 @@ fwrite($fh,$data);
 fclose($fh);
 
 
+/*  ------ block examples ---------*/
+echo "Compiling Block examples\n";
+$x = new HTML_Template_Flexy($options);
+$x->compile('blocks.html#block1');
 
+$x = new HTML_Template_Flexy($options);
+$x->compile('blocks.html#block2');
 
 
