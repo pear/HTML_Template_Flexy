@@ -204,7 +204,10 @@ class HTML_Template_Flexy_Element {
      */
      
     function setValue($value) {
-     
+        // store the value in all situations
+        $this->value = $value;
+        
+        
         switch ($this->tag) {
             case 'input':
                 switch (isset($this->attributes['type']) ? strtolower($this->attributes['type']) : '') {
