@@ -32,15 +32,24 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY'] = array();
 * A Flexible Template engine - based on simpletemplate  
 *
 * @abstract Long Description
-*  This is  a rip of of Wolfram's Simple Template class - heavily simplified,
-*  with a modified filter loading mechanism.
-*  notebly 
-*       - no xml config stuff
-*       - simplified filters - so you just tell it which filter (classes) to use, 
-*            not individual methods
-*       - a smarty like tag library, 
-*       - heavily focused on displaying objects as pages.
-* (so you can document your tags.)
+*  Have a look at the package description for details.
+*
+* usage: 
+*
+* // $options can be blank if so, it is read from 
+* // PEAR::getStaticProperty('HTML_Template_Flexy','options');
+* $template = new HTML_Template_Flexy($options);
+* 
+* $template->compiler('/name/of/template.html');
+*
+* // $this - should be a class whose variable are used
+* // in the template eg. $this->xxx maps to {xxx}
+* // $elements is an array of HTML_Template_Flexy_Elements
+* // eg. array('name'=> new HTML_Template_Flexy_Element('',array('value'=>'fred blogs'));
+* 
+* $template->outputObject($this,$elements)
+*
+*
 *
 * @version    $Id$
 */
@@ -50,15 +59,18 @@ class HTML_Template_Flexy
     /*
     *   @var    array   $options    the options for initializing the template class
     */
-    var $options = array(   'compileDir'    =>  '',      // by default its always the same one as where the template lies in, this might not be desired
-                            'templateDir'   =>  '',
+    var $options = array(   'compileDir'    =>  '',      // where do you want to write to..
+                            'templateDir'   =>  '',     // where are your templates
+                            'locale'        => 'en',    // works with gettext
                             'forceCompile'  =>  false,  // only suggested for debugging
-                            'filters'       => array(),
-                            'debug'         => false,
-                            'locale'        => 'en',
-                            'useLegacy'     => false,  // use old preg_replace code
+
+                            'debug'         => false,   // prints a few errors
+                            
                             'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
-                            'allowPHP'      => false   // allow PHP in template
+                            'allowPHP'      => false,   // allow PHP in template
+                            'compiler'      => 'Standard', // which compiler to use.
+                            
+                            'filters'       => array(),    // used by regex compiler..
                         );
 
     
@@ -149,23 +161,13 @@ class HTML_Template_Flexy
     *   Outputs an object as $t 
     *
     *   for example the using simpletags the object's variable $t->test
-    *   would map to {t.test}
-    *
-    *   maps ** these are all depreciated and should not be used!
-    *   the area only available if useLegacy is set.
-    *   $t->o_*           maps to {o.*}  // used for output
-    *   $t->input         maps to {i.*} // used for input
-    *   $t->modules[xxxx] maps to {m.xxxx} // used for modules
-    *   $t->config        maps to {c.*}  // used for config
-    *   PEAR::getStaticProperty('Auth','singleton') maps to  {a.*}
-    *   {email_boundary} // for email boundaries  
-    *   {email_date}    // for email dates
-    *
+    *   would map to {test}
     *
     *   @version    01/12/14
     *   @access     public
     *   @author     Alan Knowles
-    *   @param    object object to output as $t
+    *   @param    object   to output  
+    *   @param    array  HTML_Template_Flexy_Elements (or any object that implements toHtml())
     *   @return     none
     */
     
@@ -181,38 +183,7 @@ class HTML_Template_Flexy
         $this->emailBoundary = md5("FlexyMail".microtime());
         $this->emailDate = date("D j M Y G:i:s O");
         
-        if ($this->options['useLegacy']) {
-            
-            $m = new StdClass;
-            // compile modules
-             
-            /* these are to be depreciated !!!*/
-            
-            
-            $c = & $t->config;
-            if (@$t->input) {
-                $i = & $t->input;
-            }
-            $a = &PEAR::getStaticProperty('Auth','singleton');
-            
-            /* expose o_ as $o */
-            $o = new StdClass;
-            foreach (get_object_vars($t) as $k=>$v) {
-                if ($k{0} != "o") {
-                    continue;
-                }
-                if ($k{1} != "_") {
-                    continue;
-                }
-                $kk = substr($k,2);
-                $o->$kk =& $t->$k;
-            }
-            
-            
-            /* usefull stuff for doing emails in Template Flexy */
-            $email_boundary = $this->emailBoundary;
-            $email_date = $this->emailDate;
-        }
+  
         // this may disappear later it's a BC fudge to try and deal with 
         // the old way of setting $this->elements to be merged.
         // the correct behavior is to use the extra field in outputObject.
