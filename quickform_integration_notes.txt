@@ -1,0 +1,112 @@
+
+
+as flexy has some dynamic form integration - it makes sense to reduce the work 
+involved and utilize the quickforms package to provide dynamic forms, this little
+document is to explore the interface between the two packages...
+
+
+
+
+PHP code side logic:
+<?
+
+$template = new HTML_Template_Flexy;
+$template->compile('somehtmlform.html');
+$quickForm = $template->getQuickForm($dataObject); 
+            // uses an object to set the defaults (returns ref to quickform)
+$elements = $quickForm->getElements(); // returns reference to elements array 
+$elements['xyz']->loadArray($dataObject->getSelectOptions('xyz');
+
+if ($quickform->validate()) {
+    $quickform->freeze();
+    
+    $original = $dataObject;
+    $dataObject->setFrom($quickForm->getSubmitValues());
+    ...
+    goto another page...
+} 
+// change this to display?? - 
+$template->output();
+?>
+
+
+
+
+Compiling side...
+
+on the compile template .. - if it compiles (eg. the file has changed..)
+
+- it should build the quickform as it goes along in the $template->quickform variable.
+- once finished (at the same time the compiled template is saved) it will write the quickform
+object as a serialized string to compiledTemplateDir/templatename.html.quickform.serial
+ ** if serialize doesnt work - then .html.quickform.php - will have to be the php code to 
+ create the quick form...
+
+
+
+
+// extra available data..?
+{this.quickform.getRequiredNote()}
+
+
+
+// Possible wrapper/addons to QuickForms..
+
+    buildRules - wrapper to _buildRules that adds the '<script language="javascript"> ... </script>
+    buildFormTag which does "<form ". $this->quickform->_getAttrString($this->quickform->_attributes); . ">"
+    buildElement($elementname ) - which wraps   $this->_buildElement($this->_elements[$elementname]);
+    &getElements(); just return $this->_elements;
+
+
+
+
+FORM: 
+    // in the template
+    <form name="xxxx" action="...." filter="trim">
+    
+    // creates php code in the compiled template:
+   
+    <?php echo $this->quickForm->buildRules() ?>
+    <?php echo $this->quickForm->buildFormTag(); ?>
+        
+    ($this refers to the template object for those that dont know flexy :)
+    // creates datafile? or builds as it parses (then serializes)
+    
+    $quickForm = new HTML_QuickForm('xxxx');
+    $quickForm->applyFilter('__ALL__','trim');
+    
+ 
+    
+INPUT: (text)    
+    // in the template
+    <input type="text" name="xxxx" 
+            rule = "required,This is a required field" 
+            rule = "minlength,5,Test must be minimum 5 characters">
+    
+    // creates php code in the compiled template:
+    
+    <?php echo $this->quickForm->buildElement("xxxx"); ?>
+
+    // creates datafile? or builds as it parses (then serializes)
+    
+    $quickForm->addElement('text','xxxx',.....)
+    $quickForm->addRule("xxxx","Test is a required field","required");
+    $quickForm->addRule("xxxx", "Test must be minimum 5 characters");
+    
+    
+    
+
+INPUT: (hidden)
+    // in the template
+    <input type="hidden" name="xxxx" value="xxxx" flexyvar="yyyyy" .....>
+    
+    // creates a template element:
+    
+    <?php echo $this->quickForm->buildElement('xxx'); ?>
+    
+    // this should be an extra method in QForms to do :
+    
+    // creates datafile?
+    
+    $quickForm->addElement('hidden','xxxx',.....)   
+    
