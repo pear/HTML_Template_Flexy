@@ -22,5 +22,12 @@
         </tree>
         <?php echo $this->elements['test']->toHtmlnoClose();?>
             <?php echo $this->elements['test2']->toHtml();?>
+            <html:table>
+              <html:tr>
+                <html:td>
+                  <label style="text-align: left;" control="listItemSubCat" value="Item Subcategory" />
+                </html:td>
+             </html:tr>
+            </html:table>
         </html:form>
 </window>

@@ -852,7 +852,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             $namespace = $bits[0];
         }
         if ($namespace{0} == '/') {
-            return '';
+            $namespace = substr($namespace,1);
         }
         if (empty($this->tagHandlers[$namespace])) {
             
