@@ -35,10 +35,11 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     * The compile method.
     * 
     * @params   object HTML_Template_Flexy
+    * @params   string|false string to compile of false to use a file.
     * @return   string   filename of template
     * @access   public
     */
-    function compile(&$flexy) 
+    function compile(&$flexy,$string=false) 
     {
         // read the entire file into one variable
         
@@ -60,12 +61,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         // replace this with a singleton??
         
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = &$flexy->_elements;
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = array();
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
         
         setlocale(LC_ALL, $this->options['locale']);
         
-        $data = file_get_contents($flexy->currentTemplate);
+        
+        $data = $string;
+        if ($string === false) {
+            $data = file_get_contents($flexy->currentTemplate);
+        }
+        
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
         $tokenizer->fileName = $flexy->currentTemplate;
         
@@ -95,6 +101,14 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         if ($this->options['nonHTML']) {
            $data =  str_replace("?>\n","?>\n\n",$data);
         }
+        
+        // at this point we are into writing stuff...
+        if ($this->options['compileToString']) {
+            $flexy->elements =  $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'];
+            return $data;
+        }
+        
+        
         
         
         // error checking?
@@ -129,12 +143,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             unlink($flexy->elementsFile);
         }
         
-        if($flexy->_elements &&
+        if( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] &&
             ($cfp = fopen( $flexy->elementsFile, 'w') ) ) {
-            
-          
-            
-            fwrite($cfp,serialize($flexy->_elements));
+            fwrite($cfp,serialize( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements']));
             fclose($cfp);
             // now clear it.
         

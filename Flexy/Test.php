@@ -27,8 +27,9 @@
 //ini_set('include_path', ini_get('include_path').realpath(dirname(__FILE__) . '/../../..'));
 require_once 'Gtk/VarDump.php';
 require_once 'Console/Getopt.php';
-require_once 'HTML/Template/Flexy/Tokenizer.php';
-require_once 'HTML/Template/Flexy/Token.php';
+require_once 'HTML/Template/Flexy.php';
+require_once 'HTML/Template/Flexy/Compiler.php';
+
 // this is the main runable...
  
 class HTML_Template_Flexy_Test {
@@ -76,22 +77,13 @@ class HTML_Template_Flexy_Test {
     
     function parse() {
         foreach($this->files as $file) {
-            $this->_elements = array();
-            $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = &$this->_elements;
-            //$this->debug(1, "Tokenizing ". $file);
-            $data = file_get_contents($file);
-            //echo strlen($data);
-            $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
-            
-            $tokenizer->debug=1;
-            //echo "buliding tokens";
-            $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-            
-            
-            //new Gtk_VarDump($res);
-            echo $res->toString();
+            $flexy = new HTML_Template_Flexy(array('compileToString'=>true));
+            $compiler =  HTML_Template_Flexy_Compiler::factory($flexy->options);
+            $result = $compiler->compile($flexy,file_get_contents($file));
+            echo $result;
             print_r(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings']));
-            print_r($this->_elements);
+            print_r($flexy->elements);
+            
         }
         
         

@@ -69,7 +69,8 @@ class HTML_Template_Flexy
                             'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
                             'allowPHP'      => false,   // allow PHP in template
                             'compiler'      => 'Standard', // which compiler to use.
-                            
+                            'compilerToString' => false,    // should the compiler return a string 
+                                                            // rather than writing to a file.
                             'filters'       => array(),    // used by regex compiler..
                         );
 
@@ -97,6 +98,15 @@ class HTML_Template_Flexy
     * @access public
     */
     var $compiledTemplate;
+    /**
+    * The source template filename (Full path)
+    *
+    * @var string
+    * @access public
+    */
+    
+    
+    var $currentTemplate;
     
     /**
     * The getTextStrings Filename
@@ -544,6 +554,7 @@ class HTML_Template_Flexy
     */
     
     function getElements() {
+    
         if ($this->elementsFile && file_exists($this->elementsFile)) {
             require_once 'HTML/Template/Flexy/Element.php';
             return unserialize(file_get_contents($this->elementsFile));

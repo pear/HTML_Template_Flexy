@@ -69,14 +69,15 @@ class HTML_Template_Flexy_Compiler {
     * The compile method.
     *
     * @param object HTML_Template_Flexy that is requesting the compile
-    * @return   string   filename of template
+    * @return   object  HTML_Template_Flexy 
+    * @return   string   to compile (if not using a file as the source)
     * @access   public
     */
-    function compile(&$flexy) 
+    function compile(&$flexy,$string = false) 
     {
         echo "No compiler implemented!";
     }
-
+     
     /**
     * Append HTML to compiled ouput
     * These are hooks for passing data to other processes
