@@ -454,7 +454,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                
                 break;
 
+            case "FILE":
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
+                   array($buildId , 'file' ,  $name,  '',   $this->getAttributes()) 
+                );
             
+                break;
 
 
             case "HIDDEN":
