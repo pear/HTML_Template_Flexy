@@ -656,6 +656,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             }
             return $string;
         }
+        if (@$this->options['debug']) {
+            echo __CLASS__.":MATCHED: {$po->strings[$string]}<BR>";
+        }
         // finally we have a match!!!
         return $po->strings[$string];
         
