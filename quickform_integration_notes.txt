@@ -14,8 +14,13 @@ $template = new HTML_Template_Flexy;
 $template->compile('somehtmlform.html');
 $template->setQuickFormData($dataObject); 
             // uses an object to set the defaults // sets up $template->quickForm
+            
+            
+// THIS WILL NOT WORK YET!
 $elements = $template->quickForm->getElements(); // returns reference to elements array 
 $elements['xyz']->loadArray($dataObject->getSelectOptions('xyz');
+
+
 
 if ($template->quickform->validate()) {
     $template->quickform->freeze();
@@ -36,10 +41,9 @@ Compiling side...
 
 on the compile template .. - if it compiles (eg. the file has changed..)
 
--   it should build the quickform as it goes along in the $template->quickform variable.
--   once finished (at the same time the compiled template is saved) it will write the quickform
-    serialized object  to compiledTemplateDir/templatename.html.quickform.serial
- ** the loader will have to double load the serialized object to resolve the missing classes.
+** SERIALIZING FAILED - due to the load order that quickforms works on.
+
+- The parser generates an array of arguments and function calls to build the quickforms at runtime.
         
 
 // extra available data..?
@@ -104,5 +108,34 @@ INPUT: (hidden)
     
     // creates datafile?
     
-    $quickForm->addElement('hidden','xxxx',.....)   
+    $quickForm->addElement('hidden','xxxx',.....)  
+    
+    
+    
+/********** ISSUES STILL TO DEAL WITH:
+
+
+mulitple forms on one template..
+
+- this is highly problematic.
+
+either 
+
+
+$flexy->quickform['xxxx'] or 
+
+somehow $flexy->setActiveQuickform('xxx');
+
+
+
+
+
+
+
+
+
+
+
+
+    
     

@@ -593,7 +593,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         ); 
         
         
-        return '<?php echo $this->quickform->formHeadToHtml(); ?>' .
+        return '<?php echo $this->quickform->formHeadToHtml("'.$this->getAttribute('NAME').'"); ?>' .
             $this->childrenToString() .
             '</form>';
         
