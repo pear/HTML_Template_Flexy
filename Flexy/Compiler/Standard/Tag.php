@@ -201,7 +201,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         $flexyignore = $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'];
         
-        if ($this->element->getAttribute('FLEXY:IGNORE') !== null) {
+        if ($this->element->getAttribute('FLEXY:IGNORE') !== false) {
             $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = true;
             $this->element->clearAttribute('FLEXY:IGNORE');
         }
