@@ -201,8 +201,7 @@ class HTML_Template_Flexy_Element {
      
         switch ($this->tag) {
             case 'input':
-                 
-                switch (strtolower($this->attributes['type'])) {
+                switch (isset($this->attributes['type']) ? strtolower($this->attributes['type']) : '') {
                     case 'checkbox':
                         if (isset($this->attributes['checked'])) {
                             unset($this->attributes['checked']);
