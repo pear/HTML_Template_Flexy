@@ -55,6 +55,7 @@ define("IN_FLEXYMETHODQUOTED"  ,12);
 define("IN_FLEXYMETHODQUOTED_END" ,13);
 define("IN_SCRIPT",             14);
 define("IN_CDATA"     ,         15);
+define("IN_DSCOM",              16);
 
 
 define('YY_E_INTERNAL', 0);
@@ -109,7 +110,14 @@ define('YY_EOF' , 258);
     */
     
     var $yyCdataBegin = 0;
+     /**
+    * the start position of a comment block
+    *
+    * @var int
+    * @access private
+    */
     
+    var $yyCommentBegin = 0;
     /**
     * the name of the file being parsed (used by error messages)
     *
@@ -157,7 +165,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA IN_DSCOM
 
  
 
@@ -322,9 +330,11 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    $this->yyCommentBegin = $this->yy_buffer_end;
+    
+    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
 
@@ -665,10 +675,19 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
  
 <IN_COM>([^-]|-[^-])*{WHITESPACE}	{
+    // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    $this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    
+    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
      
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+ 
+<IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
+    // inside a comment (not - or not --
+    // <!^--...-->   -- comment */   
+    $this->value = HTML_Template_Flexy_Token::factory('DSComment',$this->yytext(),$this->yyline);
+         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
@@ -716,10 +735,20 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
 <IN_COM>{COM}{TAGC}			{   
-    $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
+    
+    $this->value = HTML_Template_Flexy_Token::factory('Comment',
+        '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),
+        $this->yyline
+    );
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
+<IN_DSCOM>{COM}{TAGC}			{   
+    $this->value = HTML_Template_Flexy_Token::factory('DSEnd', $this->yytext(),$this->yyline);
+    $this->yybegin(YYINITIAL); 
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
+}
+
 <IN_MD>{TAGC}			{   
     $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
@@ -754,7 +783,8 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_DS>{DSC}			{ 
     // ] -- declaration subset close */
     $this->value = HTML_Template_Flexy_Token::factory('DSEndSubset',$this->yytext(),$this->yyline);
-    $this->yybegin(IN_COM); 
+    $this->yybegin(IN_DSCOM); 
+    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -970,7 +1000,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<YYINITIAL,IN_SINGLEQUOTE,IN_TAG,IN_ATTR,IN_ATTRVAL,IN_NETDATA,IN_DOUBLEQUOTE,IN_DS,IN_FLEXYMETHOD,IN_FLEXYMETHODQUOTED,IN_FLEXYMETHODQUOTED_END> . {
+<YYINITIAL,IN_SINGLEQUOTE,IN_TAG,IN_ATTR,IN_ATTRVAL,IN_NETDATA,IN_DOUBLEQUOTE,IN_DS,IN_FLEXYMETHOD,IN_FLEXYMETHODQUOTED,IN_FLEXYMETHODQUOTED_END,IN_DSCOM> . {
     return $this->raiseError("unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
     
 } 
