@@ -51,7 +51,8 @@ class HTML_Template_Flexy
                             'forceCompile'  =>  false,  // only suggested for debugging
                             'filters'       => array(),
                             'debug'         => false,
-                            'locale'          => 'en'
+                            'locale'          => 'en',
+                            'useTokenizer'  => false
                             
                         );
 
@@ -198,6 +199,7 @@ class HTML_Template_Flexy
     
       
     /**
+    *   classicParse - the older regex based code generator.
     *   here all the replacing, filtering and writing of the compiled file is done
     *   well this is not much work, but still its in here :-)
     *
@@ -207,7 +209,7 @@ class HTML_Template_Flexy
     *   @param
     *   @return
     */
-    function parse()
+    function classicParse()
     {
         // read the entire file into one variable
         if ( $input = @file($this->currentTemplate) ) {
@@ -224,6 +226,99 @@ class HTML_Template_Flexy
         // write the compiled template into the compiledTemplate-File
         if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
             fwrite($cfp,$fileContent);
+            fclose($cfp);
+            @chmod($this->compiledTemplate,0775);
+        }
+
+        return true;
+    }
+
+    /**
+    *   parse - the new tokenizer based generator
+    *
+    *   @access     private
+    *   @version    01/12/03
+    *   @author     Alan Knowles <alan@kriesing.de>
+    *   @param
+    *   @return
+    */
+
+
+
+
+    function parse() 
+    { 
+        // read the entire file into one variable
+        $data = file_get_contents($this->currentTemplate);
+            //echo strlen($data);
+        $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
+        //$tokenizer->debug=1;
+        $i=0;
+        $res = array();
+        
+        while ($t = $tokenizer->yylex()) {  
+            //if ($tokenizer->value === '') {
+            //    continue;
+           // }
+            
+            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
+                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,null,PEAR_ERROR_DIE);
+            }
+            if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
+                continue;
+            }
+           
+            $i++;
+            $res[$i] = $tokenizer->value;
+            $res[$i]->id = $i;
+            //print_r($res[$i]);
+            
+            $tokenizer->value = '';
+            
+        }
+        // connect parent and child tags.
+        $stack = array();
+        for($i=0;$i<count($res);$i++) {
+            if (!@$res[$i]->tag) {
+                continue;
+            }
+            if ($res[$i]->tag{0} == '/') { // it's a close tag..
+                //echo "GOT END TAG: {$res[$i]->tag}\n";
+                $tag = strtoupper(substr($res[$i]->tag,1));
+                if (!isset($stack[$tag]['pos'])) {
+                    continue; // unmatched
+                }
+                $npos = $stack[$tag]['pos'];
+                //echo "matching it to {$stack[$tag][$npos]}\n";
+                $res[$stack[$tag][$npos]]->close = &$res[$i];
+                $stack[$tag]['pos']--;
+                if ($stack[$tag]['pos'] < 0) {
+                    // too many closes - just ignore it..
+                    $stack[$tag]['pos'] = 0;
+                }
+                continue;
+            }
+            // new entry on stack..
+            $tag = strtoupper($res[$i]->tag);
+            
+            if (!isset($stack[$tag])) {
+                $npos = $stack[$tag]['pos'] = 0;
+            } else {
+                $npos = ++$stack[$tag]['pos'];
+            }
+            $stack[$tag][$npos] = $i;
+        }
+                
+            
+        //new Gtk_VarDump($res);
+        $data = '';
+        foreach($res as $v) {
+            $data .=  $v->toHTML();
+        }
+        
+        // error checking?
+        if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
+            fwrite($cfp,$data);
             fclose($cfp);
             @chmod($this->compiledTemplate,0775);
         }
@@ -333,9 +428,12 @@ class HTML_Template_Flexy
                 $recompile = true;
             }
         }
-
+        $method = 'classicParse';
+        if (@$this->options['useTokenizer']) {
+            $method = 'parse';
+        }
         if( $recompile )  {             // or any of the config files
-            if( !$this->parse() ) {
+            if( !$this->$method() ) {
                 return false;
             }
         }
