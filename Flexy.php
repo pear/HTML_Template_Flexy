@@ -113,6 +113,12 @@ class HTML_Template_Flexy
         'filters'       => array(),     // used by regex compiler.                
         'flexyIgnore'   => 0,           // turn on/off the tag to element code
         'numberFormat'  => ",2,'.',','",  // default number format  {xxx:n} format = eg. 1,200.00 
+        
+        'url_rewrite'   => '',          // url rewriting ability:
+                                        // eg. "images/:test1/images/,js/:test1/js"
+                                        // changes href="images/xxx" to href="test1/images/xxx"
+                                        // and src="js/xxx.js" to src="test1/js/xxx.js"
+                                        
         'compiler'      => 'Standard',  // which compiler to use.
         'compileToString' => false,     // should the compiler return a string 
                                         // rather than writing to a file.

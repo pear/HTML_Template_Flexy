@@ -224,6 +224,7 @@ TAGC    = ">"
 
 
 PIO_XML                 = ({PIO}[Xx][Mm][Ll])
+
 NAME_START_CHARACTER    = ({LCLETTER}|{UCLETTER})
 NAME_CHARACTER          = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
 NAME_CHARACTER_WITH_NAMESPACE  = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR}|":")
@@ -389,24 +390,51 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     
     return $this->returnSimple();
 }
-    
   
-<YYINITIAL>{PIO_XML}[^>]*{TAGC}			{ 
-    /* <?xml ...> -- processing instruction */
+<YYINITIAL>{PIO}{NAME}{WHITESPACE}		{ 
+    /* eg. <?xml-stylesheet, <?php ... */
     
     $t = $this->yytext();
-    $this->value = HTML_Template_Flexy_Token::factory('Processing',$this->yytext(),$this->yyline);
     
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
+    $tagname = trim(strtoupper(substr($t,2)));
+   // echo "STARTING XML? $t:$tagname\n";
+    if ($tagname == 'PHP') {
+        $this->yyPhpBegin = $this->yy_buffer_start;
+        $this->yybegin(IN_PHP);
+        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    }
+    // not php - it's xlm or something...
+    // we treat this like a tag???
+    // we are going to have to escape it eventually...!!!
+    $this->tagName = trim(substr($t,1));
+    $this->tokenName = 'Tag';
+    $this->value = '';
+    $this->attributes = array();
+    $this->yybegin(IN_ATTR);
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+     
 }
+   
 
-<YYINITIAL>{PIO} { 
+<YYINITIAL>{PIO}{WHITESPACE} { 
     /* <? php start.. */
+    //echo "STARTING PHP?\n";
+    $this->yyPhpBegin = $this->yy_buffer_start;
     
-    $this->yyPhpBegin = $this->yy_buffer_end -2;
     $this->yybegin(IN_PHP);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 
+}
+
+<IN_ATTR>{PIC_PHP}	{
+    // <em^/ -- NET tag */
+    $this->attributes["?"] = true;
+    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+        array($this->tagName,$this->attributes),
+        $this->yyline);
+        
+    $this->yybegin(YYINITIAL);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <IN_PHP>{PIC_PHP} { 
@@ -642,13 +670,15 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-  // <em^/ -- NET tag */
+
 <IN_ATTRVAL>{NET}	{
+    // <em^/ -- NET tag */
     return $this->raiseError("attribute value missing"); 
 }
 
-  // <em^/ -- NET tag */
+
 <IN_ATTR>{NET}	{
+    // <em^/ -- NET tag */
     $this->yybegin(IN_NETDATA);
     $this->attributes["/"] = true;
     $this->value = '';
@@ -656,6 +686,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 } 
 
 <IN_ATTR>{NET}{WHITESPACE}{TAGC}	{
+    // <em^/ -- NET tag */
     $this->attributes["/"] = true;
     $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
         array($this->tagName,$this->attributes),

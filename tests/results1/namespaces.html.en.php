@@ -1,6 +1,7 @@
-<?php echo '<?xml version="1.0"?>';?>
-<?php echo '<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>';?>
- 
+<?php echo "<"; ?>?xml version="1.0" ?>
+<?php echo "<"; ?>?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
+<?php echo "<"; ?>?xml-stylesheet href="/myproject/images/css/test.css" type="text/css" ?>
+
 <window id="wndUserResults" title="User Search Results" persist="screenX screenY width height" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml">
  
         <tree id="userSearchResults" flex="1" height="300" enableColumnDrag="true" ondblclick="parent.parent.userEditPopup();">

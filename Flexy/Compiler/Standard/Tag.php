@@ -145,7 +145,12 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         // spit ou the tag and attributes.
         
-        $ret .=  "<". $element->oTag;
+        if ($element->oTag{0} == '?') {
+            $ret .= '<?php echo "<"; ?>';
+        } else { 
+            $ret .= "<";
+        }
+        $ret .= $element->oTag;
       
         foreach ($element->attributes as $k=>$v) {
             // if it's a flexy tag ignore it.
