@@ -4,6 +4,7 @@
 /* Mini test suite */
 require_once 'HTML/Template/Flexy.php';
 
+
 $x = new HTML_Template_Flexy(array(
                 'compileDir'    =>  dirname(__FILE__),      // where do you want to write to..
                 'templateDir'   =>  dirname(__FILE__),     // where are your templates

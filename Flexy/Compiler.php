@@ -57,7 +57,7 @@ class HTML_Template_Flexy_Compiler {
             $options['compiler'] = 'Standard';
         }
     
-        require_once 'HTML/Template/Flexy/Compiler/'.ucfirst(strtolower($options['compiler'])) .'.php';
+        require_once 'HTML/Template/Flexy/Compiler/'.ucfirst( $options['compiler'] ) .'.php';
         $class = 'HTML_Template_Flexy_Compiler_'.$options['compiler'];
         $ret = new $class;
         $ret->options = $options;
@@ -112,4 +112,4 @@ class HTML_Template_Flexy_Compiler {
     
 
 }
-?>
+ 
