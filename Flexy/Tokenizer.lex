@@ -166,12 +166,13 @@ LITERAL		            = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
  
 
 
-
 FLEXY_START         = ("%7B"|"%7b"|"{")
-FLEXY_VALID_CHARS   = ({LCLETTER}|{UCLETTER}|"_"|"."|{DIGIT})
-FLEXY_VAR           = ({NAME_START_CHARACTER}{FLEXY_VALID_CHARS}*("["{DIGIT}+"]")?)
+
 FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
-FLEXY_END            = ("%7D"|"%7d"|"}")
+FLEXY_ARRAY         = ("["{DIGIT}+"]")
+FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?)*)
+FLEXY_METHOD        = ({FLEXY_SIMPLEVAR}|{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?)*"."{FLEXY_SIMPLEVAR})
+FLEXY_END           = ("%7D"|"%7d"|"}")
 FLEXY_LITERAL       = [^#]*
 FLEXY_MODIFIER      = [hur]
 
@@ -179,7 +180,9 @@ FLEXY_MODIFIER      = [hur]
 
 %%
 
- 
+// note (for above) - this is rather cool - it actually prevents calling quazi private 
+// methods by not accepting _first methods or variables..   
+
 // "
 
 
@@ -723,7 +726,7 @@ FLEXY_MODIFIER      = [hur]
 
 // methods
 
-<YYINITIAL>"{"{FLEXY_VAR}"(" {
+<YYINITIAL>"{"{FLEXY_METHOD}"(" {
     $this->value =  '';
     $this->flexyMethod = substr($this->yytext(),1,-1);
     $this->flexyArgs = array();
@@ -789,7 +792,7 @@ FLEXY_MODIFIER      = [hur]
 // methods inside quotes..
 
 
-<IN_DOUBLEQUOTE,IN_SINGLEQUOTE>{FLEXY_START}{FLEXY_VAR}"(" {
+<IN_DOUBLEQUOTE,IN_SINGLEQUOTE>{FLEXY_START}{FLEXY_METHOD}"(" {
     $this->value =  '';
     $n = $this->yytext();
     if ($n{0} != "{") {
