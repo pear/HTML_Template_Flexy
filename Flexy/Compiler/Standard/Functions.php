@@ -76,12 +76,7 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
         
         // add the '!' to if
         
-        if ($element->isConditional) {
-            $prefix = 'if ('.$element->isNegative;
-            $element->pushState();
-            $suffix = ')';
-        }  
-        
+      
         
         
         
@@ -89,12 +84,14 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
         
         // to use any of the internal functions, they must be listed in the config
         // eg. valid_functions = "include date printf" ... etc.
+        $bits = explode('.',$element->method);
+        $method = array_pop($bits);
         
         $valid = @$this->compiler->options['valid_functions'];
         if ($valid && in_array(strtolower($method),preg_split('/\s+/',strtolower($valid)))) {
             
             if (method_exists($this,'handle'.$method)) {
-               $body =  $this->{'handle'.$method}($element);
+                $body = $this->{'handle'.$method}($element,$prefix,$suffix);
             } 
             
             // b) !!! BETA!!!
@@ -105,7 +102,7 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
                 foreach ($handlerClasses  as $classname) {
                     if (is_callable(array($classname,'handle'.$method))) {
                         $x = new $classname;
-                        $body = $x->{'handle'.$method}($element);
+                        $body = $x->{'handle'.$method}($element,$prefix,$suffix);
                         break;
                     }
                 }
@@ -114,27 +111,25 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
             // return if we've set body alread..
             
             if ($body !== false) {
-                $ret .= $prefix . $body . $suffix;
-                 if ($element->isConditional) {
-                    $ret .= ' { ';
-                } else {
-                    $ret .= ";";
-                }
-                return $this->appendPhp($ret);
-             
-                
+                return $this->appendPhp($body);
             }
+            
         }
+        
+        
         
         // good ole default behaviour..
         
         
+        if ($element->isConditional) {
+            $prefix = 'if ('.$element->isNegative;
+            $element->pushState();
+            $suffix = ')';
+        }  
         
         
         // check that method exists..
         // if (method_exists($object,'method');
-        $bits = explode('.',$element->method);
-        $method = array_pop($bits);
         
         $object = implode('.',$bits);
         
@@ -178,9 +173,9 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
     
     
     
-    function handleInclude($element) {
+    function handleInclude($element,$modifierPrefix,$modifierSuffix) {
         // this is disabled by default...
-        
+        // we ignore modifier pre/suffix
     
     
     
@@ -189,11 +184,11 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
         if ($arg{0} != '#') {
             return false;
         }
+        $arg = substr($arg,1,-1);
         
         // compile the child template....
         // output... include $this->options['compiled_templates'] . $arg . $this->options['locale'] . '.php'
-        return "\$x = new HTML_Template_Flexy;\$x->compile('{$arg}');" .
-               "include \$this->compiler->options['compiled_templates']/{$arg}.{$this->options['locale']}.php'";
+        return "\$x = new HTML_Template_Flexy;\$x->compile('{$arg}');\$x->outputObject(\$t);";
     
     }
     

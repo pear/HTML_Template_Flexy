@@ -39,7 +39,10 @@ class HTML_Template_Flexy_Test {
         // for testing!
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = array(
             'compileDir' => dirname(__FILE__),
-            'locale' => 'en');
+            'locale' => 'en',
+          
+        
+        );
             
         $this->parseArgs();
         $this->parse();
@@ -77,7 +80,10 @@ class HTML_Template_Flexy_Test {
     
     function parse() {
         foreach($this->files as $file) {
-            $flexy = new HTML_Template_Flexy(array('compileToString'=>true));
+            $flexy = new HTML_Template_Flexy(array(
+                    'compileToString'=>true,  
+                    'valid_functions' => 'include'
+            ));
             $compiler =  HTML_Template_Flexy_Compiler::factory($flexy->options);
             $result = $compiler->compile($flexy,file_get_contents($file));
             echo $result;

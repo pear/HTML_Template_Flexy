@@ -168,6 +168,18 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 </form>
 
 
+
+<H1>Internal Methods Testing<H1>
+** Only use this for simple includes - otherwise define your own method.. eg. 
+<?php if (isset($t) && method_exists($t,'includeBody')) echo htmlspecialchars($t->includeBody());?> - as you can manage caching far better..
+
+The currenly only registered method - include!
+
+<?php $x = new HTML_Template_Flexy;$x->compile('test.html');$x->outputObject($t);?>
+
+
+
+
 <p>&nbsp;</p>
 </body>
 </html>
