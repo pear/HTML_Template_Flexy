@@ -106,7 +106,7 @@ class HTML_Template_Flexy_Tokenizer
     * @access   public
     */
     function returnSimple() {
-        $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+        $this->value = HTML_Template_Flexy_Token::factory('TextSimple',$this->yytext(),$this->yyline);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
 
@@ -1999,7 +1999,7 @@ case 3:
 case 4:
 {
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 5:
@@ -2026,13 +2026,13 @@ case 6:
 case 7:
 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 8:
 {
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 9:
@@ -2543,7 +2543,7 @@ case 76:
 case 77:
 {
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 78:
@@ -2562,13 +2562,13 @@ case 78:
 case 79:
 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 80:
 {
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 81:

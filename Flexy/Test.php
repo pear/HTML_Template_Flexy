@@ -89,7 +89,7 @@ class HTML_Template_Flexy_Test {
             
             new Gtk_VarDump($res);
             echo $res->toString();
-            
+            print_r(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings']));
         }
         
         

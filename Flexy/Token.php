@@ -29,6 +29,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state'] = 0;
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeForm'] = '';
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['tokens'] = array();
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] = array();
 /**
 * Base Class for all Tokens.
 *
@@ -194,6 +195,7 @@ class HTML_Template_Flexy_Token {
         
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = array(new HTML_Template_Flexy_Token);
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->id =0;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['gettextStrings'] = array();
         $i=1;
         
         
@@ -234,9 +236,28 @@ class HTML_Template_Flexy_Token {
         //echo "BUILT TOKENS";
         
         $res = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'];
-        // connect parent and child tags.
+        
         $stack = array();
         $total = $i +1;
+        
+         
+        for($i=1;$i<$total;$i++) {
+            if (!isset($res[$i])) {
+                continue;
+            }
+            if (get_class($res[$i]) == 'html_template_flexy_token_text') {
+                if (!$res[$i]->isWord()) {
+                    continue;
+                }
+                $res[$i]->backSearch();
+                $i = $res[$i]->forwardSearch($total);
+            }
+        }
+         
+        
+        
+        // connect parent and child tags.
+       
         for($i=1;$i<$total;$i++) {
             //echo "Checking TAG $i\n";
             if (!@$res[$i]->tag) {

@@ -78,7 +78,21 @@ class HTML_Template_Flexy
     * @access public
     */
     var $emaildate;
+    /**
+    * The compiled template filename (Full path)
+    *
+    * @var string
+    * @access public
+    */
+    var $compiledTemplate;
     
+    /**
+    * The getTextStrings Filename
+    *
+    * @var string
+    * @access public
+    */
+    var $gettextStringsFilename;
     /**
     *   Constructor 
     *
@@ -295,7 +309,7 @@ class HTML_Template_Flexy
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
         
         
-        
+        setlocale(LC_ALL, $this->options['locale']);
         
         $data = file_get_contents($this->currentTemplate);
             //echo strlen($data);
@@ -325,7 +339,13 @@ class HTML_Template_Flexy
             fclose($cfp);
             @chmod($this->compiledTemplate,0775);
         }
-
+        if( ($cfp = fopen( $this->gettextStringsFile, 'w' )) ) {
+            fwrite($cfp,serialize(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'])));
+            fclose($cfp);
+        }
+        
+        
+        
         return true;
     }
 
@@ -418,8 +438,8 @@ class HTML_Template_Flexy
  
         
         
-        $this->compiledTemplate = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
-
+        $this->compiledTemplate    = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
+        $this->getTextStringsFile  = $compileDest.DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
   
         $recompile = false;
         if( @$this->options['forceCompile'] ) {

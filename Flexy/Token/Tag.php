@@ -476,7 +476,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         $value =    $this->getAttribute('value');
         if (empty($value)) {
+          
             $value = $this->childrenToString();
+            
         }
         
         

@@ -53,6 +53,7 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
     function toString() {
         // ignore modifier at present!!
         $prefix = 'echo ';
+        
         $suffix = '';
         switch ($this->modifier) {
             case 'h':
@@ -66,6 +67,10 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
                 // add language ?
                 $suffix = ')';
         }
+        
+        
+            
+        
         
         return "<?php {$prefix}" . $this->toVar($this->value) . "{$suffix}; ?>";
     }

@@ -92,7 +92,9 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     * @see parent::toString(), $this->pullState()
     */
     
-    function toString() {
+    function toString($var = false) {
+
+        
         // ignore modifier at present!!
         $prefix = 'echo ';
         $suffix = '';
@@ -100,11 +102,11 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
             case 'h':
                 break;
             case 'u':
-                $prefix = 'echo urlencode(';
+                $prefix = "echo urlencode(";
                 $suffix = ')';
                 break;
             default:
-                $prefix = 'echo htmlspecialchars(';
+                $prefix = "echo htmlspecialchars(";
                 // add language ?
                 $suffix = ')';
         }
@@ -133,7 +135,6 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         
         
         
-        
         $ret = '<?php ' . $prefix;
         $ret .=  $this->toVar($this->method) . "(";
         $s =0;
@@ -159,6 +160,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
             $ret .= ";";
         }
         $ret .= ' ?>';
+        
         
         return $ret;
             

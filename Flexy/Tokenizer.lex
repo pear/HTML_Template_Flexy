@@ -134,7 +134,7 @@ define('YY_EOF' , 258);
     */
   
     function returnSimple() {
-        $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+        $this->value = HTML_Template_Flexy_Token::factory('TextSimple',$this->yytext(),$this->yyline);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
     
@@ -230,21 +230,21 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{CRO}{NUMBER}{REFERENCE_END}?	 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 
 <YYINITIAL>{CRO}{NAME}{REFERENCE_END}?		{
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
   
 <YYINITIAL>{ERO}{NAME}{REFERENCE_END}?	{
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Ref',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 

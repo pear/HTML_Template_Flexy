@@ -36,14 +36,11 @@ Compiling side...
 
 on the compile template .. - if it compiles (eg. the file has changed..)
 
-- it should build the quickform as it goes along in the $template->quickform variable.
-- once finished (at the same time the compiled template is saved) it will write the quickform
-object as a serialized string to compiledTemplateDir/templatename.html.quickform.serial
- ** if serialize doesnt work - then .html.quickform.php - will have to be the php code to 
- create the quick form...
-
-
-
+-   it should build the quickform as it goes along in the $template->quickform variable.
+-   once finished (at the same time the compiled template is saved) it will write the quickform
+    serialized object  to compiledTemplateDir/templatename.html.quickform.serial
+ ** the loader will have to double load the serialized object to resolve the missing classes.
+        
 
 // extra available data..?
 {this.quickform.getRequiredNote()}
@@ -52,10 +49,10 @@ object as a serialized string to compiledTemplateDir/templatename.html.quickform
 
 // Possible wrapper/addons to QuickForms..
 
-    buildRules - wrapper to _buildRules that adds the '<script language="javascript"> ... </script>
-    buildFormTag which does "<form ". $this->quickform->_getAttrString($this->quickform->_attributes); . ">"
-    buildElement($elementname ) - which wraps   $this->_buildElement($this->_elements[$elementname]);
+    formHeadtoHtml - writes javascript, form element and hidden attributes
+    elementToHtml($elementname ) - which wraps   $this->_buildElement($this->_elements[$elementname]);
     &getElements(); just return $this->_elements;
+    loadFromSerialFile($filename) - used by setQuickFormData to load serialized quickform.
 
 
 
@@ -66,8 +63,7 @@ FORM:
     
     // creates php code in the compiled template:
    
-    <?php echo $this->quickForm->buildRules() ?>
-    <?php echo $this->quickForm->buildFormTag(); ?>
+    <?php echo $this->quickForm->formHeadToHtml() ?>
         
     ($this refers to the template object for those that dont know flexy :)
     // creates datafile? or builds as it parses (then serializes)
@@ -85,7 +81,7 @@ INPUT: (text)
     
     // creates php code in the compiled template:
     
-    <?php echo $this->quickForm->buildElement("xxxx"); ?>
+    <?php echo $this->quickForm->elementToHtml("xxxx"); ?>
 
     // creates datafile? or builds as it parses (then serializes)
     
@@ -102,7 +98,7 @@ INPUT: (hidden)
     
     // creates a template element:
     
-    <?php echo $this->quickForm->buildElement('xxx'); ?>
+     = nothing - hidden elements are appended after form automatically (so you can add to them)
     
     // this should be an extra method in QForms to do :
     
