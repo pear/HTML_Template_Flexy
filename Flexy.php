@@ -700,7 +700,7 @@ class HTML_Template_Flexy
     * @status alpha
     */
   
-    function assign() {
+    function setData() {
         require_once 'HTML/Template/Flexy/Assign.php';
         // load assigner..
         if (!isset($this->assign)) {
@@ -723,7 +723,7 @@ class HTML_Template_Flexy
     * @status alpha
     */
         
-    function assignRef($k,&$v) {
+    function setDataByRef($k,&$v) {
         require_once 'HTML/Template/Flexy/Assign.php';
         // load assigner..
         if (!isset($this->assign)) {
