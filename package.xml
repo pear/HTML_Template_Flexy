@@ -76,6 +76,8 @@
           This proved to be a bad decision (As the unescaping and escaping got too messy)
            - the strings are now stored as they are found. (albiet still trimmed)
           
+      New Features:
+        * strings from option tags, and value of input tags are added to gettext array.
         
        
       
