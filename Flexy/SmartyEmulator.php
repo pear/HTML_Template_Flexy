@@ -114,14 +114,35 @@ class HTML_Template_Flexy_SmartyEmulator {
     }
     
     
-    function display($templatename) 
+    function display($templatename,$object=null) 
     {
+        $o = PEAR::getStaticProperty('HTML_Template_Flexy','options');
+        if (!file_exists($o['templateDir'].'/'.$templatename.'.html')) {
+            require_once 'Smarty.class.php';
+            $x = new Smarty;
+            echo "USING SMARTY? - could not find " .$o['templateDir'].'/'.$templatename.'.html';
+            $x->assign($this->vars);
+            $x->template_dir = $o['templateDir'];
+            $x->compile_dir = ini_get('session.save_path').'/smartyEmulator';
+            if (!file_exists($x->compile_dir)) {
+                
+                require_once 'System.php';
+                System::mkdir($x->compile_dir);
+            }
+            return $x->display($templatename);
+        }
+        
         require_once 'HTML/Template/Flexy.php';
         $t = new HTML_Template_Flexy(array(
-            'compiler' => 'SmartyEmulator'
+            //'compiler' => 'SmartyEmulator'
         ));
-        $t->compile();
-        $t->output();
+        $t->compile($templatename . '.html');
+        if ($object) {
+            foreach($this->vars as $k=>$v) {
+                $object->$k = $v;
+            }
+        }
+        $t->outputObject($object);
     }
     
 }

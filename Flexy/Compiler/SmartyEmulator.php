@@ -21,7 +21,7 @@
 //  Smarty Compilation wrapper
 //  Calls the relivent smarty compilers, then calls flexy to do the rest..
 
-
+require_once 'HTML/Template/Flexy/Compiler.php';
 
 class HTML_Template_Flexy_Compiler_SmartyEmulator extends HTML_Template_Flexy_Compiler {
     
@@ -33,8 +33,18 @@ class HTML_Template_Flexy_Compiler_SmartyEmulator extends HTML_Template_Flexy_Co
         }
         
         
-        // do the smarty stuff...
+        $data = $this->convertToFlexy($data);
         
+        require_once 'HTML/Template/Flexy/Compiler/Standard.php';
+        
+        $flexyCompiler = HTML_Template_Flexy_Compiler_Standard;
+        $flexyCompiler->compile($flexy,$data);
+        return true;
+    }
+    
+    
+    function convertToFlexy($data) {
+    
         $leftq = preg_quote('{', '!');
         $rightq = preg_quote('}', '!');
          
@@ -57,15 +67,11 @@ class HTML_Template_Flexy_Compiler_SmartyEmulator extends HTML_Template_Flexy_Co
             $data .= $text[$i].$compiled_tags[$i];
         }
         $data .= $text[$i];
-        
-        echo "DATA: $data";
-        return;
-        require_once 'HTML/Template/Flexy/Compiler/Standard.php';
-        
-        $flexyCompiler = HTML_Template_Flexy_Compiler_Standard;
-        $flexyCompiler->compile($flexy,$data);
-        return true;
+        return $data;
+    
     }
+    
+    
         
     /**
     * stack for conditional and closers.

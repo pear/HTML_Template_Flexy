@@ -1,7 +1,7 @@
 <?php
 /* Mini test suite */
 require_once 'HTML/Template/Flexy.php';
-print_r($_SERVER['argv']);
+//print_r($_SERVER['argv']);
 
 if (!isset($_SERVER['argv'][1])) {
     $files = array(dirname(__FILE__) . '/index.tpl');
@@ -9,10 +9,10 @@ if (!isset($_SERVER['argv'][1])) {
     $files =$_SERVER['argv'];
     array_shift($files);
 }
-print_r($files);
+//print_r($files);
 foreach($files as $file) {
     $dir = dirname($file);
-    
+    /*
     $x = new HTML_Template_Flexy(array(
                     'compileDir'    =>  dirname(__FILE__) ,      // where do you want to write to..
                     'templateDir'   =>  $dir ,     // where are your templates
@@ -30,6 +30,10 @@ foreach($files as $file) {
                     'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00 ( {xxx:n} )
                     'flexyIgnore'   => 0        // turn on/off the tag to element code
                 ));
-    echo "\n\n:COMPILE $file\n\n";
-    echo $x->compile(basename($file));
+   // echo "\n\n:COMPILE $file\n\n";
+   */
+    require_once 'HTML/Template/Flexy/Compiler/SmartyEmulator.php';
+   
+    $x = new HTML_Template_Flexy_Compiler_SmartyEmulator;
+    echo $x->convertToFlexy(file_get_contents($dir.'/'.basename($file)));
 }
