@@ -69,6 +69,10 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 {multi[array][0]}
 {object[array].with[objects]}
 
+Everything: {t:r}
+an Object: {object:r}
+
+
 <img src="%7bgetImageDir%7D/someimage.jpg">
 <img src="%7bgetImageDir:h%7D/someimage.jpg">
 <img src="%7bgetImageDir:u%7D/someimage.jpg">
@@ -170,15 +174,20 @@ Invoice number: {t.getelem(t.invoice,#number#)} Place:
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
 <table width="100%" border="0">
-  <tr foreach="loop,a"> 
+  <tr flexy:foreach="loop,a" class="{a.hightlight}"> 
     <td>a is</td>
-    <td>{a}</td>
+    <td flexy:if="a.showtext">{a.text}</td>
+    <td flexy:if="!a.showtext">{a.price:n}</td>
   </tr>
 </table>
 
+Example error messages..
+<span flexy:if="error_message"><font color="red"><B>Opps</B></font></span>
+
+
 <p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
 <table width="100%" border="0">
-  <tr foreach="loop,a,b"> 
+  <tr flexy:foreach="loop,a,b"> 
     <td>{a}</td>
     <td>{b}</td>
   </tr>

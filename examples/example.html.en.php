@@ -69,6 +69,10 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 <?php echo htmlspecialchars($t->multi['array'][0]);?>
 <?php echo htmlspecialchars($t->object['array']->with['objects']);?>
 
+Everything: <?php echo '<pre>'; echo htmlspecialchars(print_r($t,true)); echo '</pre>';;?>
+an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); echo '</pre>';;?>
+
+
 <img src="<?php echo htmlspecialchars($t->getImageDir);?>/someimage.jpg">
 <img src="<?php echo $t->getImageDir;?>/someimage.jpg">
 <img src="<?php echo urlencode($t->getImageDir);?>/someimage.jpg">
@@ -170,18 +174,23 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
 <table width="100%" border="0">
-  <tr foreach="loop,a"> 
+  <?php if (is_array($t->loop)) foreach($t->loop as $a) {?><tr class="<?php echo htmlspecialchars($a->hightlight);?>"> 
     <td>a is</td>
-    <td><?php echo htmlspecialchars($t->a);?></td>
-  </tr>
+    <?php if ($a->showtext)  {?><td><?php echo htmlspecialchars($a->text);?></td><?php }?>
+    <?php if (!$a->showtext)  {?><td><?php echo number_format($a->price,2,'.',',');?></td><?php }?>
+  </tr><?php }?>
 </table>
+
+Example error messages..
+<?php if ($t->error_message)  {?><span><font color="red"><B>Opps</B></font></span><?php }?>
+
 
 <p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
 <table width="100%" border="0">
-  <tr foreach="loop,a,b"> 
-    <td><?php echo htmlspecialchars($t->a);?></td>
-    <td><?php echo htmlspecialchars($t->b);?></td>
-  </tr>
+  <?php if (is_array($t->loop)) foreach($t->loop as $a => $b) {?><tr> 
+    <td><?php echo htmlspecialchars($a);?></td>
+    <td><?php echo htmlspecialchars($b);?></td>
+  </tr><?php }?>
 </table>
 
 <h2>Form Not Parsed</h2>
