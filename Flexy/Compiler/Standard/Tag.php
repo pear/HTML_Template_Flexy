@@ -127,7 +127,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             
             
             if (strtoupper($k) == 'FLEXY:RAW') {
-                if (!is_object($v)) {
+                if (!isset($v[1]) || !is_object($v[1])) {
                     PEAR::raiseError(
                     'flexy:raw only accepts a variable or method call as an argument, eg.'.
                     ' flexy:raw="{somevalue}" you provided something else.' .
@@ -135,7 +135,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                      null, PEAR_ERROR_DIE);
                 }
                  
-                $ret .= ' ' . $v->compile($this->compiler);
+                $ret .= ' ' . $v[1]->compile($this->compiler);
                 continue;
             
             }
@@ -168,6 +168,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             // otherwise its a key="sometext{andsomevars}"
             
             $ret .=  " {$k}=";
+            
             foreach($v as $item) {
                 if (is_string($item)) {
                     $ret .= $item;
