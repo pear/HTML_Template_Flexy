@@ -103,15 +103,26 @@ class HTML_Template_Flexy_Tokenizer
     * @access public
     */
     var $fileName;
-    function dump () {
-        foreach(get_object_vars($this) as  $k=>$v) {
-            if (is_string($v)) { continue; }
-            if (is_array($v)) { continue; }
-            echo "$k = $v\n";
-        }
-    }
+    /**
+    * the string containing an error if it occurs..
+    *
+    * @var string
+    * @access public
+    */
+    var $error;
+    /**
+    * raise an error: = return an error token and set the error variable.
+    *
+    * 
+    * @param   string           Error type
+    * @param   string           Full Error message
+    * @param   boolean          is it fatal..
+    *
+    * @return   int the error token.
+    * @access   public
+    */
     function raiseError($s,$n='',$isFatal=false) {
-        echo "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
+        $this->error = "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
         return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
     }
     /**
@@ -2929,7 +2940,6 @@ case 52:
 case 53:
 {
     return $this->raiseError("illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 54:
 {   
@@ -3260,7 +3270,6 @@ case 100:
 case 101:
 {
     return $this->raiseError("illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 102:
 {   
@@ -3373,7 +3382,6 @@ case 120:
 case 121:
 {
     return $this->raiseError("illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 122:
 { 
@@ -3393,7 +3401,6 @@ case 125:
 case 126:
 {
     return $this->raiseError("illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 128:
 {
@@ -3402,7 +3409,6 @@ case 128:
 case 129:
 {
     return $this->raiseError("illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 case 131:
 {
