@@ -188,7 +188,7 @@ class HTML_Template_Flexy_Compiler_Standard_Functions extends HTML_Template_Flex
         
         // compile the child template....
         // output... include $this->options['compiled_templates'] . $arg . $this->options['locale'] . '.php'
-        return "\$x = new HTML_Template_Flexy;\$x->compile('{$arg}');\$x->outputObject(\$t);";
+        return "\$x = new HTML_Template_Flexy(\$this->options);\$x->compile('{$arg}');\$x->outputObject(\$t);";
     
     }
     
