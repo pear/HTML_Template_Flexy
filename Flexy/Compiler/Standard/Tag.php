@@ -17,8 +17,11 @@
 // +----------------------------------------------------------------------+
 //
 // $Id$
- 
- 
+/* FC/BC compatibility with php5 */
+if ( (substr(phpversion(),0,1) < 5) && !function_exists('clone')) {
+    eval('function clone($t) { return $t; }');
+}
+
 /**
 * Compiler That deals with standard HTML Tag output.
 * Since it's pretty complex it has it's own class.
@@ -238,6 +241,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if ($element->tag == 'SCRIPT') {
             foreach($element->children as $c) {
                 //print_R($c);
+                if (!$c) {
+                    continue;
+                }
                 if ($c->token == 'Text') {
                     $ret .= $c->value;
                     continue;
@@ -668,7 +674,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
   
     function parseTagSelect() 
     {
-        return$this->compiler->appendPhp(
+        return $this->compiler->appendPhp(
             $this->getElementPhp( $this->element->getAttribute('NAME')));
     }
       
@@ -685,7 +691,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     function parseTagForm() 
     {
         global $_HTML_TEMPLATE_FLEXY;
-        $copy = $this->element;
+        $copy = clone($this->element);
         $copy->children = array();
         $id = $this->element->getAttribute('NAME');
         if (!$id) {
@@ -693,7 +699,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
         
         // this adds the element to the elements array.
-        $old = $this->element;
+        $old = clone($this->element);
         $this->element = $copy;
         $this->getElementPhp($id);
         $this->element= $old;

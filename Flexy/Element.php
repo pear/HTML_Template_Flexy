@@ -255,9 +255,12 @@ class HTML_Template_Flexy_Element {
                 if (!is_array($value)) {
                     $value = array($value);
                 }
-             
+                
                 // its setting the default value..
                 foreach($this->children as $i=>$child) {
+                    if (is_string($child)) {
+                        continue;
+                    }
                     if ($child->tag == 'optgroup') {
                         foreach($this->children[$i]->children as $ii=>$child) {
                         
