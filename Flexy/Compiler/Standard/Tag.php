@@ -405,12 +405,25 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if ($this->element->getAttribute('FLEXY:IGNOREONLY') !== false) {
             return false;
         }
-        $method = 'parseTag'.$this->element->tag;
-        if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
-            return $this->$method();
-            // allow the parse methods to return output.
+        if ($_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore']) {
+            return false;
         }
-        return false;
+        $method = 'parseTag'.$this->element->tag;
+        if (!method_exists($this,$method)) {
+            return false;
+        }
+        // do any of the attributes use flexy data...
+        foreach ($this->element->attributes as $k=>$v) {
+            if (is_array($v)) {
+                return false;
+            }
+        }
+        
+        //echo "call $method" . serialize($this->element->attributes). "\n";
+        
+        return $this->$method();
+            // allow the parse methods to return output.
+        
     }
            
     /**

@@ -303,12 +303,24 @@ var test_abc_agcg = 0
  {foreach:xxxx} {end:} 
 -->
 
+Bugs: 809
+
 Comments:
 <!--- this is a comment with alot of stuff.. --# ---->
 
 <!-- this is a comment with alot of stuff.. --# -- -->
 
 
+Bug 1120:
+<?php echo $this->elements['form']->toHtmlnoClose();?>
+<?php echo $this->elements['testing']->toHtml();?>
+<?php echo $this->elements['_submit[2]']->toHtml();?>
+</form>
+
+<form action="<?php echo htmlspecialchars($t->someurl);?>">
+<input name="testing" value="<?php echo htmlspecialchars($t->somevalue);?>">
+<?php echo $this->elements['_submit[1]']->toHtml();?>
+</form>
 
 <p>&nbsp;</p>
 </body>
