@@ -629,7 +629,10 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_SINGLEQUOTE>([^\{\%\'\\]+|\\[^\'])+|"%"|"{"	{
+
+ 
+
+<IN_SINGLEQUOTE>([^\{\%\'\\]+|\\[^\'])+|"%"|"{"|{FLEXY_GTSTART}|{FLEXY_GTEND}	{
     
     $this->attrVal[] = $this->yytext();
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -652,7 +655,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_DOUBLEQUOTE>([^\{\%\"\\]|\\[^\"\\])+|"%"|"{" {
+<IN_DOUBLEQUOTE>([^\{\%\"\\]|\\[^\"\\])+|"%"|"{"|{FLEXY_GTSTART}|{FLEXY_GTEND} {
     //echo "GOT DATA:".$this->yytext();
     $this->attrVal[] = $this->yytext();
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;

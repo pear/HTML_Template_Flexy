@@ -283,25 +283,7 @@ class HTML_Template_Flexy_Token {
         
         $stack = array();
         $total = $i +1;
-        
-        
-        // merge variables into strings. so printf && gettext work.
-        
-        for($i=1;$i<$total;$i++) {
-            if (!isset($res[$i])) {
-                continue;
-            }
-            if (strtolower(get_class($res[$i])) == 'html_template_flexy_token_text') {
-                if (!$res[$i]->isWord()) {
-                    continue;
-                }
-                
-                $res[$i]->backSearch($res);
-                $i = $res[$i]->forwardSearch($res);
-            }
-        }
-        
-        
+         
         
         // connect open  and close tags.
         

@@ -713,11 +713,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             return $this->appendHtml($element->value);
         }
         
-        // argTokens is built before the tag matching (it combined
-        // flexy tags into %s, into the string,
-        // and made a list of tokens in argTokens.
         
-        if (!count($element->argTokens) && !$element->isWord()) {
+        if (!$element->isWord()) {
             return $this->appendHtml($element->value);
         }
         
@@ -736,31 +733,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         $this->addStringToGettext($value);
         $value = $this->translateString($value);
         // its a simple word!
-        if (!count($element->argTokens)) {
-            return $this->appendHtml($front . $value . $rear);
-        }
-        
-        
-        // there are subtokens..
-        // print_r($element->argTokens );
-        $args = array();
-        // these should only be text or vars..
-        
-        foreach($element->argTokens as $i=>$token) {
-            $args[] = $token->compile($this);
-        }
-        
-        // we break up the translated string, and put the compiled tags 
-        // in between the values here.
-        
-        $bits = explode('%s',$value);
-        $ret  = $front;
-        
-        foreach($bits as $i=>$v) {
-            $ret .= $v . @$args[$i];
-        }
-        
-        return  $ret . $rear;
+        return $this->appendHtml($front . $value . $rear);
         
     }
     /**

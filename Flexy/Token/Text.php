@@ -21,111 +21,15 @@
  
  
 /**
-* Class to Text - implements gettext support.
+* Class that represents a text string node.
 * 
 *
 */
 
 class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
      
-      
-    
-      
-      
+     
     /**
-    * List of argument tokens.
-    *
-    * @var array
-    * @access public
-    */
-    var $argTokens = array();
-    
-    /**
-    * Search backwards for whitespace and flexy tags to add to string.
-    *
-    * @return   none
-    * @access   public
-    */
-  
-    function backSearch(&$tokens) {
-        // if this is an empty string ignore it?
-        if (!strlen(trim($this->value))) {
-            return;
-        }
-        
-        
-        $i = $this->id -1;
-        while ($i > 0) {
-            if (empty($tokens[$i])) {
-                return;
-            }
-            $token = $tokens[$i];
-            
-            switch (strtolower(get_class($token))) {
-                case 'html_template_flexy_token_text';
-                    if (trim($tokens[$i]->value) == '') {
-                        return;
-                    }
-                    $this->value = $token->value . $this->value;
-                    $tokens[$i]->value = ''; // blank it..
-                    break;
-                    
-                //case 'html_template_flexy_token_method';
-                case 'html_template_flexy_token_var';
-                    $this->value = '%s'. $this->value;
-                    // copy token into argTokens
-                    array_unshift($this->argTokens,$token);
-                    // make the old token blank..
-                    $tokens[$i] = HTML_Template_Flexy_Token::factory('Text','',$tokens[$i]->line);
-                    break;
-               
-                default:
-                    // found a stop point.
-                    return;
-            }
-            $i--;
-        }
-    
-    }
-    /**
-    * Search forwards for whitespace and flexy tags to add to string.
-    *
-    * @param   int - id of last tag
-    * @return   int - id of next tag.
-    * @access   public
-    */
-    
-    function forwardSearch(&$tokens) {
-        $max = count($tokens);
-        
-        $i = $this->id +1;
-        while ($i < $max) {
-        
-            $token = $tokens[$i];
-            
-            switch (strtolower(get_class($token))) {
-                case 'html_template_flexy_token_text';
-                    if (trim($tokens[$i]->value) == '') {
-                        return $i -1;
-                    }
-                    $this->value .= $token->value;
-                    $tokens[$i]->value = '';
-                    break;
-                    
-                //case 'html_template_flexy_token_method';
-                case 'html_template_flexy_token_var';
-                    $this->value .= '%s';
-                    $this->argTokens[] = $token;
-                    $tokens[$i] = HTML_Template_Flexy_Token::factory('Text','',$tokens[$i]->line);
-                    break;
-                default:
-                    return $i - 1;
-            }
-            $i++;
-        }
-        return $i - 1;
-    }
-     /**
     * Simple check to see if this piece of text is a word 
     * so that gettext and the merging tricks dont try
     * - merge white space with a flexy tag

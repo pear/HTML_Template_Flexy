@@ -149,7 +149,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             $ret .= "<";
         }
         $ret .= $element->oTag;
-      
+        //echo '<PRE>'.print_r($element->attributes,true);
         foreach ($element->attributes as $k=>$v) {
             // if it's a flexy tag ignore it.
             
@@ -182,6 +182,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             
             // if it's a string just dump it.
             if (is_string($v)) {
+                $v = str_replace(array('{_(',')_}'),array('',''),$v);
                 $ret .=  " {$k}={$v}";
                 continue;
             }
@@ -204,9 +205,12 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             // otherwise its a key="sometext{andsomevars}"
             
             $ret .=  " {$k}=";
-            
+          
             foreach($v as $item) {
+                
                 if (is_string($item)) {
+                    // skip translation strings in tags.
+                    $item = str_replace(array('{_(',')_}'),array('',''),$item);
                     $ret .= $item;
                     continue;
                 }
