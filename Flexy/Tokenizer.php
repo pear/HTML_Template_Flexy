@@ -3055,7 +3055,7 @@ case 74:
 {
     // </script>
     $this->value = HTML_Template_Flexy_Token::factory('EndTag',
-        array('script'),
+        array('/script'),
         $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;

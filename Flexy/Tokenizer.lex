@@ -519,7 +519,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_SCRIPT>{END_SCRIPT} {
     // </script>
     $this->value = HTML_Template_Flexy_Token::factory('EndTag',
-        array('script'),
+        array('/script'),
         $this->yyline);
 
     $this->yybegin(YYINITIAL);

@@ -23,7 +23,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
     }
 }
  
-<script>
+</script>
 <!--
 
 // and now just commented out stuff.. that may cause problems
@@ -45,9 +45,9 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
  
 <?php require_once 'HTML/Javascript/Convert.php'; ?>
 <script language='javascript'>
-<?=HTML_Javscript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
-<?=HTML_Javscript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
-<?=HTML_Javscript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+<?php echo HTML_Javscript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
+<?php echo HTML_Javscript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
+<?php echo HTML_Javscript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
 </script>
 
 
