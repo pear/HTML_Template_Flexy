@@ -67,7 +67,13 @@ class HTML_Template_Flexy
     */
     var $options = array(   'compileDir'    =>  '',         // where do you want to write to..
                             'templateDir'   =>  '',         // where are your templates
-                            'locale'        => 'en',        // works with gettext
+                            'locale'        => 'en',        // works with gettext or File_Gettext
+                            'textdomain'    => '',          // for gettext emulation with File_Gettext
+                                                            // eg. 'messages' (or you can use the template name.
+                            'textdomainDir' => '',          // eg. /var/www/site.com/locale
+                                                            // so the french po file is:
+                                                            // /var/www/site.com/local/fr/LC_MESSAGE/{textdomain}.po
+                                                            
                             'forceCompile'  =>  false,      // only suggested for debugging
 
                             'debug'         => false,       // prints a few messages

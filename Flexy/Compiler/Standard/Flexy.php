@@ -127,7 +127,9 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
         if (!$arg) {
             return $this->compiler->appendHTML("<B>Flexy:Include without a src=filename</B>");
         }
-        
+        // ideally it would be nice to embed the results of one template into another.
+        // however that would involve some complex test which would have to stat
+        // the child templates anyway..
         // compile the child template....
         // output... include $this->options['compiled_templates'] . $arg . $this->options['locale'] . '.php'
         return $this->compiler->appendPHP( "\n".
