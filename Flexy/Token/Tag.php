@@ -146,10 +146,41 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $ret = $foreachObj->toString();
             // does it have a closetag?
             
-            $this->close->postfix = array($this->factory("End",
-                    '',
-                    $this->line));
+            $this->close->postfix = array($this->factory("End", '', $this->line));
             unset($this->attributes['FOREACH']);
+        }
+        
+        
+        if ($if = $this->getAttribute('IF')) {
+            if ($foreach) {
+                PEAR::raiseError(
+                    "You may not use FOREACH and IF tags in the same tag on Line {$this->line} &lt;{$this->tag}&gt;",
+                     null, PEAR_ERROR_DIE);
+            }
+            
+            // if="xxxxx"
+            // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
+            
+             
+            if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\])?)*(\(\))?$/i',$if)) {
+                PEAR::raiseError(
+                    "IF tags only accept simple object.variable or object.method() values on Line {$this->line} &lt;{$this->tag}&gt;",
+                     null, PEAR_ERROR_DIE);
+            }
+            
+            if (substr($if,-1) == ')') {
+                $ifObj =  $this->factory('Method',
+                        array('if:'.substr($if,0,-2), array()),
+                        $this->line);
+            } else {
+                $ifObj =  $this->factory('If', $if, $this->line);
+            }
+            
+            $ret = $ifObj->toString();
+            // does it have a closetag?
+            
+            $this->close->postfix = array($this->factory("End",'', $this->line));
+            unset($this->attributes['IF']);
         }
     
         $ret .=  "<". $this->tag;

@@ -61,7 +61,8 @@
           of compiled template to replace ?&gt;\n with ?&gt;\n\n (aimed at email templates)
         - Added extra Option - allowPHP to enable PHP code in template to be left alone. - defaults
           to off (eg. no PHP allowed) - 
-                    
+        - added support for &lt;TAG IF=&quot;somevar.xxxx&quot; and 
+          &lt;TAG  IF=&quot;somevar.method()&quot; maps to if (the test) &lt;TAG .....
       </notes>
       <state>beta</state>
      </release>
