@@ -61,9 +61,15 @@ class HTML_Template_Flexy_Token {
     * @var int
     * @access public
     */
-    
-    
     var $line;
+    /**
+    * the character Position 
+    *
+    * @var int
+    * @access public
+    */
+    var $charPos;
+    
 
     /**
     * factory a Token
@@ -79,7 +85,7 @@ class HTML_Template_Flexy_Token {
     * @access   public
     */
   
-    function factory($token,$value,$line) {
+    function factory($token,$value,$line,$charPos=0) {
         // try not to reload the same class to often
         static $loaded = array();
         
@@ -100,6 +106,7 @@ class HTML_Template_Flexy_Token {
             $t = new $c;
         }
         $t->token = $token;
+        $t->charPos = $charPos;
         
         if ($t->setValue($value) === false) {
             // kick back error conditions..
