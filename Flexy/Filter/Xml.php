@@ -47,7 +47,7 @@ class HTML_Template_Flexy_Filter_Xml
     */
     function pre_replace_xml ($input) 
     {
-        $input = str_replace("?>","<?php  echo '?'.'>'; ?>",$input);
+        $input = str_replace("?>","<?php  echo '?'.'>'; ?>\n",$input);
         $input = str_replace("<?xml","<?php  echo '<'.'?xml'; ?>",$input);
         return  $input;
     }
