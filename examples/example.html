@@ -96,6 +96,13 @@ an Object: {object:r}
 <img src="%7bgetImageDir()}/someimage.jpg">
 <img src="{getImageDir()%7D/someimage.jpg">
 
+
+
+<span class="{t.getBgnd(valueArr[isConfigurable])}"></span>
+
+
+
+
 <H2>Conditions</H2>
 <p>a condition {if:condition} hello {else:} world {end:}</p>
 
@@ -180,6 +187,9 @@ Invoice number: {t.getelem(t.invoice,#number#)} Place:
 {foreach:t.sum,sum} {t.getelem(sum,#nr#)} 		{t.getelem(sum,#netto#)} 
 {t.getelem(sum,#vat#)} 	{t.getelem(sum,#brutto#)}
 {end:}
+
+
+
 
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>

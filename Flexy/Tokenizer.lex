@@ -982,8 +982,8 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_FLEXYMETHODQUOTED>{FLEXY_VAR} {
     
-    $t = substr($this->yytext(),0,-1);
-    
+     
+    $t = $this->yytext();
     // add argument
     $this->flexyArgs[] = $t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);

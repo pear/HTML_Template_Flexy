@@ -3164,7 +3164,7 @@ case 69:
 }
 case 70:
 {
-    $t = substr($this->yytext(),0,-1);
+    $t = $this->yytext();
     // add argument
     $this->flexyArgs[] = $t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);
@@ -3409,7 +3409,7 @@ case 106:
 }
 case 107:
 {
-    $t = substr($this->yytext(),0,-1);
+    $t = $this->yytext();
     // add argument
     $this->flexyArgs[] = $t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);
@@ -3463,7 +3463,7 @@ case 116:
 }
 case 117:
 {
-    $t = substr($this->yytext(),0,-1);
+    $t = $this->yytext();
     // add argument
     $this->flexyArgs[] = $t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);
@@ -3532,7 +3532,7 @@ case 284:
 }
 case 285:
 {
-    $t = substr($this->yytext(),0,-1);
+    $t = $this->yytext();
     // add argument
     $this->flexyArgs[] = $t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);

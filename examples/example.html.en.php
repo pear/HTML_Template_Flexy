@@ -100,6 +100,13 @@ an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); 
 <img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir());?>/someimage.jpg">
 <img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir());?>/someimage.jpg">
 
+
+
+<span class="<?php if (isset($t) && method_exists($t,'getBgnd')) echo htmlspecialchars($t->getBgnd($t->valueArr['isConfigurable']));?>"></span>
+
+
+
+
 <H2>Conditions</H2>
 <p>a condition <?php if ($t->condition)  {?> hello <?php } else {?> world <?php }?></p>
 
@@ -184,6 +191,9 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 <?php if (is_array($t->sum)  || is_object($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"vat"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"brutto"));?>
 <?php }?>
+
+
+
 
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>

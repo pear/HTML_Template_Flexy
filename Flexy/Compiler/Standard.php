@@ -415,6 +415,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $ret .=  $element->toVar($element->method) . "(";
         $s =0;
          
+       
+         
         foreach($element->args as $a) {
              
             if ($s) {
