@@ -380,7 +380,15 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         switch ($type) {
             case "CHECKBOX":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('checkbox',   $name,  $this->getAttribute('FLEXY:LABEL')  ,   '' ,    $this->getAttributes() ),
+                    array('checkbox',   $name,  $this->getAttribute('FLEXY:LABEL')  , '',  $this->getAttributes() ),
+                    array('setChecked' => $this->getAttribute('CHECKED'))
+                );
+                break;
+            
+            case "CHECKBOX":
+                $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
+                    array('radio',   $name,  $this->getAttribute('FLEXY:LABEL')  ,   '',
+                            $this->getAttribute('VALUE')   ,    $this->getAttributes() ),
                     array('setChecked' => $this->getAttribute('CHECKED'))
                 );
                 break;
@@ -410,7 +418,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                
                 break;
 
-
+            
 
 
             case "HIDDEN":
