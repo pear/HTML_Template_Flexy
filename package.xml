@@ -5,7 +5,7 @@
   <summary>An extremely powerful Tokenizer driven Template engine</summary>
   <description>
   HTML_Template_Flexy started it's life as a simplification of HTML_Template_Xipe, 
-  however in Version 0.2, It became one of the first template engines to use a real Lexer,
+  however in Version 0.2, It became one of the first template engine to use a real Lexer,
   rather than regex'es, making it possible to do things like ASP.net or Cold Fusion tags. 
   However, it still has a very simple set of goals.
 
@@ -15,7 +15,19 @@
   - Ability to edit the templates in WYSIWYG HTML editors, without breaking the tags
   - Extremely Fast, for normal variables and looping (or blocks), both for designing and runtime.
   
-   
+  Features:
+  - {variable} to echo $object->variable
+  - {method()} to echo $object->method();
+  - {foreach:var,key,value} to PHP foreach loops
+  - {if:variable} to PHP If statement
+  - {if:method()} to PHP If statement
+  - {else:} and {end:} to close or alternate If statements
+  - FORM to object mapping, 
+  - replacement of INPUT, TEXTAREA and SELECT tags with PHP variables or OPTIONS
+    FLEXYIGNORE to prevent replacements
+  - FLEXYSTART/FLEXYSTARTCHILDREN tags to define where output starts/finishes
+  - support for urlencoded braces {} in HTML attributes. 
+  
   
   
 </description>
@@ -43,7 +55,7 @@
         - parsers are now private methods. (internal change)
         
       New Features
-        - FLEXYSTART and FLEXYSTARTCHILDREN tags added so when use include sub
+        - FLEXYSTART and FLEXYSTARTCHILDREN tags added so when use you include sub
           templates, you can avoid including HEAD etc. tags.
         
       </notes>
