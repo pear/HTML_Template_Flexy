@@ -4,8 +4,8 @@ NOTE:: this is part of the smarty distribution - and presumably licenced under L
 
 
 
-{templateConfigLoad(#test.conf#,#setup)}
-<!--   UNSUPPORTED TAG: include file="header.tpl" title=foo FOUND -->
+{plugin(#smartyConfigLoad#,#test.conf#,#setup#)}
+{plugin(#smartyInclude#,#header.tpl#)}
 
 <PRE>
 
@@ -20,7 +20,7 @@ Title: {configVars.title}<!-- UNSUPPORTED MODIFIERS: capitalize -->
 Title: {configVars.title}<!-- UNSUPPORTED MODIFIERS: capitalize -->
 {if:configVars.bold}</b>{end:}
 
-The current date and time is {smarty[now]}<!--  UNSUPPORTED MODIFIERS: date_format:"%Y-%m-%d %H:%M:%S" -->
+The current date and time is {plugin(#smartyModifiers#,smarty[now],#date_format:"%Y-%m-%d %H:%M:%S"#):h}
 
 Tooltip example: Move your mouse over the <A HREF="" <!--   UNSUPPORTED TAG: popup sticky=true caption="Smarty pop-up text" delay=400 text="This is an example of a tooltip. Tooltips are handy for context sensitive information, and extremely easy to add to your templates with Smarty and the integration of <a href='http://www.bosrup.com/web/overlib/'>overLIB</a> by Erik Bosrup" FOUND --> onclick="return false;">Help</A> link to see an example of a tooltip using Smarty's popup function.
 
@@ -32,7 +32,7 @@ The value of {$Name} is <b>{Name}</b>
 
 variable modifier example of {$Name|upper}
 
-<b>{Name}<!--  UNSUPPORTED MODIFIERS: upper --></b>
+<b>{plugin(#smartyModifiers#,Name,#upper#):h}</b>
 
 
 An example of a section loop:
@@ -91,4 +91,4 @@ This is an example of the html_options function:
 </select>
 </form>
 
-<!--   UNSUPPORTED TAG: include file="footer.tpl" FOUND -->
+{plugin(#smartyInclude#,#footer.tpl#)}
