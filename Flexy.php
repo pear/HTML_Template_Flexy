@@ -762,7 +762,7 @@ class HTML_Template_Flexy
         if (!isset($this->assign)) {
             $this->assign = new HTML_Template_Flexy_Assign;
         }
-        $this->assign->assignRef($k,&$v);
+        $this->assign->assignRef($k,$v);
     } 
     /**
     * 

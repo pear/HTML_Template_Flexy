@@ -20,6 +20,9 @@
 //
 //  Provider for Assign API ( Eg. $flexy->assign(...) )
 //
+
+define('HTML_TEMPLATE_FLEXY_ASSIGN_ERROR_INVALIDARGS', -100);
+
 class HTML_Template_Flexy_Assign {
     
     /**
@@ -183,7 +186,7 @@ class HTML_Template_Flexy_Assign {
         
         // final error catch
         return HTML_Template_Flexy::raiseError(
-            "invalid type sent to assignRef, ". print_r($args,true),
+            "invalid type sent to assignRef, ". print_r($name,true),
             HTML_TEMPLATE_FLEXY_ASSIGN_ERROR_INVALIDARGS 
  
         );
