@@ -203,7 +203,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         switch ($type) {
             case "CHECKBOX":
-                $this->attributes['checked'] = 
+                $this->attributes['CHECKED'] = 
                     $this->factory("PHP",
                     "<?php if (". $this->toVar($thisvar).") { ?>CHECKED<?php } ?>",
                     $this->line);
@@ -218,14 +218,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
 
 
             case "HIDDEN":
-                $this->attributes['value'] = array(
+                $this->attributes['VALUE'] = array(
                     "\"",
                     $this->factory("Var",$thisvar.":u",$this->line),
                     "\"");
                 return;
             
             default:
-                $this->attributes['value'] = array(
+                $this->attributes['VALUE'] = array(
                     "\"",
                     $this->factory("Var",$thisvar.":u",$this->line),
                     "\"");
@@ -418,15 +418,15 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     /**
     * getAttribute = reads an attribute value and strips the quotes 
     *
-    * TODO : sort out case issues...
-    * does not handle valuse with flexytags in
+    * TODO 
+    * does not handle values with flexytags in them
     *
     * @return   none
     * @access   string
     */
     function getAttribute($key) {
         // all attribute keys are stored Upper Case,
-        // however just to make sure we have not done a type :)
+        // however just to make sure we have not done a typo :)
         $key = strtoupper($key); 
         
         if (!isset($this->attributes[$key])) {
