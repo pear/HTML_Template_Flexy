@@ -32,6 +32,13 @@ class HTML_Template_Flexy_Assign {
     * @access public
     */
     var $variables = array();
+    /**
+    * The references stored in the Assigner
+    *
+    * @var array
+    * @access public
+    */
+    var $references = array();
 
  
     /**
@@ -99,8 +106,8 @@ class HTML_Template_Flexy_Assign {
         // don't check isset() on $args[1] becuase a 'null' is not set,
         // and we might want to pass a null.
         if (is_string($args[0]) && $count > 1) {
-            if (isset($this->variables[$args[0]])) {
-                unset($this->variables[$args[0]]);
+            if (isset($this->references[$args[0]])) {
+                unset($this->references[$args[0]]);
             }
             // keep a copy in the token vars array
             $this->variables[$args[0]] = $args[1];
@@ -178,7 +185,7 @@ class HTML_Template_Flexy_Assign {
             }
             //
             // assign the token as a reference
-            $this->variables[$name] =& $ref;
+            $this->references[$name] =& $ref;
              
             // done!
             return true;

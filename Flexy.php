@@ -316,6 +316,9 @@ class HTML_Template_Flexy
                 $t = (object) $this->assign->variables;
             }
             extract($this->assign->variables);
+            foreach(array_keys($this->assign->references) as $k) {
+                $$k = &$this->assign->references[$k];
+            }
         }
         
         
