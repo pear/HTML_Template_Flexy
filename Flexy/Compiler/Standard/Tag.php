@@ -612,6 +612,10 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     function parseTagInput() 
     {
         global $_HTML_TEMPLATE_FLEXY;
+        
+        if (in_array(strtoupper($this->element->getAttribute('TYPE')), array('SUBMIT','BUTTON','INPUT','')))  {
+            $this->compiler->addStringToGettext($this->element->getAttribute('VALUE'));
+        }
         // form elements : format:
         //value - fill out as PHP CODE
         
@@ -789,6 +793,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         $ret = new HTML_Template_Flexy_Element;
         
         if (strtolower(get_class($element)) != 'html_template_flexy_token_tag') {
+            $this->compiler->addStringToGettext($element->value);
             return $element->value;
         }
         
@@ -808,6 +813,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if (!$element->children) {
             return $ret;
         }
+        
+        // children - normally to deal with <element>
         
         //print_r($this->children);
         foreach(array_keys($element->children) as $i) {

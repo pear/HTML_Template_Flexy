@@ -618,34 +618,12 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
 
     function toStringText($element) 
     {
-        // if it's XML then quote it..
         
-        /**
-        * Global variable for gettext replacement
-        * static object vars will be nice in PHP5 :)
-        *
-        * @var array
-        * @access private
-        */
-        global $_HTML_TEMPLATE_FLEXY_COMPILER;
+        // first get rid of stuff thats not translated etc.
+        // empty strings => output.
+        // comments -> just output
+        // our special tags -> output..
         
-        $gettextStrings = &$_HTML_TEMPLATE_FLEXY_COMPILER['gettextStrings'];
-        
-        static $cleanArray = array(
-            '$' => '\$',
-            '"' => '\"',
-            "'" => '\\\'',
-            '\\' => '\\\\',
-            "\n" => '\n',
-            "\t" => '\t',
-            "\r" => '\r'
-        );
-        static $uncleanArray = false;
-        if (!$uncleanArray ) {
-            $uncleanArray = array_flip($cleanArray);
-        }
-
-         
         if (!strlen(trim($element->value) )) {
             return $this->appendHtml($element->value);
         }
@@ -654,73 +632,94 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         if (substr($element->value,0,4) == '<!--') {
             return $this->appendHtml($element->value);
         }
-        if (!count($element->argTokens) && !$element->isWord()) {
-            return $this->appendHtml($element->value);
-        }
-        
         // ignore anything wrapped with {_( .... )_}
         if ($this->inGetTextBlock) {
             return $this->appendHtml($element->value);
         }
         
-        $front = '';
-        $rear = '';
-        // trim whitespace front
-        for ($i=0;$i<strlen($element->value); $i++) {
-            if (strpos(" \n\t\r\0\x0B", $element->value{$i}) !== false) {
-                $front .= $element->value{$i};
-                continue;
-            }
-            break;
-        }
-        // trim whitespace rear 
-        for ($i=strlen($element->value)-1;$i>-1; $i--) {
-            if (strpos(" \n\t\r\0\x0B", $element->value{$i}) !== false) {
-                $rear = $element->value{$i} . $rear;
-                continue;
-            }
-            break;            
+        // argTokens is built before the tag matching (it combined
+        // flexy tags into %s, into the string,
+        // and made a list of tokens in argTokens.
+        
+        if (!count($element->argTokens) && !$element->isWord()) {
+            return $this->appendHtml($element->value);
         }
         
+        // grab the white space at start and end (and keep it!
+        
+        $value = ltrim($element->value);
+        $front = substr($element->value,0,-strlen($value));
+        $value = rtrim($element->value);
+        $rear  = substr($element->value,strlen($value));
         $value = trim($element->value);
         
         
         // convert to escaped chars.. (limited..)
-        $value = strtr($value,$cleanArray);
+        //$value = strtr($value,$cleanArray);
         
-        
+        $this->addStringToGettext($value);
+        $value = $this->translateString($value);
         // its a simple word!
         if (!count($element->argTokens)) {
-            $gettextStrings[] = $value;
-            $value = $this->translateString($value);
-            $value = strtr($value,$uncleanArray);
-        
-            return $this->appendHtml($front .  $value  . $rear);
+            return $this->appendHtml($front . $value . $rear);
         }
         
         
         // there are subtokens..
         // print_r($element->argTokens );
         $args = array();
-        $argsMake = '';
         // these should only be text or vars..
+        
         foreach($element->argTokens as $i=>$token) {
             $args[] = $token->compile($this);
         }
         
-        $gettextStrings[] = $value;
-        $value = $this->translateString($value);
-        $value = strtr($value,$uncleanArray);
+        // we break up the translated string, and put the compiled tags 
+        // in between the values here.
         
         $bits = explode('%s',$value);
-        $ret = $front;
+        $ret  = $front;
+        
         foreach($bits as $i=>$v) {
-            $ret.=$v.@$args[$i];
+            $ret .= $v . @$args[$i];
         }
         
         return  $ret . $rear;
         
     }
+    /**
+    * addStringToGettext 
+    *
+    * Adds a string to the gettext array. 
+    * 
+    * @param   mixed        preferably.. string to store
+    *
+    * @return   none
+    * @access   public
+    */
+    
+    function addStringToGettext($string) 
+    {
+    
+        
+        
+        
+        if (!is_string($string)) {
+            return;
+        }
+        
+        if (!preg_match('/[a-z]+/i', $string)) {
+            return;
+        }
+        $string = trim($string);
+        
+        if (substr($string,0,4) == '<!--') {
+            return;
+        }
+        
+        $GLOBALS['_HTML_TEMPLATE_FLEXY_COMPILER']['gettextStrings'][] = $string;
+    }
+    
     
     /**
     * translateString - a gettextWrapper
@@ -748,6 +747,10 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $string;
         }
         
+        // note this stuff may have been broken by removing the \n replacement code 
+        // since i dont have a test for it... it may remain broken..
+        // use Translation2 - it has gettext backend support
+        // and should sort out the mess that \n etc. entail.
         
         
         $prefix = basename($GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']).':';

@@ -61,23 +61,21 @@
  
 
     <release>
-     <version>0.8.2</version>
-      <date>2004-05-05</date>
+     <version>0.9.0</version>
+      <date>2004-05-06</date>
       <notes><![CDATA[
-      Bugfix release:
+      minor BC break release:
       
       Moving to stable Planned Sometime after Late May 2004
-        
-      Bugs / Fixes:
-        * Bug #1274
-        * Test added for Bug #1310
-        * fix Flexy_Element::setOptions / Flexy_Element::setValue, using a value of 0 
-          highlighting everything.
-        * Closing Tags for XHTML closers correctly placed at end of tag.
-          (Flexy_Element only)
-        * url_rewriting now works in &lt;?xml-stylesheet tags. (they are treaded similar to
-          normal html tags now. (and only the opening &lt; is written using php.
-        * closers for namepaced tags are now output (big oops bug..)
+      
+      BC Break on Gettext string storage.
+        * during parsing of the template  flexy builds an array of strings that
+          can be used to automate translation.
+          The strings in this array used to be escaped (similar to addslashes).
+          
+          This proved to be a bad decision (As the unescaping and escaping got too messy)
+           - the strings are now stored as they are found. (albiet still trimmed)
+          
         
        
       
@@ -194,6 +192,33 @@
    <changelog>
    
    
+    <release>
+     <version>0.8.2</version>
+      <date>2004-05-05</date>
+      <notes><![CDATA[
+      Bugfix release:
+      
+      Moving to stable Planned Sometime after Late May 2004
+        
+      Bugs / Fixes:
+        * Bug #1274
+        * Test added for Bug #1310
+        * fix Flexy_Element::setOptions / Flexy_Element::setValue, using a value of 0 
+          highlighting everything.
+        * Closing Tags for XHTML closers correctly placed at end of tag.
+          (Flexy_Element only)
+        * url_rewriting now works in &lt;?xml-stylesheet tags. (they are treaded similar to
+          normal html tags now. (and only the opening &lt; is written using php.
+        * closers for namepaced tags are now output (big oops bug..)
+        
+       
+      
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
    
     <release>
      <version>0.8.1</version>
