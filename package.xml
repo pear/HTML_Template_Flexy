@@ -44,14 +44,14 @@
   
 
   <release>
-     <version>0.5</version>
-      <date>2003-04-20</date>
+     <version>0.4.1</version>
+      <date>2003-06-11</date>
       <notes>
       
        
       Bug fixes
-	- fixed #literal# support for method calls - hopefully finally (Yuri Dyakonov)
-        
+    	- fixed #literal# support for method calls - hopefully finally (Yuri Dyakonov)
+        - BC support for  getOptions call on objects (Marcin Galczynski)
         
       Features
         - method calls with literals at end can now use modifiers (:h/:u etc.)
