@@ -1,6 +1,24 @@
 <?php
-
-
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+// +----------------------------------------------------------------------+
+// | PHP Version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2002 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 2.02 of the PHP license,      |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Authors:  Alan Knowles <alan@akbkhome>                               |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+ 
+ 
 /**
 * Compiler That deals with standard HTML Tag output.
 * Since it's pretty complex it has it's own class.
@@ -134,8 +152,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                     " Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                      null, PEAR_ERROR_DIE);
                 }
-                 
-                $ret .= ' ' . $v[1]->compile($this->compiler);
+                $add = $v[1]->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+                $ret .= ' ' . $add;
                 continue;
             
             }
@@ -161,7 +182,12 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             // the object is responsible for adding it's space..
             
             if (is_object($v)) {
-                $ret .= $v->compile($this->compiler);
+                $add = $v->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+            
+                $ret .= $add;
                 continue;
             }
             
@@ -174,8 +200,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                     $ret .= $item;
                     continue;
                 }
-                 
-                $ret .= $item->compile($this->compiler);
+                $add = $item->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+                $ret .= $add;
             }
         }
         $ret .= ">";
@@ -184,22 +213,37 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         if ($element->postfix) {
             foreach ($element->postfix as $e) {
-                $ret .= $e->compile($this->compiler);
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+                $ret .= $add;
             }
         } else if ($this->element->postfix) { // if postfixed by self..
             foreach ($this->element->postfix as $e) {
-                $ret .= $e->compile($this->compiler);
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+            
+                $ret .= $add;
             }
         }
         // output the children.
-        
-        $ret .= $element->compileChildren($this->compiler);
+        $add = $element->compileChildren($this->compiler);
+        if (is_a($add,'PEAR_Error')) {
+            return $add;
+        }
+        $ret .= $add;
         
         // output the closing tag.
         
         if ($element->close) {
-            
-            $ret .= $element->close->compile($this->compiler);
+            $add = $element->close->compile($this->compiler);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
         }
         
         // reset flexyignore
@@ -261,7 +305,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 "Missing Arguments: An flexy:foreach attribute was foundon Line {$this->element->line} 
                 in tag &lt;{$this->element->tag} flexy:foreach=&quot;$foreach&quot; .....&gt;<BR>
                 the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
-                 null, PEAR_ERROR_DIE);
+                 null, PEAR_ERROR_RETURN);
         }
         
         
@@ -270,7 +314,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             PEAR::raiseError(
                 "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
                     tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, PEAR_ERROR_DIE);
+                 null, PEAR_ERROR_RETURN);
         }
         $this->element->close->postfix = array($this->element->factory("End", '', $this->element->line));
 
@@ -310,6 +354,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // if="xxxxx"
         // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
         // these checks should really be in the if/method class..!!!
+        
+        
         
         if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?((\[|%5B)[A-Z0-9_]+(\]|%5D))*'.
                 '(\.[_A-Z][A-Z0-9_]*((\[|%5B)[A-Z0-9_]+(\]|%5D))*)*(\\([^)]*\))?$/i',$if)) {

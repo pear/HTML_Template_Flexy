@@ -150,12 +150,16 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         }
         
         $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-            
+        if (is_a($res,'PEAR_Error')) {
+            return $res;
+        }   
         // turn tokens into Template..
         
         $data = $res->compile($this);
         
-        
+        if (is_a($data,'PEAR_Error')) {
+            return $data;
+        }
         
         
         if (   @$this->options['debug']) {
@@ -193,7 +197,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
             
         } else {
-            PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,null,PEAR_ERROR_DIE);
+            return PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,
+                HTML_TEMPLATE_FLEXY_ERROR_FILE ,PEAR_ERROR_RETURN);
         }
         // gettext strings
         if (file_exists($flexy->getTextStringsFile)) {
@@ -263,19 +268,25 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $class = get_class($element);
         if (strlen($class) >= $len) {
             $type = substr($class,$len);
-            //echo "CALL $type";
             return $this->{'toString'.$type}($element);
         }
         
         $ret = $element->value;
-        $ret .= $element->compileChildren($this);
+        $add = $element->compileChildren($this);
+        if (is_a($add,'PEAR_Error')) {
+            return $add;
+        }
+        $ret .= $add;
+        
         if ($element->close) {
-            $ret .= $element->close->compile($this);
+            $add = $element->close->compile($this);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
         }
         
         return $ret;
-        
-        
     }
 
 
@@ -359,12 +370,15 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     function toStringForeach($element) 
     {
     
+        $loopon = $element->toVar($element->loopOn);
+        if (is_a($loopon,'PEAR_Error')) {
+            return $loopon;
+        }
         
-    
         $ret = 'if (is_array('.
-            $element->toVar($element->loopOn) . ")  || " .
-            'is_object(' . $element->toVar($element->loopOn) . ')) ' .
-            'foreach(' . $element->toVar($element->loopOn) . " ";
+            $element->toVar($loopon ) . ")  || " .
+            'is_object(' . $loopon  . ')) ' .
+            'foreach(' . $loopon  . " ";
             
         $ret .= "as \${$element->key}";
         
@@ -390,7 +404,13 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
   
     function toStringIf($element) 
     {
-        $ret = "if (".$element->isNegative . $element->toVar($element->condition) .")  {";
+        
+        $var = $element->toVar($element->condition);
+        if (is_a($var,'PEAR_Error')) {
+            return $var;
+        }
+        
+        $ret = "if (".$element->isNegative . $var .")  {";
         $element->pushState();
         return $this->appendPhp($ret);
     }
@@ -459,8 +479,13 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     function toStringVar($element) 
     {
         // ignore modifier at present!!
+        
+        $var = $element->toVar($element->value);
+        if (is_a($var,'PEAR_Error')) {
+            return $var;
+        }
         list($prefix,$suffix) = $this->getModifierWrapper($element);
-        return $this->appendPhp( $prefix . $element->toVar($element->value) . $suffix .';');
+        return $this->appendPhp( $prefix . $var . $suffix .';');
     }
    /**
     *   HTML_Template_Flexy_Token_Method toString 
@@ -495,13 +520,22 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         $object = implode('.',$bits);
         
-        $prefix = 'if (isset('.$element->toVar($object).
-            ') && method_exists('.$element->toVar($object) .",'{$method}')) " . $prefix;
+        $var = $element->toVar($object);
+        if (is_a($var,'PEAR_Error')) {
+            return $var;
+        }
+        
+        $prefix = 'if (isset('.$var.
+            ') && method_exists('.$var .",'{$method}')) " . $prefix;
         
         
+        $var = $element->toVar($element->method);
+        if (is_a($var,'PEAR_Error')) {
+            return $var;
+        }
         
         $ret  =  $prefix;
-        $ret .=  $element->toVar($element->method) . "(";
+        $ret .=  $var . "(";
         $s =0;
          
        
@@ -516,7 +550,12 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
                 $ret .= '"'. addslashes(substr($a,1,-1)) . '"';
                 continue;
             }
-            $ret .= $element->toVar($a);
+            
+            $var = $element->toVar($a);
+            if (is_a($var,'PEAR_Error')) {
+                return $var;
+            }
+            $ret .= $var;
             
         }
         $ret .= ")" . $suffix;
@@ -804,16 +843,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             $bits =  explode(':',$element->tag);
             $namespace = $bits[0];
         }
-	if ($namespace{0} == '/') {
-		return '';
+        if ($namespace{0} == '/') {
+            return '';
         }
         if (empty($this->tagHandlers[$namespace])) {
             
             require_once 'HTML/Template/Flexy/Compiler/Standard/Tag.php';
             $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Standard_Tag::factory($namespace,$this);
             if (!$this->tagHandlers[$namespace] ) {
-                PEAR::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
-                ' in file ' . $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'],null,PEAR_ERROR_DIE);
+                return PEAR::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
+                    ' in file ' . $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'],
+                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,PEAR_ERROR_RETURN);
             }
                 
         }

@@ -122,18 +122,18 @@ an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); 
 <h2>Looping</h2>
 
 
-<p>a loop <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?> <?php echo htmlspecialchars($a);?> <?php }?></p>
-<p>a loop with 2 vars <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?> 
+<p>a loop <?php if (is_array($t->$t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?> <?php echo htmlspecialchars($a);?> <?php }?></p>
+<p>a loop with 2 vars <?php if (is_array($t->$t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?> 
     <?php echo htmlspecialchars($a);?> , 
     <?php echo htmlspecialchars($b);?>
 <?php }?></p>
 
 Bug #84
-<?php if (is_array($t->list)  || is_object($t->list)) foreach($t->list as $i) {?><?php if (isset($t) && method_exists($t,'method')) echo htmlspecialchars($t->method($i));?><?php }?>
+<?php if (is_array($t->$t->list)  || is_object($t->list)) foreach($t->list as $i) {?><?php if (isset($t) && method_exists($t,'method')) echo htmlspecialchars($t->method($i));?><?php }?>
 
 
 <table>
-    <?php if (is_array($t->xyz)  || is_object($t->xyz)) foreach($t->xyz as $abcd => $def) {?><tr>
+    <?php if (is_array($t->$t->xyz)  || is_object($t->xyz)) foreach($t->xyz as $abcd => $def) {?><tr>
         <td><?php echo htmlspecialchars($abcd);?>, <?php if (isset($t) && method_exists($t,'test')) echo htmlspecialchars($t->test($def));?></td>
     </tr><?php }?>
 </table>
@@ -179,7 +179,7 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"nip"));?> Street: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"street"));?> City: 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"code"));?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"city"));?>
 # 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 	Netto 	VAT 	Brutto
-<?php if (is_array($t->positions)  || is_object($t->positions)) foreach($t->positions as $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if (is_array($t->$t->positions)  || is_object($t->positions)) foreach($t->positions as $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"name"));?> <?php if ($t->show_pkwiu)  {?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"pkwiu"));?><?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"count"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"netto"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"vat"));?> 
@@ -187,11 +187,11 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 <?php }?> <?php if ($t->edit_positions)  {?> # 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 
 <?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	Netto<?php } else {?>	<?php }?> 	VAT 
 <?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	<?php } else {?>	Brutto<?php }?>
-<?php if (is_array($t->edit_positions)  || is_object($t->edit_positions)) foreach($t->edit_positions as $k => $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if (is_array($t->$t->edit_positions)  || is_object($t->edit_positions)) foreach($t->edit_positions as $k => $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
 <?php if ($t->show_pkwiu)  {?> 	<?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?> 
 <?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?>	<?php }?>
 <?php }?> <?php }?> # 	
-<?php if (is_array($t->sum)  || is_object($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
+<?php if (is_array($t->$t->sum)  || is_object($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"vat"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"brutto"));?>
 <?php }?>
 
@@ -201,7 +201,7 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
 <table width="100%" border="0">
-  <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?><tr class="<?php echo htmlspecialchars($a->hightlight);?>"> 
+  <?php if (is_array($t->$t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?><tr class="<?php echo htmlspecialchars($a->hightlight);?>"> 
     <td>a is</td>
     <?php if ($a->showtext)  {?><td><?php echo htmlspecialchars($a->text);?></td><?php }?>
     <?php if (!$a->showtext)  {?><td><?php echo number_format($a->price,2,'.',',');?></td><?php }?>
@@ -214,7 +214,7 @@ Example error messages..
 
 <p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
 <table width="100%" border="0">
-  <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?><tr> 
+  <?php if (is_array($t->$t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?><tr> 
     <td><?php echo htmlspecialchars($a);?></td>
     <td><?php echo htmlspecialchars($b);?></td>
   </tr><?php }?>
@@ -322,6 +322,22 @@ Bug 1120:
 <input name="testing" value="<?php echo htmlspecialchars($t->somevalue);?>">
 <?php echo $this->elements['_submit[1]']->toHtml();?>
 </form>
+
+
+
+GLOBALS:
+<?php echo htmlspecialchars($_SESSION['hello']);?>
+<?php echo htmlspecialchars($_GET['fred']);?>
+<?php echo htmlspecialchars($GLOBALS['abc']);?>
+
+Privates:
+<?php if (isset($t) && method_exists($t,'_somemethod')) echo htmlspecialchars($t->_somemethod());?>
+<?php echo htmlspecialchars($t->_somevar);?>
+
+
+
+
+
 
 <p>&nbsp;</p>
 </body>

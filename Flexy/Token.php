@@ -157,7 +157,11 @@ class HTML_Template_Flexy_Token {
             if (!$child) {
                 continue;
             }
-            $ret .= $child->compile($compiler);
+            $add = $child->compile($compiler);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
         }
         return $ret;
     }
@@ -217,14 +221,15 @@ class HTML_Template_Flexy_Token {
                 //echo "ERROR";
                 
                 //print_r($tokenizer);
-                echo "<PRE>" . 
+                $err = "<PRE>" . $tokenizer->error;
                     htmlspecialchars(substr($tokenizer->yy_buffer,0,$tokenizer->yy_buffer_end)) . 
                     "<font color='red'>". htmlspecialchars(substr($tokenizer->yy_buffer,$tokenizer->yy_buffer_end,100)) . 
                     ".......</font></PRE>";
-                    // print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
-                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline 
-                  // . " <PRE>" . htmlspecialchars(print_r($tokenizer,true)) . "</PRE>"
-                   , null,PEAR_ERROR_DIE);
+                    
+                return PEAR::raiseError('HTML_Template_Flexy::Syntax error in ".
+                    "Template line:'. $tokenizer->yyline .
+                    $err
+                   , HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,PEAR_ERROR_RETURN);
             }
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
                 continue;
@@ -529,13 +534,14 @@ class HTML_Template_Flexy_Token {
         // accept global access on some string
         if (@$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['globals'] &&
             preg_match('/^(_POST|_GET|_REQUEST|_SESSION|_COOKIE|GLOBALS)\[/',$string)) {
-            return '$'.$parts[0];
+            return '$'.$string;
         } 
         if (!@$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['privates'] &&
                 ($string{0} == '_')) {
                 return PEAR::raiseError('HTML_Template_Flexy::Attempt to access private variable:'.
-                    " on line {$element->line}, Use options[privates] to allow this."
-                   , null,PEAR_ERROR_DIE);
+                    " on line {$this->line} of {$GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']}".
+                    ", Use options[privates] to allow this."
+                   , HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,PEAR_ERROR_RETURN);
         }
         
         $lookup = $string;
