@@ -18,7 +18,7 @@
 //
 // $Id$
 //
-// Plugin API provides support for  <?= $this->plugin(".....",.....); ?>
+// Plugin API provides support for  < ? = $this->plugin(".....",.....); ? >
 //  or {this.plugin(#xxxxx#,#xxxx#):h}
 //
 // BASICALLY THIS IS SAVANT'S PLUGIN PROVIDER.
@@ -56,17 +56,18 @@ class HTML_Template_Flexy_Plugin {
         // attempt to load the plugin on-the-fly
         $class = $this->_loadPlugins($method);
         
-        if (is_a('PEAR_Error',$class)) {
+        if (is_a($class,'PEAR_Error')) {
+            //echo $class->toString();
             return $class;
         }
-          
+        
          
         // first argument is always the plugin name; shift the first
         // argument off the front of the array and reduce the number of
         // array elements.
         array_shift($args);
         
-        return call_user_func_array(array($this->plugins[$classname],$method), $args);
+        return call_user_func_array(array($this->plugins[$class],$method), $args);
     }
     
     /**
@@ -79,7 +80,7 @@ class HTML_Template_Flexy_Plugin {
     * @access   private
     */
     
-    function _loadPlugin($name) 
+    function _loadPlugins($name) 
     {
         // name can be:
         // ahref = maps to {class_prefix}_ahref::ahref
@@ -88,7 +89,7 @@ class HTML_Template_Flexy_Plugin {
             foreach ($this->flexy->options['plugins'] as $cname=>$file) {
                 if (!is_int($cname)) {
                     include_once $file;
-                    $this->plugins[$cname] = new $cname
+                    $this->plugins[$cname] = new $cname;
                     $this->plugins[$cname]->flexy = &$this->flexy;
                     continue;
                 }
@@ -102,11 +103,13 @@ class HTML_Template_Flexy_Plugin {
                 
         
         foreach ($this->plugins as $class=>$o) {
+            //echo "checking :". get_class($o). ":: $name\n";
             if (method_exists($o,$name)) {
                 return $class;
             }
         }
-        return HTML_Template_Flexy::raiseError('could not find plugin');
+        
+        return HTML_Template_Flexy::raiseError('could not find plugin with method '. $name);
     }
     
     

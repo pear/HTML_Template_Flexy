@@ -461,8 +461,6 @@ class HTML_Template_Flexy_Plugin_Savant {
         return '<script language="javascript" type="text/javascript" src="' .
             $href . '"></script>';
     }
-
-}
  
 
     /**
@@ -499,9 +497,7 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
-
-    /* THIS IS DISABLED UNTIL IT IS RATIONALIZED == BIG SECURITY HOLE !! */
-    /*
+ 
     function modify($value, $functions = null)
     {
         // is there a space-delimited function list?
@@ -514,15 +510,21 @@ class HTML_Template_Flexy_Plugin_Savant {
             // loop through the function list and
             // apply to the output in sequence.
             foreach ($list as $func) {
-                if (function_exists($func)) {
-                    $value = $func($value);
+                if (!function_exists($func)) {
+                    continue;
                 }
+                // extend this..
+                if (!in_array($func, array('htmlspecialchars','nl2br','urlencode'))) {
+                    continue;
+                }
+                $value = $func($value);
+                
             }
         }
         
         return $value;
     }
-    */
+    
 
      
     /**
