@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -26,6 +28,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 0
+                    [charPos] => 0
                     [close] => 
                     [children] => Array
                         (
@@ -44,11 +47,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 1
+                    [charPos] => 4
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 1
+                            [charPos] => 46
                             [close] => 
                             [children] => Array
                                 (
@@ -77,6 +82,7 @@ html_template_flexy_token Object
                                     [token] => Text
                                     [value] => Example of function block definitions
                                     [line] => 1
+                                    [charPos] => 5
                                     [close] => 
                                     [children] => Array
                                         (
@@ -116,6 +122,7 @@ html_template_flexy_token Object
 
 
                     [line] => 1
+                    [charPos] => 47
                     [close] => 
                     [children] => Array
                         (
@@ -134,11 +141,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 4
+                    [charPos] => 73
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 8
+                            [charPos] => 182
                             [close] => 
                             [children] => Array
                                 (
@@ -168,6 +177,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 4
+                                    [charPos] => 74
                                     [close] => 
                                     [children] => Array
                                         (
@@ -186,11 +196,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 5
+                                    [charPos] => 78
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 7
+                                            [charPos] => 173
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -219,11 +231,13 @@ html_template_flexy_token Object
                                                     [token] => Tag
                                                     [value] => 
                                                     [line] => 5
+                                                    [charPos] => 82
                                                     [close] => html_template_flexy_token_endtag Object
                                                         (
                                                             [token] => EndTag
                                                             [value] => 
                                                             [line] => 7
+                                                            [charPos] => 168
                                                             [close] => 
                                                             [children] => Array
                                                                 (
@@ -253,6 +267,7 @@ html_template_flexy_token Object
                                                                     [value] => 
     
                                                                     [line] => 5
+                                                                    [charPos] => 83
                                                                     [close] => 
                                                                     [children] => Array
                                                                         (
@@ -271,11 +286,13 @@ html_template_flexy_token Object
                                                                     [token] => Tag
                                                                     [value] => 
                                                                     [line] => 6
+                                                                    [charPos] => 116
                                                                     [close] => html_template_flexy_token_endtag Object
                                                                         (
                                                                             [token] => EndTag
                                                                             [value] => 
                                                                             [line] => 6
+                                                                            [charPos] => 162
                                                                             [close] => 
                                                                             [children] => Array
                                                                                 (
@@ -304,6 +321,7 @@ html_template_flexy_token Object
                                                                                     [token] => Text
                                                                                     [value] => this is the contents of test1
                                                                                     [line] => 6
+                                                                                    [charPos] => 117
                                                                                     [close] => 
                                                                                     [children] => Array
                                                                                         (
@@ -343,6 +361,7 @@ html_template_flexy_token Object
                                                                     [value] => 
 
                                                                     [line] => 6
+                                                                    [charPos] => 163
                                                                     [close] => 
                                                                     [children] => Array
                                                                         (
@@ -398,6 +417,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 7
+                                    [charPos] => 174
                                     [close] => 
                                     [children] => Array
                                         (
@@ -437,6 +457,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 8
+                    [charPos] => 183
                     [close] => 
                     [children] => Array
                         (
@@ -455,11 +476,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 9
+                    [charPos] => 190
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 14
+                            [charPos] => 323
                             [close] => 
                             [children] => Array
                                 (
@@ -489,6 +512,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 9
+                                    [charPos] => 191
                                     [close] => 
                                     [children] => Array
                                         (
@@ -507,11 +531,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 10
+                                    [charPos] => 195
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 13
+                                            [charPos] => 314
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -540,11 +566,13 @@ html_template_flexy_token Object
                                                     [token] => Tag
                                                     [value] => 
                                                     [line] => 10
+                                                    [charPos] => 199
                                                     [close] => html_template_flexy_token_endtag Object
                                                         (
                                                             [token] => EndTag
                                                             [value] => 
                                                             [line] => 13
+                                                            [charPos] => 309
                                                             [close] => 
                                                             [children] => Array
                                                                 (
@@ -574,6 +602,7 @@ html_template_flexy_token Object
                                                                     [value] => 
    
                                                                     [line] => 10
+                                                                    [charPos] => 200
                                                                     [close] => 
                                                                     [children] => Array
                                                                         (
@@ -592,11 +621,13 @@ html_template_flexy_token Object
                                                                     [token] => Tag
                                                                     [value] => 
                                                                     [line] => 11
+                                                                    [charPos] => 232
                                                                     [close] => html_template_flexy_token_endtag Object
                                                                         (
                                                                             [token] => EndTag
                                                                             [value] => 
                                                                             [line] => 11
+                                                                            [charPos] => 249
                                                                             [close] => 
                                                                             [children] => Array
                                                                                 (
@@ -646,6 +677,7 @@ html_template_flexy_token Object
                                                                     [value] => 
    
                                                                     [line] => 11
+                                                                    [charPos] => 250
                                                                     [close] => 
                                                                     [children] => Array
                                                                         (
@@ -664,11 +696,13 @@ html_template_flexy_token Object
                                                                     [token] => Tag
                                                                     [value] => 
                                                                     [line] => 12
+                                                                    [charPos] => 286
                                                                     [close] => html_template_flexy_token_endtag Object
                                                                         (
                                                                             [token] => EndTag
                                                                             [value] => 
                                                                             [line] => 12
+                                                                            [charPos] => 303
                                                                             [close] => 
                                                                             [children] => Array
                                                                                 (
@@ -707,6 +741,7 @@ html_template_flexy_token Object
                                                                                             [token] => Var
                                                                                             [value] => a_value
                                                                                             [line] => 12
+                                                                                            [charPos] => 276
                                                                                             [close] => 
                                                                                             [children] => Array
                                                                                                 (
@@ -731,6 +766,7 @@ html_template_flexy_token Object
                                                                                             [token] => Var
                                                                                             [value] => a_value
                                                                                             [line] => 12
+                                                                                            [charPos] => 276
                                                                                             [close] => 
                                                                                             [children] => Array
                                                                                                 (
@@ -756,6 +792,7 @@ html_template_flexy_token Object
                                                                     [value] => 
 
                                                                     [line] => 12
+                                                                    [charPos] => 304
                                                                     [close] => 
                                                                     [children] => Array
                                                                         (
@@ -811,6 +848,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 13
+                                    [charPos] => 315
                                     [close] => 
                                     [children] => Array
                                         (

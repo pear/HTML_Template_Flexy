@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -25,11 +27,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 0
+                    [charPos] => 17
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 2
+                            [charPos] => 41
                             [close] => 
                             [children] => Array
                                 (
@@ -60,6 +64,7 @@ html_template_flexy_token Object
 This is block 1
 
                                     [line] => 0
+                                    [charPos] => 18
                                     [close] => 
                                     [children] => Array
                                         (
@@ -100,6 +105,7 @@ This is block 1
 
 
                     [line] => 2
+                    [charPos] => 42
                     [close] => 
                     [children] => Array
                         (
@@ -118,11 +124,13 @@ This is block 1
                     [token] => Tag
                     [value] => 
                     [line] => 4
+                    [charPos] => 61
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 6
+                            [charPos] => 85
                             [close] => 
                             [children] => Array
                                 (
@@ -153,6 +161,7 @@ This is block 1
 This is block 2
 
                                     [line] => 4
+                                    [charPos] => 62
                                     [close] => 
                                     [children] => Array
                                         (

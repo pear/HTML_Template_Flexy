@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -25,6 +27,7 @@ html_template_flexy_token Object
                     [token] => Doctype
                     [value] => <!DOCTYPE 
                     [line] => 0
+                    [charPos] => 0
                     [close] => 
                     [children] => Array
                         (
@@ -39,6 +42,7 @@ html_template_flexy_token Object
                     [token] => Name
                     [value] => HTML 
                     [line] => 0
+                    [charPos] => 10
                     [close] => 
                     [children] => Array
                         (
@@ -53,6 +57,7 @@ html_template_flexy_token Object
                     [token] => Name
                     [value] => PUBLIC 
                     [line] => 0
+                    [charPos] => 15
                     [close] => 
                     [children] => Array
                         (
@@ -67,6 +72,7 @@ html_template_flexy_token Object
                     [token] => Literal
                     [value] => "-//W3C//DTD HTML 4.01 Transitional//EN"
                     [line] => 0
+                    [charPos] => 22
                     [close] => 
                     [children] => Array
                         (
@@ -81,6 +87,7 @@ html_template_flexy_token Object
                     [token] => CloseTag
                     [value] => >
                     [line] => 0
+                    [charPos] => 62
                     [close] => 
                     [children] => Array
                         (
@@ -96,6 +103,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 0
+                    [charPos] => 63
                     [close] => 
                     [children] => Array
                         (
@@ -114,6 +122,7 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 1
+                    [charPos] => 69
                     [close] => 
                     [children] => Array
                         (
@@ -141,6 +150,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 1
+                    [charPos] => 70
                     [close] => 
                     [children] => Array
                         (
@@ -159,6 +169,7 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 2
+                    [charPos] => 76
                     [close] => 
                     [children] => Array
                         (
@@ -186,6 +197,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 2
+                    [charPos] => 77
                     [close] => 
                     [children] => Array
                         (
@@ -204,11 +216,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 3
+                    [charPos] => 84
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 3
+                            [charPos] => 109
                             [close] => 
                             [children] => Array
                                 (
@@ -237,6 +251,7 @@ html_template_flexy_token Object
                                     [token] => Text
                                     [value] => Untitled Document
                                     [line] => 3
+                                    [charPos] => 85
                                     [close] => 
                                     [children] => Array
                                         (
@@ -274,6 +289,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 3
+                    [charPos] => 110
                     [close] => 
                     [children] => Array
                         (
@@ -292,6 +308,7 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 4
+                    [charPos] => 182
                     [close] => 
                     [children] => Array
                         (
@@ -326,6 +343,7 @@ html_template_flexy_token Object
  
 
                     [line] => 4
+                    [charPos] => 183
                     [close] => 
                     [children] => Array
                         (
@@ -344,11 +362,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 13
+                    [charPos] => 287
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 22
+                            [charPos] => 465
                             [close] => 
                             [children] => Array
                                 (
@@ -378,6 +398,7 @@ html_template_flexy_token Object
                                     [value] => 
     
                                     [line] => 13
+                                    [charPos] => 288
                                     [close] => 
                                     [children] => Array
                                         (
@@ -396,11 +417,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 14
+                                    [charPos] => 323
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 20
+                                            [charPos] => 434
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -435,6 +458,7 @@ html_template_flexy_token Object
     
     
                                                     [line] => 14
+                                                    [charPos] => 324
                                                     [close] => 
                                                     [children] => Array
                                                         (
@@ -475,6 +499,7 @@ html_template_flexy_token Object
 
 
                                     [line] => 20
+                                    [charPos] => 443
                                     [close] => 
                                     [children] => Array
                                         (
@@ -524,6 +549,7 @@ html_template_flexy_token Object
 
 
                     [line] => 22
+                    [charPos] => 466
                     [close] => 
                     [children] => Array
                         (
@@ -542,11 +568,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 27
+                    [charPos] => 501
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 31
+                            [charPos] => 594
                             [close] => 
                             [children] => Array
                                 (
@@ -576,6 +604,7 @@ html_template_flexy_token Object
                                     [value] => 
     
                                     [line] => 27
+                                    [charPos] => 502
                                     [close] => 
                                     [children] => Array
                                         (
@@ -594,11 +623,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 28
+                                    [charPos] => 537
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 30
+                                            [charPos] => 564
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -629,6 +660,7 @@ html_template_flexy_token Object
     var xyz = '123';
     
                                                     [line] => 28
+                                                    [charPos] => 538
                                                     [close] => 
                                                     [children] => Array
                                                         (
@@ -668,6 +700,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 30
+                                    [charPos] => 573
                                     [close] => 
                                     [children] => Array
                                         (
@@ -712,6 +745,7 @@ html_template_flexy_token Object
 
 
                     [line] => 31
+                    [charPos] => 595
                     [close] => 
                     [children] => Array
                         (
@@ -730,11 +764,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 37
+                    [charPos] => 606
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 39
+                            [charPos] => 672
                             [close] => 
                             [children] => Array
                                 (
@@ -764,6 +800,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 37
+                                    [charPos] => 607
                                     [close] => 
                                     [children] => Array
                                         (
@@ -782,11 +819,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 38
+                                    [charPos] => 610
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 38
+                                            [charPos] => 664
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -815,6 +854,7 @@ html_template_flexy_token Object
                                                     [token] => Text
                                                     [value] => Example of flexy:toJavascript with default values.
                                                     [line] => 38
+                                                    [charPos] => 611
                                                     [close] => 
                                                     [children] => Array
                                                         (
@@ -852,6 +892,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 38
+                                    [charPos] => 665
                                     [close] => 
                                     [children] => Array
                                         (

@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -28,6 +30,7 @@ html_template_flexy_token Object
 
 
                     [line] => 0
+                    [charPos] => 0
                     [close] => 
                     [children] => Array
                         (
@@ -49,6 +52,7 @@ html_template_flexy_token Object
  {foreach:xxxx} {end:} 
 -->
                     [line] => 6
+                    [charPos] => 7
                     [close] => 
                     [children] => Array
                         (

@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -26,6 +28,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 0
+                    [charPos] => 0
                     [close] => 
                     [children] => Array
                         (
@@ -46,6 +49,7 @@ html_template_flexy_token Object
 
 
                     [line] => 1
+                    [charPos] => 29
                     [close] => 
                     [children] => Array
                         (
@@ -66,6 +70,7 @@ html_template_flexy_token Object
 
 
                     [line] => 3
+                    [charPos] => 41
                     [close] => 
                     [children] => Array
                         (
@@ -84,11 +89,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 5
+                    [charPos] => 65
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 11
+                            [charPos] => 115
                             [close] => 
                             [children] => Array
                                 (
@@ -123,6 +130,7 @@ echo "hello world";
 }
 
                                     [line] => 5
+                                    [charPos] => 66
                                     [close] => 
                                     [children] => Array
                                         (
@@ -141,6 +149,7 @@ echo "hello world";
                                     [token] => Text
                                     [value] => 
                                     [line] => 7
+                                    [charPos] => 79
                                     [close] => 
                                     [children] => Array
                                         (
@@ -159,6 +168,7 @@ echo "hello world";
                                     [token] => Text
                                     [value] => 
                                     [line] => 7
+                                    [charPos] => 80
                                     [close] => 
                                     [children] => Array
                                         (

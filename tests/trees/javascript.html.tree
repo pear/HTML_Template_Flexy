@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -25,6 +27,7 @@ html_template_flexy_token Object
                     [token] => Doctype
                     [value] => <!DOCTYPE 
                     [line] => 0
+                    [charPos] => 0
                     [close] => 
                     [children] => Array
                         (
@@ -39,6 +42,7 @@ html_template_flexy_token Object
                     [token] => Name
                     [value] => HTML 
                     [line] => 0
+                    [charPos] => 10
                     [close] => 
                     [children] => Array
                         (
@@ -53,6 +57,7 @@ html_template_flexy_token Object
                     [token] => Name
                     [value] => PUBLIC 
                     [line] => 0
+                    [charPos] => 15
                     [close] => 
                     [children] => Array
                         (
@@ -67,6 +72,7 @@ html_template_flexy_token Object
                     [token] => Literal
                     [value] => "-//W3C//DTD HTML 4.01 Transitional//EN"
                     [line] => 0
+                    [charPos] => 22
                     [close] => 
                     [children] => Array
                         (
@@ -81,6 +87,7 @@ html_template_flexy_token Object
                     [token] => CloseTag
                     [value] => >
                     [line] => 0
+                    [charPos] => 62
                     [close] => 
                     [children] => Array
                         (
@@ -96,6 +103,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 0
+                    [charPos] => 63
                     [close] => 
                     [children] => Array
                         (
@@ -114,6 +122,7 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 1
+                    [charPos] => 69
                     [close] => 
                     [children] => Array
                         (
@@ -141,6 +150,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 1
+                    [charPos] => 70
                     [close] => 
                     [children] => Array
                         (
@@ -159,11 +169,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 2
+                    [charPos] => 76
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 9
+                            [charPos] => 236
                             [close] => 
                             [children] => Array
                                 (
@@ -193,6 +205,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 2
+                                    [charPos] => 77
                                     [close] => 
                                     [children] => Array
                                         (
@@ -211,11 +224,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 3
+                                    [charPos] => 84
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 3
+                                            [charPos] => 109
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -244,6 +259,7 @@ html_template_flexy_token Object
                                                     [token] => Text
                                                     [value] => Untitled Document
                                                     [line] => 3
+                                                    [charPos] => 85
                                                     [close] => 
                                                     [children] => Array
                                                         (
@@ -281,6 +297,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 3
+                                    [charPos] => 110
                                     [close] => 
                                     [children] => Array
                                         (
@@ -299,6 +316,7 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 4
+                                    [charPos] => 182
                                     [close] => 
                                     [children] => Array
                                         (
@@ -330,6 +348,7 @@ html_template_flexy_token Object
                                     [value] => 
 
                                     [line] => 4
+                                    [charPos] => 183
                                     [close] => 
                                     [children] => Array
                                         (
@@ -348,11 +367,13 @@ html_template_flexy_token Object
                                     [token] => Tag
                                     [value] => 
                                     [line] => 5
+                                    [charPos] => 216
                                     [close] => html_template_flexy_token_endtag Object
                                         (
                                             [token] => EndTag
                                             [value] => 
                                             [line] => 5
+                                            [charPos] => 217
                                             [close] => 
                                             [children] => Array
                                                 (
@@ -392,6 +413,7 @@ html_template_flexy_token Object
                                                             [token] => Var
                                                             [value] => js_file
                                                             [line] => 5
+                                                            [charPos] => 206
                                                             [close] => 
                                                             [children] => Array
                                                                 (
@@ -417,6 +439,7 @@ html_template_flexy_token Object
                                                             [token] => Var
                                                             [value] => js_file
                                                             [line] => 5
+                                                            [charPos] => 206
                                                             [close] => 
                                                             [children] => Array
                                                                 (
@@ -445,6 +468,7 @@ html_template_flexy_token Object
 
 
                                     [line] => 5
+                                    [charPos] => 226
                                     [close] => 
                                     [children] => Array
                                         (
@@ -483,6 +507,7 @@ html_template_flexy_token Object
 
 
                     [line] => 9
+                    [charPos] => 237
                     [close] => 
                     [children] => Array
                         (
@@ -501,11 +526,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 11
+                    [charPos] => 268
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 40
+                            [charPos] => 1164
                             [close] => 
                             [children] => Array
                                 (
@@ -563,6 +590,7 @@ function CheckDuplicates2 (AddListContainer, RemoveListContainer) {
  
 
                                     [line] => 11
+                                    [charPos] => 269
                                     [close] => 
                                     [children] => Array
                                         (
@@ -581,6 +609,7 @@ function CheckDuplicates2 (AddListContainer, RemoveListContainer) {
                                     [token] => Text
                                     [value] => 
                                     [line] => 25
+                                    [charPos] => 738
                                     [close] => 
                                     [children] => Array
                                         (
@@ -599,6 +628,7 @@ function CheckDuplicates2 (AddListContainer, RemoveListContainer) {
                                     [token] => Text
                                     [value] => 
                                     [line] => 25
+                                    [charPos] => 739
                                     [close] => 
                                     [children] => Array
                                         (
@@ -639,6 +669,7 @@ function CheckDuplicates2 (AddListContainer, RemoveListContainer) {
 
 
                     [line] => 40
+                    [charPos] => 1173
                     [close] => 
                     [children] => Array
                         (
@@ -671,6 +702,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
  
 -->
                     [line] => 56
+                    [charPos] => 1179
                     [close] => 
                     [children] => Array
                         (
@@ -686,6 +718,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] =>  
 
                     [line] => 56
+                    [charPos] => 1659
                     [close] => 
                     [children] => Array
                         (
@@ -704,11 +737,13 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [token] => Tag
                     [value] => 
                     [line] => 57
+                    [charPos] => 1719
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 57
+                            [charPos] => 1720
                             [close] => 
                             [children] => Array
                                 (
@@ -760,6 +795,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] => 
 
                     [line] => 57
+                    [charPos] => 1729
                     [close] => 
                     [children] => Array
                         (
@@ -778,11 +814,13 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [token] => Tag
                     [value] => 
                     [line] => 58
+                    [charPos] => 1791
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 58
+                            [charPos] => 1792
                             [close] => 
                             [children] => Array
                                 (
@@ -834,6 +872,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] => 
 
                     [line] => 58
+                    [charPos] => 1801
                     [close] => 
                     [children] => Array
                         (
@@ -852,11 +891,13 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [token] => Tag
                     [value] => 
                     [line] => 59
+                    [charPos] => 1861
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 59
+                            [charPos] => 1862
                             [close] => 
                             [children] => Array
                                 (
@@ -908,6 +949,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] => 
 
                     [line] => 59
+                    [charPos] => 1871
                     [close] => 
                     [children] => Array
                         (
@@ -926,11 +968,13 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [token] => Tag
                     [value] => 
                     [line] => 60
+                    [charPos] => 1911
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 72
+                            [charPos] => 2654
                             [close] => 
                             [children] => Array
                                 (
@@ -971,6 +1015,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                 }
 
                                     [line] => 60
+                                    [charPos] => 1912
                                     [close] => 
                                     [children] => Array
                                         (
@@ -1010,6 +1055,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] => 
 
                     [line] => 72
+                    [charPos] => 2663
                     [close] => 
                     [children] => Array
                         (
@@ -1028,11 +1074,13 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [token] => Tag
                     [value] => 
                     [line] => 73
+                    [charPos] => 2669
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 76
+                            [charPos] => 2680
                             [close] => 
                             [children] => Array
                                 (
@@ -1064,6 +1112,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
 
                                     [line] => 73
+                                    [charPos] => 2670
                                     [close] => 
                                     [children] => Array
                                         (
@@ -1101,6 +1150,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
                     [value] => 
 
                     [line] => 76
+                    [charPos] => 2681
                     [close] => 
                     [children] => Array
                         (

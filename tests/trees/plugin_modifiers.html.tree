@@ -3,11 +3,13 @@ html_template_flexy_token Object
     [token] => 
     [value] => 
     [line] => 
+    [charPos] => 
     [close] => html_template_flexy_token Object
         (
             [token] => 
             [value] => 
             [line] => 
+            [charPos] => 
             [close] => 
             [children] => Array
                 (
@@ -25,11 +27,13 @@ html_template_flexy_token Object
                     [token] => Tag
                     [value] => 
                     [line] => 0
+                    [charPos] => 3
                     [close] => html_template_flexy_token_endtag Object
                         (
                             [token] => EndTag
                             [value] => 
                             [line] => 0
+                            [charPos] => 32
                             [close] => 
                             [children] => Array
                                 (
@@ -58,6 +62,7 @@ html_template_flexy_token Object
                                     [token] => Text
                                     [value] => Testing Plugin Modifiers
                                     [line] => 0
+                                    [charPos] => 4
                                     [close] => 
                                     [children] => Array
                                         (
@@ -97,6 +102,7 @@ html_template_flexy_token Object
 
 
                     [line] => 0
+                    [charPos] => 33
                     [close] => 
                     [children] => Array
                         (
@@ -115,6 +121,7 @@ html_template_flexy_token Object
                     [token] => Var
                     [value] => abcd
                     [line] => 3
+                    [charPos] => 36
                     [close] => 
                     [children] => Array
                         (
@@ -131,6 +138,7 @@ html_template_flexy_token Object
                     [value] => 
 
                     [line] => 3
+                    [charPos] => 53
                     [close] => 
                     [children] => Array
                         (
@@ -149,6 +157,7 @@ html_template_flexy_token Object
                     [token] => Var
                     [value] => abcd
                     [line] => 4
+                    [charPos] => 54
                     [close] => 
                     [children] => Array
                         (
