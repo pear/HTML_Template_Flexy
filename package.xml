@@ -23,6 +23,11 @@
      o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
      o uses compiled templates, as a result it is many times faster on blocks and loops than 
        than Regex templates (eg. IT/phplib)
+  - Safer (for cross site scripting attacks)
+     o All variables default to be output as HTML escaped (overridden with the :h modifier)
+  - Multilanguage support
+     o Parses strings out of template, so you can build translation tools
+     o Compiles language specific templates (so translation is only done once, not on every request)
   - Full dynamic element support (like ASP.NET), so you can pick elements to replace at runtime
   
   Features:
