@@ -140,9 +140,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         $data = $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput'] . $data;
         
-        if (   @$this->options['debug']) {
-            echo "<B>Result: </B><PRE>".htmlspecialchars($data)."</PRE><BR>";
-            
+        if (   $flexy->options['debug'] > 1) {
+            echo "<B>Result: </B><PRE>".htmlspecialchars($data)."</PRE><BR>\n";
         }
 
         if ($this->options['nonHTML']) {
@@ -153,7 +152,11 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         
         // at this point we are into writing stuff...
-        if ($this->options['compileToString']) {
+        if ($flexy->options['compileToString']) {
+            if (   $flexy->options['debug']) {
+                echo "<B>Returning string:<BR>\n";
+            }
+
             $flexy->elements =  $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'];
             return $data;
         }
@@ -168,9 +171,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
         
         if( ($cfp = fopen( $file , 'w' )) ) {
-            if (@$this->options['debug']) {
-                echo "<B>Writing: </B>".htmlspecialchars($data)."<BR>";
-                
+            if ($flexy->options['debug']) {
+                echo "<B>Writing: </B>$file<BR>\n";
             }
             fwrite($cfp,$data);
             fclose($cfp);
@@ -192,6 +194,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
                 HTML_TEMPLATE_FLEXY_ERROR_FILE ,HTML_TEMPLATE_FLEXY_ERROR_RETURN);
         }
         // gettext strings
+         
         if (file_exists($flexy->getTextStringsFile)) {
             unlink($flexy->getTextStringsFile);
         }
@@ -321,7 +324,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     function toString($element) 
     {
         static $len = 26; // strlen('HTML_Template_Flexy_Token_');
-        if ($this->options['debug']) {
+        if ($this->options['debug'] > 1) {
             $x = $element;
             unset($x->children);
             echo htmlspecialchars(print_r($x,true))."<BR>\n";

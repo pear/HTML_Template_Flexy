@@ -917,16 +917,16 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
   
     
     function elementUsesDynamic($e) {
-        if (!is_a($e,'HTML_Template_Flexy_Token_Var')) {
+        if (is_a($e,'HTML_Template_Flexy_Token_Var')) {
             return true;
         }
-        if (!is_a($e,'HTML_Template_Flexy_Token_Foreach')) {
+        if (is_a($e,'HTML_Template_Flexy_Token_Foreach')) {
             return true;
         }
-        if (!is_a($e,'HTML_Template_Flexy_Token_If')) {
+        if (is_a($e,'HTML_Template_Flexy_Token_If')) {
             return true;
         }
-        if (!is_a($e,'HTML_Template_Flexy_Token_Method')) {
+        if (is_a($e,'HTML_Template_Flexy_Token_Method')) {
             return true;
         }
         if (!is_a($e,'HTML_Template_Flexy_Token_Tag')) {
@@ -938,13 +938,13 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if  ($e->getAttribute('FLEXY:FOREACH')  !== false) {
             return true;
         }   
-        foreach($iobj->attributes as $k=>$v) {
+        foreach($e->attributes as $k=>$v) {
             if (is_array($v) || is_object($v)) {
                 return true;
             }
         }
-        foreach($this->children as $c) {
-            if ($this->elementHasDynamic($c)) {
+        foreach($e->children as $c) {
+            if ($this->elementUsesDynamic($c)) {
                 return true;
             }
         }
