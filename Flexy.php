@@ -72,6 +72,8 @@ class HTML_Template_Flexy
                             'compileToString' => false,    // should the compiler return a string 
                                                             // rather than writing to a file.
                             'filters'       => array(),    // used by regex compiler..
+                            'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00
+                            
                         );
 
     

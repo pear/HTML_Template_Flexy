@@ -321,7 +321,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $prefix = 'echo ';
         
         $suffix = '';
-        switch ($element->modifier) {
+        $modifier = $element->modifier . ' ';
+        switch ($modifier{0}) {
             case 'h':
                 break;
             case 'u':
@@ -332,8 +333,12 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
                 $prefix = 'echo \'<pre>\'; echo htmlspecialchars(print_r(';
                 $suffix = ',true)); echo \'</pre>\';';
                 break;                
-                
-                
+            case 'n': 
+                // blank or value..
+                $numberformat = @$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['numberFormat'];
+                $prefix = 'echo number_format(';
+                $suffix = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['numberFormat'] . ')';
+                break;
             default:
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?

@@ -319,13 +319,18 @@ class HTML_Template_Flexy_Element {
      * and label = array(key=>value) maps to 
      * <optgroup label="label"> <option value="key">value</option></optgroup>
      * 
+     * $element->setOptions(array('a'=>'xxx','b'=>'yyy'));
+     * or
+     * $element->setOptions(array('a','b','c','d'),true);
+     *
      *
      *.
      * @param    HTML_Element   $from  override settings from another element.
+     * @param    HTML_Element   $noValue  ignore the key part of the array
      * @access   public
      */
      
-    function setOptions($array) {
+    function setOptions($array,$noValue=false) {
         if (!is_array($array)) {
             $this->children = array();
             return;
@@ -335,7 +340,7 @@ class HTML_Template_Flexy_Element {
                 $child = new HTML_Template_Flexy_Element('optgroup',array('label'=>$kk));
                 foreach($v as $kk=>$vv) {
                     $atts=array();
-                    if ($kk != $vv) {
+                    if (($kk != $vv) && !$noValue) {
                         $atts = array('value'=>$kk);
                     }
                     $add = new HTML_Template_Flexy_Element('option',$atts);
@@ -346,7 +351,7 @@ class HTML_Template_Flexy_Element {
                 continue;
             } 
             $atts=array();
-            if ($k !== $v) {
+            if (($k != $v) && !$noValue) {
                 $atts = array('value'=>$k);
             }
             $add = new HTML_Template_Flexy_Element('option',$atts);
