@@ -30,6 +30,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeForm'] = '';
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['tokens'] = array();
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] = array();
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['activeFormId'] = 0;
 /**
 * Base Class for all Tokens.
 *

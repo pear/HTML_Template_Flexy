@@ -144,42 +144,51 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     * @return   object HTML_Template_Flexy_QuickForm
     * @access   public
     */
-    function loadFromSerialFile($filename,$defaults) 
+    function loadFromSerialFile($filename,$defaults_array) 
     {
         // does our file exist.
         if (!file_exists($filename)) {
             return PEAR::raiseError('Flexy Quickform wrapper attempted to load non existent file :'. $filename,null,PEAR_ERROR_DIE);
             
         }
+         
         $ret = false;
         
         // double load defintion for quickform..
         $data = unserialize(file_get_contents($filename));
+        $form = -1;
         //echo "<PRE>LOAD:";print_r($data);echo "</PRE>";
         foreach($data  as $array) {
             //echo "<PRE>PARSE:";print_r($array);echo "</PRE>";
             if ($array[0][0] == 'form') {
-                $ret = new HTML_Template_Flexy_QuickForm;
+                $form++;
+                $ret[$form] = new HTML_Template_Flexy_QuickForm;
                 array_shift($array[0]);
+                // create it..
                 call_user_func_array(array($ret,'HTML_QuickForm'), $array[0]);
-                $ret->setDefaults($defaults);
+                // set the defaults.
+                if (isset($defaults[$form])) {
+                    $ret[$form]->setDefaults($defaults[$form]);
+                } else if (isset($defaults[0])) {
+                    $ret[$form]->setDefaults($defaults[0]);
+                }
                 continue;
             }
-            if (!$ret) {
+            if (!$ret[$form]) {
                 // technically this is an error condition.
                 continue;
             }
             if ($array[0][0] == 'addRule' || $array[0][0] == 'addFilter' ) {
                 $method = array_shift($array[0]);
                 //echo "<PRE>addrule";print_r(array(array($method), $array[0]));echo "</PRE>";
-                $rr = call_user_func_array(array(&$ret,$method), $array[0]);
+                $rr = call_user_func_array(array(&$ret[$form],$method), $array[0]);
                 //echo "<PRE>addrule";print_r($rr);echo "</PRE>";
                 continue;
             }
             
             
             
-            $e = call_user_func_array(array($ret,'createElement'),$array[0]);
+            $e = call_user_func_array(array($ret[$form],'createElement'),$array[0]);
             //array_pop($ret->_elements);
             if (isset($array[2])) { // options..
                 foreach ($array[2] as $v) {
@@ -187,14 +196,14 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
                 }
             }
             if (!isset($array[1])) {
-                $ret->addElement($e);
+                $ret[$form]->addElement($e);
                 continue;
             }
             foreach ($array[1] as $k=>$v) {
                 //echo "<PRE>USR FUNC:";print_r(array( array($e,$k),$v));echo "</PRE>";
                 call_user_func(array($e,$k),$v);
             }
-            $ret->addElement($e);
+            $ret[$form]->addElement($e);
             
         }
         // echo "<PRE>RETURN:";print_r($ret);echo "</PRE>";

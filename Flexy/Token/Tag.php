@@ -580,6 +580,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         
         require_once 'HTML/Template/Flexy/QuickForm.php';
+        
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = new HTML_Template_Flexy_QuickForm;
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElementDef(
             array(
@@ -592,12 +593,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             )
         ); 
         
-        
-        return '<?php $this->setActiveQuickForm('. $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId'].'); echo $this->quickform->formHeadToHtml(); ?>' .
+       
+        return '<?php $this->setActiveQuickForm('. ((int) $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId']++).');' .
+            'echo $this->quickform->formHeadToHtml(); ?>' .
             $this->childrenToString() .
             '</form>';
             
-        $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId']++;
+       
+       
         //print_r($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']);
     }
     

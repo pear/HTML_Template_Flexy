@@ -636,11 +636,13 @@ class HTML_Template_Flexy
     *
     *   @access     public
     *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param      optional object|array $data       default data for the form.
+    *   @param      optional array $data       default data for the form.
+    *   @param      optional array $data       default data for the 2nd form.    
+    *   @param      optional array $data       ... and so on for as many forms on the page.
     *   @return     none
     */
     
-    function setQuickForm($data = false) 
+    function setQuickForm() 
     {
         if (!$this->quickformFile) {
             return $this->raiseError("You must compile()/setup the template before setting the quickform data",null,PEAR_ERROR_DIE);
@@ -650,15 +652,10 @@ class HTML_Template_Flexy
             return false;
         }
         require_once 'HTML/Template/Flexy/QuickForm.php';
-        if (is_object($data)) {
-            $data = (array)$data;
-        }
-        if (!is_array($data)) {
-            $data = array();
-        }
+          
         
-        
-        $this->quickform = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,$data);
+        $this->quickforms = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,func_get_args());
+        $this->setActiveQuickForm(0);
          
     }
      /**
