@@ -480,7 +480,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $e->setValue($this->childrenToString());
             $e->setWrap($this->getAttribute('WRAP'));
             $e->setRows($this->getAttribute('ROWS'));
-            $e->setCols($this->getAttribute('ROWS'));
+            $e->setCols($this->getAttribute('COLS'));
         } else {
             return false;
         }
