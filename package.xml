@@ -45,7 +45,7 @@
 
   <release>
      <version>0.4</version>
-      <date>2003-03-15</date>
+      <date>2003-04-17</date>
       <notes>
       Bug fixes
 	- fixed #literal# support for method calls.
@@ -57,9 +57,9 @@
         
         
       Features
-        - quickforms integration added.
+        - quickforms (3) integration added.
         - quickforms with multiple forms $flexyobj->quickforms[0.....]
-        - gettext/multilanguage support
+        - Initial gettext/multilanguage support
         - support variable[12] as a valid variable name.
         - does syntax checking on form element names 
         - fixed {outputBody()} (no prefix var methods)
@@ -72,6 +72,9 @@
           to off (eg. no PHP allowed) - 
         - added support for &lt;TAG IF=&quot;somevar.xxxx&quot; and 
           &lt;TAG  IF=&quot;somevar.method()&quot; maps to if (the test) &lt;TAG .....
+        - handles elements with same name, like radio buttons  - although performing modifications on 
+          them can be tricky..
+          
         
       While may thanks are owed to the many beta testers, special mention to Xavier 
       for spotting some really annoying little bugs.
