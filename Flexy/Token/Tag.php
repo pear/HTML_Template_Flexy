@@ -141,9 +141,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             // normally the value is an array of string, however
             // if it is an object - then it's a conditional key.
             // eg.  if (something) echo ' SELECTED';
+            // the object is responsible for adding it's space..
             
             if (is_object($v)) {
-                $ret .= " " .$v->toString();
+                $ret .= $v->toString();
                 continue;
             }
             

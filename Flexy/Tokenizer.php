@@ -1963,7 +1963,7 @@ case 67:
 case 68:
 {
     $t = $this->yytext();
-    if ($t{stlen($t-1)} == ",") {
+    if ($t{strlen($t-1)} == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -1992,7 +1992,7 @@ case 69:
 case 70:
 {
     $t = $this->yytext();
-    if ($t{stlen($t-1)} == ",") {
+    if ($t{strlen($t-1)} == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -2005,7 +2005,7 @@ case 70:
 case 71:
 {
     $t = $this->yytext();
-    if ($t{stlen($t-1)} == ",") {
+    if ($t{strlen($t-1)} == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -2018,7 +2018,7 @@ case 71:
 case 72:
 {
     $t = $this->yytext();
-    if ($t{ stlen($t-1) } == ",") {
+    if ($t{ strlen($t-1) } == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
