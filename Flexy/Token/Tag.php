@@ -228,6 +228,22 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         $type = strtoupper($this->getAttribute('TYPE'));
         // still depating the wisdome of this replacement
         
+        // at least do some error checking here..
+        
+        
+        //FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
+        //FLEXY_ARRAY         = ("["{DIGIT}+"]")
+        //FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?)*)
+       
+        // this has quite a few limitations...it also accepts colname[aaaabbb] 
+        
+        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?)*$/i',$name)) {
+            $this->postfix = array( $this->factory("Text","<B><font color=red>Invalid name used for flexy tag :$name: </font></b>",$this->line));
+            return;
+        }
+            
+        
+        
         $thisvar = str_replace(']','',$name);
         $thisvar = str_replace('[','.',$thisvar);
         
