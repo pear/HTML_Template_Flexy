@@ -375,8 +375,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $loopon;
         }
         
-        $ret = 'if (is_array('.
-            $element->toVar($loopon ) . ")  || " .
+        $ret = 'if (is_array('. $loopon. ")  || " .
             'is_object(' . $loopon  . ')) ' .
             'foreach(' . $loopon  . " ";
             
