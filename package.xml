@@ -109,7 +109,6 @@
                     <file>Tag.php</file>
                     <file>Flexy.php</file>
                     
-                    <file>Functions.php</file> <!-- to be nuked -->
                   </dir>
                   
                   <!-- The Old Regex Compiler -->
