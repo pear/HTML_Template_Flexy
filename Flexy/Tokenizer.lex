@@ -56,7 +56,7 @@ define("IN_FLEXYMETHODQUOTED_END" ,13);
 define("IN_SCRIPT",             14);
 define("IN_CDATA"     ,         15);
 define("IN_DSCOM",              16);
-
+define("IN_PHP",                17);
 
 define('YY_E_INTERNAL', 0);
 define('YY_E_MATCH',  1);
@@ -179,7 +179,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA IN_DSCOM
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA IN_DSCOM IN_PHP
 
  
 
@@ -216,14 +216,14 @@ MDO	    = "<!"
 MSC	    = "]]"
 NET     = "/"
 PERO    = "%"
-PIC	    = ">"
+PIC_PHP = "?>"
 PIO	    = "<?"
 REFC    = ";"
 STAGO   = "<"
 TAGC    = ">"
 
 
-
+PIO_XML                 = ({PIO}[Xx][Mm][Ll])
 NAME_START_CHARACTER    = ({LCLETTER}|{UCLETTER})
 NAME_CHARACTER          = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
 NAME_CHARACTER_WITH_NAMESPACE  = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR}|":")
@@ -241,6 +241,7 @@ WHITESPACE              = ({SPACECHAR}|{RE}|{RS}|{SEPCHAR})*
 
 REFERENCE_END           = ({REFC}|{RE})
 LITERAL                 = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
+
 
  
 FLEXY_GTSTART       = "{_("
@@ -390,24 +391,45 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
     
   
-<YYINITIAL>{STAGO}"?"[^>]*{TAGC}			{ 
-    /* <? ...> -- processing instruction */
-    // this is a little odd cause technically we dont allow it!!
-    // really we only want to handle < ? xml 
+<YYINITIAL>{PIO_XML}[^>]*{TAGC}			{ 
+    /* <?xml ...> -- processing instruction */
+    
     $t = $this->yytext();
-    
-    // only allow 'xml'
-    if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
-        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
-    }
-    
-    
     $this->value = HTML_Template_Flexy_Token::factory('Processing',$this->yytext(),$this->yyline);
+    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
- 
 
-  
+<YYINITIAL>{PIO} { 
+    /* <? php start.. */
+    
+    $this->yyPhpBegin = $this->yy_buffer_end -2;
+    $this->yybegin(IN_PHP);
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+
+}
+
+<IN_PHP>{PIC_PHP} { 
+    /* php end */
+    if ($this->ignorePHP) {
+
+        $this->yybegin(YYINITIAL);
+        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
+    }
+    $this->value = HTML_Template_Flexy_Token::factory('Text',
+        substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
+        $this->yyline);
+    $this->yybegin(YYINITIAL);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+
+<IN_PHP>([^\?]*|"?"[^>]) {     
+    /* anything inside of php tags */
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+
+
 <YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}		{
     //<name -- start tag */
     if ($this->ignoreHTML) {

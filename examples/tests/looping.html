@@ -1,0 +1,20 @@
+
+
+<h2>Looping</h2>
+
+
+<p>a loop {foreach:loop,a} {a} {end:}</p>
+<p>a loop with 2 vars {foreach:loop,a,b} 
+    {a} , 
+    {b}
+{end:}</p>
+
+Bug #84
+{foreach:list,i}{method(i)}{end:}
+
+
+<table>
+    <tr flexy:foreach="xyz,abcd,def">
+        <td>{abcd}, {test(def)}</td>
+    </tr>
+</table>

@@ -128,7 +128,6 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         // handle elements
         if (($ret =$this->_parseTags()) !== false) {
-            //echo "PARSETAGS RET";
             return $ret;
         }
         // these add to the close tag..
@@ -454,6 +453,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore']) {
             return false;
         }
+        
         $method = 'parseTag'.$this->element->tag;
         if (!method_exists($this,$method)) {
             return false;
@@ -471,6 +471,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             // allow the parse methods to return output.
         
     }
+    
+ 
+    
            
     /**
     * produces the code for dynamic elements
@@ -533,7 +536,34 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
     }
     
+    /**
+    * Reads an Script tag - check if PHP is allowed.
+    *
+    * @return   false|PEAR_Error 
+    * @access   public
+    */
+    function parseTagScript() {
+        
+        
+        $lang = $this->element->getAttribute('LANGUAGE');
+        if (!$lang) {
+            return;
+        }
+        $lang = strtoupper($lang);
+        
+        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['allowPHP']) {
+            return false;
+        }
+        
+        if ($lang == "PHP") {
+            
+            return PEAR::raiseError('PHP code found in script',
+                HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,PEAR_ERROR_RETURN
+            );
+        }
+        return false;
     
+    }
     /**
     * Reads an Input tag - build a element object for it
     *
@@ -541,6 +571,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
+    
   
     function parseTagInput() 
     {
