@@ -55,7 +55,7 @@ class HTML_Template_Flexy
                             'filters'       => array(),
                             'debug'         => false,
                             'locale'          => 'en',
-                            'useTokenizer'  => false
+                            'useLegacy'  => false
                             
                         );
 
@@ -100,14 +100,15 @@ class HTML_Template_Flexy
     *   for example the using simpletags the object's variable $t->test
     *   would map to {t.test}
     *
-    *   maps 
+    *   maps ** these are all depreciated and should not be used!
+    *   the area only available if useLegacy is set.
     *   $t->o_*           maps to {o.*}  // used for output
     *   $t->input         maps to {i.*} // used for input
     *   $t->modules[xxxx] maps to {m.xxxx} // used for modules
     *   $t->config        maps to {c.*}  // used for config
     *   PEAR::getStaticProperty('Auth','singleton') maps to  {a.*}
     *   {email_boundary} // for email boundaries  
-        {email_date}    // for email dates
+    *   {email_date}    // for email dates
     *
     *
     *   @version    01/12/14
@@ -125,37 +126,43 @@ class HTML_Template_Flexy
             echo "output $this->compiledTemplate<BR>";
             
         }
+        
+        if ($this->options['useLegacy']) {
             
-        $m = new StdClass;
-        // compile modules
-         
-        /* these are to be depreciated !!!*/
-        
-        
-        $c = & $t->config;
-        if (@$t->input) {
-            $i = & $t->input;
-        }
-        $a = &PEAR::getStaticProperty('Auth','singleton');
-        
-        /* expose o_ as $o */
-        $o = new StdClass;
-        foreach (get_object_vars($t) as $k=>$v) {
-            if ($k{0} != "o") {
-                continue;
+            $m = new StdClass;
+            // compile modules
+             
+            /* these are to be depreciated !!!*/
+            
+            
+            $c = & $t->config;
+            if (@$t->input) {
+                $i = & $t->input;
             }
-            if ($k{1} != "_") {
-                continue;
+            $a = &PEAR::getStaticProperty('Auth','singleton');
+            
+            /* expose o_ as $o */
+            $o = new StdClass;
+            foreach (get_object_vars($t) as $k=>$v) {
+                if ($k{0} != "o") {
+                    continue;
+                }
+                if ($k{1} != "_") {
+                    continue;
+                }
+                $kk = substr($k,2);
+                $o->$kk =& $t->$k;
             }
-            $kk = substr($k,2);
-            $o->$kk =& $t->$k;
+            
+            
+            /* usefull stuff for doing emails in Template Flexy */
+            $email_boundary = md5("FlexyMail".microtime());
+            $email_date = date("D j M Y G:i:s O");
         }
-        
-        /* END DEPRECIATED.. depreciated !!!*/
-        
-        /* usefull stuff for doing emails in Template Flexy */
-        $email_boundary = md5("FlexyMail".microtime());
-        $email_date = date("D j M Y G:i:s O");
+        // we use PHP's error handler to hide errors in the template.
+        // this may be removed later, or replace with
+        // options['strict'] - so you have to declare
+        // all variables
         
         $_error_reporting = false;
         if (!$options['debug']) {
@@ -213,10 +220,11 @@ class HTML_Template_Flexy
     *   @access     private
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
+    *   @author     Alan Knowles <alan@akbkhome.com>
     *   @param
     *   @return
     */
-    function classicParse()
+    function _classicParse()
     {
         // read the entire file into one variable
         if ( $input = @file($this->currentTemplate) ) {
@@ -245,7 +253,7 @@ class HTML_Template_Flexy
     *
     *   @access     private
     *   @version    01/12/03
-    *   @author     Alan Knowles <alan@kriesing.de>
+    *   @author     Alan Knowles <alan@akbkhome.com>
     *   @param
     *   @return
     */
@@ -253,7 +261,7 @@ class HTML_Template_Flexy
 
 
 
-    function parse() 
+    function _parse() 
     { 
         // read the entire file into one variable
         
@@ -389,9 +397,9 @@ class HTML_Template_Flexy
                 $recompile = true;
             }
         }
-        $method = 'classicParse';
-        if (@$this->options['useTokenizer']) {
-            $method = 'parse';
+        $method = '_parse';
+        if (@$this->options['useLegacy']) {
+            $method = '_classicParse';
         }
         if( $recompile )  {             // or any of the config files
             if( !$this->$method() ) {

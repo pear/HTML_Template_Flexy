@@ -32,10 +32,20 @@
 
   <release>
        <version>0.3</version>
-      <date>2003-02-14</date>
+      <date>2003-02-06</date>
       <notes>
       Bug fixes
         - allow usage with only constructor options
+        - fixed form elements - should be htmlspecialchars, rather than urlencoding
+        - new Tokenizer is enabled by default - set 'useLegacy' in config/options to
+          use the old regex replacer.
+        - no variables are added (eg. o.*, a.* etc. to the page unless useLegacy is set)
+        - parsers are now private methods. (internal change)
+        
+      New Features
+        - FLEXYSTART and FLEXYSTARTCHILDREN tags added so when use include sub
+          templates, you can avoid including HEAD etc. tags.
+        
       </notes>
       <state>beta</state>
      </release>
