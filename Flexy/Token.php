@@ -158,9 +158,9 @@ class HTML_Template_Flexy_Token {
     */
     
     function toVar($s) {
-    
+        
         $parts = explode(".",$s);
-        $ret = $this->findVar($parts[0]);
+        $ret =  $this->findVar($parts[0]);
         array_shift($parts);
         if (!$parts) {
             return $ret;
@@ -178,12 +178,15 @@ class HTML_Template_Flexy_Token {
     */
     
     function findVar($string) {
+        if ($string == 't') {
+            return '$t';
+        }
         for ($s = $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['state']; $s > 0; $s--) {
             if (in_array($string, $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['statevars'][$s])) {
                 return '$'.$string;
             }
         }
-        return '$this->'.$string;
+        return '$t->'.$string;
     }
     /**
     * add a variable to the stack.
@@ -258,7 +261,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @var object alias
     * @access public
     */
-    var $closetag; // alias to closing tag.
+    var $close; // alias to closing tag.
     
     
     
@@ -283,7 +286,21 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @see parent::toHTML()
     */
     function toHTML() {
-        $ret =  "<". $this->tag;
+        $ret = '';
+        if ($foreach = $this->getAttribute('foreach')) {
+            $foreachObj =  $this->create('Foreach',
+                    explode(',',$foreach),
+                    $this->line);
+            $ret = $foreachObj->toHTML();
+            // does it have a closetag?
+            
+            $this->close->postfix = array($this->create("End",
+                    '',
+                    $this->line));
+        
+        }
+    
+        $ret .=  "<". $this->tag;
         foreach ($this->attributes as $k=>$v) {
             if ($v === null) {
                 $ret .= " $k";
@@ -333,17 +350,24 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         //value - fill out as PHP CODE
         $name = $this->getAttribute('name');
         $type = strtoupper($this->getAttribute('type'));
+        $thisvar = str_replace(']','',$name);
+        $thisvar = str_replace('[','.',$thisvar);
+        
         switch ($type) {
             case "CHECKBOX":
                 $this->attributes['checked'] = 
                     $this->create("PHP",
-                    "<?php if (\$this->{$name}) { ?>CHECKED<?php } ?>",
+                    "<?php if (". $this->toVar($thisvar).") { ?>CHECKED<?php } ?>",
                     $this->line);
                 break;
+                
+            case "SUBMIT":
+                return;
+            
             default:
                 $this->attributes['value'] = array(
                     "\"",
-                    $this->create("Var","{".$name.":u}",$this->line),
+                    $this->create("Var",$thisvar.":u",$this->line),
                     "\"");
                break;
             
@@ -353,8 +377,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         
         $this->postfix = array(
-            $this->create("PHP", "<?php if (isset(\$this->errors['".urlencode($name)."'])) { ".
-                "echo  htmlspecialchars(\$this->errors['".urlencode($name). "']); } ?>",$this->line));
+            $this->create("PHP", "<?php if (isset(\$this->errors['".urlencode($thisvar)."'])) { ".
+                "echo  htmlspecialchars(\$this->errors['".urlencode($thisvar). "']); } ?>",$this->line));
         // this should use <div name="form.error"> or something...
             
         
@@ -531,7 +555,7 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
     function toHTML() {
         $ret = "<?php if (is_array(".
             $this->toVar($this->loopOn) . ")) " .
-            "foreach(@".$this->toVar($this->loopOn). " ";
+            "foreach(".$this->toVar($this->loopOn). " ";
         $ret .= "as \${$this->key}";
         if ($this->value) {
             $ret .=  " => \${$this->value}";
@@ -550,9 +574,39 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
 * Class to handle include statements
 * TODO!!!
 *
+* Include is an odd baby.. - since we are supposed to be dealing with compiled templates..
+* It is the responsibility of the appliacation to make sure it has compiled the 
+* included template.
+* Various types of Includes should be supported
+*       include:someobject.someval
+*                   - maps to if (isset(....) && file_exists(....))  include ( value . '.{lang}.html')
+*
+*       include: somevar
+*
+*
 *
 */
-class HTML_Template_Flexy_Token_Include extends HTML_Template_Flexy_Token{ }
+class HTML_Template_Flexy_Token_Include extends HTML_Template_Flexy_Token{ 
+
+    
+    
+    function toHTML() {
+        $v = $this->toVar($this->value);
+         
+        $options = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'];
+       
+        $ret = "<?php  if (isset($v) &&
+                    file_exists(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\")) 
+                    include(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\"); ?>";
+            
+        return $ret;     
+    
+    }
+
+
+
+
+}
 
 /**
 * Class to handle variable output
@@ -575,11 +629,11 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
     */
     function setValue($value) {
         // comes in as raw {xxxx}, {xxxx:h} or {xxx.yyyy:h}
-        $raw = substr($value,1,-1);
-        if (strpos($raw,":")) {
-            list($raw,$this->modifier) = explode(':',$raw);
+       
+        if (strpos($value,":")) {
+            list($value,$this->modifier) = explode(':',$value);
         }
-        $this->value = $raw;
+        $this->value = $value;
     }
     /**
     * toHTML - generate PHP code 
@@ -612,6 +666,13 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     * @access public
     */
     var $method;
+    /**
+    * is it in if statement with a method?
+    *
+    * @var boolean
+    * @access public
+    */
+    var $isConditional;
      /**
     * arguments, either variables or literals eg. #xxxxx yyyy#
     * 
@@ -625,9 +686,19 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     */
     
     function setValue($value) {
-        $this->method = $value[0];
-        array_shift($value);
-        $this->arguments = $value;
+        //var_dump($value);
+        $method = $value[0];
+        if (substr($value[0],0,3) == 'if:') {
+            $this->isConditional = true;
+            $method = substr($value[0],3);
+        }
+        
+        if (strpos($method,":")) {
+            list($method,$this->modifier) = explode(':',$method);
+        }
+        $this->method = $method;
+        
+        $this->args = $value[1];
         // modifier TODO!
         
     }
@@ -638,16 +709,50 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     
     function toHTML() {
         // ignore modifier at present!!
-        $ret = "<?php echo htmlspecialchars(" . $this->toVar($this->value) . "(".
+        $prefix = 'echo ';
+        $suffix = '';
+        switch ($this->modifier) {
+            case 'h':
+                break;
+            case 'u':
+                $prefix = 'echo urlencode(';
+                $suffix = ')';
+            default:
+                $prefix = 'echo htmlspecialchars(';
+                // add language ?
+                $suffix = ')';
+        }
+        
+        
+        
+        if ($this->isConditional) {
+            $prefix = 'if (';
+            $this->pushState();
+            $suffix = ')';
+        }  
+        // should really check the variable part of method ...
+        
+        $ret = '<?php ' . $prefix;
+        $ret .=  $this->toVar($this->method) . "(";
         $s =0;
+        
         foreach($this->args as $a) {
+             
             if ($s) {
                 $ret .= ",";
             }
             $ret .= $this->toVar($a);
             $s =1;
         }
-        $ret .= ")); ?>";
+        $ret .= ")" . $suffix;
+        
+        if ($this->isConditional) {
+            $ret .= ' { ';
+        } else {
+            $ret .= ";";
+        }
+        $ret .= ' ?>';
+        
         return $ret;
             
         

@@ -71,7 +71,8 @@ class HTML_Template_Flexy_Filter_SimpleTags
     * Maps variables
     * {i.xyz}             maps to  <?=htmlspecialchars($i->xyz)?>
     * {i.xyz:h}           maps to  <?=$i->xyz?>
-    * {i.xyz:u}           maps to  <?=urlencode($i->xyz)?>
+    * {i.xyz:u}           maps to  <?=urlencode($i->xyz)?> 
+    * {i.xyz:ru}           maps to  <?=rawurlencode($i->xyz)?>
     * 
     * {i.xyz:r}           maps to  <PRE><?=print_r($i->xyz)?></PRE>
     * {i.xyz:n}           maps to  <?=nl2br(htmlspecialchars($i->xyz))?>
@@ -102,6 +103,11 @@ class HTML_Template_Flexy_Filter_SimpleTags
             $input);
         
         $input = preg_replace(
+            "/".$this->start."([a-z0-9_.]+):ru".$this->stop."/ie",
+            "'<?=rawurlencode(".$this->error."$'.str_replace('.','->','\\1').')?>'",
+            $input);
+        
+        $input = preg_replace(
             "/".$this->start."([a-z0-9_.]+):r".$this->stop."/ie",
             "'<PRE><?=print_r($'.str_replace('.','->','\\1').')?></PRE>'",
             $input);
@@ -123,6 +129,7 @@ class HTML_Template_Flexy_Filter_SimpleTags
     * %??i.xyz%??             maps to  <?=htmlspecialchars($i->xyz)?>
     * %??i.xyz:h%??           maps to  <?=$i->xyz?>
     * %??i.xyz:u%??           maps to  <?=urlencode($i->xyz)?>
+    * %??i.xyz:ru%??           maps to  <?=urlencode($i->xyz)?>
     *           THIS IS PROBABLY THE ONE TO USE! 
     *
     * %??i.xyz:uu%??           maps to <?=urlencode(urlencode($i->xyz))?>
@@ -149,7 +156,7 @@ class HTML_Template_Flexy_Filter_SimpleTags
             "/".urlencode(stripslashes($this->start))."([a-z0-9_.]+):u".urlencode(stripslashes($this->stop))."/ie",
             "'<?=urlencode(".$this->error."$'.str_replace('.','->','\\1').')?>'",
             $input);
-            
+ 
         $input = preg_replace(
             "/".urlencode(stripslashes($this->start))."([a-z0-9_.]+):uu".urlencode(stripslashes($this->stop))."/ie",
             "'<?=urlencode(urlencode(".$this->error."$'.str_replace('.','->','\\1').'))?>'",

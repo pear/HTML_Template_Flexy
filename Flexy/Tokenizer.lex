@@ -30,7 +30,9 @@
 // how to modifiy the lexer to handle the changes..
 //
 
- 
+require_once 'HTML/Template/Flexy/Token.php';
+
+
 define('HTML_TEMPLATE_FLEXY_TOKEN_NONE',1);
 define('HTML_TEMPLATE_FLEXY_TOKEN_OK',2);
 define('HTML_TEMPLATE_FLEXY_TOKEN_ERROR',3);
@@ -49,7 +51,9 @@ define("IN_MD"     ,8);
 define("IN_COM"     ,9);
 define("IN_DS"     ,10);
  
-define("IN_FLEXYMETHOD"     ,10);
+define("IN_FLEXYMETHOD"     ,11);
+ 
+define("IN_FLEXYMETHODQUOTED"     ,11);
 
 
 define('YY_E_INTERNAL', 0);
@@ -101,7 +105,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED
 
  
 
@@ -170,7 +174,7 @@ FLEXY_VAR           = ({NAME_START_CHARACTER}{FLEXY_VALID_CHARS}*)
 FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
 FLEXY_END            = ("%7D"|"%7d"|"}")
 FLEXY_LITERAL       = [^#]*
-FLEXY_MODIFIER      = [hur]?
+FLEXY_MODIFIER      = [hur]
 
 
 
@@ -621,6 +625,21 @@ FLEXY_MODIFIER      = [hur]?
     $this->value = HTML_Template_Flexy_Token::create('If',substr($this->yytext(),4,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
+
+<YYINITIAL>"{if:"{FLEXY_VAR}"(" {
+    $this->value =  '';
+    $this->flexyMethod = substr($this->yytext(),1,-1);
+    $this->flexyArgs = array();
+     
+    $this->yybegin(IN_FLEXYMETHOD);
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+ 
+
+
+
+
+
 <YYINITIAL>"{foreach:"{FLEXY_VAR}"}" {
     $this->value = HTML_Template_Flexy_Token::create('Foreach',array(substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -644,14 +663,14 @@ FLEXY_MODIFIER      = [hur]?
 }
 
 <YYINITIAL>"{include:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),8,-1),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),9,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 // needs to deal with \# - excaped #'s
 
 <YYINITIAL>"{include:#"{FLEXY_LITERAL}"#}" {
-    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),8,-1),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::create('Include', substr($this->yytext(),9,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -663,13 +682,24 @@ FLEXY_MODIFIER      = [hur]?
  
  
 <IN_DOUBLEQUOTE,IN_SINGLEQUOTE> ({FLEXY_START}{FLEXY_VAR}":"{FLEXY_MODIFIER}{FLEXY_END})|({FLEXY_START}{FLEXY_VAR}{FLEXY_END}) {
-    $this->attrVal[] = HTML_Template_Flexy_Token::create('Var'  , $this->yytext(), $this->yyline);
+
+    $n = $this->yytext();
+    if ($n{0} != '{') {
+        $n = substr($n,3);
+    }
+    if ($n{strlen($n)-1} != '}') {
+        $n = substr($n,0,-3);
+    }
+    $this->attrVal[] = HTML_Template_Flexy_Token::create('Var'  , $n, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
 
 <YYINITIAL>("{"{FLEXY_VAR}":"{FLEXY_MODIFIER}"}")|("{"{FLEXY_VAR}"}") {
-    $this->value = HTML_Template_Flexy_Token::create('Var'  , $this->yytext(), $this->yyline);
+    $t =  $this->yytext();
+    $t = substr($t,1,-1);
+
+    $this->value = HTML_Template_Flexy_Token::create('Var'  , $t, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -689,8 +719,21 @@ FLEXY_MODIFIER      = [hur]?
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
+<IN_FLEXYMETHOD>(")}"|"):"{FLEXY_MODIFIER}"}") {
+    
+    $t = $this->yytext();
+    if ($t{1} == ':') {
+        $this->flexyMethod .= substr($t,1,-1);
+    }
+        
+    $this->value = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->yybegin(YYINITIAL);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
 
-<IN_FLEXYMETHOD>{FLEXY_VAR}(","|")}") {
+
+
+<IN_FLEXYMETHOD>{FLEXY_VAR}(","|")}"|"):"{FLEXY_MODIFIER}"}") {
     
     $t = $this->yytext();
     
@@ -699,7 +742,14 @@ FLEXY_MODIFIER      = [hur]?
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
-    $this->flexyArgs[] = substr($t,0,-2);
+    if ($c = strpos($t,':')) {
+        $this->flexyMethod .= substr($t,$c,-1);
+        $t = substr($t,0,$c-2);
+    } else {
+        $t = substr($t,0,-2);
+    }
+    
+    $this->flexyArgs[] = $t;
     $this->value = HTML_Template_Flexy_Token::create('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -717,21 +767,31 @@ FLEXY_MODIFIER      = [hur]?
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
+<IN_FLEXYMETHOD> . {
+    $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
+    return HTML_TEMPLATE_FLEXY_ERROR;
+} 
+
+
 
 // methods inside quotes..
 
 
-<IN_DOUBLEQUOTE,IN_SINGLEQUOTE>{FLEXY_START}{FLEXY_VAR}{FLEXY_END} {
+<IN_DOUBLEQUOTE,IN_SINGLEQUOTE>{FLEXY_START}{FLEXY_VAR}"(" {
     $this->value =  '';
-    $this->flexyMethod = substr($this->yytext(),1,-1);
+    $n = $this->yytext();
+    if ($n{0} != "{") {
+        $n = substr($n,3);
+    }
+    $this->flexyMethod = substr($n,0,-1);
     $this->flexyArgs = array();
     $this->flexyMethodState = $this->yy_lexical_state;
-    $this->yybegin(IN_FLEXYMETHODQ);
+    $this->yybegin(IN_FLEXYMETHODQUOTED);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
 
-<IN_FLEXYMETHOD>{FLEXY_VAR}(","|")"{FLEXY_END}) {
+<IN_FLEXYMETHODQUOTED>{FLEXY_VAR}(","|")"{FLEXY_END}) {
     
     $t = $this->yytext();
     
@@ -746,9 +806,9 @@ FLEXY_MODIFIER      = [hur]?
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_FLEXYMETHOD>"#"{FLEXY_LITERAL}("#,"|"#)"{FLEXY_END}) {
+<IN_FLEXYMETHODQUOTED>"#"{FLEXY_LITERAL}("#,"|"#)"{FLEXY_END}) {
     $t = $this->yytext();
-    if ($t{stlen($t-1)} == ",") {
+    if ($t{ stlen($t-1) } == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -760,12 +820,7 @@ FLEXY_MODIFIER      = [hur]?
 }
 
 
-
-
-
-
-
-
+ 
 
 
 <YYINITIAL,IN_TAG,IN_ATTR,IN_ATTRVAL> . {

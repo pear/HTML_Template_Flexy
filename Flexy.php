@@ -22,7 +22,10 @@
 *   @package    HTML_Template_Flexy
 */
 
-
+/*
+* Global variable - used to store active options when compiling a template.
+*/
+$GLOBALS['_HTML_TEMPLATE_FLEXY'] = array(); 
 
 /**
 * A Flexible Template engine - based on simpletemplate  
@@ -71,7 +74,7 @@ class HTML_Template_Flexy
     function HTML_Template_Flexy( $options=array() )
     {
         $baseoptions = &PEAR::getStaticProperty('HTML_Template_Flexy','options');
-        
+       
         foreach( $baseoptions as  $key=>$aOption )  {
             $this->options[$key] = $aOption;
         }
@@ -118,21 +121,15 @@ class HTML_Template_Flexy
         $options = PEAR::getStaticProperty('HTML_Template_Flexy','options');
         if (@$options['debug']) {
             echo "output $this->compiledTemplate<BR>";
+            
         }
             
         $m = new StdClass;
         // compile modules
+         
+        /* these are to be depreciated !!!*/
         
-        if (@$t->modules) {
-            foreach ($t->modules as $modulename=>$object)  {
-                $m->$modulename = &$t->modules[$modulename];
-                $te = $this;
-                if (@$object->template) {
-                    $te->compile($object->template);
-                }
-            }
-        }
-      
+        
         $c = & $t->config;
         if (@$t->input) {
             $i = & $t->input;
@@ -151,13 +148,21 @@ class HTML_Template_Flexy
             $kk = substr($k,2);
             $o->$kk =& $t->$k;
         }
+        
+        /* END DEPRECIATED.. depreciated !!!*/
+        
         /* usefull stuff for doing emails in Template Flexy */
         $email_boundary = md5("FlexyMail".microtime());
         $email_date = date("D j M Y G:i:s O");
         
-        
-        
+        $_error_reporting = false;
+        if (!$options['debug']) {
+            $_error_reporting = error_reporting();
+        }
         include($this->compiledTemplate);
+        if ($_error_reporting !== false) {
+            error_reporting($_error_reporting);
+        }
     }
     /**
     *   Outputs an object as $t, buffers the result and returns it.
@@ -249,6 +254,11 @@ class HTML_Template_Flexy
     function parse() 
     { 
         // read the entire file into one variable
+        
+        require_once 'HTML/Template/Flexy/Tokenizer.php';
+        
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
+        
         $data = file_get_contents($this->currentTemplate);
             //echo strlen($data);
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
@@ -419,7 +429,7 @@ class HTML_Template_Flexy
 
   
         $recompile = false;
-        if( @$this->option['forceCompile'] ) {
+        if( @$this->options['forceCompile'] ) {
             $recompile = true;
         }
 

@@ -33,18 +33,15 @@
     </maintainer>
   </maintainers>
   <release>
-       <version>0.1</version>
-      <date>2002-09-07</date>
+       <version>0.2</version>
+      <date>2003-02-01</date>
       <notes>First PEAR release,
-      - Renamed to HTML_Flexy_Template to conform to PEAR standards
-      - Added more phpdoc comments to filters
-      - Removed getTemplateDir method (legacy/unused)
-      - Added multilanguage support options['locale'] - in theory a i18n filter could be added.
-        Othewise it just checks to see if a template/compiled template with ????.{locale}.???
-        exists
-      - added staticQuickTemplate($template,$object) for quickly including subtemplates.
-      - added {q_include:#aaaaa.html#} to simpletags to support quicktemplate.
-      - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
+      - Introduction of Lex based Parser. - A real syntax checking 
+        Template generator
+      - Ability to use HTML attributes like foreach="abc,b,c" in TR tags.
+      - Automatically converts form elements contents to $object->{fromname}
+        and adds errormessages.
+        
       </notes>
       <state>beta</state>
      </release>
@@ -53,6 +50,9 @@
             <file>Flexy.php</file>
             <dir name="Flexy" role="php">
                 <file>example.ini</file>
+                <file>Tokenizer.php</file>
+                <file>Token.php</file>
+                <file>Test.php</file>
                 <dir name="Filter" role="php">
                     <file>BodyOnly.php</file>
                     <file>Php.php</file>
@@ -67,6 +67,10 @@
     </filelist>
   
    <changelog>
+   
+   
+   
+   
      <release>
        <version>0.1</version>
       <date>2002-09-07</date>

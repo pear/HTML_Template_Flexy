@@ -24,16 +24,22 @@
 // Used to test parsing and generation.
 //
 
-require_once 'GTK/VarDump.php';
+ini_set('include_path', realpath(dirname(__FILE__) . '/../../..'));
+require_once 'Gtk/VarDump.php';
 require_once 'Console/Getopt.php';
-require_once './Tokenizer.php';
-require_once './Token.php';
+require_once 'HTML/Template/Flexy/Tokenizer.php';
+require_once 'HTML/Template/Flexy/Token.php';
 // this is the main runable...
  
 class HTML_Template_Flexy_Test {
 
 
     function HTML_Template_Flexy_Test () {
+        // for testing!
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = array(
+            'compileDir' => dirname(__FILE__),
+            'locale' => 'en');
+            
         $this->parseArgs();
         $this->parse();
         
@@ -133,7 +139,7 @@ class HTML_Template_Flexy_Test {
             }
                 
             
-            //new Gtk_VarDump($res);
+            new Gtk_VarDump($res);
             foreach($res as $v) {
                 echo $v->toHTML();
             }
