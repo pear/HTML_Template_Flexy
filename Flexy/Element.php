@@ -351,7 +351,7 @@ class HTML_Template_Flexy_Element {
                 continue;
             } 
             $atts=array();
-            if (($k != $v) && !$noValue) {
+            if (($k !== $v) && !$noValue) {
                 $atts = array('value'=>$k);
             }
             $add = new HTML_Template_Flexy_Element('option',$atts);
