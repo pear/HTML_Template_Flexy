@@ -38,18 +38,18 @@ class HTML_Template_Flexy_Plugin_Savant {
     
     
      
-	function ahref($href, $text, $extra = null)
-	{
-		$output = '<a href="' . $href . '"';
-		
-		if (! is_null($extra)) {
-			$output .= ' ' . $extra;
-		}
-		
-		$output .= '>' . $text . '</a>';
-		
-		return $output;
-	}
+    function ahref($href, $text, $extra = null)
+    {
+        $output = '<a href="' . $href . '"';
+        
+        if (! is_null($extra)) {
+            $output .= ' ' . $extra;
+        }
+        
+        $output .= '>' . $text . '</a>';
+        
+        return $output;
+    }
  
     /**
     * 
@@ -84,34 +84,34 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
-	function checkbox(
-		$name,
-		$value,
-		$selected = null,
-		$set_unchecked = null,
-		$extra = null)
-	{
-		$html = '';
-		
-		if (! is_null($set_unchecked)) {
-			// this sets the unchecked value of the checkbox.
-			$html .= "<input type=\"hidden\" ";
-			$html .= "name=\"$name\" ";
-			$html .= "value=\"$set_unchecked\" />\n";
-		}
-		
-		$html .= "<input type=\"checkbox\" ";
-		$html .= "name=\"$name\" ";
-		$html .= "value=\"$value\"";
-				
-		if ($value == $selected) {
-			$html .= " checked=\"checked\"";
-		}
-		
-		$html .= " $extra />";
-		
-		return $html;
-	}
+    function checkbox(
+        $name,
+        $value,
+        $selected = null,
+        $set_unchecked = null,
+        $extra = null)
+    {
+        $html = '';
+        
+        if (! is_null($set_unchecked)) {
+            // this sets the unchecked value of the checkbox.
+            $html .= "<input type=\"hidden\" ";
+            $html .= "name=\"$name\" ";
+            $html .= "value=\"$set_unchecked\" />\n";
+        }
+        
+        $html .= "<input type=\"checkbox\" ";
+        $html .= "name=\"$name\" ";
+        $html .= "value=\"$value\"";
+                
+        if ($value == $selected) {
+            $html .= " checked=\"checked\"";
+        }
+        
+        $html .= " $extra />";
+        
+        return $html;
+    }
      
     /**
     * 
@@ -151,61 +151,61 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
 
-	function checkboxes(
-		 
-		$name,
-		$options,
-		$selected = array(),
-		$set_unchecked = null,
-		$sep = "<br />\n",
-		$extra = null)
-	{
-		// force $selected to be an array.  this allows multi-checks to
-		// have multiple checked boxes.
-		settype($selected, 'array');
-		
-		// the text to be returned
-		$html = '';
-		
-		if (is_array($options)) {
-			
-			// an iteration counter.  we use this to track which array
-			// elements are checked and which are unchecked.
-			$i = 0;
-			
-			foreach ($options as $value => $label) {
-				
-				if (! is_null($set_unchecked)) {
-					// this sets the unchecked value of the checkbox.
-					$html .= "<input type=\"hidden\" ";
-					$html .= "name=\"{$name}[$i]\" ";
-					$html .= "value=\"$set_unchecked\" />\n";
-				}
-				
-				
-				$html .= "<input type=\"checkbox\" ";
-				$html .= "name=\"{$name}[$i]\" ";
-				$html .= "value=\"$value\"";
-				
-				if (in_array($value, $selected)) {
-					$html .= " checked=\"checked\"";
-				}
-				
-				if (! is_null($extra)) {
-					$html .= " $extra";
-				}
-				
-				$html .= " />$label$sep";
-				
-				$i++;
-			}
-		}
-		
-		return $html;
-	}
+    function checkboxes(
+         
+        $name,
+        $options,
+        $selected = array(),
+        $set_unchecked = null,
+        $sep = "<br />\n",
+        $extra = null)
+    {
+        // force $selected to be an array.  this allows multi-checks to
+        // have multiple checked boxes.
+        settype($selected, 'array');
+        
+        // the text to be returned
+        $html = '';
+        
+        if (is_array($options)) {
+            
+            // an iteration counter.  we use this to track which array
+            // elements are checked and which are unchecked.
+            $i = 0;
+            
+            foreach ($options as $value => $label) {
+                
+                if (! is_null($set_unchecked)) {
+                    // this sets the unchecked value of the checkbox.
+                    $html .= "<input type=\"hidden\" ";
+                    $html .= "name=\"{$name}[$i]\" ";
+                    $html .= "value=\"$set_unchecked\" />\n";
+                }
+                
+                
+                $html .= "<input type=\"checkbox\" ";
+                $html .= "name=\"{$name}[$i]\" ";
+                $html .= "value=\"$value\"";
+                
+                if (in_array($value, $selected)) {
+                    $html .= " checked=\"checked\"";
+                }
+                
+                if (! is_null($extra)) {
+                    $html .= " $extra";
+                }
+                
+                $html .= " />$label$sep";
+                
+                $i++;
+            }
+        }
+        
+        return $html;
+    }
 
  
-	
+    
     /**
     * 
     * Cycle through a series of values based on an iteration number,
@@ -251,16 +251,16 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
-	function cycle($iteration, $values = null, $repeat = 1)
-	{
-		settype($values, 'array');
-		
-		// prevent divide-by-zero errors
-		if ($repeat == 0) {
-			$repeat = 1;
-		}
-		
-		return $values[($iteration / $repeat) % count($values)];
+    function cycle($iteration, $values = null, $repeat = 1)
+    {
+        settype($values, 'array');
+        
+        // prevent divide-by-zero errors
+        if ($repeat == 0) {
+            $repeat = 1;
+        }
+        
+        return $values[($iteration / $repeat) % count($values)];
     }
     
     
@@ -288,14 +288,14 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
 
- 	function dateformat($datestring, $format = '%d %b %Y')
-	{
-		if (trim($datestring != '')) {
-			return strftime($format, strtotime($datestring));
-		} else {
-			return '';
-		}
-	}
+    function dateformat($datestring, $format = '%d %b %Y')
+    {
+        if (trim($datestring != '')) {
+            return strftime($format, strtotime($datestring));
+        } else {
+            return '';
+        }
+    }
 
     
     /**
@@ -331,68 +331,68 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
  
-	function image(
-		$src,
-		$alt = null,
-		$border = 0,
-		$width = null,
-		$height = null)
-	{
-		$size = '';
-		
-		// build the alt tag
-		if (is_null($alt)) {
-			$alt = basename($src);
-		}
-		
-		$alt = ' alt="' . htmlentities($alt) . '"';
-				
-		// build the border tag
-		$border = ' border="' . htmlentities($border) . '"';
-		
-		// get the width and height of the image
-		if (is_null($width) && is_null($height)) {
-		
-			if (substr(strtolower($src), 0, 7) == 'http://' ||
-				substr(strtolower($src), 0, 8) == 'https://') {
-				
-				// the image is not on the local filesystem
-				$root = '';
-			
-			} else {
-			
-				// we need to set a base root path so we can find images on the
-				// local file system
-				$root = isset($GLOBALS['HTTP_SERVER_VARS']['DOCUMENT_ROOT'])
-					? $GLOBALS['HTTP_SERVER_VARS']['DOCUMENT_ROOT'] . '/'
-					: '';
-			}
-			
-			$info = @getimagesize($root . $src);
-			
-			$width = (is_null($width)) ? $info[0] : $width;
-			$height = (is_null($height)) ? $info[1] : $height;
-			
-			unset($info);
-		}
-		
-		// build the width tag
-		if ($width > 0) {
-			$size .= ' width="' . htmlentities($width) . '"';
-		}
-		
-		// build the height tag
-		if ($height > 0) {
-			$size .= ' height="' . htmlentities($height) . '"';
-		}
-		
-		// done!
-		return '<img src="' . $src . '"' .
-			$alt .
-			$border .
-			$size .
-			' />';
-	}
+    function image(
+        $src,
+        $alt = null,
+        $border = 0,
+        $width = null,
+        $height = null)
+    {
+        $size = '';
+        
+        // build the alt tag
+        if (is_null($alt)) {
+            $alt = basename($src);
+        }
+        
+        $alt = ' alt="' . htmlentities($alt) . '"';
+                
+        // build the border tag
+        $border = ' border="' . htmlentities($border) . '"';
+        
+        // get the width and height of the image
+        if (is_null($width) && is_null($height)) {
+        
+            if (substr(strtolower($src), 0, 7) == 'http://' ||
+                substr(strtolower($src), 0, 8) == 'https://') {
+                
+                // the image is not on the local filesystem
+                $root = '';
+            
+            } else {
+            
+                // we need to set a base root path so we can find images on the
+                // local file system
+                $root = isset($GLOBALS['HTTP_SERVER_VARS']['DOCUMENT_ROOT'])
+                    ? $GLOBALS['HTTP_SERVER_VARS']['DOCUMENT_ROOT'] . '/'
+                    : '';
+            }
+            
+            $info = @getimagesize($root . $src);
+            
+            $width = (is_null($width)) ? $info[0] : $width;
+            $height = (is_null($height)) ? $info[1] : $height;
+            
+            unset($info);
+        }
+        
+        // build the width tag
+        if ($width > 0) {
+            $size .= ' width="' . htmlentities($width) . '"';
+        }
+        
+        // build the height tag
+        if ($height > 0) {
+            $size .= ' height="' . htmlentities($height) . '"';
+        }
+        
+        // done!
+        return '<img src="' . $src . '"' .
+            $alt .
+            $border .
+            $size .
+            ' />';
+    }
  
     
     /**
@@ -424,13 +424,13 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
- 	
-	function input($type, $name, $value = '', $extra = '')
-	{
-		$output = "<input type=\"$type\" name=\"$name\" ";
-		$output .= "value=\"$value\" $extra />";
-		return $output;
-	}
+    
+    function input($type, $name, $value = '', $extra = '')
+    {
+        $output = "<input type=\"$type\" name=\"$name\" ";
+        $output .= "value=\"$value\" $extra />";
+        return $output;
+    }
      
     /**
     * 
@@ -456,11 +456,11 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
 
- 	function javascript($href)
-	{
-		return '<script language="javascript" type="text/javascript" src="' .
-			$href . '"></script>';
-	}
+    function javascript($href)
+    {
+        return '<script language="javascript" type="text/javascript" src="' .
+            $href . '"></script>';
+    }
 
 }
  
@@ -502,26 +502,26 @@ class HTML_Template_Flexy_Plugin_Savant {
 
     /* THIS IS DISABLED UNTIL IT IS RATIONALIZED == BIG SECURITY HOLE !! */
     /*
-	function modify($value, $functions = null)
-	{
-		// is there a space-delimited function list?
-		if (is_string($functions)) {
-			
-			// yes.  split into an array of the
-			// functions to be called.
-			$list = explode(' ', $functions);
-			
-			// loop through the function list and
-			// apply to the output in sequence.
-			foreach ($list as $func) {
-				if (function_exists($func)) {
-					$value = $func($value);
-				}
-			}
-		}
-		
-		return $value;
-	}
+    function modify($value, $functions = null)
+    {
+        // is there a space-delimited function list?
+        if (is_string($functions)) {
+            
+            // yes.  split into an array of the
+            // functions to be called.
+            $list = explode(' ', $functions);
+            
+            // loop through the function list and
+            // apply to the output in sequence.
+            foreach ($list as $func) {
+                if (function_exists($func)) {
+                    $value = $func($value);
+                }
+            }
+        }
+        
+        return $value;
+    }
     */
 
      
@@ -553,37 +553,37 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
- 	function options( $options, $selected = array(), $extra = null)
-	{
-		$html = '';
-		
-		// force $selected to be an array.  this allows multi-selects to
-		// have multiple selected options.
-		settype($selected, 'array');
-		
-		// is $options an array?
-		if (is_array($options)) {
-			
-			// loop through the options array
-			foreach ($options as $value => $label) {
-				
-				$html .= '<option value="' . $value . '"';
-				$html .= ' label="' . $label . '"';
-				
-				if (in_array($value, $selected)) {
-					$html .= ' selected="selected"';
-				}
-				
-				if (! is_null($extra)) {
-					$html .= ' ' . $extra;
-				}
-				
-				$html .= ">$label</option>\n";
-			}
-		}
-		
-		return $html;
-	}
+    function options( $options, $selected = array(), $extra = null)
+    {
+        $html = '';
+        
+        // force $selected to be an array.  this allows multi-selects to
+        // have multiple selected options.
+        settype($selected, 'array');
+        
+        // is $options an array?
+        if (is_array($options)) {
+            
+            // loop through the options array
+            foreach ($options as $value => $label) {
+                
+                $html .= '<option value="' . $value . '"';
+                $html .= ' label="' . $label . '"';
+                
+                if (in_array($value, $selected)) {
+                    $html .= ' selected="selected"';
+                }
+                
+                if (! is_null($extra)) {
+                    $html .= ' ' . $extra;
+                }
+                
+                $html .= ">$label</option>\n";
+            }
+        }
+        
+        return $html;
+    }
  
 
     /**
@@ -627,40 +627,40 @@ class HTML_Template_Flexy_Plugin_Savant {
     */
 
  
-	function radios(
-		$name,
-		$options,
-		$checked = null,
-		$set_unchecked = null,
-		$sep = "<br />\n",
-		$extra = null)
-	{
-		$html = '';
-		
-		if (is_array($options)) {
-			
-			if (! is_null($set_unchecked)) {
-				// this sets the unchecked value of the
-				// radio button set.
-				$html .= "<input type=\"hidden\" ";
-				$html .= "name=\"$name\" ";
-				$html .= "value=\"$set_unchecked\" />\n";
-			}
-			
-			foreach ($options as $value => $label) {
-				$html .= "<input type=\"radio\" ";
-				$html .= "name=\"$name\" ";
-				$html .= "value=\"$value\"";
-				
-				if ($value == $checked) {
-					$html .= " checked=\"checked\"";
-				}
-				$html .= " $extra />$label$sep";
-			}
-		}
-		
-		return $html;
-	}
+    function radios(
+        $name,
+        $options,
+        $checked = null,
+        $set_unchecked = null,
+        $sep = "<br />\n",
+        $extra = null)
+    {
+        $html = '';
+        
+        if (is_array($options)) {
+            
+            if (! is_null($set_unchecked)) {
+                // this sets the unchecked value of the
+                // radio button set.
+                $html .= "<input type=\"hidden\" ";
+                $html .= "name=\"$name\" ";
+                $html .= "value=\"$set_unchecked\" />\n";
+            }
+            
+            foreach ($options as $value => $label) {
+                $html .= "<input type=\"radio\" ";
+                $html .= "name=\"$name\" ";
+                $html .= "value=\"$value\"";
+                
+                if ($value == $checked) {
+                    $html .= " checked=\"checked\"";
+                }
+                $html .= " $extra />$label$sep";
+            }
+        }
+        
+        return $html;
+    }
      
     /**
     * 
@@ -683,11 +683,11 @@ class HTML_Template_Flexy_Plugin_Savant {
     * 
     */
  
-	function stylesheet($href)
-	{
-		return '<link rel="stylesheet" type="text/css" href="' .
-			$href . '" />';
-	}
+    function stylesheet($href)
+    {
+        return '<link rel="stylesheet" type="text/css" href="' .
+            $href . '" />';
+    }
 
      
      
@@ -722,12 +722,12 @@ class HTML_Template_Flexy_Plugin_Savant {
     * @return string
     * 
     */
- 	
-	function textarea($name, $text, $tall = 24, $wide = 80, $extra = '')
-	{
-		$output = "<textarea name=\"$name\" rows=\"$tall\" ";
-		$output .= "cols=\"$wide\" $extra>$text</textarea>";
-		return $output;
-	}
+    
+    function textarea($name, $text, $tall = 24, $wide = 80, $extra = '')
+    {
+        $output = "<textarea name=\"$name\" rows=\"$tall\" ";
+        $output .= "cols=\"$wide\" $extra>$text</textarea>";
+        return $output;
+    }
 }
 
