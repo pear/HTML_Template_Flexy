@@ -817,8 +817,7 @@ FLEXY_MODIFIER      = [hur]
 <IN_FLEXYMETHOD>{FLEXY_VAR}(","|")}"|"):"{FLEXY_MODIFIER}"}") {
     
     $t = $this->yytext();
-    
-    if ($t{strlen($t-1)} == ",") {
+    if ($t{strlen($t)-1} == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -837,8 +836,10 @@ FLEXY_MODIFIER      = [hur]
 }
 
 <IN_FLEXYMETHOD>"#"{FLEXY_LITERAL}("#,"|"#)}") {
+   
+    
     $t = $this->yytext();
-    if ($t{strlen($t-1)} == ",") {
+    if ($t{strlen($t)-1} == ",") {
         // add argument
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -908,7 +909,7 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_FLEXYMETHODQUOTED>"#"{FLEXY_LITERAL}"#" {
     $t = $this->yytext();
-    $this->flexyArgs[] = substr($t,0,-1);
+    $this->flexyArgs[] =$t;
     $this->yybegin(IN_FLEXYMETHODQUOTED_END);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     

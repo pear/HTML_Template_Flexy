@@ -131,8 +131,13 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
             if ($s) {
                 $ret .= ",";
             }
-            $ret .= $this->toVar($a);
             $s =1;
+            if ($a{0} == '#') {
+                $ret .= '"'. addslashes(substr($a,1,-2)) . '"';
+                continue;
+            }
+            $ret .= $this->toVar($a);
+            
         }
         $ret .= ")" . $suffix;
         

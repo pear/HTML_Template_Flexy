@@ -50,6 +50,7 @@
       Bug fixes
         - deal with blank names in forms (no replacement is done)
         - deal with reset items in forms (no replacement is done)
+	- fixed #literal# support for method calls.
       Features
         - support variable[12] as a valid variable name.
         - does syntax checking on form element names 
