@@ -42,16 +42,16 @@
       <email>alan@akbkhome.com</email>
     </maintainer>
   </maintainers>
-  
+ 
 
   <release>
-     <version>0.5.1</version>
-      <date>2003-09-04</date>
+     <version>0.5.2</version>
+      <date>2003-09-08</date>
       <notes>
       
-      Fixes
-        - bufferedOutputObject correctly deals with elements array (Stephan Wentz)
-      
+        Fixes
+        - array syntax supported in attributes (eg. urlencoded)
+         
       Note: See Version 0.5  release notes concerning BC issues with 0.4 series
       
         
@@ -123,6 +123,22 @@
   
    <changelog>
    
+  <release>
+     <version>0.5.1</version>
+      <date>2003-09-04</date>
+      <notes>
+      
+      Fixes
+        - bufferedOutputObject correctly deals with elements array (Stephan Wentz)
+      
+      Note: See Version 0.5  release notes concerning BC issues with 0.4 series
+      
+        
+
+      </notes>
+      <state>beta</state>
+     </release>
+     
   <release>
      <version>0.5</version>
       <date>2003-09-03</date>
