@@ -40,20 +40,22 @@ define('HTML_TEMPLATE_FLEXY_TOKEN_ERROR',3);
  
 
 define("YYINITIAL"     ,0);
-define("IN_SINGLEQUOTE"     ,1) ;
-define("IN_TAG"     ,2)  ;
-define("IN_ATTR"     ,3);
-define("IN_ATTRVAL"     ,4) ;
-define("IN_NETDATA"     ,5);
-define("IN_ENDTAG"     ,6);
-define("IN_DOUBLEQUOTE"     ,7);
-define("IN_MD"     ,8);
-define("IN_COM"     ,9);
-define("IN_DS"     ,10);
-define("IN_FLEXYMETHOD"     ,11);
-define("IN_FLEXYMETHODQUOTED"     ,12);
-define("IN_FLEXYMETHODQUOTED_END"     ,13);
-define("IN_SCRIPT"     ,14);
+define("IN_SINGLEQUOTE"     ,   1) ;
+define("IN_TAG"     ,           2)  ;
+define("IN_ATTR"     ,          3);
+define("IN_ATTRVAL"     ,       4) ;
+define("IN_NETDATA"     ,       5);
+define("IN_ENDTAG"     ,        6);
+define("IN_DOUBLEQUOTE"     ,   7);
+define("IN_MD"     ,            8);
+define("IN_COM"     ,           9);
+define("IN_DS",                 10);
+define("IN_FLEXYMETHOD"     ,   11);
+define("IN_FLEXYMETHODQUOTED"  ,12);
+define("IN_FLEXYMETHODQUOTED_END" ,13);
+define("IN_SCRIPT",             14);
+define("IN_CDATA"     ,         15);
+
 
 define('YY_E_INTERNAL', 0);
 define('YY_E_MATCH',  1);
@@ -98,6 +100,15 @@ define('YY_EOF' , 258);
     * @access   public
     */
     var $ignorePHP = true;
+    
+    /**
+    * the start position of a cdata block
+    *
+    * @var int
+    * @access private
+    */
+    
+    var $yyCdataBegin = 0;
     
     /**
     * the name of the file being parsed (used by error messages)
@@ -146,7 +157,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA
 
  
 
@@ -306,7 +317,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
 
-<YYINITIAL>{MDO}{COM}			{
+<YYINITIAL>{MDO}{COM}           {
     /* <!--  -- comment declaration */
     if ($this->ignoreHTML) {
         return $this->returnSimple();
@@ -317,26 +328,38 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<YYINITIAL>{MDO}{DSO}{WHITESPACE}			{
+<YYINITIAL>{MDO}{DSO}{WHITESPACE}   {
     /* <![ -- marked section */
     return $this->returnSimple();
-    
-    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
-    // At the momemnt just ignore this!
-    return $this->raiseError("marked section not handled"); 
+
+}
+
+<YYINITIAL>{MDO}{DSO}"CDATA"{DSO}     {
+    /* <![ -- marked section */
+    $this->yybegin(IN_CDATA);
+    $this->yyCdataBegin = $this->yy_buffer_end;
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+
+<IN_CDATA>([^{MSC}]+|{MSC}) { 
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+
+<IN_CDATA>{MSC}{TAGC}      { 
+    /* ]]> -- marked section end */
+    $this->value = HTML_Template_Flexy_Token::factory('Cdata',
+        substr($this->yy_buffer,$this->yyCdataBegin ,$this->yy_buffer_end - $this->yyCdataBegin - 3 ),
+        $this->yyline);
+    $this->yybegin(YYINITIAL);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
+
 }
 
 
-<YYINITIAL>{MSC}{TAGC}		{ 
+<YYINITIAL>{MSC}{TAGC}      { 
     /* ]]> -- marked section end */
     
     return $this->returnSimple();
-    
-    //$this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
-    //return HTML_TEMPLATE_FLEXY_TOKEN_OK;
-    // At the momemnt just ignore this!
-    return $this->raiseError("unmatched marked sections end"); 
 }
     
   
