@@ -241,7 +241,13 @@ class HTML_Template_Flexy_Token {
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
                 continue;
             }
-           
+            if (!$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['allowPHP']  && 
+                ($t->token == 'Php')) {
+                return HTML_Template_Flexy::raiseError('PHP code found in script',
+                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,HTML_TEMPLATE_FLEXY_ERROR_RETURN
+                );
+            
+            }
             $i++;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = $tokenizer->value;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $i;

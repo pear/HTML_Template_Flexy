@@ -138,7 +138,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
                 "\$x = new HTML_Template_Flexy(\$this->options);\n".
                 "\$x->compile('{$arg}');\n".
                 "\$_t = function_exists('clone') ? clone(\$t) : \$t;\n".
-                "foreach(get_defined_vars(); as \$k=>\$v) {\n" .
+                "foreach(get_defined_vars()  as \$k=>\$v) {\n" .
                 "    if (\$k != 't') { \$_t->\$k = \$v; }\n" .
                 "}\n" .
                 "\$x->outputObject(\$_t, \$this->elements);\n"

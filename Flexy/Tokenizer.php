@@ -80,7 +80,6 @@ class HTML_Template_Flexy_Tokenizer
     */
     var $options = array(
         'ignore_html' => false,
-        'ignore_php'  => true,
         'token_factory'  => array('HTML_Template_Flexy_Token','factory'),
     );
     /**
@@ -3607,10 +3606,6 @@ case 86:
 case 87:
 { 
     /* php end */
-    if ($this->options['ignore_php']) {
-        $this->yybegin(YYINITIAL);
-        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
-    }
     $this->value = $this->createToken('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
         $this->yyline,$this->yyPhpBegin);

@@ -87,9 +87,6 @@ define('YY_EOF' , 258);
      
     /**
     * options array : meanings:
-    *    ignore_php - default is to remove all PHP code from template.
-    *           although this may not produce a tidy result - eg. close ?> in comments
-    *           it will have the desired effect of blocking injection of PHP from templates.
     *    ignore_html - return all tags as  text tokens
     *
     *
@@ -100,7 +97,6 @@ define('YY_EOF' , 258);
     
     var $options = array(
         'ignore_html' => false,
-        'ignore_php'  => true,
         'token_factory'  => array('HTML_Template_Flexy_Token','factory'),
     );
      
@@ -505,11 +501,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_PHP>{PIC_PHP} { 
     /* php end */
-    if ($this->options['ignore_php']) {
-
-        $this->yybegin(YYINITIAL);
-        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
-    }
+    
     $this->value = $this->createToken('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
         $this->yyline,$this->yyPhpBegin);

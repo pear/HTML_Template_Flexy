@@ -519,13 +519,19 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         // doesnt really need strtolower etc. as php functions are not case sensitive!
         
+        
+        /* always render script correctly */
+        if (0 == strcasecmp($this->element->tag,"script")) {
+            return $this->parseTagScript();
+        }
+        
         if ($this->element->getAttribute('FLEXY:DYNAMIC')) {
             return $this->compiler->appendPhp(
                 $this->getElementPhp( $this->element->getAttribute('ID') )
             );
             
         }
-            
+        
         if ($this->element->getAttribute('FLEXY:IGNOREONLY') !== false) {
             return false;
         }
@@ -537,7 +543,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             $bits = explode(':',$tag);
             $tag = $bits[1];
         }
-        
+         
         $method = 'parseTag'.$tag;
         if (!method_exists($this,$method)) {
             return false;

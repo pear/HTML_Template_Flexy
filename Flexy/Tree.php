@@ -165,7 +165,9 @@ class HTML_Template_Flexy_Tree {
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
                 continue;
             }
-           
+            if ($t->token == 'Php') {
+                continue;
+            }
             $i++;
             $this->tokens[$i] = $tokenizer->value;
             $this->tokens[$i]->id = $i;

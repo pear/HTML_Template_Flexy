@@ -3,9 +3,9 @@
 require_once 'HTML/Template/Flexy.php';
 // simple testsuite..
 
-function compilefile($file,$data =array()) {
+function compilefile($file,$data =array(),$options=array()) {
     
-    $options =  array(
+    $options = $options + array(
         
         'templateDir'   =>  dirname(__FILE__) .'/templates',            // where are your templates
         'forceCompile'  =>  true,  // only suggested for debugging
