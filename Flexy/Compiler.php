@@ -54,7 +54,7 @@ class HTML_Template_Flexy_Compiler {
     function factory($options) 
     {
         if (empty($options['compiler'])) {
-            $options['compiler'] = 'Standard';
+            $options['compiler'] = 'Flexy';
         }
     
         require_once 'HTML/Template/Flexy/Compiler/'.ucfirst( $options['compiler'] ) .'.php';
