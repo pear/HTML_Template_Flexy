@@ -681,16 +681,16 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
      
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
-<IN_COM>{COM}[^>] 	{
+<IN_COM>{COM}[^>]	{
 	// inside comment -- without a >
-	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+	return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
 <IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
     $this->value = HTML_Template_Flexy_Token::factory('DSComment',$this->yytext(),$this->yyline);
-         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
@@ -737,7 +737,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<IN_COM>{COM}{TAGC}			{   
+<IN_COM>[-]*{COM}{TAGC}			{   
     
     $this->value = HTML_Template_Flexy_Token::factory('Comment',
         '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),

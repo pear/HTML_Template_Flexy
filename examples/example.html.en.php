@@ -43,10 +43,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
 -->
 
-
-
-
-
 <!--  testing -- inside of a -- comment -->
 
  
@@ -302,15 +298,17 @@ var test_abc_agcg = 0
 </script>
 
 
-<!-- Bug: 739
+<!-- Bugs: 739
 <td flexy:foreach="xxxx">xxx</td> 
  {foreach:xxxx} {end:} 
 -->
 
+Comments:
+<!--- this is a comment with alot of stuff.. --# ---->
 
-Bug: 874 
+<!-- this is a comment with alot of stuff.. --# -- -->
 
-<?php if (isset($t->supporter) && method_exists($t->supporter,'isFreq')) if ($t->supporter->isFreq("XAPP,OXRP")) { ?><span>do something </span><?php }?>
+
 
 <p>&nbsp;</p>
 </body>
