@@ -44,6 +44,20 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     
        /* -----------------------     PUBLIC METHODS AND VARS - used outside engine. ---------------------------- */
     
+    /**
+    * relaying of constructor - has to be done manually !!!
+    *
+    * @param    see HTML_Quickform..
+    * @return   none
+    * @access   public
+    */
+    
+    function HTML_Template_Flexy_QuickForm($a,$b,$c,$d,$e) {
+    
+        parent::HTML_QuickForm($a,$b,$c,$d,$e);
+    
+    }
+    
     
      /**
     * flag an element as hidden (so do not display it)
@@ -182,14 +196,17 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             //echo "<PRE>PARSE:";print_r($array);echo "</PRE>";
             if ($array[0][0] == 'form') {
                 $form++;
-                $ret[$form] = new HTML_Template_Flexy_QuickForm;
-                array_shift($array[0]);
+                
+                
+                //array_shift($array[0]);
+                $ret[$form] = new HTML_Template_Flexy_QuickForm(@$array[0][1],@$array[0][2],@$array[0][3],@$array[0][4],@$array[0][5]);
+                
                 // create it..
-                call_user_func_array(array($ret[$form],'HTML_QuickForm'), $array[0]);
+                //echo "<PRE>";print_r($array[0]);
+                //call_user_func_array(array($ret[$form],'HTML_QuickForm'), $array[0]);
                 // set the defaults.\
-                 
+                //echo "<PRE>";print_r($ret[$form]);
                 if (isset($defaults[$form])) {
-                   
                     $ret[$form]->setDefaults((array) $defaults[$form]);
                 } else if (isset($defaults[0])) {
                     $ret[$form]->setDefaults((array) $defaults[0]);
