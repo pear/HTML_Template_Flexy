@@ -83,17 +83,19 @@ class HTML_Template_Flexy_Token {
         // try not to reload the same class to often
         static $loaded = array();
         
-        if (!isset($loaded[$token])) {
+        
+        $c = 'HTML_Template_Flexy_Token_'.$token;
+        
+        if (!class_exists($c) && !isset($loaded[$token])) {
             // make sure parse errors are picked up - now @ here..
             if (file_exists(dirname(__FILE__)."/Token/{$token}.php")) {
-                include 'HTML/Template/Flexy/Token/'.$token.'.php';
+                require_once'HTML/Template/Flexy/Token/'.$token.'.php';
             }
             $loaded[$token] = true;
         }
             
-        $c = 'HTML_Template_Flexy_Token_'.$token;
-        
         $t = new HTML_Template_Flexy_Token;
+        
         if (class_exists($c)) {
             $t = new $c;
         }
