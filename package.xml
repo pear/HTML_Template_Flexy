@@ -86,7 +86,8 @@
                 <file>example.ini</file>
                 <file>Tokenizer.php</file>
                 <file>Token.php</file>
-                <file>QuickForm.php</file>
+                <file>Element.php</file>
+                <file>Factory.php</file>
                 <file>compileAll.php</file>
                 <dir name="Token" role="php">
                     <file>Tag.php</file>

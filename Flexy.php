@@ -393,8 +393,9 @@ class HTML_Template_Flexy
             fwrite($cfp,$data);
             fclose($cfp);
             @chmod($this->compiledTemplate,0775);
-            
-            
+            // make the timestamp of the two items match.
+            clearstatcache();
+            @touch($this->compiledTemplate, filemtime($this->currentTemplate));
             
         } else {
             PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$this->compiledTemplate,null,PEAR_ERROR_DIE);
@@ -605,7 +606,7 @@ class HTML_Template_Flexy
         }
 
         if( !file_exists( $this->compiledTemplate ) ||
-            filemtime( $checkFile ) > filemtime( $this->compiledTemplate )
+            filemtime( $checkFile ) != filemtime( $this->compiledTemplate )
           ) {
             return false;
         }
