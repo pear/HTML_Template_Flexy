@@ -66,6 +66,18 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if (!$type) {
             $type = 'Tag';
         }
+        
+        $class = 'HTML_Template_Flexy_Compiler_Flexy_' . $type;
+        if (class_exists($class)) {
+            $ret = new $class;
+            $ret->compiler = &$compiler;
+            return $ret;    
+        }
+        
+        $filename = 'HTML/Template/Flexy/Compiler/Flexy/' . ucfirst(strtolower($type)) . '.php';
+        if (!HTML_Template_Flexy_Compiler_Flexy_Tag::fileExistsInPath($filename)) {
+            return HTML_Template_Flexy_Compiler_Flexy_Tag::factory('Tag',&$compiler);
+        }
         // if we dont have a handler - just use the basic handler.
         if (!file_exists(dirname(__FILE__) . '/'. ucfirst(strtolower($type)) . '.php')) {
             $type = 'Tag';
@@ -77,10 +89,22 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if (!class_exists($class)) {
             return false;
         }
-        $ret = new $class;
-        $ret->compiler = &$compiler;
-        return $ret;
+        return HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,&$compiler);
     }
+    
+    function fileExistsInPath($filename) {
+        if (isset($GLOBALS['_'.__CLASS__]['cache'][$filename])) {
+            return $GLOBALS['_'.__CLASS__]['cache'][$filename];
+        }
+        $bits = explode(PATH_SEPARATOR,ini_get('include_path'));
+        foreach($bits as $b) {
+            if (file_exists("$b/$filename")) {
+                return $GLOBALS['_'.__CLASS__]['cache'][$filename] = true;
+            }
+        }
+        return $GLOBALS['_'.__CLASS__]['cache'][$filename] = false;
+    }
+    
         
         
     /**
@@ -745,7 +769,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
            
             $id = $this->element->getAttribute('ID');
             if (!$id) {
-                return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
+                return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;: 
                  Radio Input's require an ID tag..",
                  null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
