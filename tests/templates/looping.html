@@ -48,3 +48,12 @@ Bug #84
     <td flexy:foreach="b,c,d">{d}</td>
   </tr>
 </table>
+
+<h2>Looping in CDATA</h2>
+Dont forget that php strips line breaks!
+<![CDATA[
+{foreach:list,i,j}
+    {i}:{j}
+    
+{end:}
+]]>

@@ -434,7 +434,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<IN_CDATA>([^{MSC}]+|{MSC}|{DSC}) { 
+<IN_CDATA>([^{DSC}"{"]+|{MSC}|{DSC}|"{") { 
     $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }

@@ -3,7 +3,7 @@ Template Test: looping.html
 --FILE--
 <?php
 require_once 'testsuite.php';
-compilefile('looping.html');
+compilefile('looping.html',array('list'=>array(1,2,3,4)));
 
 --EXPECTF--
 ===Compiling looping.html===
@@ -62,6 +62,14 @@ Bug #84
   </tr><?php }?>
 </table>
 
+<h2>Looping in CDATA</h2>
+Dont forget that php strips line breaks!
+<![CDATA[
+<?php if ($this->options['strict'] || (is_array($t->list)  || is_object($t->list))) foreach($t->list as $i => $j) {?>
+    <?php echo htmlspecialchars($i);?>:<?php echo htmlspecialchars($j);?>
+    
+<?php }?>
+]]>
 
 ===With data file: looping.html===
 
@@ -73,8 +81,8 @@ Bug #84
 <p>a loop with 2 vars </p>
 
 Bug #84
-
-
+        
+    0:1    1:2    2:3    3:4
 <table>
     </table>
 
@@ -90,3 +98,12 @@ Bug #84
 <h2>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</h2>
 <table width="100%" border="0">
   </table>
+
+<h2>Looping in CDATA</h2>
+Dont forget that php strips line breaks!
+<![CDATA[
+    0:1    
+    1:2    
+    2:3    
+    3:4    
+]]>
