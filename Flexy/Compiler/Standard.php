@@ -100,17 +100,32 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         // PRE PROCESS {_(.....)} translation markers.
         $got_gettext_markup = false;
         
-        if (preg_match_all('/\{_\((.*)\)_\}/', $data,$matches)) {
-            // echo '<PRE>';print_r($matches);
+        
+        
+        if (strpos($data,'{_(') !== false) {
+            $matches = array();
+            $lmatches = explode ('{_(', $data);
+            array_shift($lmatches);
+            // shift the first..
+            foreach ($lmatches as $k) {
+                if (false === strpos($k,')_}')) {
+                    continue;
+                }
+                $x = explode(')_}',$k);
+                $matches[] = $x[0];
+            }
+        
+        
+           //echo '<PRE>';print_r($matches);
             // we may need to do some house cleaning here...
-            $gettextStrings = $matches[1];
+            $gettextStrings = $matches;
             $got_gettext_markup = true;
             
             
             // replace them now..  
             // ** leaving in the tag (which should be ignored by the parser..
             // we then get rid of the tags during the toString method in this class.
-            foreach($matches[1] as $k=>$v) {
+            foreach($matches as $v) {
                 $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
             }
             
