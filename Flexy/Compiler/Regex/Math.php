@@ -30,7 +30,7 @@
 */  
  
 
-class HTML_Template_Flexy_Filter_Math {
+class HTML_Template_Flexy_Compiler_Regex_Math {
     /*
     *   @var    string   $start    the start tag for the template (escaped for regex)
     */

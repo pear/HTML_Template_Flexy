@@ -33,7 +33,7 @@
 
 require_once "HTML/Template/Flexy/Filter/SimpleTags.php";
 
-class HTML_Template_Flexy_Filter_RtfSimpleTags extends HTML_Template_Flexy_Filter_simpletags 
+class HTML_Template_Flexy_Compiler_Regex_RtfSimpleTags extends HTML_Template_Flexy_Compiler_Regex_simpletags 
 {
     /*
     *   @var    string   $start    the start tag for the template (escaped for regex)

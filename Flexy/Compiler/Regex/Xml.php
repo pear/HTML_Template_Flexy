@@ -27,7 +27,7 @@
 */  
  
 
-class HTML_Template_Flexy_Filter_Xml 
+class HTML_Template_Flexy_Compiler_Regex_Xml 
 {  
     /**
     * Standard Set Engine

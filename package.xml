@@ -46,10 +46,12 @@
 
   <release>
      <version>0.5</version>
-      <date>2003-06-11</date>
+      <date>2003-07-01</date>
       <notes>
       
       Warning: BC Breaking release
+      Warning: Beta Testing..
+      
       Due to the conclusion that the quickforms integration was not only messy, but 
       a heavy weight to be carried. The whole form/dynamic element layer was re-engineered.
       
@@ -71,7 +73,11 @@
         - setting error messages (as suffixes to elements)
         - flag something as required. (prefixing strings to elements)
     
-       
+      Compiler Abstraction
+        The Compiler code in Flexy is now abstracted out, to make it possible to write
+        Other compilers and use the same caching/loading mechanism.
+        
+        
 
       </notes>
       <state>beta</state>
@@ -84,11 +90,18 @@
             <file>Flexy.php</file>
             <dir name="Flexy" role="php">
                 <file>example.ini</file>
-                <file>Tokenizer.php</file>
-                <file>Token.php</file>
+                
+                <!-- The HTML Element and a factory helper class for it. -->
                 <file>Element.php</file>
                 <file>Factory.php</file>
+                
+                
+                <!-- a compile all script -->
                 <file>compileAll.php</file>
+                
+                <!-- The tokenizer and related Tokens -->
+                <file>Tokenizer.php</file>
+                <file>Token.php</file>
                 <dir name="Token" role="php">
                     <file>Tag.php</file>
                     <file>EndTag.php</file>
@@ -103,15 +116,30 @@
                     <file>Text.php</file>
                 </dir>
                 <file>Test.php</file>
-                <dir name="Filter" role="php">
-                    <file>BodyOnly.php</file>
-                    <file>Php.php</file>
-                    <file>RtfSimpleTags.php</file>
-                    <file>SimpleTags.php</file>
-                    <file>Mail.php</file>
-                    <file>Xml.php</file>
-                    <file>Math.php</file>
-               </dir>
+                
+                <!-- the compiler Interface/Factory -->
+                <file>Compiler.php</file>
+                
+                <dir name="Compiler" role="php">
+                
+                  <!-- The Standard Compiler -->
+                  <file>Standard.php</file>
+                  <dir name="Standard">
+                    <file>Tag.php</file>
+                  </dir>
+                  
+                  <!-- The Old Regex Compiler -->
+                  <file>Regex.php</file>
+                  <dir name="Regex" role="php">
+                      <file>BodyOnly.php</file>
+                      <file>Php.php</file>
+                      <file>RtfSimpleTags.php</file>
+                      <file>SimpleTags.php</file>
+                      <file>Mail.php</file>
+                      <file>Xml.php</file>
+                      <file>Math.php</file>
+                  </dir>
+                </dir>
             </dir>
         </dir>
     </filelist>

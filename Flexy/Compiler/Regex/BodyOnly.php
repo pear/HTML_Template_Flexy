@@ -29,7 +29,7 @@
 */ 
  
 
-class HTML_Template_Flexy_Filter_BodyOnly 
+class HTML_Template_Flexy_Compiler_Regex_BodyOnly 
 { 
 
     /**

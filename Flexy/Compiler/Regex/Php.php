@@ -28,7 +28,7 @@
 * @package    HTML_Template_Flexy
 *  
 */
-class HTML_Template_Flexy_Filter_Php 
+class HTML_Template_Flexy_Compiler_Regex_Php 
 {  
     /**
     * Standard Set Engine

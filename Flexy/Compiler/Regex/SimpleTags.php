@@ -29,7 +29,7 @@
 */  
  
 
-class HTML_Template_Flexy_Filter_SimpleTags 
+class HTML_Template_Flexy_Compiler_Regex_SimpleTags 
 {
     /*
     *   @var     object HTML_Template_Flexy   the main engine

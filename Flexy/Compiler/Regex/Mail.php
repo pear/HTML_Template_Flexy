@@ -28,7 +28,7 @@
 *  
 */ 
  
-class HTML_Template_Flexy_Filter_Mail {  
+class HTML_Template_Flexy_Compiler_Regex_Mail {  
     /**
     * Standard Set Engine
     * 
