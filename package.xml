@@ -22,9 +22,9 @@
   - {if:variable} to PHP If statement
   - {if:method()} to PHP If statement
   - {else:} and {end:} to close or alternate If statements
-  - FORM to object mapping, 
-  - replacement of INPUT, TEXTAREA and SELECT tags with PHP variables or OPTIONS
-    FLEXYIGNORE to prevent replacements
+  - FORM to HTML_QuickForms mapping
+  - replacement of INPUT, TEXTAREA and SELECT tags with HTML_QuickForm code
+    use FLEXYIGNORE to prevent replacements
   - FLEXYSTART/FLEXYSTARTCHILDREN tags to define where output starts/finishes
   - support for urlencoded braces {} in HTML attributes. 
   
@@ -45,16 +45,17 @@
 
   <release>
      <version>0.4</version>
-      <date>2003-02-15</date>
+      <date>2003-03-15</date>
       <notes>
       Bug fixes
-        - deal with blank names in forms (no replacement is done)
-        - deal with reset items in forms (no replacement is done)
 	- fixed #literal# support for method calls.
         - fixed XML support
         - fixed Fatal Error messages - with more details
         - fixed whitespace in doctype tags. (wierd lexer stuff)
+        
       Features
+        - quickforms integration added.
+        - gettext/multilanguage support
         - support variable[12] as a valid variable name.
         - does syntax checking on form element names 
         - fixed {outputBody()} (no prefix var methods)
@@ -80,6 +81,7 @@
                 <file>example.ini</file>
                 <file>Tokenizer.php</file>
                 <file>Token.php</file>
+                <file>QuickForm.php</file>
                 <file>compileAll.php</file>
                 <dir name="Token" role="php">
                     <file>Tag.php</file>
@@ -92,6 +94,7 @@
                     <file>Var.php</file>
                     <file>Method.php</file>
                     <file>Processing.php</file>
+                    <file>Text.php</file>
                 </dir>
                 <file>Test.php</file>
                 <dir name="Filter" role="php">

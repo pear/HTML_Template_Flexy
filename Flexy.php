@@ -208,7 +208,7 @@ class HTML_Template_Flexy
         // this may disappear later it's a BC fudge to try and deal with 
         // the old way of auto matching form elements to object Vars
         
-        if (!$this->quickForm && file_exists($this->quickformFile)) {
+        if (!$this->quickform && file_exists($this->quickformFile)) {
             $this->setQuickForm($t);
             $this->setQuickForm($t->data);
         }
@@ -634,10 +634,11 @@ class HTML_Template_Flexy
         if (!file_exists($this->quickformFile)) {
             return false;
         }
+        require_once 'HTML/Template/Flexy/QuickForm.php';
         if (!$this->quickform) {
-            $this->quickform = HTML_Template_Flexy_QuickFrom::loadFromSerialFile($this->quickFormFile);
+            $this->quickform = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile);
         }
-        
+         
         if ($data === false) {
             return;
         }

@@ -56,9 +56,10 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     {
         $ret ='<script language="javascript"><!--'.$this->_buildRules() . '--></script>';
         $ret .= '<form ' . $this->_getAttrString($this->_attributes) . '>';
-        foreach(array_keys($this->_elements) as $name) {
-            if ($this->_element[$name]->getType() == 'hidden') {
-                $ret .= $this->_element[$name]->buildElement($name);
+      
+        foreach($this->_elementIndex as $name => $id) {
+            if ($this->_elements[$id]->getType() == 'hidden') {
+                $ret .= $this->_buildElement($this->_elements[$id]);
             }
         }
         return $ret;
@@ -74,7 +75,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     
     function elementToHtml($elementname) 
     {
-        return $this->_buildElement($this->_elements[$elementname]);
+        return $this->_buildElement($this->_elements[$this->_elementIndex[$elementname]]);
     }
     /**
     * get a reference to the Elements (so you can modify them/ set stuff)
@@ -102,17 +103,23 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     {
         // does our file exist.
         if (!file_exists($filename)) {
-            return;
+            return PEAR::raiseError('Flexy Quickform wrapper attempted to load non existent file :'. $filename,null,PEAR_ERROR_DIE);
+            
         }
         // double load defintion for quickform..
         $data = unserialize(file_get_contents($filename));
         foreach($data->_elements as $e=>$object) {
-            $class = $object->__PHP_Incomplete_Class_Name;
+            $dd = (array) $object;
+            $class = $dd['__PHP_Incomplete_Class_Name'];
             if (class_exists($class)) {
                 continue;
             }
-            $filename = str_replace('HTML_Template_','',$class) . '.php';
-            require_once 'HTML/Template/' . $filename;
+            //print_r($object);
+            
+            $classFilename = str_replace('html_quickform_','',$class) . '.php';
+            //echo "class $class fileme : $filename";
+            require_once 'HTML/QuickForm/' . $classFilename;
+            
         }
         return unserialize(file_get_contents($filename));
     }
