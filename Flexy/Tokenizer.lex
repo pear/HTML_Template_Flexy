@@ -348,7 +348,7 @@ FLEXY_MODIFIER      = [hur]
     
     // only allow 'xml'
     if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
-        return HTML_TEMPLATE_NONE;
+        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
     
     

@@ -1854,7 +1854,7 @@ case 14:
     $t = $this->yytext();
     // only allow 'xml'
     if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
-        return HTML_TEMPLATE_NONE;
+        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
     $this->value = HTML_Template_Flexy_Token::factory('Processing',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 

@@ -19,7 +19,7 @@ class HTML_Template_Flexy_Compiler_Regex {
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
     *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @return
+    *   @return   boolean (basically true all the time here)
     */
     function compile(&$flexy)
     {
