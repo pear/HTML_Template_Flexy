@@ -1,0 +1,65 @@
+html_template_flexy_token Object
+(
+    [token] => 
+    [value] => 
+    [line] => 
+    [close] => html_template_flexy_token Object
+        (
+            [token] => 
+            [value] => 
+            [line] => 
+            [close] => 
+            [children] => Array
+                (
+                )
+
+            [ignoreChildren] => 
+            [id] => 4
+        )
+
+    [children] => Array
+        (
+            [0] => 
+            [1] => html_template_flexy_token_text Object
+                (
+                    [token] => Text
+                    [value] => 
+
+
+
+                    [line] => 0
+                    [close] => 
+                    [children] => Array
+                        (
+                        )
+
+                    [ignoreChildren] => 
+                    [argTokens] => Array
+                        (
+                        )
+
+                    [id] => 2
+                )
+
+            [2] => html_template_flexy_token Object
+                (
+                    [token] => Comment
+                    [value] => <!-- Bugs: 739
+<td flexy:foreach="xxxx">xxx</td> 
+ {foreach:xxxx} {end:} 
+-->
+                    [line] => 6
+                    [close] => 
+                    [children] => Array
+                        (
+                        )
+
+                    [ignoreChildren] => 
+                    [id] => 3
+                )
+
+        )
+
+    [ignoreChildren] => 
+    [id] => 0
+)

@@ -1,0 +1,889 @@
+html_template_flexy_token Object
+(
+    [token] => 
+    [value] => 
+    [line] => 
+    [close] => html_template_flexy_token Object
+        (
+            [token] => 
+            [value] => 
+            [line] => 
+            [close] => 
+            [children] => Array
+                (
+                )
+
+            [ignoreChildren] => 
+            [id] => 36
+        )
+
+    [children] => Array
+        (
+            [0] => 
+            [1] => html_template_flexy_token_text Object
+                (
+                    [token] => Text
+                    [value] => 
+
+                    [line] => 0
+                    [close] => 
+                    [children] => Array
+                        (
+                        )
+
+                    [ignoreChildren] => 
+                    [argTokens] => Array
+                        (
+                        )
+
+                    [id] => 2
+                )
+
+            [2] => html_template_flexy_token_tag Object
+                (
+                    [token] => Tag
+                    [value] => 
+                    [line] => 1
+                    [close] => html_template_flexy_token_endtag Object
+                        (
+                            [token] => EndTag
+                            [value] => 
+                            [line] => 1
+                            [close] => 
+                            [children] => Array
+                                (
+                                )
+
+                            [ignoreChildren] => 
+                            [tag] => /H1
+                            [oTag] => /H1
+                            [attributes] => Array
+                                (
+                                )
+
+                            [ucAttributes] => Array
+                                (
+                                )
+
+                            [postfix] => 
+                            [prefix] => 
+                            [foreach] => 
+                            [startChildren] => 
+                            [id] => 5
+                        )
+
+                    [children] => Array
+                        (
+                            [0] => html_template_flexy_token_text Object
+                                (
+                                    [token] => Text
+                                    [value] => Example of function block definitions
+                                    [line] => 1
+                                    [close] => 
+                                    [children] => Array
+                                        (
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [argTokens] => Array
+                                        (
+                                        )
+
+                                    [id] => 4
+                                )
+
+                        )
+
+                    [ignoreChildren] => 
+                    [tag] => H1
+                    [oTag] => H1
+                    [attributes] => Array
+                        (
+                        )
+
+                    [ucAttributes] => Array
+                        (
+                        )
+
+                    [postfix] => 
+                    [prefix] => 
+                    [foreach] => 
+                    [startChildren] => 
+                    [id] => 3
+                )
+
+            [3] => html_template_flexy_token_text Object
+                (
+                    [token] => Text
+                    [value] => 
+
+
+
+                    [line] => 1
+                    [close] => 
+                    [children] => Array
+                        (
+                        )
+
+                    [ignoreChildren] => 
+                    [argTokens] => Array
+                        (
+                        )
+
+                    [id] => 6
+                )
+
+            [4] => html_template_flexy_token_tag Object
+                (
+                    [token] => Tag
+                    [value] => 
+                    [line] => 4
+                    [close] => html_template_flexy_token_endtag Object
+                        (
+                            [token] => EndTag
+                            [value] => 
+                            [line] => 8
+                            [close] => 
+                            [children] => Array
+                                (
+                                )
+
+                            [ignoreChildren] => 
+                            [tag] => /TABLE
+                            [oTag] => /table
+                            [attributes] => Array
+                                (
+                                )
+
+                            [ucAttributes] => Array
+                                (
+                                )
+
+                            [postfix] => 
+                            [prefix] => 
+                            [foreach] => 
+                            [startChildren] => 
+                            [id] => 19
+                        )
+
+                    [children] => Array
+                        (
+                            [0] => html_template_flexy_token_text Object
+                                (
+                                    [token] => Text
+                                    [value] => 
+
+                                    [line] => 4
+                                    [close] => 
+                                    [children] => Array
+                                        (
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [argTokens] => Array
+                                        (
+                                        )
+
+                                    [id] => 8
+                                )
+
+                            [1] => html_template_flexy_token_tag Object
+                                (
+                                    [token] => Tag
+                                    [value] => 
+                                    [line] => 5
+                                    [close] => html_template_flexy_token_endtag Object
+                                        (
+                                            [token] => EndTag
+                                            [value] => 
+                                            [line] => 7
+                                            [close] => 
+                                            [children] => Array
+                                                (
+                                                )
+
+                                            [ignoreChildren] => 
+                                            [tag] => /TR
+                                            [oTag] => /tr
+                                            [attributes] => Array
+                                                (
+                                                )
+
+                                            [ucAttributes] => Array
+                                                (
+                                                )
+
+                                            [postfix] => 
+                                            [prefix] => 
+                                            [foreach] => 
+                                            [startChildren] => 
+                                            [id] => 17
+                                        )
+
+                                    [children] => Array
+                                        (
+                                            [0] => html_template_flexy_token_tag Object
+                                                (
+                                                    [token] => Tag
+                                                    [value] => 
+                                                    [line] => 5
+                                                    [close] => html_template_flexy_token_endtag Object
+                                                        (
+                                                            [token] => EndTag
+                                                            [value] => 
+                                                            [line] => 7
+                                                            [close] => 
+                                                            [children] => Array
+                                                                (
+                                                                )
+
+                                                            [ignoreChildren] => 
+                                                            [tag] => /TD
+                                                            [oTag] => /td
+                                                            [attributes] => Array
+                                                                (
+                                                                )
+
+                                                            [ucAttributes] => Array
+                                                                (
+                                                                )
+
+                                                            [postfix] => 
+                                                            [prefix] => 
+                                                            [foreach] => 
+                                                            [startChildren] => 
+                                                            [id] => 16
+                                                        )
+
+                                                    [children] => Array
+                                                        (
+                                                            [0] => html_template_flexy_token_text Object
+                                                                (
+                                                                    [token] => Text
+                                                                    [value] => 
+    
+                                                                    [line] => 5
+                                                                    [close] => 
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [argTokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [id] => 11
+                                                                )
+
+                                                            [1] => html_template_flexy_token_tag Object
+                                                                (
+                                                                    [token] => Tag
+                                                                    [value] => 
+                                                                    [line] => 6
+                                                                    [close] => html_template_flexy_token_endtag Object
+                                                                        (
+                                                                            [token] => EndTag
+                                                                            [value] => 
+                                                                            [line] => 6
+                                                                            [close] => 
+                                                                            [children] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ignoreChildren] => 
+                                                                            [tag] => /FLEXY:FUNCTION
+                                                                            [oTag] => /flexy:function
+                                                                            [attributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ucAttributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [postfix] => 
+                                                                            [prefix] => 
+                                                                            [foreach] => 
+                                                                            [startChildren] => 
+                                                                            [id] => 14
+                                                                        )
+
+                                                                    [children] => Array
+                                                                        (
+                                                                            [0] => html_template_flexy_token_text Object
+                                                                                (
+                                                                                    [token] => Text
+                                                                                    [value] => this is the contents of test1
+                                                                                    [line] => 6
+                                                                                    [close] => 
+                                                                                    [children] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [ignoreChildren] => 
+                                                                                    [argTokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [id] => 13
+                                                                                )
+
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [tag] => FLEXY:FUNCTION
+                                                                    [oTag] => flexy:function
+                                                                    [attributes] => Array
+                                                                        (
+                                                                            [name] => "test1"
+                                                                        )
+
+                                                                    [ucAttributes] => Array
+                                                                        (
+                                                                            [NAME] => "test1"
+                                                                        )
+
+                                                                    [postfix] => 
+                                                                    [prefix] => 
+                                                                    [foreach] => 
+                                                                    [startChildren] => 
+                                                                    [id] => 12
+                                                                )
+
+                                                            [2] => html_template_flexy_token_text Object
+                                                                (
+                                                                    [token] => Text
+                                                                    [value] => 
+
+                                                                    [line] => 6
+                                                                    [close] => 
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [argTokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [id] => 15
+                                                                )
+
+                                                        )
+
+                                                    [ignoreChildren] => 
+                                                    [tag] => TD
+                                                    [oTag] => td
+                                                    [attributes] => Array
+                                                        (
+                                                        )
+
+                                                    [ucAttributes] => Array
+                                                        (
+                                                        )
+
+                                                    [postfix] => 
+                                                    [prefix] => 
+                                                    [foreach] => 
+                                                    [startChildren] => 
+                                                    [id] => 10
+                                                )
+
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [tag] => TR
+                                    [oTag] => tr
+                                    [attributes] => Array
+                                        (
+                                        )
+
+                                    [ucAttributes] => Array
+                                        (
+                                        )
+
+                                    [postfix] => 
+                                    [prefix] => 
+                                    [foreach] => 
+                                    [startChildren] => 
+                                    [id] => 9
+                                )
+
+                            [2] => html_template_flexy_token_text Object
+                                (
+                                    [token] => Text
+                                    [value] => 
+
+                                    [line] => 7
+                                    [close] => 
+                                    [children] => Array
+                                        (
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [argTokens] => Array
+                                        (
+                                        )
+
+                                    [id] => 18
+                                )
+
+                        )
+
+                    [ignoreChildren] => 
+                    [tag] => TABLE
+                    [oTag] => table
+                    [attributes] => Array
+                        (
+                            [flexy:if] => "false"
+                        )
+
+                    [ucAttributes] => Array
+                        (
+                            [FLEXY:IF] => "false"
+                        )
+
+                    [postfix] => 
+                    [prefix] => 
+                    [foreach] => 
+                    [startChildren] => 
+                    [id] => 7
+                )
+
+            [5] => html_template_flexy_token_text Object
+                (
+                    [token] => Text
+                    [value] => 
+
+                    [line] => 8
+                    [close] => 
+                    [children] => Array
+                        (
+                        )
+
+                    [ignoreChildren] => 
+                    [argTokens] => Array
+                        (
+                        )
+
+                    [id] => 20
+                )
+
+            [6] => html_template_flexy_token_tag Object
+                (
+                    [token] => Tag
+                    [value] => 
+                    [line] => 9
+                    [close] => html_template_flexy_token_endtag Object
+                        (
+                            [token] => EndTag
+                            [value] => 
+                            [line] => 14
+                            [close] => 
+                            [children] => Array
+                                (
+                                )
+
+                            [ignoreChildren] => 
+                            [tag] => /TABLE
+                            [oTag] => /table
+                            [attributes] => Array
+                                (
+                                )
+
+                            [ucAttributes] => Array
+                                (
+                                )
+
+                            [postfix] => 
+                            [prefix] => 
+                            [foreach] => 
+                            [startChildren] => 
+                            [id] => 35
+                        )
+
+                    [children] => Array
+                        (
+                            [0] => html_template_flexy_token_text Object
+                                (
+                                    [token] => Text
+                                    [value] => 
+
+                                    [line] => 9
+                                    [close] => 
+                                    [children] => Array
+                                        (
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [argTokens] => Array
+                                        (
+                                        )
+
+                                    [id] => 22
+                                )
+
+                            [1] => html_template_flexy_token_tag Object
+                                (
+                                    [token] => Tag
+                                    [value] => 
+                                    [line] => 10
+                                    [close] => html_template_flexy_token_endtag Object
+                                        (
+                                            [token] => EndTag
+                                            [value] => 
+                                            [line] => 13
+                                            [close] => 
+                                            [children] => Array
+                                                (
+                                                )
+
+                                            [ignoreChildren] => 
+                                            [tag] => /TR
+                                            [oTag] => /tr
+                                            [attributes] => Array
+                                                (
+                                                )
+
+                                            [ucAttributes] => Array
+                                                (
+                                                )
+
+                                            [postfix] => 
+                                            [prefix] => 
+                                            [foreach] => 
+                                            [startChildren] => 
+                                            [id] => 33
+                                        )
+
+                                    [children] => Array
+                                        (
+                                            [0] => html_template_flexy_token_tag Object
+                                                (
+                                                    [token] => Tag
+                                                    [value] => 
+                                                    [line] => 10
+                                                    [close] => html_template_flexy_token_endtag Object
+                                                        (
+                                                            [token] => EndTag
+                                                            [value] => 
+                                                            [line] => 13
+                                                            [close] => 
+                                                            [children] => Array
+                                                                (
+                                                                )
+
+                                                            [ignoreChildren] => 
+                                                            [tag] => /TD
+                                                            [oTag] => /td
+                                                            [attributes] => Array
+                                                                (
+                                                                )
+
+                                                            [ucAttributes] => Array
+                                                                (
+                                                                )
+
+                                                            [postfix] => 
+                                                            [prefix] => 
+                                                            [foreach] => 
+                                                            [startChildren] => 
+                                                            [id] => 32
+                                                        )
+
+                                                    [children] => Array
+                                                        (
+                                                            [0] => html_template_flexy_token_text Object
+                                                                (
+                                                                    [token] => Text
+                                                                    [value] => 
+   
+                                                                    [line] => 10
+                                                                    [close] => 
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [argTokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [id] => 25
+                                                                )
+
+                                                            [1] => html_template_flexy_token_tag Object
+                                                                (
+                                                                    [token] => Tag
+                                                                    [value] => 
+                                                                    [line] => 11
+                                                                    [close] => html_template_flexy_token_endtag Object
+                                                                        (
+                                                                            [token] => EndTag
+                                                                            [value] => 
+                                                                            [line] => 11
+                                                                            [close] => 
+                                                                            [children] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ignoreChildren] => 
+                                                                            [tag] => /FLEXY:FUNCTION
+                                                                            [oTag] => /flexy:function
+                                                                            [attributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ucAttributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [postfix] => 
+                                                                            [prefix] => 
+                                                                            [foreach] => 
+                                                                            [startChildren] => 
+                                                                            [id] => 27
+                                                                        )
+
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [tag] => FLEXY:FUNCTION
+                                                                    [oTag] => flexy:function
+                                                                    [attributes] => Array
+                                                                        (
+                                                                            [call] => "test1"
+                                                                        )
+
+                                                                    [ucAttributes] => Array
+                                                                        (
+                                                                            [CALL] => "test1"
+                                                                        )
+
+                                                                    [postfix] => 
+                                                                    [prefix] => 
+                                                                    [foreach] => 
+                                                                    [startChildren] => 
+                                                                    [id] => 26
+                                                                )
+
+                                                            [2] => html_template_flexy_token_text Object
+                                                                (
+                                                                    [token] => Text
+                                                                    [value] => 
+   
+                                                                    [line] => 11
+                                                                    [close] => 
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [argTokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [id] => 28
+                                                                )
+
+                                                            [3] => html_template_flexy_token_tag Object
+                                                                (
+                                                                    [token] => Tag
+                                                                    [value] => 
+                                                                    [line] => 12
+                                                                    [close] => html_template_flexy_token_endtag Object
+                                                                        (
+                                                                            [token] => EndTag
+                                                                            [value] => 
+                                                                            [line] => 12
+                                                                            [close] => 
+                                                                            [children] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ignoreChildren] => 
+                                                                            [tag] => /FLEXY:FUNCTION
+                                                                            [oTag] => /flexy:function
+                                                                            [attributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [ucAttributes] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [postfix] => 
+                                                                            [prefix] => 
+                                                                            [foreach] => 
+                                                                            [startChildren] => 
+                                                                            [id] => 30
+                                                                        )
+
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [tag] => FLEXY:FUNCTION
+                                                                    [oTag] => flexy:function
+                                                                    [attributes] => Array
+                                                                        (
+                                                                            [call] => Array
+                                                                                (
+                                                                                    [0] => "
+                                                                                    [1] => html_template_flexy_token_var Object
+                                                                                        (
+                                                                                            [token] => Var
+                                                                                            [value] => a_value
+                                                                                            [line] => 12
+                                                                                            [close] => 
+                                                                                            [children] => Array
+                                                                                                (
+                                                                                                )
+
+                                                                                            [ignoreChildren] => 
+                                                                                            [modifier] => 
+                                                                                        )
+
+                                                                                    [2] => "
+                                                                                )
+
+                                                                        )
+
+                                                                    [ucAttributes] => Array
+                                                                        (
+                                                                            [CALL] => Array
+                                                                                (
+                                                                                    [0] => "
+                                                                                    [1] => html_template_flexy_token_var Object
+                                                                                        (
+                                                                                            [token] => Var
+                                                                                            [value] => a_value
+                                                                                            [line] => 12
+                                                                                            [close] => 
+                                                                                            [children] => Array
+                                                                                                (
+                                                                                                )
+
+                                                                                            [ignoreChildren] => 
+                                                                                            [modifier] => 
+                                                                                        )
+
+                                                                                    [2] => "
+                                                                                )
+
+                                                                        )
+
+                                                                    [postfix] => 
+                                                                    [prefix] => 
+                                                                    [foreach] => 
+                                                                    [startChildren] => 
+                                                                    [id] => 29
+                                                                )
+
+                                                            [4] => html_template_flexy_token_text Object
+                                                                (
+                                                                    [token] => Text
+                                                                    [value] => 
+
+                                                                    [line] => 12
+                                                                    [close] => 
+                                                                    [children] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [ignoreChildren] => 
+                                                                    [argTokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [id] => 31
+                                                                )
+
+                                                        )
+
+                                                    [ignoreChildren] => 
+                                                    [tag] => TD
+                                                    [oTag] => td
+                                                    [attributes] => Array
+                                                        (
+                                                        )
+
+                                                    [ucAttributes] => Array
+                                                        (
+                                                        )
+
+                                                    [postfix] => 
+                                                    [prefix] => 
+                                                    [foreach] => 
+                                                    [startChildren] => 
+                                                    [id] => 24
+                                                )
+
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [tag] => TR
+                                    [oTag] => tr
+                                    [attributes] => Array
+                                        (
+                                        )
+
+                                    [ucAttributes] => Array
+                                        (
+                                        )
+
+                                    [postfix] => 
+                                    [prefix] => 
+                                    [foreach] => 
+                                    [startChildren] => 
+                                    [id] => 23
+                                )
+
+                            [2] => html_template_flexy_token_text Object
+                                (
+                                    [token] => Text
+                                    [value] => 
+
+                                    [line] => 13
+                                    [close] => 
+                                    [children] => Array
+                                        (
+                                        )
+
+                                    [ignoreChildren] => 
+                                    [argTokens] => Array
+                                        (
+                                        )
+
+                                    [id] => 34
+                                )
+
+                        )
+
+                    [ignoreChildren] => 
+                    [tag] => TABLE
+                    [oTag] => table
+                    [attributes] => Array
+                        (
+                        )
+
+                    [ucAttributes] => Array
+                        (
+                        )
+
+                    [postfix] => 
+                    [prefix] => 
+                    [foreach] => 
+                    [startChildren] => 
+                    [id] => 21
+                )
+
+        )
+
+    [ignoreChildren] => 
+    [id] => 0
+)

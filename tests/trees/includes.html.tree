@@ -1,0 +1,26 @@
+html_template_flexy_token Object
+(
+    [token] => 
+    [value] => 
+    [line] => 
+    [close] => html_template_flexy_token Object
+        (
+            [token] => 
+            [value] => 
+            [line] => 
+            [close] => 
+            [children] => Array
+                (
+                )
+
+            [ignoreChildren] => 
+            [id] => 1
+        )
+
+    [children] => Array
+        (
+        )
+
+    [ignoreChildren] => 
+    [id] => 0
+)
