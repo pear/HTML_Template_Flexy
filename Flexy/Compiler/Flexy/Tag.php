@@ -76,7 +76,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         $filename = 'HTML/Template/Flexy/Compiler/Flexy/' . ucfirst(strtolower($type)) . '.php';
         if (!HTML_Template_Flexy_Compiler_Flexy_Tag::fileExistsInPath($filename)) {
-            return HTML_Template_Flexy_Compiler_Flexy_Tag::factory('Tag',&$compiler);
+            return HTML_Template_Flexy_Compiler_Flexy_Tag::factory('Tag',$compiler);
         }
         // if we dont have a handler - just use the basic handler.
         if (!file_exists(dirname(__FILE__) . '/'. ucfirst(strtolower($type)) . '.php')) {

@@ -64,29 +64,15 @@
   </maintainers>
  
       <release>
-     <version>1.2.0</version>
+     <version>1.2.1</version>
       <date>2004-12-28</date>
       <notes><![CDATA[
-      Minor Feature Release
-        phpt testsuite has replaced previous CVS diff tests. (and in turn picked up
-        a few bugs)
-        
+      Minor Bugfix Release
+          
         
        Features / Fixes
-        #---- - Nested included templates <flexy:include src="...."/> inherit parent variables.
-        #---- - Fixed PHP code detection 
-        #---- - option['allowPHP'] = 'delete', will just remove php code, rather than 
-                barf with error, or just add it.
-        #---- - CDATA sections supported, with limited flexy tags (eg. foreach and variables only)
-        #---- - Plugins now show correct warning when loading fails.
-        #---- - Plugins as modifiers work correctly 
-                (fixed previous bug if they started with h/r/t etc. they got ignored.)
-                A very nice introduction to plugin's exists here:
-                http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
-                
-        #3129 - add note that setRequired/setError/freeze are depreciated 
-                (they should really be examples, that end user can modify, rather than a method)
-        #3145 - fixed missing ; in an error message.
+        #---- - Pass by reference warning fixed.
+        
         
         
         
@@ -256,6 +242,39 @@
      
    <changelog>
    
+    <release>
+     <version>1.2.0</version>
+      <date>2004-12-28</date>
+      <notes><![CDATA[
+      Minor Feature Release
+        phpt testsuite has replaced previous CVS diff tests. (and in turn picked up
+        a few bugs)
+        
+        
+       Features / Fixes
+        #---- - Nested included templates <flexy:include src="...."/> inherit parent variables.
+        #---- - Fixed PHP code detection 
+        #---- - option['allowPHP'] = 'delete', will just remove php code, rather than 
+                barf with error, or just add it.
+        #---- - CDATA sections supported, with limited flexy tags (eg. foreach and variables only)
+        #---- - Plugins now show correct warning when loading fails.
+        #---- - Plugins as modifiers work correctly 
+                (fixed previous bug if they started with h/r/t etc. they got ignored.)
+                A very nice introduction to plugin's exists here:
+                http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
+                
+        #3129 - add note that setRequired/setError/freeze are depreciated 
+                (they should really be examples, that end user can modify, rather than a method)
+        #3145 - fixed missing ; in an error message.
+        
+        
+        
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+     
+     
       <release>
      <version>1.1.2</version>
       <date>2004-12-28</date>
