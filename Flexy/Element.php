@@ -205,7 +205,7 @@ class HTML_Template_Flexy_Element {
      
     function setValue($value) {
         // store the value in all situations
-        $this->value = htmlspecialchars($value);
+        $this->value = $value;
         
         
         switch ($this->tag) {
@@ -321,7 +321,7 @@ class HTML_Template_Flexy_Element {
                 }
                 return;
             case 'textarea':
-                $this->children = array($value);
+                $this->children = array(htmlspecialchars($value));
                 return;
             case '':  // dummy objects.
                 $this->value = $value;
