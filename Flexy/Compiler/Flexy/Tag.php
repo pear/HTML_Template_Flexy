@@ -900,42 +900,59 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     {
         
         // does it contain any flexy tags??
-        foreach($this->element->children as $obj) {
-            if (!is_a($obj,'HTML_Template_Flexy_Token_Tag')) {
-                continue;
-            }
-            if ($obj->tag  != 'menupopup') {
-                continue;
-            }
-            foreach ($obj->children as $iobj) {
-                if (!is_a($iobj,'HTML_Template_Flexy_Token_Tag')) {
-                    continue;
-                }
-                if ($iobj->tag  != 'menuitem') {
-                    continue;
-                }
-                if ($iobj->getAttribute('FLEXY:FOREACH')) {
-                    return false;
-                }
-                if ($iobj->getAttribute('FLEXY:IF')) {
-                    return false;
-                }
-                // Now do any of the attributes contain vars?
-                foreach($iobj->attributes as $k=>$v) {
-                    if (is_array($v) || is_object($v)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        
+        if ($this->elementUsesDynamic($this->element)) {
+            return false;
+        } 
         
         return $this->compiler->appendPhp(
             $this->getElementPhp( $this->element->getAttribute('ID')));
     }
+     /**
+    * Recursively search for any flexy:if flexy:foreach or {xxxx} tags inside tags..
+    *
+    * @param    HTML_Template_Flexy_Token   element to check.
+    * @return   boolean true if it finds a  dynamic tag.
+    * @access   public
+    */
+  
     
+    function elementUsesDynamic($e) {
+        if (!is_a($e,'HTML_Template_Flexy_Token_Var')) {
+            return true;
+        }
+        if (!is_a($e,'HTML_Template_Flexy_Token_Foreach')) {
+            return true;
+        }
+        if (!is_a($e,'HTML_Template_Flexy_Token_If')) {
+            return true;
+        }
+        if (!is_a($e,'HTML_Template_Flexy_Token_Method')) {
+            return true;
+        }
+        if (!is_a($e,'HTML_Template_Flexy_Token_Tag')) {
+            return false;
+        }
+        if  ($e->getAttribute('FLEXY:IF')  !== false) {
+            return true;
+        }
+        if  ($e->getAttribute('FLEXY:FOREACH')  !== false) {
+            return true;
+        }   
+        foreach($iobj->attributes as $k=>$v) {
+            if (is_array($v) || is_object($v)) {
+                return true;
+            }
+        }
+        foreach($this->children as $c) {
+            if ($this->elementHasDynamic($c)) {
+                return true;
+            }
+        }
+        return false;
+        
+         
     
-    
+    }
       
     
 
