@@ -64,13 +64,29 @@
   </maintainers>
  
       <release>
-     <version>1.1.2</version>
+     <version>1.2.0</version>
       <date>2004-12-28</date>
       <notes><![CDATA[
-      Minor BugFix Release
+      Minor Feature Release
+        phpt testsuite has replaced previous CVS diff tests. (and in turn picked up
+        a few bugs)
+        
         
        Features / Fixes
-        #3041 - Removed Warning raised during compilation.
+        #---- - Nested included templates <flexy:include src="...."/> inherit parent variables.
+        #---- - Fixed PHP code detection 
+        #---- - option['allowPHP'] = 'delete', will just remove php code, rather than 
+                barf with error, or just add it.
+        #---- - CDATA sections supported, with limited flexy tags (eg. foreach and variables only)
+        #---- - Plugins now show correct warning when loading fails.
+        #---- - Plugins as modifiers work correctly 
+                (fixed previous bug if they started with h/r/t etc. they got ignored.)
+        
+        #3129 - add note that setRequired/setError/freeze are depreciated 
+                (they should really be examples, that end user can modify, rather than a method)
+        #3145 - fixed missing ; in an error message.
+        
+        
         
         
      ]]></notes>
@@ -174,11 +190,32 @@
           </dir>
         </dir>
         <dir name="tests" role="test">
-          <file>test.php</file>
-          <file>treeTest.php</file>
+          
+          <file>testsuite.php</file>
+          <file>test_blocks.html.phpt</file>
+          <file>test_bug_2959.html.phpt</file>
+          <file>test_conditions.html.phpt</file>
+          <file>test_error_foreach.html.phpt</file>
+          <file>test_flexy_tojavascript.html.phpt</file>
+          <file>test_forms.html.phpt</file>
+          <file>test_function.html.phpt</file>
+          <file>test_globals.html.phpt</file>
+          <file>test_image_view.html.phpt</file>
+          <file>test_include.html.phpt</file>
+          <file>test_javascript.html.phpt</file>
+          <file>test_looping.html.phpt</file>
+          <file>test_methods.html.phpt</file>
+          <file>test_namespaces.html.phpt</file>
+          <file>test_plugin_modifiers.html.phpt</file>
+          <file>test_raw_php.html.phpt</file>
+          <file>test_raw_text.html.phpt</file>
+          <file>test_style.html.phpt</file>
+          <file>test_variables.html.phpt</file>
+          
 
           <dir name="templates" role="test">
             <file>blocks.html</file> 
+            <file>bug_2959.html</file>
             <file>conditions.html</file> 
             <file>error_foreach.html</file> 
             <file>flexy_tojavascript.html</file> 
@@ -186,13 +223,15 @@
             <file>function.html</file> 
             <file>globals.html</file> 
             <file>image_view.html</file> 
-            <file>includes.html</file> 
+            <file>include.html</file> 
             <file>javascript.html</file> 
             <file>looping.html</file> 
             <file>methods.html</file> 
             <file>namespaces.html</file> 
+            <file>plugin_modifiers.html</file> 
             <file>raw_php.html</file> 
             <file>raw_text.html</file> 
+            <file>style.html</file>
             <file>variables.html</file> 
           </dir>
           <dir name="smarty" role="test">
@@ -215,6 +254,21 @@
      
    <changelog>
    
+      <release>
+     <version>1.1.2</version>
+      <date>2004-12-28</date>
+      <notes><![CDATA[
+      Minor BugFix Release
+        
+       Features / Fixes
+        #3041 - Removed Warning raised during compilation.
+        
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+    
+    
       <release>
      <version>1.1.1</version>
       <date>2004-12-22</date>
