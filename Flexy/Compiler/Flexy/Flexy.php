@@ -137,7 +137,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
         return $this->compiler->appendPHP( "\n".
                 "\$x = new HTML_Template_Flexy(\$this->options);\n".
                 "\$x->compile('{$arg}');\n".
-                "include $x->compiledTemplate;\n"
+                "include \$x->compiledTemplate;\n"
             );
     
     }
