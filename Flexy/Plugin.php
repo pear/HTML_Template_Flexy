@@ -93,8 +93,8 @@ class HTML_Template_Flexy_Plugin {
                     continue;
                 }
                 $cname = $file;
-                require_once 'HTML/Template/Flexy/Plugins/'. $cname . '.php';
-                $class = "HTML_Template_Flexy_Plugins_{$cname}";
+                require_once 'HTML/Template/Flexy/Plugin/'. $cname . '.php';
+                $class = "HTML_Template_Flexy_Plugin_{$cname}";
                 $this->plugins[$class] = new $class;
                 $this->plugins[$class]->flexy = &$this->flexy;
             }
