@@ -748,22 +748,6 @@ FLEXY_MODIFIER      = ({NAME_START_CHARACTER}+)
 }
 
 
-// plan is to remove these - using a object method solves it anyway..
-
-<YYINITIAL>"{include:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Include', substr($this->yytext(),9,-1),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
-}
-
-// needs to deal with \# - excaped #'s
-
-<YYINITIAL>"{include:#"{FLEXY_LITERAL}"#}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Include', substr($this->yytext(),9,-1),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
-}
-
-
-
 // variables
 // need to work out how to do this with attribute values..
 
