@@ -9,11 +9,20 @@
   rather than regex'es, making it possible to do things like ASP.net or Cold Fusion tags. 
   However, it still has a very simple set of goals.
 
-  - Very Simple API, easy to learn...
-  - Targeted at Object based systems - default behavior is to display object variables
-  - Designed to allow the documentation of available variables using PEAR standards, eg. PHPDoc comments around object variables
-  - Ability to edit the templates in WYSIWYG HTML editors, without breaking the tags
-  - Extremely Fast, for normal variables and looping (or blocks), both for designing and runtime.
+  - Very Simple API, 
+     o easy to learn...
+     o prevents to much logic going in templates
+  - Easy to write document'able code
+     o By using object vars for a template rather than 'assign', you 
+       can use phpdoc comments to list what variable you use.
+  - Editable in WYSIWYG editors
+     o you can create full featured templates, that doesnt get broken every time you edit with 
+       Dreamweaver(tm) or Mozzila editor
+     o Uses namespaced attributes to add looping/conditionals  
+  - Extremely Fast, 
+     o runtime is at least 4 time smaller than most other template engines (eg. Smarty)
+     o uses compiled templates so many times faster on blocks and loops than 
+       than Regex templates (eg. IT/phplib)
   - Full dynamic element support (like ASP.NET), so you can pick elements to replace at runtime
   
   Features:
@@ -27,7 +36,7 @@
   - FORM to HTML_Template_Flexy_Element's
   - replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
     use FLEXY:IGNORE (inherited) and FLEXY:IGNOREONLY (single) to prevent replacements
-  - FLEXY:START/FLEXY:STARTCHILDREN tags to define where output starts/finishes
+  - FLEXY:START/FLEXY:STARTCHILDREN tags to define where template starts/finishes
   - support for urlencoded braces {} in HTML attributes.  
   - documentation in the pear manual
   
@@ -47,13 +56,46 @@
  
 
     <release>
-     <version>0.6.5</version>
-      <date>2004-02-01</date>
+     <version>0.7</version>
+      <date>2004-04-03</date>
       <notes><![CDATA[
+      
+      Last Beta release - (eg. it's a RC Release - next one will be stable!!! hopefully)
+      
+      
       
       Minor Bugfix 
         - fixed bug #643 (compile incorrectly tests for string on windows.)
-      
+        - fixed bug #615 constructor can not return errors 
+         * check for compileDir isDir is in the compile() anyway..
+        - fix bug 1120: remove necessity to use flexy:ignoreonly, 
+          * if a input tag has {variable} the engine assumes you dont want use a flexy_element.
+        - fix bug #809 - extra minuses in comments
+          (too may ---> caused problems )  
+        - fix bug #874 (literals with commas in flexy:if)
+          flexy:if=(#aaa,bbb#) correctly seen as a single attribute
+        - fix bug 739 - syntax checking on foreach
+          flexy:foreach="singlevalue" now flagged as error.
+        - /flexy:include and toJavascript closers now correctly ignored.
+        - fix #856 - fix get_class usage.
+        - Fix bug when too many closing tags could zero the stack and delete parts of the template.
+       
+       
+       
+      New Features
+        - config option templateDirOrder=reverse, allows you to prefer the first found template,
+          rather than the last found template (when using theme type configurations)
+        - Engine uses File_Gettext if gettext is not found. (or textdomain is set.)
+        - Provisional Smarty to Flexy template convertor
+        - Provisional Smarty Assign API emulator added.
+        - strict option 
+          so variable can emit errors if they are not defined.
+        - multiSource option 
+          for enabling themes type systems, where you can override the default template folder
+          with your own custom designs.
+        
+
+         
       Behaviour changed
         - templateDir can be an array, or string seperated by the system path seperatory
         (; on windows,: on unix)
@@ -62,7 +104,12 @@
         - If you use multiple paths in the template_dir, then the path will be modified to
         write to {compileDir}/{basename(actualTemplateDir)}_{md5(actualTemplateDir)}/...template..
         
-
+        - 
+        
+  
+       
+       
+         
         
       ]]></notes>
       <state>beta</state>
@@ -80,6 +127,8 @@
                 <file>Element.php</file>
                 <file>Factory.php</file>
                 
+                <!-- This is alpha (do not depend on it yet.) -->
+                <file>SmartyEmulator.php</file>
                 
                 <!-- a compile all script -->
                 <file>compileAll.php</file>
@@ -106,11 +155,13 @@
                 
                 <dir name="Compiler" role="php">
                 
+                
+                
                   <!-- The Standard Compiler -->
                   <file>Standard.php</file>
                   <dir name="Standard">
                     <file>Tag.php</file>
-                    <file>Flexy.php</file>
+                    <file>Flexy.php</file> <!
                     
                   </dir>
                   
@@ -125,6 +176,13 @@
                       <file>Xml.php</file>
                       <file>Math.php</file>
                   </dir>
+                  
+                  <!-- The Smarty Convertor code. (alpha) -->
+                  <!-- see examples/smarty in cvs -->
+                  <file>SmartyEmulator.php</file> 
+                  
+                  
+                  
                 </dir>
             </dir>
         </dir>
@@ -132,28 +190,13 @@
    <deps>
       <dep type="php" rel="ge" version="4.3"/>
       <dep type="pkg" rel="ge" version="1.1.0" optional="yes">HTML_Javascript</dep>
+      <dep type="pkg" rel="ge" version="0.2.0" optional="yes">File_Gettext</dep>
     </deps>
 
    <changelog>
    
    
-
-    <release>
-     <version>0.6.4</version>
-      <date>2004-01-24</date>
-      <notes><![CDATA[
-      
-      Minor Bugfix 
-        - fixed bug #615 constructor can not return errors 
-         * check for compileDir isDir is in the compile() anyway..
-         
-        
-      ]]></notes>
-      <state>beta</state>
-     </release>
-     
-   
-   
+ 
     <release>
      <version>0.6.3</version>
       <date>2004-01-21</date>
