@@ -39,19 +39,21 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY'] = array();
 *  Have a look at the package description for details.
 *
 * usage: 
-*
-* // $options can be blank if so, it is read from 
-* // PEAR::getStaticProperty('HTML_Template_Flexy','options');
 * $template = new HTML_Template_Flexy($options);
-* 
 * $template->compiler('/name/of/template.html');
+* $data =new StdClass
+* $data->text = 'xxxx';
+* $template->outputObject($data,$elements)
 *
-* // $this - should be a class whose variable are used
-* // in the template eg. $this->xxx maps to {xxx}
-* // $elements is an array of HTML_Template_Flexy_Elements
-* // eg. array('name'=> new HTML_Template_Flexy_Element('',array('value'=>'fred blogs'));
+* Notes:
+* $options can be blank if so, it is read from 
+* PEAR::getStaticProperty('HTML_Template_Flexy','options');
+*
+* the first argument to outputObject is an object (which could even be an 
+* associateve array cast to an object) - I normally send it the controller class.
+* the seconde argument '$elements' is an array of HTML_Template_Flexy_Elements
+* eg. array('name'=> new HTML_Template_Flexy_Element('',array('value'=>'fred blogs'));
 * 
-* $template->outputObject($this,$elements)
 *
 *
 *
@@ -63,21 +65,24 @@ class HTML_Template_Flexy
     /*on 
     *   @var    array   $options    the options for initializing the template class
     */
-    var $options = array(   'compileDir'    =>  '',      // where do you want to write to..
-                            'templateDir'   =>  '',     // where are your templates
-                            'locale'        => 'en',    // works with gettext
-                            'forceCompile'  =>  false,  // only suggested for debugging
+    var $options = array(   'compileDir'    =>  '',         // where do you want to write to..
+                            'templateDir'   =>  '',         // where are your templates
+                            'locale'        => 'en',        // works with gettext
+                            'forceCompile'  =>  false,      // only suggested for debugging
 
-                            'debug'         => false,   // prints a few errors
+                            'debug'         => false,       // prints a few messages
                             
-                            'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
-                            'allowPHP'      => false,   // allow PHP in template
-                            'compiler'      => 'Standard', // which compiler to use.
-                            'compileToString' => false,    // should the compiler return a string 
+                            'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
+                            'allowPHP'      => false,       // allow PHP in template
+                            'compiler'      => 'Standard',  // which compiler to use.
+                            'compileToString' => false,     // should the compiler return a string 
                                                             // rather than writing to a file.
-                            'filters'       => array(),    // used by regex compiler..
+                            'filters'       => array(),     // used by regex compiler.
                             'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00
-                            'flexyIgnore'   => 0        // turn on/off the tag to element code
+                            'flexyIgnore'   => 0,           // turn on/off the tag to element code
+                            'strict'        => false,       // All elements in the template must be defined !
+                            'multiSource'   => false,       // Allow same template to exist in multiple places
+                                                            // So you can have user themes....
                         );
 
     
@@ -131,11 +136,13 @@ class HTML_Template_Flexy
     
      
     /**
-    * Array of HTML_elements to merge with form
+    * Array of HTML_elements which is displayed on the template
+    * 
+    * Technically it's private (eg. only the template uses it..)
     * 
     *
     * @var array of  HTML_Template_Flexy_Elements
-    * @access public
+    * @access private
     */
     var $elements = array();
     /**
@@ -202,39 +209,44 @@ class HTML_Template_Flexy
             echo "output $this->compiledTemplate<BR>";
         }
   
-        // this may disappear later it's a BC fudge to try and deal with 
-        // the old way of setting $this->elements to be merged.
-        // the correct behavior is to use the extra field in outputObject.
+        // this may disappear later it's a Backwards Compatibility fudge to try 
+        // and deal with the first stupid design decision to not use a second argument
+        // to the method.
        
         if (count($this->elements) && !count($elements)) {
             $elements = $this->elements;
         }
-       
+        // end depreciated code
+        
+        
         $this->elements = $this->getElements();
         
-        // overlay elements..
-        //echo "<PRE>"; print_R($this->elements);
+        // Overlay values from $elements to $this->elements (which is created from the template)
+        // Remove keys with no corresponding value.
         foreach($elements as $k=>$v) {
+            // Remove key-value pair from $this->elements if hasn't a value in $elements.
             if (!$v) {
                 unset($this->elements[$k]);
             }
+            // Add key-value pair to $this->$elements if it's not there already.
             if (!isset($this->elements[$k])) {
                 $this->elements[$k] = $v;
                 continue;
             }
+            // Call the clever element merger - that understands form values and 
+            // how to display them...
             $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
         }
      
       
         
         // we use PHP's error handler to hide errors in the template.
-        // this may be removed later, or replace with
-        // options['strict'] - so you have to declare
-        // all variables
+        // use $options['strict'] - if you want to force declaration of
+        // all variables in the template
         
         
         $_error_reporting = false;
-        if (!$this->options['debug']) {
+        if (!$this->options['strict']) {
             $_error_reporting = error_reporting(E_ALL ^ E_NOTICE);
         }
         if (!is_readable($this->compiledTemplate)) {
@@ -245,7 +257,7 @@ class HTML_Template_Flexy
         
         include($this->compiledTemplate);
         
-        // restore error handler.
+        // Return the error handler to its previous state. 
         
         if ($_error_reporting !== false) {
             error_reporting($_error_reporting);
@@ -302,13 +314,8 @@ class HTML_Template_Flexy
     *   @param      boolean $fixForMail - replace ?>\n with ?>\n\n
     *   @return    boolean true on success. false on failure..
     */
-    
-    
-    
     function compile( $file )
     {
-         
-        
         if (!$file) {
             PEAR::raiseError('HTML_Template_Flexy::compile no file selected',null,PEAR_ERROR_DIE);
         }
@@ -318,13 +325,13 @@ class HTML_Template_Flexy
         }
         
         
-        /** ---------- Lets start off by finding the file to compile.. -----*/
+        //Remove the slash if there is one in front, just to be safe.
         $file = ltrim($file,DIRECTORY_SEPARATOR);
           
         $parts = array();
         $tmplDirUsed = false;
         
-        // PART A mulitlanguage support: 
+        // PART A mulitlanguage support: ( part B is gettext support in the engine..) 
         //    - user created language version of template.
         //    - compile('abcdef.html') will check for compile('abcdef.en.html') 
         //       (eg. when locale=en)
@@ -349,15 +356,14 @@ class HTML_Template_Flexy
                 if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
                     continue;
                 }
-                // This code would break the idea of using  override templates (eg. themes)... 
-                // eg. templateDir => array('/somdir/original_templates','/somdir/modified_for_this_project'),
-                /* 
-                if ($this->currentTemplate  !== false) {
+                 
+                    
+                if (!$this->options['multiSource'] && ($this->currentTemplate  !== false)) {
                     return PEAR::raiseError("You have more than one template Named {$file} in your paths, found in both".
                         "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  null, PEAR_ERROR_DIE);
                     
                 }
-                */
+                
                 $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR . $file;
                 $tmplDirUsed = $tmplDir;
             }
@@ -370,26 +376,23 @@ class HTML_Template_Flexy
         
         
         
-        /** now for the compile target 
+        // now for the compile target 
         
-        If you are working with mulitple source folders the template folder will be:
-        compiled_tempaltes/{templatedir_basename}_{md5_of_dir}/
-        
-        */
-        
+        //If you are working with mulitple source folders and $options['multiSource'] is set
+        //the template folder will be:
+        // compiled_tempaltes/{templatedir_basename}_{md5_of_dir}/
         
         
-        
-        
-        $compileSuffix = count($this->options['templateDir']) > 1 ? 
+        $compileSuffix = ((count($this->options['templateDir']) > 1) && $this->options['multiSource']) ? 
              DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
+        
         
         $compileDest = @$this->options['compileDir'];
         
         $isTmp = false;
-        // use a default compile dir if none set.. 
+        // Use a default compile directory if one has not been set. 
         if (!@$compileDest) {
-            // use session.temp + 'compiled_templates_' + md5
+            // Use session.save_path + 'compiled_templates_' + md5(of sourcedir)
             $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
             if (!file_exists($compileDest)) {
                 require_once 'System.php';
@@ -400,41 +403,27 @@ class HTML_Template_Flexy
         }
         
          
-        // remove the slash if there is one in front, just to be clean
-      
-        $directory = dirname( $file );
-        $filename = basename($file);
-
         
-
-        // extract dirname to create directori(es) in compileDir in case they dont exist yet
-        // we just keep the directory structure as the application uses it, so we dont get into conflict with names
-        // i dont see no reason for hashing the directories or the filenames
+        // we generally just keep the directory structure as the application uses it,
+        // so we dont get into conflict with names
+        // if we have multi sources we do md5 the basedir..
         
        
         
-        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
-        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
-        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.elements.serial';
-        
-        //print_r( $this->compiledTemplate );
-        
+        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.'.$this->options['locale'].'.php';
+        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.gettext.serial';
+        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.elements.serial';
+          
         $recompile = false;
-        if( @$this->options['forceCompile'] ) {
+        // we only compile if not uptodate or forced to.
+        
+        if( @$this->options['forceCompile'] || !$this->isUpToDate() ) {
             $recompile = true;
-        }
-
-        if( $recompile==false )  {                    // if recompile is true dont bother to check if template has changed
-            if( !$this->isUpToDate() ) {                 // check if the template has changed
-                $recompile = true;
-            }
-        }
-        
-        
-        
-        if(! $recompile )  {             // or any of the config files
+        } else {
             return true;
+
         }
+        
         
         
         
@@ -444,12 +433,12 @@ class HTML_Template_Flexy
                             null, PEAR_ERROR_DIE);
         }
         
-        if (!file_exists($compileDest . $compileSuffix . DIRECTORY_SEPARATOR . $directory)) {
+        if (!file_exists(dirname($this->compiledTemplate))) {
             require_once 'System.php';
-            System::mkdir(array('-p','-m', 0770, $compileDest . $compileSuffix . DIRECTORY_SEPARATOR . $directory));
+            System::mkdir(array('-p','-m', 0770, dirname($this->compiledTemplate)));
         }
          
-        // compile it..
+        // Compile the template in $file. 
         
         require_once 'HTML/Template/Flexy/Compiler.php';
         $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
@@ -461,7 +450,7 @@ class HTML_Template_Flexy
 
      /**
     *  compiles all templates
-    *  used for offline batch compilation (eg. if your server doesnt have write access to the filesystem)
+    *  Used for offline batch compilation (eg. if your server doesn't have write access to the filesystem).
     *
     *   @access     public
     *   @author     Alan Knowles <alan@akbkhome.com>
@@ -499,22 +488,16 @@ class HTML_Template_Flexy
     *   @access     private
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
-    *   @param      string      $fileToCheckAgainst if given this file is checked if it is newer than the compiled template
-    *                                               this is useful if for example only an xml-config file has changed but not the
-    *                                               template itself
     *   @return     boolean     true if it is still up to date
     */
-    function isUpToDate( $fileToCheckAgainst='' )
+    function isUpToDate()
     {
-        if( $fileToCheckAgainst == '' ) {
-            $checkFile = $this->currentTemplate;
-        } else {
-            $checkFile = $fileToCheckAgainst;
-        }
-
+        // Check against the template in the specified file (if it exists), or if none is specified, the current template.
+        
         if( !file_exists( $this->compiledTemplate ) ||
-            filemtime( $checkFile ) != filemtime( $this->compiledTemplate )
-          ) {
+            filemtime( $$this->currentTemplate ) != filemtime( $this->compiledTemplate )
+          ) 
+        {
             return false;
         }
 
@@ -522,12 +505,7 @@ class HTML_Template_Flexy
     }
 
       
-    
-     
-    
-    
-    
-     /**
+    /**
     *   if debugging is on, print the debug info to the screen
     *
     *   @access     public
@@ -547,28 +525,30 @@ class HTML_Template_Flexy
      
     /**
      * A general Utility method that merges HTML_Template_Flexy_Elements
-     
+     * Static method - no native debug avaiable..
      *
      * @param    HTML_Template_Flexy_Element   $original  (eg. from getElements())
      * @param    HTML_Template_Flexy_Element   $new (with data to replace/merge)
      * @return   HTML_Template_Flexy_Element   the combined/merged data.
+     * @static
      * @access   public
      */
      
     function mergeElement($original,$new)
     {
      
-        //echo "<PRE>MERGING ORIGINAL with NEW\n";print_r($original);print_r($new);
-        // changing tags.. - should this be valid?
-        // hidden is one use of this....
+        // no original - return new
         if (!$original) {
             return $new;
         }
-        
+        // no new - return original
         if (!$new) {
             return $original;
         }
-        
+        // If the properties of $original differ from those of $new and 
+        // they are set on $new, set them to $new's. Otherwise leave them 
+        // as they are.
+
         if ($new->tag && ($new->tag != $original->tag)) {
             $original->tag = $new->tag;
         }
@@ -576,8 +556,6 @@ class HTML_Template_Flexy
         if ($new->override !== false) {
             $original->override = $new->override;
         }
-        //if $from is not an object:
-        // then it's a value set....
         
         if (count($new->children)) {
             //echo "<PRE> COPY CHILDREN"; print_r($from->children);
@@ -590,10 +568,11 @@ class HTML_Template_Flexy
                 $original->attributes[$key] = $value;
             }
         }
+        // originals never have prefixes or suffixes..
         $original->prefix = $new->prefix;
         $original->suffix = $new->suffix;  
+
         if ($new->value !== null) {
-            //echo "<PRE>set";print_r($original); print_r($new->value);
             $original->setValue($new->value);
         } 
        
@@ -605,9 +584,13 @@ class HTML_Template_Flexy
     /**
     * Get an array of elements from the template
     *
-    * All form elements and anything marked as dynamic are converted in to elements
-    * (simliar to XML_Tree_Node) - you can then modify or merge them at the output stage
- 
+    * All <form> elements (eg. <input><textarea) etc.) and anything marked as 
+    * dynamic  (eg. flexy:dynamic="yes") are converted in to elements
+    * (simliar to XML_Tree_Node) 
+    * you can use this to build the default $elements array that is used by
+    * outputObject() - or just create them and they will be overlayed when you
+    * run outputObject()
+    *
     *
     * @return   array   of HTML_Template_Flexy_Element sDescription
     * @access   public
