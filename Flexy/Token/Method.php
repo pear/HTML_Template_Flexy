@@ -92,7 +92,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     * @see parent::toString(), $this->pullState()
     */
     
-    function toString($var = false) {
+    function toString() {
 
         
         // ignore modifier at present!!
