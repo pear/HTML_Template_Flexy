@@ -20,7 +20,7 @@
 //
 //  Base Compiler Class
 //  Standard 'Original Flavour' Flexy compiler
-.
+
 /*------------------------------------------------------------------------------------------
                                         NOTICE: 
                              THIS COMPILER IS DEPRECIATED 
