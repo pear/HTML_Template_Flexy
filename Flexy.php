@@ -119,7 +119,7 @@ class HTML_Template_Flexy
                                         // changes href="images/xxx" to href="test1/images/xxx"
                                         // and src="js/xxx.js" to src="test1/js/xxx.js"
                                         
-        'compiler'      => 'Standard',  // which compiler to use.
+        'compiler'      => 'Standard',  // which compiler to use. (Standard,Regex, Raw)
         'compileToString' => false,     // should the compiler return a string 
                                         // rather than writing to a file.
         'privates'      => false,       // allow access to _variables (eg. suido privates
@@ -431,6 +431,15 @@ class HTML_Template_Flexy
                 implode("<BR>",$this->options['templateDir']) ,
                 HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS, $this->options['fatalError']);
         }
+        
+        
+        /* Savant compatible compiler */
+        
+        if ($this->options['compiler'] == 'Raw') {
+            $this->compiledTemplate = $this->currentTemplate;
+            return true;
+        }
+        
         
         
         
