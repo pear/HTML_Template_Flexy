@@ -228,7 +228,7 @@ class HTML_Template_Flexy_Element {
     function setValue($value) {
         // store the value in all situations
         $this->value = $value;
-        $tag = $this->tag;
+        $tag = strtolower($this->tag);
         if (strpos($tag,':') !==  false) {
             $bits = explode(':',$tag);
             $tag = $bits[1];
@@ -349,7 +349,9 @@ class HTML_Template_Flexy_Element {
             case '':  // dummy objects.
                 $this->value = $value;
                 return;
-            case 'menuitem':
+                
+            // XUL elements
+            case 'menulist':
                 require_once 'HTML/Template/Flexy/Element/Xul.php';
                 HTML_Template_Flexy_Element_Xul::setValue($this,$value);
                 return ;
@@ -393,7 +395,7 @@ class HTML_Template_Flexy_Element {
         }
         
         
-        $tag = '';
+        $tag = strtolower($this->tag);
         $namespace = '';
         if (false !== strpos($this->tag, ':')) {
             

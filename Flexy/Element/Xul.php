@@ -54,7 +54,7 @@ class HTML_Template_Flexy_Element_Xul {
                 if (!isset($element->children[0])) {
                     $element->children[0] = HTML_Template_Flexy_Element('menupopup');
                 }
-                if (!is_a($element->children[0],HTML_Template_Flexy_Element)) {
+                if (!is_a($element->children[0],'HTML_Template_Flexy_Element')) {
                     // oh sh*t big problem!
                     return HTML_Template_Flexy::raiseError(
                         __CLASS__ . '::setValue expected a menupopup as the child of a menuitem?', 
@@ -91,6 +91,7 @@ class HTML_Template_Flexy_Element_Xul {
                     $child->attributes['selected'] = 'false';
                     
                 }
+                 
                 return;
              
         }
@@ -130,9 +131,9 @@ class HTML_Template_Flexy_Element_Xul {
             
         }
         if (!isset($element->children[0])) {
-            $element->children[0] = HTML_Template_Flexy_Element('menupopup');
+            $element->children[0] = new  HTML_Template_Flexy_Element('menupopup');
         }
-        if (!is_a($element->children[0],HTML_Template_Flexy_Element)) {
+        if (!is_a($element->children[0],'HTML_Template_Flexy_Element')) {
             // oh sh*t big problem!
             return HTML_Template_Flexy::raiseError(
                 __CLASS__ . '::setValue expected a menupopup as the child of a menuitem?', 
