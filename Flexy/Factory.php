@@ -70,7 +70,7 @@ class HTML_Template_Flexy_Factory {
       
         foreach($ar as $k=>$v) {
             if (is_array($v)) {
-                $ret = HTML_Template_Flexy_Factory::flatten($prefix.'['.$k.']',$v,$ret);
+                $ret = HTML_Template_Flexy_Factory::fromArrayPrefixed($prefix.'['.$k.']',$v,$ret);
             }
             
             if (!isset($ret[$prefix.'['.$k.']'])) {
