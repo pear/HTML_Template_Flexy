@@ -68,7 +68,7 @@ if ($a) {
 }
 
 
-
+/* ----- forms examples ---------*/
 
 
 $x = new HTML_Template_Flexy($options);
@@ -92,3 +92,22 @@ $data = $x->bufferedOutputObject($tmp,$elements);
 $fh = fopen(dirname(__FILE__) . '/results2/forms.result.html','w');
 fwrite($fh,$data);
 fclose($fh);
+
+
+/* ----- functions examples ---------*/
+
+$x = new HTML_Template_Flexy($options);
+$x->compile('function.html');
+
+$tmp = new StdClass;
+$tmp->a_value= "test1";
+
+$data = $x->bufferedOutputObject($tmp,$elements);
+$fh = fopen(dirname(__FILE__) . '/results2/function.result.html','w');
+fwrite($fh,$data);
+fclose($fh);
+
+
+
+
+

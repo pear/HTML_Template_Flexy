@@ -31,6 +31,7 @@ require_once 'HTML/Template/Flexy/Tokenizer.php';
 // cache for po files..
 $GLOBALS['_html_template_flexy_compiler_standard']['PO'] = array();
 
+
 class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler {
     
     
@@ -67,7 +68,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = array();
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
-        
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput']  = '';
         
         if (is_array($this->options['Translation2'])) {
             require_once 'Translation2.php';
@@ -172,6 +173,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $data;
         }
         
+        $data = $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput'] . $data;
         
         if (   @$this->options['debug']) {
             echo "<B>Result: </B><PRE>".htmlspecialchars($data)."</PRE><BR>";
