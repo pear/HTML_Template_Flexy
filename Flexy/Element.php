@@ -205,7 +205,7 @@ class HTML_Template_Flexy_Element {
      
     function setValue($value) {
         // store the value in all situations
-        $this->value = $value;
+        $this->value = htmlspecialchars($value);
         
         
         switch ($this->tag) {
