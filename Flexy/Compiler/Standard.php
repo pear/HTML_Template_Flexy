@@ -150,6 +150,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         }
         
         $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
+         
+        
         if (is_a($res,'PEAR_Error')) {
             return $res;
         }   

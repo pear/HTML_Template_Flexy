@@ -578,7 +578,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         $lang = $this->element->getAttribute('LANGUAGE');
         if (!$lang) {
-            return;
+            return false;
         }
         $lang = strtoupper($lang);
         

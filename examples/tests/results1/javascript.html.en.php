@@ -54,7 +54,23 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
     }
 }
  
--->
+--> 
+<script type="application/x-javascript" src="js/common.js"></script>
+<script type="application/x-javascript" src="../searchjs.php"></script>
+<script type="application/x-javascript" src="js/catctrl.js"></script>
+<script type="application/x-javascript">
+                function productAddApply() {
+                        req = new phpRequest(URI_CONTROL + "/New/product");
+                        req.add("product_category", get_value("listProdCat"));
+                        req.add("item_category", get_value("listItemCat"));
+                        req.add("item_subcategory", get_value("listItemSubCat"));
+                        req.add("supplier_id", get_value("listSupplier"));
+                        req.add("supplier_model_numb", get_value("txtSupModelNo"));
+                        req.add("article", get_value("txtArtDescr"));
+                        req.add("material", get_value("txtMaterial"));
+                        req.add("color", get_value("txtColor"));
+                }
+</script>
 <body> 
 
 

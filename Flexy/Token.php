@@ -273,6 +273,9 @@ class HTML_Template_Flexy_Token {
         //echo "BUILT TOKENS";
         
         $res = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'];
+       
+        // DEBUG DUMPTING : foreach($res as $k) {  $k->dump(); }
+        
         
         $stack = array();
         $total = $i +1;
@@ -571,7 +574,20 @@ class HTML_Template_Flexy_Token {
         $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s][] = $string;
     }
     
-     
+     /**
+    * dump to text ATM
+    *
+    * 
+    * @access   public
+    */
+    
+    function dump() {
+        echo "{$this->token}/" . (isset($this->tag) ? "<{$this->tag}>" : '') . ": {$this->value}\n";
+    }
+    
+    
+    
+    
 }
  
   
