@@ -41,7 +41,8 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
 
 <P>a loop <?php if (is_array($t->loop)) foreach($t->loop as $a) { ?> <?php echo htmlspecialchars($a); ?> <?php } ?></P>
 <P>a loop with 2 vars <?php if (is_array($t->loop)) foreach($t->loop as $a => $b) { ?> 
-    <?php echo htmlspecialchars($a); ?> ,<?php echo htmlspecialchars($b); ?>
+    <?php echo htmlspecialchars($a); ?> , 
+    <?php echo htmlspecialchars($b); ?>
 <?php } ?></P>
 
 
@@ -112,12 +113,10 @@ Array
     [12] => Looping
     [13] => a loop
     [14] => a loop with 2 vars
-    [15] => ,
-    [16] => HTML tags example using foreach=&quot;loop,a&quot; or the tr
-    [17] => a is
-    [18] => HTML tags example using foreach=&quot;loop,a,b&quot; or the tr
-    [19] => Form Not Parsed
-    [20] => bb
-    [21] => Parsed
-    [25] => &nbsp;
+    [15] => HTML tags example using foreach=&quot;loop,a&quot; or the tr
+    [16] => a is
+    [17] => HTML tags example using foreach=&quot;loop,a,b&quot; or the tr
+    [18] => Form Not Parsed
+    [19] => bb
+    [20] => Parsed
 )
