@@ -669,11 +669,13 @@ class HTML_Template_Flexy
     function setActiveQuickForm($active) {
         if (isset($this->quickforms[$active])) {
             $this->quickform = & $this->quickforms[$active];
+            $this->quickform->buildElementsArray();
             return true;
         }
         foreach($this->quickforms as $k=>$v) {
             if (isset($v->_attributes['name']) && ($v->_attributes['name'] == $active)) {
                 $this->quickform = & $this->quickforms[$k];
+                $this->quickform->buildElementsArray();
                 return true;
             }
         }

@@ -390,7 +390,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if ($name == '') {
             return false;
         }
-         
+        
+        static $buildId =0;
         
         $type = strtoupper($this->getAttribute('TYPE'));
             
@@ -401,17 +402,19 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             return false;
         }
         
+        
+        
         switch ($type) {
             case "CHECKBOX":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('checkbox',   $name,  $this->getAttribute('FLEXY:LABEL')  , '',  $this->getAttributes() ),
+                    array($buildId , 'checkbox',   $name,  $this->getAttribute('FLEXY:LABEL')  , '',  $this->getAttributes() ),
                     array('setChecked' => $this->getAttribute('CHECKED'))
                 );
                 break;
             
             case "RADIO":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('radio',   $name,  $this->getAttribute('FLEXY:LABEL')  ,   '',
+                    array($buildId , 'radio',   $name,  $this->getAttribute('FLEXY:LABEL')  ,   '',
                             $this->getAttribute('VALUE')   ,    $this->getAttributes() ),
                     array('setChecked' => $this->getAttribute('CHECKED'))
                 );
@@ -419,25 +422,25 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             
             case "RESET":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array( 'reset' , $name,  $this->getAttribute('VALUE') , $this->getAttributes()  )
+                    array( $buildId , 'reset' , $name,  $this->getAttribute('VALUE') , $this->getAttributes()  )
                 );
                 break;
                 
             case "SUBMIT":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array( 'submit' ,  $name,  $this->getAttribute('VALUE') ,  $this->getAttributes() )
+                    array( $buildId , 'submit' ,  $name,  $this->getAttribute('VALUE') ,  $this->getAttributes() )
                 );
                 break;
                 
             case "BUTTON":            
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('button' , $name,  $this->getAttribute('VALUE') , $this->getAttributes() ) 
+                    array($buildId , 'button' , $name,  $this->getAttribute('VALUE') , $this->getAttributes() ) 
                 );
                 break;
                 
             case "PASSWORD":     
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                   array('password' ,  $name,  '' ,   $this->getAttributes()) 
+                   array($buildId , 'password' ,  $name,  '' ,   $this->getAttributes()) 
                 );
                
                 break;
@@ -447,7 +450,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
 
             case "HIDDEN":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('hidden' , $name,$this->getAttribute('VALUE'),$this->getAttributes()),
+                    array($buildId , 'hidden' , $name,$this->getAttribute('VALUE'),$this->getAttributes()),
                     array('setValue' => $this->getAttribute('VALUE'))
                 );
                 // hidden elements are displayed after the form tag.
@@ -456,7 +459,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             default:
                 
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
-                    array('text' ,$name,'',  $this->getAttributes()),
+                    array($buildId , 'text' ,$name,'',  $this->getAttributes()),
                     array(
                         'setSize'       => $this->getAttribute('SIZE'),
                         'setMaxLength'  => $this->getAttribute('MAXLENGTH'),
@@ -468,7 +471,11 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         $this->_quickFormCalls();
         
-        return '<?php echo $this->quickform->elementToHtml("'.$name .'"); ?>';
+        
+        // we need to use id's to stop things like radio buttons overlapping.
+        
+        
+        return '<?php echo $this->quickform->elementToHtml("",'.$buildId++ .'); ?>';
     
         
     }
