@@ -26,11 +26,11 @@
   - {else:} and {end:} to close or alternate If statements
   - FORM to HTML_Template_Flexy_Element's
   - replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
-    use FLEXY:IGNORE to prevent replacements
+    use FLEXY:IGNORE (inherited) and FLEXY:IGNOREONLY (single) to prevent replacements
   - FLEXY:START/FLEXY:STARTCHILDREN tags to define where output starts/finishes
   - support for urlencoded braces {} in HTML attributes.  
   - documentation in the pear manual
-     
+  
   
 </description>
   <license>PHP License</license>
@@ -46,11 +46,11 @@
 
   <release>
      <version>0.5</version>
-      <date>2003-07-01</date>
+      <date>2003-09-03</date>
       <notes>
       
       Warning: BC Breaking release
-      Warning: Beta Testing..
+      Warning: Still in Beta Testing.. (although most of the API should now be)
       
       Due to the conclusion that the quickforms integration was not only messy, but 
       a heavy weight to be carried. The whole form/dynamic element layer was re-engineered.
@@ -61,24 +61,34 @@
         it is used to store the representation of form elements, and any HTML element 
         which contains the FLEXY:DYNAMIC attribute.
         
-        $template->elements, can be set to an associate array of (form name)=>Element
+        you can override elements, by using the new second argument to outputObject($object,$elements)
+        where $elements is an associate array of (form name)=>Element
         and the data in the elements array is merged with the visable template at runtime.
+        (so you only need to define what is different to the HTML, not the whole tag.)
         
         You can make any tag 'dynamic', by just tagging it. - if you replace the element
         in the elements array with an object that implements a toHtml method, This will be 
         called rather than the drawn element.
        
         A Utility class, HTML_Template_Flexy_Factory offers common static methods, like
-        - creating element values from a key=>value array (eg. Dataobjects->toArrary())
+        - creating element values from a key=>value array (eg. Dataobjects->toArray())
         - setting error messages (as suffixes to elements)
         - flag something as required. (prefixing strings to elements)
     
       Compiler Abstraction
         The Compiler code in Flexy is now abstracted out, to make it possible to write
-        Other compilers and use the same caching/loading mechanism.
+        Other compilers and use the same caching/loading mechanism. (the old regex compiler
+        is included as an example of this.)
         
-      Note:
+      Other BC Issues:
         all Flexy attributes must now be prefixed with &quot;flexy:&quot; namespace (eg. if, foreach, startchildren etc.)
+      
+      General New Features
+        - support for array strings on variables and methods = eg. {somevar[xxx][yyy].toHtml():h}
+        - added :r (print_r), and :n (number_format), and in future may make available user defined modifiers
+        
+        
+     
         
 
       </notes>
