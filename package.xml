@@ -189,6 +189,12 @@
       <dep type="pkg" rel="ge" version="0.0.1" optional="yes">Translation2</dep>
     </deps>
 
+   
+     
+   <changelog>
+   
+   
+   
     <release>
      <version>0.8.1</version>
       <date>2004-04-24</date>
@@ -208,9 +214,11 @@
       <state>beta</state>
      </release>
      
-     
-   <changelog>
+   
+   
+   
    <release>
+   
      <version>0.8.0</version>
       <date>2004-04-22</date>
       <notes><![CDATA[
