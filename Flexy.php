@@ -336,11 +336,7 @@ class HTML_Template_Flexy
                                 null, PEAR_ERROR_DIE);
         }
 
-        if( !is_writeable($compileDest)) {
-             PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
-                                "1. please give write and enter-rights to it",
-                                null, PEAR_ERROR_DIE);
-        }
+    
 
         $directory = dirname( $file );
         $filename = basename($file);
@@ -405,6 +401,13 @@ class HTML_Template_Flexy
             $method = '_classicParse';
         }
         if( $recompile )  {             // or any of the config files
+        
+            if( !is_writeable($compileDest)) {
+                PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
+                                "1. please give write and enter-rights to it",
+                                null, PEAR_ERROR_DIE);
+            }
+        
             if( !$this->$method() ) {
                 return false;
             }
