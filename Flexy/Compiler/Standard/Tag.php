@@ -277,7 +277,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
         // these checks should really be in the if/method class..!!!
         
-        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\])?)*(\(\))?$/i',$if)) {
+        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?((\[|%5B)[A-Z0-9_]+(\]|%5D))*(\.[_A-Z][A-Z0-9_]*((\[|%5B)[A-Z0-9_]+(\]|%5D))*)*(\(\))?$/i',$if)) {
             PEAR::raiseError(
                 "IF tags only accept simple object.variable or object.method() values on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                  null, PEAR_ERROR_DIE);
