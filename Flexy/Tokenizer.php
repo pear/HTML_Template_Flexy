@@ -79,6 +79,13 @@ class HTML_Template_Flexy_Tokenizer
     * @access   public
     */
     var $ignorePHP = true;
+    /**
+    * the name of the file being parsed (used by error messages)
+    *
+    * @var string
+    * @access public
+    */
+    var $fileName;
     function dump () {
         foreach(get_object_vars($this) as  $k=>$v) {
             if (is_string($v)) { continue; }
@@ -87,7 +94,7 @@ class HTML_Template_Flexy_Tokenizer
         }
     }
     function raiseError($s,$n='',$isFatal=false) {
-        echo "ERROR  $n on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
+        echo "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
 	return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
     }
     /**

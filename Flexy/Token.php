@@ -61,7 +61,7 @@ class HTML_Template_Flexy_Token {
     
     
     var $line;
-    
+
     /**
     * factory a Token
     *

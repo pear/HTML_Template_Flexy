@@ -300,6 +300,7 @@ class HTML_Template_Flexy
         $data = file_get_contents($this->currentTemplate);
             //echo strlen($data);
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
+        $tokenizer->fileName = $this->currentTemplate;
         //$tokenizer->debug=1;
         if ($this->options['nonHTML']) {
             $tokenizer->ignoreHTML = true;

@@ -88,6 +88,7 @@ define('YY_EOF' , 258);
     * @access   public
     */
     var $ignoreHTML = false;
+    
     /**
     * ignorePHP flag - default is to remove all PHP code from template.
     * although this may not produce a tidy result - eg. close ?> in comments
@@ -98,6 +99,15 @@ define('YY_EOF' , 258);
     */
     var $ignorePHP = true;
     
+    /**
+    * the name of the file being parsed (used by error messages)
+    *
+    * @var string
+    * @access public
+    */
+    
+    
+    var $fileName;
     
     function dump () {
         foreach(get_object_vars($this) as  $k=>$v) {
@@ -109,7 +119,7 @@ define('YY_EOF' , 258);
     
     
     function raiseError($s,$n='',$isFatal=false) {
-        echo "ERROR  $n on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
+        echo "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
 	return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 	
     }
