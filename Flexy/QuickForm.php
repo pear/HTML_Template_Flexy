@@ -92,7 +92,13 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     */
     function buildElementsArray() 
     {
+        if (empty($this->_elementIndex)) {
+            return PEAR::raiseError(
+                'Flexy Template encounted an Form with no elements - 
+                check the source for extra FORM tags :',null,PEAR_ERROR_DIE);
+        }
         foreach ($this->_elementIndex as $name => $id) {
+            echo "$name => $id<BR>";
             $this->elements[$name] = & $this->_elements[$id];
         }
     }
