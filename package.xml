@@ -65,13 +65,13 @@
  
 
     <release>
-     <version>1.0.1</version>
-      <date>2004-08-09</date>
+     <version>1.0.2</version>
+      <date>2004-09-06</date>
       <notes><![CDATA[
-      Minor Bug Fix Release
+      Minor Feature Release
        
-      Bugs
-        #------ Fix Missing include of Token.php 
+       Features 
+        #------ Limited support for Xul in Element  
         
       ]]></notes>
       <state>stable</state>
@@ -87,6 +87,9 @@
           
           <!-- The HTML Element and a factory helper class for it. -->
           <file>Element.php</file>
+	<dir name="Element" role="php">
+              <file>Xul.php</file>
+         </dir>
           <file>Factory.php</file>
           <file>Assign.php</file>
           <file>Plugin.php</file>
@@ -212,6 +215,23 @@
      
    <changelog>
 
+
+
+
+
+ <release>
+
+    <version>1.0.1</version>
+      <date>2004-08-09</date>
+      <notes><![CDATA[
+      Minor Bug Fix Release
+                                                                                
+      Bugs
+        #------ Fix Missing include of Token.php
+                                                                                
+      ]]></notes>
+      <state>stable</state>
+     </release>
 
 
 

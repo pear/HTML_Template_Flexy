@@ -19,6 +19,7 @@
 <?php echo htmlspecialchars($t->object->var['array'][1]);?>
 <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object->var['array'][1],true)); echo '</pre>';;?>
 <?php echo $t->object->var['array'][1];?>
+<?php echo $t->object->var['array'][-1];?>
 <?php echo htmlspecialchars($t->object['array']->with['objects']);?>
 Long string with NL2BR + HTMLSPECIALCHARS
 <?php echo nl2br(htmlspecialchars($t->longstring));?>

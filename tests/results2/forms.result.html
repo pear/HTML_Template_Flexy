@@ -39,11 +39,14 @@
 
 <img name="picture" id="picture" width="400" height="400" src="any.gif">
 <h2>Bug 1120:</h2>
-<form action="test"><input name="testing" value="test"><input type="submit" value="x" name="_submit[2]"></form>
+<form action="test">
+<input name="testing" value="test"><input type="submit" value="x" name="_submit[2]"></form>
 
 <form action="">
-<input name="testing" value="">
-<input type="submit" name="_submit[1]"></form>
+<input name="testing2" value=""><input type="submit" name="_submit[1]"></form>
 
 <H2> Bug 1275 XHTML output </H2>
 <input type="checkbox" name="testingxhtml" checked="checked"><select name="xhtmllisttest"><option value="0">--select something--</option><option value="bbb" selected="selected">somevalue</option></select>
+
+
+<form name="test_mix" action=""><input name="testing5" value=""><input type="submit" name="_submit[3]"></form>

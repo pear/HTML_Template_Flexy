@@ -56,6 +56,7 @@ define("IN_SCRIPT",             14);
 define("IN_CDATA"     ,         15);
 define("IN_DSCOM",              16);
 define("IN_PHP",                17);
+define("IN_COMSTYLE"     ,      18);
 
 define('YY_E_INTERNAL', 0);
 define('YY_E_MATCH',  1);
@@ -103,6 +104,16 @@ define('YY_EOF' , 258);
         'token_factory'  => array('HTML_Template_Flexy_Token','factory'),
     );
      
+    
+    /**
+    * flag if inside a style tag. (so comments are ignored.. )
+    *
+    * @var boolean
+    * @access private
+    */
+    
+    
+    var $inStyle = false;
     
     /**
     * the start position of a cdata block
@@ -219,7 +230,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA IN_DSCOM IN_PHP
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT IN_CDATA IN_DSCOM IN_PHP IN_COMSTYLE
 
  
 
@@ -291,7 +302,7 @@ FLEXY_GTEND         = ")_}"
 FLEXY_START         = ("%7B"|"%7b"|"{")
 FLEXY_NEGATE        = "!"
 FLEXY_SIMPLEVAR     = (({NAME_START_CHARACTER}|"_")({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
-FLEXY_ARRAY         = (("["|"%5B"|"%5b")({DIGIT}|{NAME_START_CHARACTER}|"_")+("]"|"%5D"|"%5d"))
+FLEXY_ARRAY         = (("["|"%5B"|"%5b")({DIGIT}|{NAME_START_CHARACTER}|"_"|"-")+("]"|"%5D"|"%5d"))
 FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*)*)
 FLEXY_METHOD        = ({FLEXY_SIMPLEVAR}|{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*)*"."{FLEXY_SIMPLEVAR})
 FLEXY_END           = ("%7D"|"%7d"|"}")
@@ -344,6 +355,9 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
+    if ($this->inStyle) {
+        $this->inStyle = false;
+    }
     $this->tagName = trim(substr($this->yytext(),1));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
@@ -389,8 +403,14 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    $this->yyCommentBegin = $this->yy_buffer_end;
     
+    if ($this->inStyle) {
+        $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
+        $this->yybegin(IN_COMSTYLE);
+        return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    }
+    
+    $this->yyCommentBegin = $this->yy_buffer_end;
     //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -703,8 +723,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     
     if (strtoupper($this->tagName) == 'SCRIPT') {
         $this->yybegin(IN_SCRIPT);
-    
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    }
+    if (strtoupper($this->tagName) == 'STYLE') {
+        $this->inStyle = true;
+    } else {
+        $this->inStyle = false;
     }
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -787,15 +811,30 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_COM>([^-]|-[^-])*{WHITESPACE}	{
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    
-    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
-     
+       
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 <IN_COM>{COM}[^>]	{
 	// inside comment -- without a >
 	return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
+
+ 
+<IN_COMSTYLE>([^"{"][^-]|-[^-])*{WHITESPACE}	{
+    // inside a style comment (not - or not --
+    // <!^--...-->   -- comment */   
+    $this->value = $this->createToken('Comment', $this->yytext(),$this->yyline);
+	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+<IN_COMSTYLE>{COM}[^>]	{
+	// inside style comment -- without a >
+    $this->value = $this->createToken('Comment', $this->yytext(),$this->yyline);
+	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+
+
+
 
 <IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
     // inside a comment (not - or not --
@@ -857,6 +896,24 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
+
+<IN_COMSTYLE>[-]*{COM}{TAGC}			{   
+    // --> inside a style tag.
+    $this->value = $this->createToken('Comment',  $this->yytext(),$this->yyline);
+    $this->yybegin(YYINITIAL); 
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
+}
+
+<IN_COMSTYLE>("{"{FLEXY_VAR}":"{FLEXY_MODIFIER}"}")|("{"{FLEXY_VAR}"}") {
+    // var in commented out style bit..
+    $t =  $this->yytext();
+    $t = substr($t,1,-1);
+
+    $this->value = $this->createToken('Var'  , $t, $this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+
 <IN_DSCOM>{COM}{TAGC}			{   
     $this->value = $this->createToken('DSEnd', $this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
@@ -879,7 +936,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<IN_MD,IN_COM>.  {
+<IN_MD,IN_COM,IN_COMSTYLE>.  {
     return $this->raiseError("illegal character in markup declaration");
 }
 

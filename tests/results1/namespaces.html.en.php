@@ -30,7 +30,12 @@
              </html:tr>
             </html:table>
         </html:form>
-        <?php echo $this->elements['atest']->toHtml();?>
+        <?php $_attributes_used = array();
+echo $this->elements['atest']->toHtml();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['atest']->attributes[$_a]);
+}}
+?>
         <!-- example of how to make the above work correctly.. -->
         <html:select name="atest">
             <?php if ($this->options['strict'] || (is_array($t->categories)  || is_object($t->categories))) foreach($t->categories as $data) {?><html:option value="<?php echo htmlspecialchars($data->value);?>" onselect="parent.onSelect_ProdCat();"><?php echo htmlspecialchars($data->name);?></html:option><?php }?>
