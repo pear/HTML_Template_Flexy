@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "../package.dtd">
+<package version="1.0">
+  <name>HTML_Template_Flexy</name>
+  <summary>A Flexible Caching Template Engine Based on SimpleTemplate</summary>
+  <description>Flexy Template is a Template to php code convertor, based on Simple Template, and 
+  similar to Smarty. It should be very fast, and is easy to extend to develop or use any template syntax you like
+  Default filter (SimpleTags) includes
+  variables
+  foreach loops
+  conditionals
+  method calls
+  includes
+  Handles urlencoded tags - so you can edit the template in mozilla etc.
+  
+  Other filters include
+  RtfSimpletags  - to make RTF/Word documents
+  BodyOnly - to strip header and footer from a template
+  Php - to strip php code from template 
+  Tags - Similar to Simpletemplate.
+  Email - For parsing email templates
+  
+</description>
+  <license>PHP License</license>
+  <maintainers>
+    <maintainer>
+      <user>alan_k</user>
+      <role>lead</role>
+      <name>Alan Knowles</name>
+      <email>alan@akbkhome.com</email>
+    </maintainer>
+  </maintainers>
+  <release>
+       <version>0.1</version>
+      <date>2002-08-23</date>
+      <notes>First PEAR release,
+      Renamed to HTML_Flexy_Template to conform to PEAR standards
+      Added more phpdoc comments to filters
+      </notes>
+      <state>beta</state>
+     
+    <filelist>
+        <dir name="/" baseinstalldir="HTML/Template" role="php">
+            <file>Flexy.php</file>
+            <dir name="Flexy" role="php">
+                <file>example.ini</file>
+                <dir name="Filter" role="php">
+                    <file>BodyOnly.php</file>
+                    <file>Php.php</file>
+                    <file>RtfSimpleTags.php</file>
+                    <file>SimpleTags.php</file>
+                    <file>Tags.php</file>
+                    <file>Mail.php</file>
+                    <file>Xml.php</file>
+                    <file>Math.php</file>
+               </dir>
+            </dir>
+        </dir>
+    </filelist>
+  </release>
+   <changelog>
+   <release>
+       <version>0.1</version>
+      <date>2002-08-23</date>
+      <notes>First PEAR release,
+      Renamed to HTML_Flexy_Template to conform to PEAR standards
+      Added more phpdoc comments to filters
+      </notes>
+      <state>beta</state>
+      </release>
+    
+  </changelog>
+</package>
