@@ -2467,7 +2467,7 @@ case 67:
     }
     if ($c = strpos($t,':')) {
         $this->flexyMethod .= substr($t,$c,-1);
-        $t = substr($t,0,$c-2);
+        $t = substr($t,0,$c-1);
     } else {
         $t = substr($t,0,-2);
     }

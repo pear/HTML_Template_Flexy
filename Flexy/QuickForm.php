@@ -122,7 +122,16 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             $this->_elements[$this->_elementIndex[$elementname]]->hide) {
                 return '';
         }
-       
+        if (!is_object($this->_elements[$this->_elementIndex[$elementname]])) {
+            echo "unable to find element $elementname\n";
+            if (!isset($this->_elementIndex[$elementname])) {
+                echo "its not in element Index!";
+            } else {
+                echo "it's not in elements";
+            }
+            return;
+        }
+        
         return $this->_buildElement($this->_elements[$this->_elementIndex[$elementname]]);
     }
    
@@ -177,8 +186,10 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
                 array_shift($array[0]);
                 // create it..
                 call_user_func_array(array($ret[$form],'HTML_QuickForm'), $array[0]);
-                // set the defaults.
+                // set the defaults.\
+                 
                 if (isset($defaults[$form])) {
+                   
                     $ret[$form]->setDefaults($defaults[$form]);
                 } else if (isset($defaults[0])) {
                     $ret[$form]->setDefaults($defaults[0]);

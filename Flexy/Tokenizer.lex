@@ -833,7 +833,7 @@ FLEXY_MODIFIER      = [hur]
     }
     if ($c = strpos($t,':')) {
         $this->flexyMethod .= substr($t,$c,-1);
-        $t = substr($t,0,$c-2);
+        $t = substr($t,0,$c-1);
     } else {
         $t = substr($t,0,-2);
     }
@@ -843,6 +843,8 @@ FLEXY_MODIFIER      = [hur]
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
+
+// todo - handle modifiers after literals..
 
 <IN_FLEXYMETHOD>"#"{FLEXY_LITERAL}("#,"|"#)}") {
    

@@ -66,7 +66,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     */
     
     function setValue($value) {
-        //var_dump($value);
+        // var_dump($value);
         $method = $value[0];
         if (substr($value[0],0,3) == 'if:') {
             $this->isConditional = true;
