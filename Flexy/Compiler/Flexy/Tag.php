@@ -548,6 +548,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         global $_HTML_TEMPLATE_FLEXY;
         static $tmpId=0;
         if (!$id) {
+            
             return HTML_Template_Flexy::raiseError(
                 "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
                 " Dynamic tags require an ID value",
@@ -800,10 +801,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         $copy = clone($this->element);
         $copy->children = array();
         $id = $this->element->getAttribute('NAME');
-        // this is stupid!!! - it doesnt work anyway now..
-        //if (!$id) {
-        //    $id = 'form';
-        // }
+        // dont make forms dynamic if they dont have a name..
+        if (!$id) {
+            return false;
+        }
         
         // this adds the element to the elements array.
         $old = clone($this->element);
