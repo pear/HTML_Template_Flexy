@@ -69,7 +69,7 @@ class HTML_Template_Flexy
                             'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
                             'allowPHP'      => false,   // allow PHP in template
                             'compiler'      => 'Standard', // which compiler to use.
-                            'compilerToString' => false,    // should the compiler return a string 
+                            'compileToString' => false,    // should the compiler return a string 
                                                             // rather than writing to a file.
                             'filters'       => array(),    // used by regex compiler..
                         );
@@ -287,7 +287,7 @@ class HTML_Template_Flexy
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
     *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
     *   @param      boolean $fixForMail - replace ?>\n with ?>\n\n
-    *   @return
+    *   @return    boolean true on success. false on failure..
     */
     
     
