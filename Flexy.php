@@ -362,7 +362,7 @@ class HTML_Template_Flexy
     function applyFilters( $input , $prefix = "",$negate=FALSE)
     {
         $this->debug("APPLY FILTER $prefix<BR>");
-        $filters = $this->option['filters'];
+        $filters = $this->options['filters'];
         $this->debug(serialize($filters)."<BR>");
         foreach($filters as $filtername) {
             $class = "HTML_Template_Flexy_Filter_{$filtername}";
@@ -414,7 +414,7 @@ class HTML_Template_Flexy
     function debug($string) 
     {  
         
-        if (!$this->option['debug']) {
+        if (!$this->options['debug']) {
             return;
         }
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
