@@ -51,7 +51,7 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
  
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='text/javascript'>
+<script type='text/javascript'>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
@@ -103,22 +103,27 @@ an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); 
 <H2>Conditions</H2>
 <p>a condition <?php if ($t->condition)  {?> hello <?php } else {?> world <?php }?></p>
 
+<?php if ($t->test)  {?><span>test</span><?php }?>
+<?php if (isset($t) && method_exists($t,'test')) if ($t->test()) { ?><span>test</span><?php }?>
+<?php if (isset($t) && method_exists($t,'test')) if ($t->test("aaa bbb",$t->ccc,"asdfasdf asdf ")) { ?><span>test</span><?php }?>
+
+
 
 <h2>Looping</h2>
 
 
-<p>a loop <?php if (is_array($t->loop)) foreach($t->loop as $a) {?> <?php echo htmlspecialchars($a);?> <?php }?></p>
-<p>a loop with 2 vars <?php if (is_array($t->loop)) foreach($t->loop as $a => $b) {?> 
+<p>a loop <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?> <?php echo htmlspecialchars($a);?> <?php }?></p>
+<p>a loop with 2 vars <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?> 
     <?php echo htmlspecialchars($a);?> , 
     <?php echo htmlspecialchars($b);?>
 <?php }?></p>
 
 Bug #84
-<?php if (is_array($t->list)) foreach($t->list as $i) {?><?php if (isset($t) && method_exists($t,'method')) echo htmlspecialchars($t->method($i));?><?php }?>
+<?php if (is_array($t->list)  || is_object($t->list)) foreach($t->list as $i) {?><?php if (isset($t) && method_exists($t,'method')) echo htmlspecialchars($t->method($i));?><?php }?>
 
 
 <table>
-    <?php if (is_array($t->xyz)) foreach($t->xyz as $abcd => $def) {?><tr>
+    <?php if (is_array($t->xyz)  || is_object($t->xyz)) foreach($t->xyz as $abcd => $def) {?><tr>
         <td><?php echo htmlspecialchars($abcd);?>, <?php if (isset($t) && method_exists($t,'test')) echo htmlspecialchars($t->test($def));?></td>
     </tr><?php }?>
 </table>
@@ -164,7 +169,7 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"nip"));?> Street: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"street"));?> City: 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"code"));?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"city"));?>
 # 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 	Netto 	VAT 	Brutto
-<?php if (is_array($t->positions)) foreach($t->positions as $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if (is_array($t->positions)  || is_object($t->positions)) foreach($t->positions as $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"name"));?> <?php if ($t->show_pkwiu)  {?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"pkwiu"));?><?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"count"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"netto"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"vat"));?> 
@@ -172,18 +177,18 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 <?php }?> <?php if ($t->edit_positions)  {?> # 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 
 <?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	Netto<?php } else {?>	<?php }?> 	VAT 
 <?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	<?php } else {?>	Brutto<?php }?>
-<?php if (is_array($t->edit_positions)) foreach($t->edit_positions as $k => $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if (is_array($t->edit_positions)  || is_object($t->edit_positions)) foreach($t->edit_positions as $k => $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
 <?php if ($t->show_pkwiu)  {?> 	<?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?> 
 <?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?>	<?php }?>
 <?php }?> <?php }?> # 	
-<?php if (is_array($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
+<?php if (is_array($t->sum)  || is_object($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
 <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"vat"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"brutto"));?>
 <?php }?>
 
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
 <table width="100%" border="0">
-  <?php if (is_array($t->loop)) foreach($t->loop as $a) {?><tr class="<?php echo htmlspecialchars($a->hightlight);?>"> 
+  <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a) {?><tr class="<?php echo htmlspecialchars($a->hightlight);?>"> 
     <td>a is</td>
     <?php if ($a->showtext)  {?><td><?php echo htmlspecialchars($a->text);?></td><?php }?>
     <?php if (!$a->showtext)  {?><td><?php echo number_format($a->price,2,'.',',');?></td><?php }?>
@@ -196,7 +201,7 @@ Example error messages..
 
 <p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
 <table width="100%" border="0">
-  <?php if (is_array($t->loop)) foreach($t->loop as $a => $b) {?><tr> 
+  <?php if (is_array($t->loop)  || is_object($t->loop)) foreach($t->loop as $a => $b) {?><tr> 
     <td><?php echo htmlspecialchars($a);?></td>
     <td><?php echo htmlspecialchars($b);?></td>
   </tr><?php }?>
@@ -256,14 +261,14 @@ $x->outputObject($t);
 
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='text/javascript'>
+<script type='text/javascript'>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
 </script>
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
-<script language='text/javascript'>
+<script type='text/javascript'>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
 <?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
