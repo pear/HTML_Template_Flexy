@@ -147,7 +147,7 @@ class HTML_Template_Flexy_Element {
             if ($value === true) {
                 // this is not xhtml compatible..
                 if ($key == '/') {
-                    $xhtmlclose = '/';
+                    $xhtmlclose = ' /';
                     continue;
                 }
                 $strAttr .= ' ' . $key;
