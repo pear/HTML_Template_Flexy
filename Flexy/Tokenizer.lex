@@ -53,7 +53,7 @@ define("IN_DS"     ,10);
 define("IN_FLEXYMETHOD"     ,11);
 define("IN_FLEXYMETHODQUOTED"     ,12);
 define("IN_FLEXYMETHODQUOTED_END"     ,13);
-
+define("IN_SCRIPT"     ,14);
 
 define('YY_E_INTERNAL', 0);
 define('YY_E_MATCH',  1);
@@ -146,7 +146,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END IN_SCRIPT
 
  
 
@@ -221,7 +221,7 @@ FLEXY_LITERAL       = [^#]*
 FLEXY_MODIFIER      = ({NAME_START_CHARACTER}+)
 
 
-
+END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 %%
 
 // note (for above) - this is rather cool - it actually prevents calling quazi private 
@@ -511,7 +511,38 @@ FLEXY_MODIFIER      = ({NAME_START_CHARACTER}+)
     
 }
 
+
+
+
+
  
+<IN_SCRIPT>{END_SCRIPT} {
+    // </script>
+    $this->value = HTML_Template_Flexy_Token::factory('EndTag',
+        array('script'),
+        $this->yyline);
+
+    $this->yybegin(YYINITIAL);
+  
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+<IN_SCRIPT>([^<]+) {
+    // general text in script..
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+<IN_SCRIPT>{STAGO} {
+    // just < .. 
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+
+
+
+
 
 
 
@@ -529,6 +560,12 @@ FLEXY_MODIFIER      = ({NAME_START_CHARACTER}+)
         array($this->tagName,$this->attributes),
         $this->yyline);
     
+    
+    if (strtoupper($this->tagName) == 'SCRIPT') {
+        $this->yybegin(IN_SCRIPT);
+    
+        return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    }
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -567,15 +604,16 @@ FLEXY_MODIFIER      = ({NAME_START_CHARACTER}+)
   
 <IN_ATTRVAL> ([^ \'\"\t\n\r>]+){WHITESPACE}	{
     // <a href = ^http://foo/> -- unquoted literal HACK */                          
+    
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);
     //   $this->raiseError("attribute value needs quotes");
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
-// "
 
 
+// ' (put here for scintilla color render mess :)
 
 <IN_TAG,IN_ATTR> {WHITESPACE}	{
     $this->value = '';
