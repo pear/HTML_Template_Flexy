@@ -664,7 +664,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     {
         
         // first see if we are using translation2
-        if (is_a($this->options['Translation2'],'Translation2') {
+        if (is_a($this->options['Translation2'],'Translation2')) {
             $result = $this->options['Translation2']->get($string);
             if (!empty($result)) {
                 return $result;
