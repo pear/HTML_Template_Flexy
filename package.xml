@@ -50,11 +50,11 @@
       <notes>
       
       Warning: BC Breaking release
-      Warning: Still in Beta Testing.. (although most of the API should now be)
+      Warning: Still in Beta Testing.. (although most of the API should now be settled)
       
       Due to the conclusion that the quickforms integration was not only messy, but 
       a heavy weight to be carried. The whole form/dynamic element layer was re-engineered.
-      
+      And the dependancy on QuickForms removed
       
       New Features
         HTML_Template_Flexy_Element, is a small simple representation of  generic HTML,
@@ -74,7 +74,8 @@
         - creating element values from a key=>value array (eg. Dataobjects->toArray())
         - setting error messages (as suffixes to elements)
         - flag something as required. (prefixing strings to elements)
-    
+        
+        
       Compiler Abstraction
         The Compiler code in Flexy is now abstracted out, to make it possible to write
         Other compilers and use the same caching/loading mechanism. (the old regex compiler
@@ -83,9 +84,9 @@
       Other BC Issues:
         all Flexy attributes must now be prefixed with &quot;flexy:&quot; namespace (eg. if, foreach, startchildren etc.)
       
-      General New Features
+      Other New Features
         - support for array strings on variables and methods = eg. {somevar[xxx][yyy].toHtml():h}
-        - added :r (print_r), and :n (number_format), and in future may make available user defined modifiers
+        - added new Modifiers:r (print_r), and :n (number_format), and in future may make available user defined modifiers
         
         
      
