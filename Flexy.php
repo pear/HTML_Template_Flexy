@@ -378,7 +378,9 @@ class HTML_Template_Flexy
         }
         
         // gettext strings
-        @unlink($this->gettextStringsFile);
+        if (file_exists($this->gettextStringsFile)) {
+            unlink($this->gettextStringsFile);
+        }
         
         if($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] &&
             ($cfp = fopen( $this->getTextStringsFile, 'w') ) ) {
@@ -388,7 +390,9 @@ class HTML_Template_Flexy
         }
         
         // quickformfile
-        @unlink($this->quickformFile);
+        if (file_exists($this->quickformFile)) {
+            unlink($this->quickformFile);
+        }
         if($this->quickform &&
             ($cfp = fopen( $this->quickformFile, 'w') ) ) {
             
