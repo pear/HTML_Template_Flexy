@@ -137,7 +137,11 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
         return $this->compiler->appendPHP( "\n".
                 "\$x = new HTML_Template_Flexy(\$this->options);\n".
                 "\$x->compile('{$arg}');\n".
-                "include \$x->compiledTemplate;\n"
+                "\$_t = function_exists('clone') ? clone(\$t) : \$t;\n".
+                "foreach(get_defined_vars(); as \$k=>\$v) {\n" .
+                "    if (\$k != 't') { \$_t->\$k = \$v; }\n" .
+                "}\n" .
+                "\$x->outputObject(\$_t, \$this->elements);\n"
             );
     
     }
