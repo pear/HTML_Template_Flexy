@@ -233,12 +233,27 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 $ret .= $add;
             }
         }
-        // output the children.
-        $add = $element->compileChildren($this->compiler);
-        if (is_a($add,'PEAR_Error')) {
-            return $add;
+        // dump contents of script raw - to prevent gettext additions..
+        //  print_r($element);
+        if ($element->tag == 'SCRIPT') {
+            foreach($element->children as $c) {
+                //print_R($c);
+                if ($c->token == 'Text') {
+                    $ret .= $c->value;
+                    continue;
+                }
+                // techically we shouldnt have anything else inside of script tags.
+                // as the tokeinzer is supposted to ignore it..
+            }
+        } else {
+            $add = $element->compileChildren($this->compiler);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
         }
-        $ret .= $add;
+        
+        
         
         // output the closing tag.
         

@@ -416,7 +416,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
         $this->yybegin(YYINITIAL);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Text',
+    $this->value = HTML_Template_Flexy_Token::factory('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
         $this->yyline);
     $this->yybegin(YYINITIAL);

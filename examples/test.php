@@ -45,7 +45,11 @@ $options =  array(
 // basic options..
 
 $options['compileDir']    =  dirname(__FILE__) .'/tests/results1';
-compileAll($options);
+
+
+$a = $_SERVER['argv'];
+array_shift($a);
+compileAll($options,$a);
 
 // test allowPHP 
 $options['compileDir']    =  dirname(__FILE__) .'/tests/results2';
@@ -59,6 +63,9 @@ $options['privates']        =  true;
 $options['globalfunctions'] =  true;
 compileAll($options,array('globals.html'));
 
+if ($a) {
+    exit;
+}
 
 
 

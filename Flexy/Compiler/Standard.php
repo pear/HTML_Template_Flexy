@@ -658,8 +658,6 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $this->appendHtml($element->value);
         }
         
-        
-        
         $front = '';
         $rear = '';
         // trim whitespace front
