@@ -107,8 +107,54 @@ class HTML_Template_Flexy_Compiler {
         
         return '<?php '.$string.'?>';
     }
+    /**
+    * Compile All templates in the 
+    * These are hooks for passing data to other processes
+    *
+    * @param   string PHP code to append to compiled
+    *
+    * @return   string to be output
+    * @access   public
+    */
+    
+    function compileAll(&$flexy, $dir = '',$regex='/.html$/')
+    {
+        $this->flexy = &$flexy;
+        $this->compileDir($dir,$regex);
+    }
     
     
+    function compileDir($dir = '',$regex='/.html$/')
+    {
+        
+        
+        foreach ($this->flexy->options['templateDir'] as $base) {
+            if (!file_exists($base . DIRECTORY_SEPARATOR  . $dir)) {
+                continue;
+            }
+            $dh = opendir($base . DIRECTORY_SEPARATOR  . $dir);
+            while (($name = readdir($dh)) !== false) {
+                if (!$name) {  // empty!?
+                    continue;
+                }
+                if ($name{0} == '.') {
+                    continue;
+                }
+                 
+                if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
+                    $this->compileDir($dir . DIRECTORY_SEPARATOR  . $name,$regex);
+                    continue;
+                }
+                
+                if (!preg_match($regex,$name)) {
+                    continue;
+                }
+                //echo "Compiling $dir". DIRECTORY_SEPARATOR  . "$name \n";
+                $this->flexy->compile($dir . DIRECTORY_SEPARATOR  . $name);
+            }
+        }
+        
+    }
     
 
 }

@@ -137,25 +137,7 @@ class HTML_Template_Flexy
                                         // eg. = array('Savant') - loads the Savant methods.
                                         // = array('MyClass_Plugins' => 'MyClass/Plugins.php')
                                         //    Class, and where to include it from..
-    );
-
-    
-    
-        
-    /**
-    * emailBoundary  - to use put {this.emailBoundary} in template
-    *
-    * @var string
-    * @access public
-    */
-    var $emailBoundary;
-    /**
-    * emaildate - to use put {this.emaildate} in template
-    *
-    * @var string
-    * @access public
-    */
-    var $emaildate;
+    ); 
     /**
     * The compiled template filename (Full path)
     *
@@ -240,6 +222,196 @@ class HTML_Template_Flexy
        
     }
 
+   
+      
+ 
+ 
+    /**
+    *   compile the template
+    *
+    *   @access     public
+    *   @version    01/12/03
+    *   @author     Wolfram Kriesing <wolfram@kriesing.de>
+    *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
+    *   @return     boolean true on success. PEAR_Error on failure..
+    */
+    function compile( $file )
+    {
+        if (!$file) {
+            return $this->raiseError('HTML_Template_Flexy::compile no file selected',
+                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS,HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        }
+        
+        if (!@$this->options['locale']) {
+            $this->options['locale']='en';
+        }
+        
+        
+        //Remove the slash if there is one in front, just to be safe.
+        $file = ltrim($file,DIRECTORY_SEPARATOR);
+          
+        $parts = array();
+        $tmplDirUsed = false;
+        
+        // PART A mulitlanguage support: ( part B is gettext support in the engine..) 
+        //    - user created language version of template.
+        //    - compile('abcdef.html') will check for compile('abcdef.en.html') 
+        //       (eg. when locale=en)
+        
+        $this->currentTemplate  = false;
+        
+        if (preg_match('/(.*)(\.[a-z]+)$/i',$file,$parts)) {
+            $newfile = $parts[1].'.'.$this->options['locale'] .$parts[2];
+            foreach ($this->options['templateDir'] as $tmplDir) {
+                if (@!file_exists($tmplDir . DIRECTORY_SEPARATOR .$newfile)) {
+                    continue;
+                }
+                $file = $newfile;
+                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR .$newfile;
+                $tmplDirUsed = $tmplDir;
+            }
+        }
+        
+        // look in all the posible locations for the template directory..
+        if ($this->currentTemplate  === false) {
+            $dirs = array_unique($this->options['templateDir']);
+            if ($this->options['templateDirOrder'] == 'reverse') {
+                $dirs = array_reverse($dirs);
+            }
+            foreach ($dirs as $tmplDir) {
+                if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
+                    continue;
+                }
+                 
+                    
+                if (!$this->options['multiSource'] && ($this->currentTemplate  !== false)) {
+                    return $this->raiseError("You have more than one template Named {$file} in your paths, found in both".
+                        "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  
+                        HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS , HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                    
+                }
+                
+                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR . $file;
+                $tmplDirUsed = $tmplDir;
+            }
+        }
+        if ($this->currentTemplate === false)  {
+            // check if the compile dir has been created
+            return $this->raiseError("Could not find Template {$file} in any of the directories<br>" . 
+                implode("<BR>",$this->options['templateDir']) ,
+                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        }
+        
+        
+        /* Savant compatible compiler */
+        
+        if ($this->options['compiler'] == 'Raw') {
+            $this->compiledTemplate = $this->currentTemplate;
+            return true;
+        }
+        
+        
+        
+        
+        // now for the compile target 
+        
+        //If you are working with mulitple source folders and $options['multiSource'] is set
+        //the template folder will be:
+        // compiled_tempaltes/{templatedir_basename}_{md5_of_dir}/
+        
+        
+        $compileSuffix = ((count($this->options['templateDir']) > 1) && $this->options['multiSource']) ? 
+             DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
+        
+        
+        $compileDest = @$this->options['compileDir'];
+        
+        $isTmp = false;
+        // Use a default compile directory if one has not been set. 
+        if (!@$compileDest) {
+            // Use session.save_path + 'compiled_templates_' + md5(of sourcedir)
+            $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
+            if (!file_exists($compileDest)) {
+                require_once 'System.php';
+                System::mkdir(array('-p',$compileDest));
+            }
+            $isTmp = true;
+        
+        }
+        
+         
+        
+        // we generally just keep the directory structure as the application uses it,
+        // so we dont get into conflict with names
+        // if we have multi sources we do md5 the basedir..
+        
+       
+        
+        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.'.$this->options['locale'].'.php';
+        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.gettext.serial';
+        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.elements.serial';
+          
+        $recompile = false;
+        // we only compile if not uptodate or forced to.
+        $isuptodate = !file_exists( $this->compiledTemplate ) || 
+            (filemtime( $this->currentTemplate ) != filemtime( $this->compiledTemplate ));
+            
+        if( @$this->options['forceCompile'] || !$isuptodate ) {
+            $recompile = true;
+        } else {
+            return true;
+        }
+        
+        
+        
+        
+        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
+            require_once 'System.php';
+            
+            System::mkdir(array('-p',$compileDest));
+        }
+        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
+            return $this->raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
+                            "Please give write and enter-rights to it",
+                            HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        }
+        
+        if (!file_exists(dirname($this->compiledTemplate))) {
+            require_once 'System.php';
+            System::mkdir(array('-p','-m', 0770, dirname($this->compiledTemplate)));
+        }
+         
+        // Compile the template in $file. 
+        
+        require_once 'HTML/Template/Flexy/Compiler.php';
+        $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
+        $ret = $compiler->compile($this);
+        if (is_a($ret,'PEAR_Error')) {
+            return $this->raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
+                $ret->code,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        }
+        return $ret;
+        
+        //return $this->$method();
+        
+    }
+
+     /**
+    *  compiles all templates
+    *  Used for offline batch compilation (eg. if your server doesn't have write access to the filesystem).
+    *
+    *   @access     public
+    *   @author     Alan Knowles <alan@akbkhome.com>
+    *
+    */
+    function compileAll($dir = '',$regex='/.html$/')
+    {
+        
+        require_once 'HTML/Template/Flexy/Compiler.php';
+        $c = new HTML_Template_Flexy_Compiler;
+        $c->compileAll($this,$dir,$regex);
+    } 
+    
     /**
     *   Outputs an object as $t 
     *
@@ -369,235 +541,6 @@ class HTML_Template_Flexy
         $template->outputObject($t);
     }
     
-      
- 
- 
-    /**
-    *   compile the template
-    *
-    *   @access     public
-    *   @version    01/12/03
-    *   @author     Wolfram Kriesing <wolfram@kriesing.de>
-    *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
-    *   @param      boolean $fixForMail - replace ?>\n with ?>\n\n
-    *   @return     boolean true on success. PEAR_Error on failure..
-    */
-    function compile( $file )
-    {
-        if (!$file) {
-            return $this->raiseError('HTML_Template_Flexy::compile no file selected',
-                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS,HTML_TEMPLATE_FLEXY_ERROR_DIE);
-        }
-        
-        if (!@$this->options['locale']) {
-            $this->options['locale']='en';
-        }
-        
-        
-        //Remove the slash if there is one in front, just to be safe.
-        $file = ltrim($file,DIRECTORY_SEPARATOR);
-          
-        $parts = array();
-        $tmplDirUsed = false;
-        
-        // PART A mulitlanguage support: ( part B is gettext support in the engine..) 
-        //    - user created language version of template.
-        //    - compile('abcdef.html') will check for compile('abcdef.en.html') 
-        //       (eg. when locale=en)
-        
-        $this->currentTemplate  = false;
-        
-        if (preg_match('/(.*)(\.[a-z]+)$/i',$file,$parts)) {
-            $newfile = $parts[1].'.'.$this->options['locale'] .$parts[2];
-            foreach ($this->options['templateDir'] as $tmplDir) {
-                if (@!file_exists($tmplDir . DIRECTORY_SEPARATOR .$newfile)) {
-                    continue;
-                }
-                $file = $newfile;
-                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR .$newfile;
-                $tmplDirUsed = $tmplDir;
-            }
-        }
-        
-        // look in all the posible locations for the template directory..
-        if ($this->currentTemplate  === false) {
-            $dirs = array_unique($this->options['templateDir']);
-            if ($this->options['templateDirOrder'] == 'reverse') {
-                $dirs = array_reverse($dirs);
-            }
-            foreach ($dirs as $tmplDir) {
-                if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
-                    continue;
-                }
-                 
-                    
-                if (!$this->options['multiSource'] && ($this->currentTemplate  !== false)) {
-                    return $this->raiseError("You have more than one template Named {$file} in your paths, found in both".
-                        "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  
-                        HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS , HTML_TEMPLATE_FLEXY_ERROR_DIE);
-                    
-                }
-                
-                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR . $file;
-                $tmplDirUsed = $tmplDir;
-            }
-        }
-        if ($this->currentTemplate === false)  {
-            // check if the compile dir has been created
-            return $this->raiseError("Could not find Template {$file} in any of the directories<br>" . 
-                implode("<BR>",$this->options['templateDir']) ,
-                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS, HTML_TEMPLATE_FLEXY_ERROR_DIE);
-        }
-        
-        
-        /* Savant compatible compiler */
-        
-        if ($this->options['compiler'] == 'Raw') {
-            $this->compiledTemplate = $this->currentTemplate;
-            return true;
-        }
-        
-        
-        
-        
-        // now for the compile target 
-        
-        //If you are working with mulitple source folders and $options['multiSource'] is set
-        //the template folder will be:
-        // compiled_tempaltes/{templatedir_basename}_{md5_of_dir}/
-        
-        
-        $compileSuffix = ((count($this->options['templateDir']) > 1) && $this->options['multiSource']) ? 
-             DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
-        
-        
-        $compileDest = @$this->options['compileDir'];
-        
-        $isTmp = false;
-        // Use a default compile directory if one has not been set. 
-        if (!@$compileDest) {
-            // Use session.save_path + 'compiled_templates_' + md5(of sourcedir)
-            $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
-            if (!file_exists($compileDest)) {
-                require_once 'System.php';
-                System::mkdir(array('-p',$compileDest));
-            }
-            $isTmp = true;
-        
-        }
-        
-         
-        
-        // we generally just keep the directory structure as the application uses it,
-        // so we dont get into conflict with names
-        // if we have multi sources we do md5 the basedir..
-        
-       
-        
-        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.'.$this->options['locale'].'.php';
-        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.gettext.serial';
-        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.elements.serial';
-          
-        $recompile = false;
-        // we only compile if not uptodate or forced to.
-        
-        if( @$this->options['forceCompile'] || !$this->isUpToDate() ) {
-            $recompile = true;
-        } else {
-            return true;
-        }
-        
-        
-        
-        
-        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
-            require_once 'System.php';
-            
-            System::mkdir(array('-p',$compileDest));
-        }
-        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
-            return $this->raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
-                            "Please give write and enter-rights to it",
-                            HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
-        }
-        
-        if (!file_exists(dirname($this->compiledTemplate))) {
-            require_once 'System.php';
-            System::mkdir(array('-p','-m', 0770, dirname($this->compiledTemplate)));
-        }
-         
-        // Compile the template in $file. 
-        
-        require_once 'HTML/Template/Flexy/Compiler.php';
-        $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
-        $ret = $compiler->compile($this);
-        if (is_a($ret,'PEAR_Error')) {
-            return $this->raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
-                $ret->code,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
-        }
-        return $ret;
-        
-        //return $this->$method();
-        
-    }
-
-     /**
-    *  compiles all templates
-    *  Used for offline batch compilation (eg. if your server doesn't have write access to the filesystem).
-    *
-    *   @access     public
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *
-    */
-    function compileAll($dir = '',$regex='/.html$/')
-    {
-        
-        $base =  $this->options['templateDir'];
-        $dh = opendir($base . DIRECTORY_SEPARATOR  . $dir);
-        while (($name = readdir($dh)) !== false) {
-            if (!$name) {  // empty!?
-                continue;
-            }
-            if ($name{0} == '.') {
-                continue;
-            }
-             
-            if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
-                $this->compileAll($dir . DIRECTORY_SEPARATOR  . $name,$regex);
-                continue;
-            }
-            
-            if (!preg_match($regex,$name)) {
-                continue;
-            }
-            echo "Compiling $dir". DIRECTORY_SEPARATOR  . "$name \n";
-            $this->compile($dir . DIRECTORY_SEPARATOR  . $name);
-        }
-        
-    }
-    /**
-    *   checks if the compiled template is still up to date
-    *
-    *   @access     private
-    *   @version    01/12/03
-    *   @author     Wolfram Kriesing <wolfram@kriesing.de>
-    *   @return     boolean     true if it is still up to date
-    */
-    function isUpToDate()
-    {
-        // Check against the template in the specified file (if it exists), or if none is specified, the current template.
-        
-        if( !file_exists( $this->compiledTemplate ) ||
-            filemtime( $this->currentTemplate ) != filemtime( $this->compiledTemplate )
-          ) 
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-      
     /**
     *   if debugging is on, print the debug info to the screen
     *
