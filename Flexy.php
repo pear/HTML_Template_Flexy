@@ -223,6 +223,7 @@ class HTML_Template_Flexy
         // the old way of auto matching form elements to object Vars
         
         if ($this->elementsFile && file_exists($this->elementsFile)) {
+            require_once 'HTML/Template/Flexy/Element.php';
             $this->_elements = unserialize(file_get_contents($this->elementsFile));
         }
         
