@@ -151,12 +151,12 @@ class HTML_Template_Flexy
         $baseoptions = &PEAR::getStaticProperty('HTML_Template_Flexy','options');
        
         if ($baseoptions ) {
-            foreach( $baseoptions as  $key=>$aOption )  {
+            foreach( $baseoptions as  $key=>$aOption)  {
                 $this->options[$key] = $aOption;
             }
         }
         
-        foreach( $options as $key=>$aOption )  {
+        foreach( $options as $key=>$aOption)  {
            $this->options[$key] = $aOption;
         }
         
@@ -165,8 +165,14 @@ class HTML_Template_Flexy
             $this->options['filters']= explode(',',$filters);
         }
         
-        if(!@is_dir($this->options['compileDir']) )
+        if (is_string($this->options['templateDir'])) {
+            $this->options['templateDir'] = explode(';', $templateDirs);
+        }
+        
+        
+        if(!@is_dir($this->options['compileDir']) ) {
             return new PEAR_Error('The compile-directory doesnt exist yet!');
+        }
     }
 
     /**
@@ -340,8 +346,9 @@ class HTML_Template_Flexy
             foreach( $path as $aDir ) {
                 $compileDest = $compileDest. DIRECTORY_SEPARATOR . $aDir;
                 if( !@is_dir($compileDest) ) {
-                    umask(0000);                        // make that the users of this group (mostly 'nogroup') can erase the compiled templates too
-                    if( !@mkdir($compileDest,0770) ) {
+                    umask(0000);          // make that the users of this group (mostly 'nogroup') 
+                                          // can erase the compiled templates too
+                    if( !@mkdir($compileDest, 0770) ) {
                         PEAR::raiseError(   "couldn't make directory: <b>'$aDir'</b> under <b>'".$this->options['compileDir']."'</b><br>".
                                             "Please give write permission to the 'compileDir', so HTML_Template_Flexy can create directories inside",
                                              null, PEAR_ERROR_DIE);
@@ -352,7 +359,7 @@ class HTML_Template_Flexy
         
         /* 
         
-            incomming file looks like xxxxxxxx.yyyy
+            incoming file looks like xxxxxxxx.yyyy
             if xxxxxxxx.{locale}.yyy exists - use that...
         */
         $parts = array();
@@ -363,12 +370,27 @@ class HTML_Template_Flexy
             }
         }
         
+        // look in all the posible locations for the template directory..
+        $this->currentTemplate  = false;
         
-        $this->currentTemplate = $this->options['templateDir'].DIRECTORY_SEPARATOR .$file;
-        
-        if( !@file_exists($this->currentTemplate ))  {
+        if (is_array($this->options['templateDir'])) {
+            
+            foreach ($this->options['templateDir'] as $tmplDir) {
+                if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
+                    continue;
+                }
+                if ($this->currentTemplate  !== false) {
+                    return PEAR::raiseError("You have more than one template Named {$file} in your paths, found in both".
+                        "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  null, PEAR_ERROR_DIE);
+                    
+                }
+                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR . $file;
+            }
+        }
+        if ($this->currentTemplate === false)  {
             // check if the compile dir has been created
-            PEAR::raiseError("Template {$this->currentTemplate} does not exist<br>",  null, PEAR_ERROR_DIE);
+            return PEAR::raiseError("Could not find Template {$file} in any of the directories<br>" . 
+                implode("<BR>",$this->options['templateDir']) ,  null, PEAR_ERROR_DIE);
         }
          
  
