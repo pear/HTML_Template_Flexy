@@ -91,15 +91,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             $data = file_get_contents($flexy->currentTemplate);
         }
          
-            // PRE PROCESS {_(.....)} translation markers.
-        
-        
-        
-        
+        // PRE PROCESS {_(.....)} translation markers.
         if (strpos($data,'{_(') !== false) {
             $data = $this->preProcessTranslation($data);
-        
-            
         }
         
         // Tree generation!!!
@@ -270,6 +264,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     * @access   public 
     */
     function preProcessTranslation($data) {
+        global $_HTML_TEMPLATE_FLEXY_COMPILER;
         $matches = array();
         $lmatches = explode ('{_(', $data);
         array_shift($lmatches);
