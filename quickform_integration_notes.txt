@@ -12,13 +12,13 @@ PHP code side logic:
 
 $template = new HTML_Template_Flexy;
 $template->compile('somehtmlform.html');
-$quickForm = $template->getQuickForm($dataObject); 
-            // uses an object to set the defaults (returns ref to quickform)
-$elements = $quickForm->getElements(); // returns reference to elements array 
+$template->setQuickFormData($dataObject); 
+            // uses an object to set the defaults // sets up $template->quickForm
+$elements = $template->quickForm->getElements(); // returns reference to elements array 
 $elements['xyz']->loadArray($dataObject->getSelectOptions('xyz');
 
-if ($quickform->validate()) {
-    $quickform->freeze();
+if ($template->quickform->validate()) {
+    $template->quickform->freeze();
     
     $original = $dataObject;
     $dataObject->setFrom($quickForm->getSubmitValues());
