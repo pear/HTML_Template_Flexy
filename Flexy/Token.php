@@ -451,7 +451,7 @@ class HTML_Template_Flexy_Token {
         $s = str_replace('[',"['",$s);
         $s = str_replace(']',"']",$s);
         // strip the quotes if it's only numbers..
-        $s = preg_replace("/'([0-9])+'/", "\\1",$s);
+        $s = preg_replace("/'([0-9]+)'/", "\\1",$s);
         
         $parts = explode(".",$s);
         
