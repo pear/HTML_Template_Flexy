@@ -343,8 +343,13 @@ class HTML_Template_Flexy
         
         // note this should be moved to new HTML_Template_Flexy_Token
         // and that can then manage all the tokens in one place..
-        
+        if (@$this->options['debug']) {
+            echo "compiling template $this->currentTemplate<BR>";
+            
+        }
         require_once 'HTML/Template/Flexy/Tokenizer.php';
+        
+        
         $this->_elements = array();
         
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
@@ -369,7 +374,11 @@ class HTML_Template_Flexy
             
            
         $data = $res->toString();
-        
+        if (@$this->options['debug']) {
+            echo "<B>Result: </B>".htmlspecialchars($data)."<BR>";
+            
+        }
+
         if ($this->options['nonHTML']) {
            $data =  str_replace("?>\n","?>\n\n",$data);
         }
@@ -377,13 +386,23 @@ class HTML_Template_Flexy
         
         // error checking?
         if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
+            if (@$this->options['debug']) {
+                echo "<B>Writing: </B>".htmlspecialchars($data)."<BR>";
+                
+            }
             fwrite($cfp,$data);
             fclose($cfp);
             @chmod($this->compiledTemplate,0775);
+            
+            
+            
+        } else {
+            PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$this->compiledTemplate,null,PEAR_ERROR_DIE);
         }
-        
         // gettext strings
-        @unlink($this->gettextStringsFile);
+        if (file_exists($this->gettextStringsFile)) {
+            unlink($this->gettextStringsFile);
+        }
         
         if($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] &&
             ($cfp = fopen( $this->getTextStringsFile, 'w') ) ) {
@@ -393,7 +412,10 @@ class HTML_Template_Flexy
         }
         
         // elements
-        @unlink($this->elementsFile);
+        if (file_exists($this->elementsFile)) {
+            unlink($this->elementsFile);
+        }
+        
         if($this->_elements &&
             ($cfp = fopen( $this->elementsFile, 'w') ) ) {
             
