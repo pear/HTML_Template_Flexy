@@ -66,7 +66,14 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = array();
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
         
-        setlocale(LC_ALL, $this->options['locale']);
+        
+        if (is_a($this->options['Translation2'],'Translation2')) {
+            $this->options['Translation2']->setLang($this->options['locale']);
+            // fixme - needs to be more specific to which template to use..
+            $this->options['Translation2']->setPageID(basename($flexy->currentTemplate));
+        } else {
+            setlocale(LC_ALL, $this->options['locale']);
+        }
         
         
         
@@ -655,6 +662,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
   
     function translateString($string)
     {
+        
+        // first see if we are using translation2
+        if (is_a($this->options['Translation2'],'Translation2') {
+            $result = $this->options['Translation2']->get($string);
+            if (!empty($result)) {
+                return $result;
+            }
+            return $string;
+        }
+        
+        
         
         $prefix = basename($GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']).':';
         if (@$this->options['debug']) {

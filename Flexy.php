@@ -67,12 +67,18 @@ class HTML_Template_Flexy
     */
     var $options = array(   'compileDir'    =>  '',         // where do you want to write to..
                             'templateDir'   =>  '',         // where are your templates
+                            
+                            // get text/transalation suppport
                             'locale'        => 'en',        // works with gettext or File_Gettext
                             'textdomain'    => '',          // for gettext emulation with File_Gettext
                                                             // eg. 'messages' (or you can use the template name.
                             'textdomainDir' => '',          // eg. /var/www/site.com/locale
                                                             // so the french po file is:
                                                             // /var/www/site.com/local/fr/LC_MESSAGE/{textdomain}.po
+                            
+                            'Translation2'  => false,       // set to 'Translation2' => new Translation2('dataobjectsimple','')
+                                                            // to make Translation2 a provider.
+                                                            // rather than gettext.
                                                             
                             'forceCompile'  =>  false,      // only suggested for debugging
 
@@ -91,6 +97,7 @@ class HTML_Template_Flexy
                                                             // So you can have user themes....
                             'templateDirOrder' => '',       // set to 'reverse' to assume that first template
                                                             // is the one use, rather than last (default)
+                            
                         );
 
     
