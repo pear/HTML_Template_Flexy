@@ -365,8 +365,10 @@ class HTML_Template_Flexy
         $parts = array();
         if (preg_match('/(.*)(\.[a-z]+)$/i',$file,$parts)) {
             $newfile = $parts[1].'.'.$this->options['locale'] .$parts[2];
-            if (@file_exists($this->options['templateDir']. DIRECTORY_SEPARATOR .$newfile)) {
-                $file = $newfile;
+            foreach ($this->options['templateDir'] as $tmplDir) {
+                if (@file_exists($tmplDir . DIRECTORY_SEPARATOR .$newfile)) {
+                    $file = $newfile;
+                }
             }
         }
         
