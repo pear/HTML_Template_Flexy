@@ -81,7 +81,10 @@ class HTML_Template_Flexy_Token {
         static $loaded = array();
         
         if (!isset($loaded[$token])) {
-            @include 'HTML/Template/Flexy/Token/'.$token.'.php';
+            // make sure parse errors are picked up - now @ here..
+            if (file_exists(dirname(__FILE__)."/Token/{$token}.php")) {
+                include 'HTML/Template/Flexy/Token/'.$token.'.php';
+            }
             $loaded[$token] = true;
         }
             
@@ -186,6 +189,7 @@ class HTML_Template_Flexy_Token {
         $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'] = array();
         $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
         
+        $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = false;
         
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = array(new HTML_Template_Flexy_Token);
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->id =0;
@@ -195,11 +199,12 @@ class HTML_Template_Flexy_Token {
         // initialize state - this trys to make sure that
         // you dont do to many elses etc.
        
-        
+        //echo "RUNNING TOKENIZER";
         // step one just tokenize it.
         while ($t = $tokenizer->yylex()) {  
             
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_ERROR) {
+                //echo "ERROR";
                 PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $t->line,
                     null,PEAR_ERROR_DIE);
             }
@@ -210,9 +215,11 @@ class HTML_Template_Flexy_Token {
             $i++;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = $tokenizer->value;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $i;
-            //print_r($res[$i]);
+            //print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]);
              
         }
+        //echo "BUILT TOKENS";
+        
         $res = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'];
         // connect parent and child tags.
         $stack = array();

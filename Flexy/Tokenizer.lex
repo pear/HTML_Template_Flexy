@@ -50,10 +50,9 @@ define("IN_DOUBLEQUOTE"     ,7);
 define("IN_MD"     ,8);
 define("IN_COM"     ,9);
 define("IN_DS"     ,10);
- 
 define("IN_FLEXYMETHOD"     ,11);
- 
-define("IN_FLEXYMETHODQUOTED"     ,11);
+define("IN_FLEXYMETHODQUOTED"     ,12);
+define("IN_FLEXYMETHODQUOTED_END"     ,13);
 
 
 define('YY_E_INTERNAL', 0);
@@ -93,7 +92,7 @@ define('YY_EOF' , 258);
     
     
 	function error($n,$s) {
-        echo "Error $n: $s\n";
+        echo "Error  $n on Line {$this->yyline}: $s\n";
     }
      
     
@@ -105,7 +104,7 @@ define('YY_EOF' , 258);
 %line
 %full
 %char
-%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED
+%state IN_SINGLEQUOTE IN_TAG IN_ATTR IN_ATTRVAL IN_NETDATA IN_ENDTAG IN_DOUBLEQUOTE IN_MD IN_COM IN_DS IN_FLEXYMETHOD IN_FLEXYMETHODQUOTED IN_FLEXYMETHODQUOTED_END
 
  
 
@@ -208,7 +207,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{ETAGO}{NAME}?{WHITESPACE}"/"{STAGO} {
     /* </name <  -- unclosed end tag */
     $this->error(0,"Unclosed  end tag");
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   
@@ -226,7 +225,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{ETAGO}{TAGC}			{
 	/* </> -- empty end tag */		
     $this->error(0,"empty end tag not handled");
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
             
 <YYINITIAL>{MDO}{NAME}{WHITESPACE}			{
@@ -241,7 +240,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{MDO}{TAGC}			{ 
     /* <!> */
     $this->error(SGML_ERROR,"empty markup tag not handled"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
 
@@ -258,14 +257,14 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{MDO}{DSO}{WHITESPACE}			{
     /* <![ -- marked section */
     $this->error(SGML_ERROR,"marked section not handled"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
 
 <YYINITIAL>{MSC}{TAGC}		{ 
     /* ]]> -- marked section end */
     $this->error(SGML_ERROR,"unmatched marked sections end"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
     
   
@@ -294,7 +293,7 @@ FLEXY_MODIFIER      = [hur]
 <YYINITIAL>{STAGO}{TAGC}			{  
     // <> -- empty start tag */
     $this->error(0,"empty tag"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   
@@ -329,7 +328,7 @@ FLEXY_MODIFIER      = [hur]
   
 <IN_ATTR>{NAME}{WHITESPACE}		{
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[strtoupper(trim($this->yytext()))] = null;
+    $this->attributes[strtoupper(trim($this->yytext()))] = true;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -435,7 +434,7 @@ FLEXY_MODIFIER      = [hur]
   // <a name= ^> -- illegal tag close */
 <IN_ATTRVAL>{TAGC}			{ 
     $this->error(0, "Tag close found where attribute value expected"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   // <a name=foo ^>,</foo^> -- tag close */
@@ -451,19 +450,19 @@ FLEXY_MODIFIER      = [hur]
   // <em^/ -- NET tag */
 <IN_ATTRVAL>{NET}	{
     $this->error(0,"attribute value missing"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   // <em^/ -- NET tag */
 <IN_ATTR>{NET}	{
     $this->yybegin(IN_NETDATA);
-    $this->attributes["/"] = null;
+    $this->attributes["/"] = true;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 } 
 
 <IN_ATTR>{NET}{WHITESPACE}{TAGC}	{
-    $this->attributes["/"] = null;
+    $this->attributes["/"] = true;
     $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
@@ -476,7 +475,7 @@ FLEXY_MODIFIER      = [hur]
 <IN_ATTR,IN_ATTRVAL,IN_TAG> {STAGO}	{
     // <foo^<bar> -- unclosed start tag */
     $this->error(0,"Unclosed tags not supported"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   
@@ -501,7 +500,7 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_ATTR,IN_ATTRVAL,IN_TAG> .	{
     $this->error(0,"ERROR: unexpected : character in tag: (".$this->yytext().") 0x" . dechex(ord($this->yytext())));
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
   // end tag -- non-permissive */
@@ -516,7 +515,7 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_ENDTAG>. { 
     $this->error(0,"extraneous character in end tag"); 
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
  
@@ -592,7 +591,7 @@ FLEXY_MODIFIER      = [hur]
 
 <IN_MD,IN_COM>.  {
     $this->error(0, "illegal character in markup declaration");
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
  
@@ -661,6 +660,9 @@ FLEXY_MODIFIER      = [hur]
     $this->value = HTML_Template_Flexy_Token::factory('Else', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
+
+
+// plan is to remove these - using a object method solves it anyway..
 
 <YYINITIAL>"{include:"{FLEXY_VAR}"}" {
     $this->value = HTML_Template_Flexy_Token::factory('Include', substr($this->yytext(),9,-1),$this->yyline);
@@ -773,7 +775,7 @@ FLEXY_MODIFIER      = [hur]
 }
 <IN_FLEXYMETHOD> . {
     $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 } 
 
 
@@ -785,49 +787,63 @@ FLEXY_MODIFIER      = [hur]
     $this->value =  '';
     $n = $this->yytext();
     if ($n{0} != "{") {
-        $n = substr($n,3);
+        $n = substr($n,2);
     }
-    $this->flexyMethod = substr($n,0,-1);
+    
+    $this->flexyMethod = substr($n,1,-1);
     $this->flexyArgs = array();
     $this->flexyMethodState = $this->yy_lexical_state;
     $this->yybegin(IN_FLEXYMETHODQUOTED);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
+// no values in method.
 
-<IN_FLEXYMETHODQUOTED>{FLEXY_VAR}(","|")"{FLEXY_END}) {
+<IN_FLEXYMETHODQUOTED,IN_FLEXYMETHODQUOTED_END>(")"|"):"{FLEXY_MODIFIER}){FLEXY_END} {
     
     $t = $this->yytext();
-    
-    if ($t{strlen($t-1)} == ",") {
-        // add argument
-        $this->flexyArgs[] = substr($t,0,-1);
-        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    if ($p = strpos($t,':')) {
+        $this->flexyMethod .= substr($t,$p,2);
     }
-    $this->flexyArgs[] = substr($t,0,-2);
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);    
     $this->yybegin($this->flexyMethodState);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_FLEXYMETHODQUOTED>"#"{FLEXY_LITERAL}("#,"|"#)"{FLEXY_END}) {
+<IN_FLEXYMETHODQUOTED_END>"," {
+
+    $this->yybegin(IN_FLEXYMETHODQUOTED);
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+}
+
+
+<IN_FLEXYMETHODQUOTED>{FLEXY_VAR} {
+    
+    $t = substr($this->yytext(),0,-1);
+    
+    // add argument
+    $this->flexyArgs[] = $t;
+    $this->yybegin(IN_FLEXYMETHODQUOTED_END);
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+  
+    
+}
+
+ 
+
+<IN_FLEXYMETHODQUOTED>"#"{FLEXY_LITERAL}"#" {
     $t = $this->yytext();
-    if ($t{ strlen($t-1) } == ",") {
-        // add argument
-        $this->flexyArgs[] = substr($t,0,-1);
-        return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
-    }
     $this->flexyArgs[] = substr($t,0,-1);
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
-    $this->yybegin($this->flexyMethodState);
+    $this->yybegin(IN_FLEXYMETHODQUOTED_END);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    
+    
 }
-
 
  
 
 
 <YYINITIAL,IN_TAG,IN_ATTR,IN_ATTRVAL> . {
     $this->error(0,"ERROR: unexpected something: (".$this->yytext() .") character: 0x" . dechex(ord($this->yytext())));
-    return HTML_TEMPLATE_FLEXY_ERROR;
+    return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 } 

@@ -90,6 +90,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
             case 'u':
                 $prefix = 'echo urlencode(';
                 $suffix = ')';
+                break;
             default:
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?

@@ -52,7 +52,22 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
     */
     function toString() {
         // ignore modifier at present!!
-        return "<?php echo htmlspecialchars(" . $this->toVar($this->value) . "); ?>";
+        $prefix = 'echo ';
+        $suffix = '';
+        switch ($this->modifier) {
+            case 'h':
+                break;
+            case 'u':
+                $prefix = 'echo urlencode(';
+                $suffix = ')';
+                break;
+            default:
+                $prefix = 'echo htmlspecialchars(';
+                // add language ?
+                $suffix = ')';
+        }
+        
+        return "<?php {$prefix}" . $this->toVar($this->value) . "{$suffix}; ?>";
     }
 
 }

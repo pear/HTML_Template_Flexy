@@ -105,9 +105,21 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @see parent::toString()
     */
     function toString() {
-    
+        
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        $flexyignore = $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'];
+        
+        if ($this->getAttribute('FLEXYIGNORE')) {
+            
+            $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = true;
+            unset($this->attributes['FLEXYIGNORE']);
+        }
+        
+        
         $method = 'parseTag'.ucfirst(strtolower($this->tag));
-        if (method_exists($this,$method)) {
+        
+        if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
             $this->$method();
         }
     
@@ -122,12 +134,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $this->close->postfix = array($this->factory("End",
                     '',
                     $this->line));
-        
+            unset($this->attributes['FOREACH']);
         }
     
         $ret .=  "<". $this->tag;
         foreach ($this->attributes as $k=>$v) {
-            if ($v === null) {
+            if ($v === true) {
                 $ret .= " $k";
                 continue;
             }
@@ -168,6 +180,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if ($this->close) {
             $ret .= $this->close->toString();
         }
+        // reset flexyignore
+        
+        $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = $flexyignore;
+        
         return $ret;
     }
     
@@ -329,6 +345,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         $_HTML_TEMPLATE_FLEXY_TOKEN['activeSelect'] = $name;
         
         if ($this->getAttribute('STATIC')) {
+            unset($this->attributes['STATIC']);
             return;
         }
          
@@ -370,7 +387,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
  
         $php = '<? ';
         
-        if ($this->getAttribute('SELECTED') === null) {
+        if ($this->getAttribute('SELECTED')) {
            // then it's the default..
            // if no value is available for $this->the_form->the name of the tag...
            // just leave it allown
@@ -429,11 +446,25 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         // all attribute keys are stored Upper Case,
         // however just to make sure we have not done a typo :)
         $key = strtoupper($key); 
+        //echo "looking for $key\n";
+        //var_dump($this->attributes);
+        
+        // this is weird case isset() returns false on this being null!
+        
+        if (@$this->attributes[$key] === true) {
+            return true;
+        }
         
         if (!isset($this->attributes[$key])) {
-            return '';
+            return;
         }
         $v = $this->attributes[$key];
+        
+        // unlikely :)
+        if ($v=='') {
+            return $v;
+        }
+        
         switch($v{0}) {
             case "\"":
             case "'":

@@ -7,9 +7,45 @@
 
 <body>
 <p>Example Template for HTML_Template_Flexy</p>
-<p>Standard variables {hello} {world:h}</p>
-<p>a loop {foreach:loop,a} {a} {end:}</p>
+
+<h2>Variables</H2>
+
+<p>Standard variables 
+{hello} 
+{world:h}
+{test:u}
+<img src="%7bgetImageDir%7D/someimage.jpg">
+<img src="%7bgetImageDir:h%7D/someimage.jpg">
+<img src="%7bgetImageDir:u%7D/someimage.jpg">
+
+<img src="%7bgetImageDir}/someimage.jpg">
+<img src="{getImageDir%7D/someimage.jpg">
+</p>
+
+<h2>Methods</H2>
+<p>Calling a method {a.helloWorld()}</p>
+<p>or {includeBody():h}</P>
+<img src="%7bgetImageDir()%7D/someimage.jpg">
+<img src="%7bgetImageDir():h%7D/someimage.jpg">
+<img src="%7bgetImageDir():u%7D/someimage.jpg">
+
+<img src="%7bgetImageDir()}/someimage.jpg">
+<img src="{getImageDir()%7D/someimage.jpg">
+
+<H2>Conditions</H2>
 <p>a condition {if:condition} hello {else:} world {end:}</p>
+
+
+<h2>Looping</h2>
+
+
+<p>a loop {foreach:loop,a} {a} {end:}</p>
+<p>a loop with 2 vars {foreach:loop,a,b} 
+    {a} , 
+    {b}
+{end:}</p>
+
+
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
 <table width="100%" border="0">
   <tr foreach="loop,a"> 
@@ -17,7 +53,42 @@
     <td>{a}</td>
   </tr>
 </table>
-<p>Calling a method {a.helloWorld()}</p>
+
+<p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
+<table width="100%" border="0">
+  <tr foreach="loop,a,b"> 
+    <td>{a}</td>
+    <td>{b}</td>
+  </tr>
+</table>
+
+<h2>Form Not Parsed</h2>
+
+<form name="test" flexyignore>
+    <input name=test123>
+    <select name="aaa">
+        <option>bb</option>
+    </select>
+</form>
+
+<h2>Parsed</h2>
+
+
+<form name="test">
+    <input name=test123>
+    <textarea name="fred">some text</textarea>
+    <select name="aaa">
+        <option>bb</option>
+    </select>
+    <select name="aaa" flexyignore>
+        <option>bb</option>
+    </select>
+    <select name="aaa" static>
+        <option>bb</option>
+    </select>
+</form>
+
+
 <p>&nbsp;</p>
 </body>
 </html>

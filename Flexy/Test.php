@@ -81,7 +81,9 @@ class HTML_Template_Flexy_Test {
             $data = file_get_contents($file);
             //echo strlen($data);
             $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
+            
             $tokenizer->debug=1;
+            //echo "buliding tokens";
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
             
             

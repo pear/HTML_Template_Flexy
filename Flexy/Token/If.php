@@ -45,7 +45,7 @@ class HTML_Template_Flexy_Token_If extends HTML_Template_Flexy_Token{
     * @see parent::toString(), $this->toVar()
     */
     function toString() {
-        $ret = "<?php if(@".$this->toVar($this->condition) .")  { ?>";
+        $ret = "<?php if (".$this->toVar($this->condition) .")  { ?>";
         $this->pushState();
         return $ret;
         
