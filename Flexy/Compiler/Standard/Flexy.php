@@ -103,7 +103,8 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
             }
             $v = substr($v,1,-1);
             $ret .= $this->compiler->appendPhp(
-                'echo HTML_Javascript_Convert::convertVar('.$element->toVar($v) .',\''.$prefix . $k.'\',true);');
+                '$__tmp = HTML_Javascript_Convert::convertVar('.$element->toVar($v) .',\''.$prefix . $k.'\',true);'.
+                'echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;');
             $ret .= $this->compiler->appendHTML("\n");
         }
         $ret .= $this->compiler->appendHTML("</script>");
