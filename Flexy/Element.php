@@ -413,6 +413,8 @@ class HTML_Template_Flexy_Element {
             $atts=array();
             if (($k !== $v) && !$noValue) {
                 $atts = array('value'=>$k);
+            } else {
+                $atts = array('value'=>$v);
             }
             $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
             $add->children = array(htmlspecialchars($v));
