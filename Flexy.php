@@ -65,49 +65,62 @@ class HTML_Template_Flexy
     /*on 
     *   @var    array   $options    the options for initializing the template class
     */
-    var $options = array(   'compileDir'    =>  '',         // where do you want to write to..
-                            'templateDir'   =>  '',         // where are your templates
-                            
-                            // get text/transalation suppport
-                            'locale'        => 'en',        // works with gettext or File_Gettext
-                            'textdomain'    => '',          // for gettext emulation with File_Gettext
-                                                            // eg. 'messages' (or you can use the template name.
-                            'textdomainDir' => '',          // eg. /var/www/site.com/locale
-                                                            // so the french po file is:
-                                                            // /var/www/site.com/local/fr/LC_MESSAGE/{textdomain}.po
-                            
-                            'Translation2'  => false,       // to make Translation2 a provider.
-                                                            // rather than gettext.
-                                                            // set to:
-                                                            //  'Translation2' => array(
-                                                            //         'driver' => 'dataobjectsimple',
-                                                            //         'options' => array()
-                                                            //  );
-                                                            // or the slower way.. 
-                                                            //   = as it requires loading the code..
-                                                            //
-                                                            //  'Translation2' => new Translation2('dataobjectsimple','')
-                                                            
-                                                            
-                            'forceCompile'  =>  false,      // only suggested for debugging
+    var $options = array(   
+        'compileDir'    =>  '',         // where do you want to write to.. (defaults to session.save_path)
+        'templateDir'   =>  '',         // where are your templates
+        
+        // where the template comes from.
+        'multiSource'   => false,       // Allow same template to exist in multiple places
+                                        // So you can have user themes....
+        'templateDirOrder' => '',       // set to 'reverse' to assume that first template
+        
+        
+        // get text/transalation suppport
+        'locale'        => 'en',        // works with gettext or File_Gettext
+        'textdomain'    => '',          // for gettext emulation with File_Gettext
+                                        // eg. 'messages' (or you can use the template name.
+        'textdomainDir' => '',          // eg. /var/www/site.com/locale
+                                        // so the french po file is:
+                                        // /var/www/site.com/local/fr/LC_MESSAGE/{textdomain}.po
+        
+        'Translation2'  => false,       // to make Translation2 a provider.
+                                        // rather than gettext.
+                                        // set to:
+                                        //  'Translation2' => array(
+                                        //         'driver' => 'dataobjectsimple',
+                                        //         'options' => array()
+                                        //  );
+                                        // or the slower way.. 
+                                        //   = as it requires loading the code..
+                                        //
+                                        //  'Translation2' => new Translation2('dataobjectsimple','')
+                                        
+                                        
+        'forceCompile'  =>  false,      // only suggested for debugging
 
-                            'debug'         => false,       // prints a few messages
-                            
-                            'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
-                            'allowPHP'      => false,       // allow PHP in template
-                            'compiler'      => 'Standard',  // which compiler to use.
-                            'compileToString' => false,     // should the compiler return a string 
-                                                            // rather than writing to a file.
-                            'filters'       => array(),     // used by regex compiler.
-                            'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00
-                            'flexyIgnore'   => 0,           // turn on/off the tag to element code
-                            'strict'        => false,       // All elements in the template must be defined !
-                            'multiSource'   => false,       // Allow same template to exist in multiple places
-                                                            // So you can have user themes....
-                            'templateDirOrder' => '',       // set to 'reverse' to assume that first template
-                                                            // is the one use, rather than last (default)
-                            
-                        );
+        'debug'         => false,       // prints a few messages
+        
+        
+        // compiling conditions.
+        'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
+        'allowPHP'      => false,       // allow PHP in template
+        'filters'       => array(),     // used by regex compiler.                
+        'flexyIgnore'   => 0,           // turn on/off the tag to element code
+        'numberFormat'  => ",2,'.',','",  // default number format  {xxx:n} format = eg. 1,200.00 
+        'compiler'      => 'Standard',  // which compiler to use.
+        'compileToString' => false,     // should the compiler return a string 
+                                        // rather than writing to a file.
+        'privates'      => false,       // allow access to _variables (eg. suido privates
+        'globals'       => false,       // allow access to _GET/_POST/_REQUEST/GLOBALS/_COOKIES/_SESSION
+
+
+        
+        'strict'        => false,       // All elements in the template must be defined - 
+                                        // makes php E_NOTICE warnings appear when outputing template.
+                                        
+        
+        
+    );
 
     
     

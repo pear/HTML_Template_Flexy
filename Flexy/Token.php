@@ -491,8 +491,14 @@ class HTML_Template_Flexy_Token {
         
         $parts = explode(".",$s);
         
+        
         $ret =  $this->findVar($parts[0]);
+        if (is_a($ret,'PEAR_Error')) {
+            return $ret;
+        }
+        
         array_shift($parts);
+        
         if (!count($parts)) {
             return $ret;
         }
@@ -520,6 +526,18 @@ class HTML_Template_Flexy_Token {
         if ($string == 'this') {
             return '$this';
         }
+        // accept global access on some string
+        if (@$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['globals'] &&
+            preg_match('/^(_POST|_GET|_REQUEST|_SESSION|_COOKIE|GLOBALS)\[/',$string)) {
+            return '$'.$parts[0];
+        } 
+        if (!@$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['privates'] &&
+                ($string{0} == '_')) {
+                return PEAR::raiseError('HTML_Template_Flexy::Attempt to access private variable:'.
+                    " on line {$element->line}, Use options[privates] to allow this."
+                   , null,PEAR_ERROR_DIE);
+        }
+        
         $lookup = $string;
         if ($p = strpos($string,'[')) {
             $lookup = substr($string,0,$p);
