@@ -339,6 +339,12 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
                 $prefix = 'echo number_format(';
                 $suffix = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['numberFormat'] . ')';
                 break;
+            case 'b': // nl2br + htmlspecialchars
+                $prefix = 'echo nl2br(htmlspecialchars(';
+                
+                // add language ?
+                $suffix = '))';
+                break;
             default:
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?
