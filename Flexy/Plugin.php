@@ -85,7 +85,7 @@ class HTML_Template_Flexy_Plugin {
         // ahref = maps to {class_prefix}_ahref::ahref
         
         if (empty($this->plugins)) {
-            foreach ($this->options['plugins'] as $p) {
+            foreach ($this->flexy->options['plugins'] as $p) {
                 if (is_array($p)) {
                     include_once $p[0];
                     $this->plugins[$p[1]] = new $p[1];
