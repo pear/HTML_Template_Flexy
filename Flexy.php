@@ -383,8 +383,12 @@ class HTML_Template_Flexy
         if($this->quickform &&
             ($cfp = fopen( $this->quickformFile, 'w') ) ) {
             
-            fwrite($cfp,serialize($this->quickform));
+            //echo "<PRE>";print_r($this->quickform);echo "</PRE>";
+            
+            fwrite($cfp,serialize($this->quickform->elementDefArray));
             fclose($cfp);
+            // now clear it.
+            $this->quickform = false;
         }
         
         return true;
@@ -646,21 +650,17 @@ class HTML_Template_Flexy
             return false;
         }
         require_once 'HTML/Template/Flexy/QuickForm.php';
-        if (!$this->quickform) {
-            $this->quickform = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile);
-        }
-         
-        if ($data === false) {
-            return;
-        }
-        
-        if (is_array($data)) {
-            $this->quickform->setDefaults($data);
-        }
-        
         if (is_object($data)) {
-            $this->quickform->setDefaults((array)$data);
+            $data = (array)$data;
         }
+        if (!is_array($data)) {
+            $data = array();
+        }
+        
+        
+        $this->quickform = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,$data);
+         
+        
      
     
     }
