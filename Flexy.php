@@ -254,7 +254,12 @@ class HTML_Template_Flexy
         
         //Remove the slash if there is one in front, just to be safe.
         $file = ltrim($file,DIRECTORY_SEPARATOR);
-          
+        
+        
+        if (strpos($file,'#')) {
+            list($file,$this->options['output.block']) = explode('#', $file);
+        }
+        
         $parts = array();
         $tmplDirUsed = false;
         
@@ -352,15 +357,18 @@ class HTML_Template_Flexy
         // if we have multi sources we do md5 the basedir..
         
        
-        
-        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.'.$this->options['locale'].'.php';
-        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.gettext.serial';
-        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.elements.serial';
+        $base = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file;
+        $fullFile = $this->compiledTemplate    = $base .'.'.$this->options['locale'].'.php';
+        $this->getTextStringsFile  = $base .'.gettext.serial';
+        $this->elementsFile        = $base .'.elements.serial';
+        if (isset($this->options['output.block'])) {
+            $this->compiledTemplate    .= '#'.$this->options['output.block'];
+        }
           
         $recompile = false;
         
-        $isuptodate = file_exists( $this->compiledTemplate ) ?
-            (filemtime( $this->currentTemplate ) == filemtime( $this->compiledTemplate )) : 0;
+        $isuptodate = (file_exists( $this->compiledTemplate  ) &&  file_exists( $fullFile))  ?
+            (filemtime( $this->currentTemplate ) == filemtime( $fullFile )) : 0;
             
         if( @$this->options['forceCompile'] || !$isuptodate ) {
             $recompile = true;
@@ -502,8 +510,6 @@ class HTML_Template_Flexy
                 $$_k = &$this->assign->references[$_k];
             }
         }
-        
-        
         
         include($this->compiledTemplate);
         

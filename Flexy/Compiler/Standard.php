@@ -69,6 +69,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = array();
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['prefixOutput']  = '';
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['compiledTemplate']  = $flexy->compiledTemplate;
         
         if (is_array($this->options['Translation2'])) {
             require_once 'Translation2.php';
@@ -197,17 +198,22 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         
         // error checking?
-        if( ($cfp = fopen( $flexy->compiledTemplate , 'w' )) ) {
+        $file  = $flexy->compiledTemplate;
+        if (isset($flexy->options['output.block'])) {
+            list($file,$part) = explode('#',$file  );
+        }
+        
+        if( ($cfp = fopen( $file , 'w' )) ) {
             if (@$this->options['debug']) {
                 echo "<B>Writing: </B>".htmlspecialchars($data)."<BR>";
                 
             }
             fwrite($cfp,$data);
             fclose($cfp);
-             chmod($flexy->compiledTemplate,0775);
+            chmod($file,0775);
             // make the timestamp of the two items match.
             clearstatcache();
-            touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
+            touch($file, filemtime($flexy->currentTemplate));
             
         } else {
             return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,

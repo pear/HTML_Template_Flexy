@@ -113,6 +113,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     {
         
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        global $_HTML_TEMPLATE_FLEXY;
          
         // store the element in a variable
         $this->element = $element;
@@ -279,6 +280,19 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // reset flexyignore
         
         $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = $flexyignore;
+        
+        if (isset($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block']) && 
+            ($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block'] == $element->getAttribute('ID'))) {
+                
+           // echo $_HTML_TEMPLATE_FLEXY['compiledTemplate'];
+            
+            $fh = fopen($_HTML_TEMPLATE_FLEXY['compiledTemplate'],'w');
+            fwrite($fh,$ret);
+            fclose($fh);   
+           
+        }
+            
+        
         
         return $ret;
     }

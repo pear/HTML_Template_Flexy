@@ -194,6 +194,7 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
         if (is_string($element->ucAttributes['CALL'])) {
             $arg = $element->getAttribute('CALL');
             return $this->compiler->appendPHP( 
+                    "if (function_exists('_html_template_flexy_compiler_standard_flexy_'.{$arg})) " .
                     " _html_template_flexy_compiler_standard_flexy_{$arg}(\$t,\$this);");
         }
         
@@ -204,8 +205,9 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
         if (is_a($add,'PEAR_Error')) {
             return $add;
         } 
-        return $this->compiler->appendPHP( 
-            " call_user_func_array('_html_template_flexy_compiler_standard_flexy_'.{$add},array(\$t,\$this));");
+        return $this->compiler->appendPHP(
+            "if (function_exists('_html_template_flexy_compiler_standard_flexy_'.{$add})) ".
+            "call_user_func_array('_html_template_flexy_compiler_standard_flexy_'.{$add},array(\$t,\$this));");
         
         
         
