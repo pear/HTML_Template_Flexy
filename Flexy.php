@@ -653,8 +653,8 @@ class HTML_Template_Flexy
         }
         require_once 'HTML/Template/Flexy/QuickForm.php';
           
-        
-        $this->quickforms = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,func_get_args());
+        $args = func_get_args(); 
+        $this->quickforms = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,$args);
         $this->setActiveQuickForm(0);
          
     }
