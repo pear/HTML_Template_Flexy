@@ -245,7 +245,11 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     function toString($element) 
     {
         static $len = 26; // strlen('HTML_Template_Flexy_Token_');
-        //echo $element->token . ':' . htmlspecialchars($element->value)."<BR>";
+        if ($this->options['debug']) {
+            $x = $element;
+            unset($x->children);
+            echo htmlspecialchars(print_r($x,true))."<BR>\n";
+        }
         if ($element->token == 'GetTextStart') {
             $this->inGetTextBlock = true;
             return '';

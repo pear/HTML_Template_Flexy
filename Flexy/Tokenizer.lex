@@ -498,7 +498,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_SINGLEQUOTE>(([^\{\%\'\\]+|\\[^\']|"%"|"{")+)	{
+<IN_SINGLEQUOTE>([^\{\%\'\\]+|\\[^\'])+|"%"|"{"	{
     
     $this->attrVal[] = $this->yytext();
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
