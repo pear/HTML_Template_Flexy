@@ -66,9 +66,10 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         if (!count($this->argTokens) && !$this->isWord()) {
             return $this->value;
         }
+        
         $front = '';
         $rear = '';
-        for ($i=0;$i<strlen($i); $i++) {
+        for ($i=0;$i<strlen($this->value); $i++) {
             if (strpos(" \n\t\r\0\x0B", $this->value{$i}) !== false) {
                 $front .= $this->value{$i};
                 continue;
@@ -76,7 +77,7 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
             break;
         }
          
-        for ($i=strlen($i);$i>-1; $i--) {
+        for ($i=strlen($this->value)-1;$i>-1; $i--) {
             if (strpos(" \n\t\r\0\x0B", $this->value{$i}) !== false) {
                 $rear = $this->value{$i} . $rear;
                 continue;

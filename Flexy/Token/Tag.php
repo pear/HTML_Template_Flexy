@@ -313,7 +313,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 
             case "BUTTON":            
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'text' ,
+                    'button' ,
                     $name,
                     $this->getAttribute('VALUE') ,
                     $this->getAttributes()  // wrapper needed...
@@ -327,6 +327,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     '' ,
                     $this->getAttributes()  // wrapper needed...
                 );
+               
                 break;
 
 
@@ -344,6 +345,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 return '';
             
             default:
+                
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
                     'text' ,
                     $name,
