@@ -134,6 +134,7 @@ class HTML_Template_Flexy_Element {
     function attributesToHTML()
     {
         $strAttr = '';
+        $xhtmlclose = '';
         foreach ($this->attributes as $key => $value) {
         
             // you shouldn't do this, but It shouldnt barf when you do..
@@ -145,11 +146,17 @@ class HTML_Template_Flexy_Element {
             }
             if ($value === true) {
                 // this is not xhtml compatible..
+                if ($key == '/') {
+                    $xhtmlclose = '/';
+                    continue;
+                }
                 $strAttr .= ' ' . $key;
             } else {
                 $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
             }
+            
         }
+        $strAttr .= $xhtmlclose;
         return $strAttr;
     } // end func _getAttrString
 
