@@ -509,7 +509,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             array('select',      $this->getAttribute('NAME'),  ''),
             array(
                 'setSize'        =>   $this->getAttribute('SIZE'),
-                'setMultiple' => $this->getAttribute('MULTIPLE'),
+                'setMultiple' => isset($this->attributes['MULTIPLE']),
                 'SetSelected' => $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['selectOptionSelected']
             ),
             $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['selectOptions']  // options..

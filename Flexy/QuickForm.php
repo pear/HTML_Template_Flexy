@@ -199,13 +199,13 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             
             
             
-            $e = call_user_func_array(array($ret[$form],'createElement'),$array[0]);
+            $e = call_user_func_array(array(&$ret[$form],'createElement'),$array[0]);
            
              
             //array_pop($ret->_elements);
             if (isset($array[2])) { // options..
                 foreach ($array[2] as $v) {
-                     $e->addOption($v[0],$v[1]);
+                    $e->addOption($v[0],$v[1]);
                 }
             }
             if (!isset($array[1])) {
@@ -215,7 +215,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             }
             foreach ($array[1] as $k=>$v) {
                 //echo "<PRE>USR FUNC:";print_r(array( array($e,$k),$v));echo "</PRE>";
-                call_user_func(array( $e,$k),$v);
+                call_user_func(array(&$e,$k),$v);
             }
             $ret[$form]->addElement($e);
             
