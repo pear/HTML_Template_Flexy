@@ -283,8 +283,24 @@ class HTML_Template_Flexy_Token {
         
         $stack = array();
         $total = $i +1;
-         
         
+        // merge strings and entities - blanking out empty text.
+        
+  
+        for($i=1;$i<$total;$i++) {
+            if (!isset($res[$i]) || !is_a($res[$i],'HTML_Template_Flexy_Token_Text')) {
+                continue;
+            }
+            $first = $i;
+            $i++;
+            while ($i<$total && is_a($res[$i],'HTML_Template_Flexy_Token_Text')) {
+                if (isset($res[$i])) {
+                    $res[$first]->value .= $res[$i]->value;
+                    $res[$i]->value = '';
+                }
+                $i++;
+            }
+        }  
         // connect open  and close tags.
         
         // this is done by having a stack for each of the tag types..
@@ -295,8 +311,6 @@ class HTML_Template_Flexy_Token {
         //
         //
         //
-        
-        
         //echo '<PRE>' . htmlspecialchars(print_R($res,true));//exit;
        
         for($i=1;$i<$total;$i++) {
