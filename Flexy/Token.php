@@ -454,6 +454,7 @@ class HTML_Template_Flexy_Token {
         $s = preg_replace("/'([0-9])+'/", "\\1",$s);
         
         $parts = explode(".",$s);
+        
         $ret =  $this->findVar($parts[0]);
         array_shift($parts);
         if (!count($parts)) {
@@ -483,8 +484,14 @@ class HTML_Template_Flexy_Token {
         if ($string == 'this') {
             return '$this';
         }
+        $lookup = $string;
+        if ($p = strpos($string,'[')) {
+            $lookup = substr($string,0,$p);
+        }
+        
+        
         for ($s = $_HTML_TEMPLATE_FLEXY_TOKEN['state']; $s > 0; $s--) {
-            if (in_array($string, $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s])) {
+            if (in_array($lookup , $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s])) {
                 return '$'.$string;
             }
         }
