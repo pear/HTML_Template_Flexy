@@ -127,7 +127,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             
             
             if (strtoupper($k) == 'FLEXY:RAW') {
-                if (!isset($v[1]) || !is_object($v[1])) {
+                if (!is_array($v) || !isset($v[1]) || !is_object($v[1])) {
                     PEAR::raiseError(
                     'flexy:raw only accepts a variable or method call as an argument, eg.'.
                     ' flexy:raw="{somevalue}" you provided something else.' .
