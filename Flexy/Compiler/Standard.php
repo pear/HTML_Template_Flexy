@@ -210,10 +210,18 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             }
             fwrite($cfp,$data);
             fclose($cfp);
+            
             chmod($file,0775);
             // make the timestamp of the two items match.
             clearstatcache();
             touch($file, filemtime($flexy->currentTemplate));
+            if ($file != $flexy->compiledTemplate) {
+                chmod($flexy->compiledTemplate,0775);
+                // make the timestamp of the two items match.
+                clearstatcache();
+                touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
+            }
+             
             
         } else {
             return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,

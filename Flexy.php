@@ -367,8 +367,8 @@ class HTML_Template_Flexy
           
         $recompile = false;
         
-        $isuptodate = (file_exists( $this->compiledTemplate  ) &&  file_exists( $fullFile))  ?
-            (filemtime( $this->currentTemplate ) == filemtime( $fullFile )) : 0;
+        $isuptodate = file_exists($this->compiledTemplate)   ?
+            (filemtime($this->currentTemplate) == filemtime( $this->compiledTemplate)) : 0;
             
         if( @$this->options['forceCompile'] || !$isuptodate ) {
             $recompile = true;
