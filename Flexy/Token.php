@@ -447,7 +447,11 @@ class HTML_Template_Flexy_Token {
     */
     
     function toVar($s) {
-        
+        // wrap [] with quotes.
+        $s = str_replace('[',"['",$s);
+        $s = str_replace(']',"']",$s);
+        // strip the quotes if it's only numbers..
+        $s = preg_replace("/'([0-9])+'/", "\\1",$s);
         
         $parts = explode(".",$s);
         $ret =  $this->findVar($parts[0]);

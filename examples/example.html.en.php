@@ -17,6 +17,12 @@
 <?php echo htmlspecialchars($t->hello);?> 
 <?php echo $t->world;?>
 <?php echo urlencode($t->test);?>
+<?php echo htmlspecialchars($t->object->var);?>
+<?php echo htmlspecialchars($t->array[0]);?>
+<?php echo htmlspecialchars($t->array['entry']);?>
+<?php echo htmlspecialchars($t->multi['array'][0]);?>
+<?php echo htmlspecialchars($t->object['array']->with['objects']);?>
+
 <img src="<?php echo htmlspecialchars($t->getImageDir);?>/someimage.jpg">
 <img src="<?php echo $t->getImageDir;?>/someimage.jpg">
 <img src="<?php echo urlencode($t->getImageDir);?>/someimage.jpg">
@@ -153,6 +159,8 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 
     </select>
     <?php echo $this->elements['aaa3']->toHtml();?>
+    
+    <?php echo $this->elements['testupload']->toHtml();?>
 </form>
 
 
@@ -418,6 +426,25 @@ Array
                     [6] => 
 
     
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [testupload] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => file
+                    [name] => testupload
+                )
+
+            [children] => Array
+                (
                 )
 
             [override] => 
