@@ -523,13 +523,24 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         global $_HTML_TEMPLATE_FLEXY;
         static $tmpId=0;
         if (!$id) {
-            
             return HTML_Template_Flexy::raiseError(
                 "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
                 " Dynamic tags require an ID value",
                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
-         
+        
+        // dont mix and match..
+        if (($this->element->getAttribute('FLEXY:IF') !== false) || 
+            ($this->element->getAttribute('FLEXY:FOREACH') !== false) )
+        {
+            return HTML_Template_Flexy::raiseError(
+                "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
+                " You can not mix flexy:if= or flexy:foreach= with dynamic form elements  " . 
+                " (turn off tag to element code with flexyIgnore=0, use flexy:ignore=&quot;yes&quot; in the tag" .
+                " or put the conditional outside in a span tag",
+                null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        }
+        
         if ((strtolower($this->element->getAttribute('type')) == 'checkbox' ) && 
                 (substr($this->element->getAttribute('name'),-2) == '[]')) {
             if ($this->element->getAttribute('id') === false) {
@@ -539,6 +550,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             } 
             $mergeWithName =  true;
         }
+        
+        
         
         
         
