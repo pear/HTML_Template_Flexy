@@ -47,14 +47,21 @@
  
 
     <release>
-     <version>0.6.4</version>
-      <date>2004-01-24</date>
+     <version>0.6.5</version>
+      <date>2004-02-01</date>
       <notes><![CDATA[
       
       Minor Bugfix 
-        - fixed bug #615 constructor can not return errors 
-         * check for compileDir isDir is in the compile() anyway..
-         
+        - fixed bug #643 (compile incorrectly tests for string on windows.)
+      
+      Behaviour changed
+        - templateDir can be an array, or string seperated by the system path seperatory
+        (; on windows,: on unix)
+        - If a file exists in multiple paths, then The LAST FOUND template will be used.
+        (previously this emited an error)
+        - If you use multiple paths in the template_dir, then the path will be modified to
+        write to {compileDir}/{basename(actualTemplateDir)}_{md5(actualTemplateDir)}/...template..
+        
         
       ]]></notes>
       <state>beta</state>
@@ -127,6 +134,25 @@
     </deps>
 
    <changelog>
+   
+   
+
+    <release>
+     <version>0.6.4</version>
+      <date>2004-01-24</date>
+      <notes><![CDATA[
+      
+      Minor Bugfix 
+        - fixed bug #615 constructor can not return errors 
+         * check for compileDir isDir is in the compile() anyway..
+         
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+   
+   
     <release>
      <version>0.6.3</version>
       <date>2004-01-21</date>

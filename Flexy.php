@@ -60,7 +60,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY'] = array();
 class HTML_Template_Flexy  
 {
 
-    /*
+    /*on 
     *   @var    array   $options    the options for initializing the template class
     */
     var $options = array(   'compileDir'    =>  '',      // where do you want to write to..
@@ -170,7 +170,7 @@ class HTML_Template_Flexy
         }
         
         if (is_string($this->options['templateDir'])) {
-            $this->options['templateDir'] = explode(';',$this->options['templateDir'] );
+            $this->options['templateDir'] = explode(PATH_SEPARATOR,$this->options['templateDir'] );
         }
          
        
@@ -312,84 +312,54 @@ class HTML_Template_Flexy
         if (!$file) {
             PEAR::raiseError('HTML_Template_Flexy::compile no file selected',null,PEAR_ERROR_DIE);
         }
+        
         if (!@$this->options['locale']) {
             $this->options['locale']='en';
         }
-        // on windows the base directory will be C:!
-        // so you have to hard code the path (no relatives on windows
-        if (DIRECTORY_SEPARATOR == "/") {
-            // if the compileDir doesnt start with a / then its under the template dir    
-            if ( $this->options['compileDir']{0} !=  DIRECTORY_SEPARATOR ) {
-                $this->options['compileDir'] =  $this->options['templateDir'].'/'.$this->options['compileDir'];
-            }
-        }
-
-        // remove the slash if there is one in front, just to be clean
-        if ( $file{0} == DIRECTORY_SEPARATOR  ) {
-            $file = substr($file,1);
-        }
-
-        $compileDest = $this->options['compileDir'];
-        if ( !@is_dir($compileDest) ) {               // check if the compile dir has been created
-            PEAR::raiseError(   "'compileDir' could not be accessed<br>".
-                                "Please create the 'compileDir' which is: <b>'$compileDest'</b><br>2. give write-rights to it",
-                                null, PEAR_ERROR_DIE);
-        }
-
-    
-
-        $directory = dirname( $file );
-        $filename = basename($file);
-
-        // extract dirname to create directori(es) in compileDir in case they dont exist yet
-        // we just keep the directory structure as the application uses it, so we dont get into conflict with names
-        // i dont see no reason for hashing the directories or the filenames
-        if( $directory!='.' )  { // it is '.' also if no dir is given
-            $path = explode(DIRECTORY_SEPARATOR ,$directory);
-            foreach( $path as $aDir ) {
-                $compileDest = $compileDest. DIRECTORY_SEPARATOR . $aDir;
-                if( !@is_dir($compileDest) ) {
-                    umask(0000);          // make that the users of this group (mostly 'nogroup') 
-                                          // can erase the compiled templates too
-                    if( !@mkdir($compileDest, 0770) ) {
-                        PEAR::raiseError(   "couldn't make directory: <b>'$aDir'</b> under <b>'".$this->options['compileDir']."'</b><br>".
-                                            "Please give write permission to the 'compileDir', so HTML_Template_Flexy can create directories inside",
-                                             null, PEAR_ERROR_DIE);
-                    }
-                }
-            }
-        }
         
-        /* 
         
-            incoming file looks like xxxxxxxx.yyyy
-            if xxxxxxxx.{locale}.yyy exists - use that...
-        */
+        /** ---------- Lets start off by finding the file to compile.. -----*/
+        $file = ltrim($file,DIRECTORY_SEPARATOR);
+          
         $parts = array();
+        $tmplDirUsed = false;
+        
+        // PART A mulitlanguage support: 
+        //    - user created language version of template.
+        //    - compile('abcdef.html') will check for compile('abcdef.en.html') 
+        //       (eg. when locale=en)
+        
+        $this->currentTemplate  = false;
+        
         if (preg_match('/(.*)(\.[a-z]+)$/i',$file,$parts)) {
             $newfile = $parts[1].'.'.$this->options['locale'] .$parts[2];
             foreach ($this->options['templateDir'] as $tmplDir) {
-                if (@file_exists($tmplDir . DIRECTORY_SEPARATOR .$newfile)) {
-                    $file = $newfile;
+                if (@!file_exists($tmplDir . DIRECTORY_SEPARATOR .$newfile)) {
+                    continue;
                 }
+                $file = $newfile;
+                $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR .$newfile;
+                $tmplDirUsed = $tmplDir;
             }
         }
         
         // look in all the posible locations for the template directory..
-        $this->currentTemplate  = false;
-        
-        if (is_array($this->options['templateDir'])) {
-            
+        if ($this->currentTemplate  === false) {
             foreach (array_unique($this->options['templateDir']) as $tmplDir) {
                 if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
                     continue;
                 }
+                // This code would break the idea of using  override templates (eg. themes)... 
+                // eg. templateDir => array('/somdir/original_templates','/somdir/modified_for_this_project'),
+                /* 
                 if ($this->currentTemplate  !== false) {
                     return PEAR::raiseError("You have more than one template Named {$file} in your paths, found in both".
                         "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  null, PEAR_ERROR_DIE);
                     
                 }
+                */
                 $this->currentTemplate = $tmplDir . DIRECTORY_SEPARATOR . $file;
+                $tmplDirUsed = $tmplDir;
             }
         }
         if ($this->currentTemplate === false)  {
@@ -397,15 +367,57 @@ class HTML_Template_Flexy
             return PEAR::raiseError("Could not find Template {$file} in any of the directories<br>" . 
                 implode("<BR>",$this->options['templateDir']) ,  null, PEAR_ERROR_DIE);
         }
+        
+        
+        
+        /** now for the compile target 
+        
+        If you are working with mulitple source folders the template folder will be:
+        compiled_tempaltes/{templatedir_basename}_{md5_of_dir}/
+        
+        */
+        
+        
+        
+        
+        
+        $compileSuffix = count($this->options['templateDir']) > 1 ? 
+             DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
+        
+        $compileDest = @$this->options['compileDir'];
+        
+        $isTmp = false;
+        // use a default compile dir if none set.. 
+        if (!@$compileDest) {
+            // use session.temp + 'compiled_templates_' + md5
+            $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
+            if (!file_exists($compileDest)) {
+                require_once 'System.php';
+                System::mkdir($compileDest);
+            }
+            $isTmp = true;
+        
+        }
+        
          
- 
+        // remove the slash if there is one in front, just to be clean
+      
+        $directory = dirname( $file );
+        $filename = basename($file);
+
         
+
+        // extract dirname to create directori(es) in compileDir in case they dont exist yet
+        // we just keep the directory structure as the application uses it, so we dont get into conflict with names
+        // i dont see no reason for hashing the directories or the filenames
         
-        $this->compiledTemplate    = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
-        $this->getTextStringsFile  = $compileDest.DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
-        $this->elementsFile        = $compileDest.DIRECTORY_SEPARATOR .$filename.'.elements.serial';
+       
         
+        $this->compiledTemplate    = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
+        $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
+        $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.elements.serial';
         
+        print_r( $this->compiledTemplate );
         
         $recompile = false;
         if( @$this->options['forceCompile'] ) {
@@ -424,12 +436,19 @@ class HTML_Template_Flexy
             return true;
         }
         
-        if( !is_writeable($compileDest)) {
+        
+        
+        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
             PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
                             "Please give write and enter-rights to it",
                             null, PEAR_ERROR_DIE);
         }
         
+        if (!file_exists($compileDest . $compileSuffix . DIRECTORY_SEPARATOR . $directory)) {
+            require_once 'System.php';
+            System::mkdir(array('-p','-m', 0770, $compileDest . $compileSuffix . DIRECTORY_SEPARATOR . $directory));
+        }
+         
         // compile it..
         
         require_once 'HTML/Template/Flexy/Compiler.php';
