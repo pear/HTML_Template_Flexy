@@ -89,7 +89,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if (!class_exists($class)) {
             return false;
         }
-        return HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,&$compiler);
+        return HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,$compiler);
     }
     
     function fileExistsInPath($filename) {
