@@ -324,7 +324,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             
         }
             
-        
+        if ($this->element->getAttribute('FLEXY:IGNOREONLY') !== false) {
+            return false;
+        }
         $method = 'parseTag'.$this->element->tag;
         if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
             return $this->$method();
