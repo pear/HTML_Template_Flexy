@@ -354,8 +354,8 @@ class HTML_Template_Flexy_Filter_SimpleTags
             
         $input = preg_replace(
             "/".$this->start."t_include:#([a-z0-9_.]+)#".$this->stop."/ie",
-            "'<?php if (file_exists(\"" .  $this->engine->option['templateDir'] .
-            "/\\1\")) include(\"" .  $this->engine->option['templateDir'] . "/\\1\");?>'",
+            "'<?php if (file_exists(\"" .  $this->engine->options['templateDir'] .
+            "/\\1\")) include(\"" .  $this->engine->options['templateDir'] . "/\\1\");?>'",
             $input);    
             
         return $input;
