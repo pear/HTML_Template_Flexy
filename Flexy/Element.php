@@ -438,7 +438,7 @@ class HTML_Template_Flexy_Element {
     function toHtml($overlay=false)
     {
          
-        
+        //echo "BEFORE<PRE>";print_R($this);
         $ret = $this;
         if ($overlay !== false) {
             $ret = HTML_Template_Flexy::mergeElement($this,$overlay);
@@ -455,7 +455,7 @@ class HTML_Template_Flexy_Element {
         if (is_object($suffix)) {
             $suffix = $suffix->toHtml();
         }
-        
+        //echo "AFTER<PRE>";print_R($ret);
         
         return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() . "</{$ret->tag}>{$suffix}" ;
         

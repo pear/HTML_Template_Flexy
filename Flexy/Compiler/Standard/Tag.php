@@ -476,7 +476,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 echo $this->elements['.$var.']->toHtml();'; 
         } elseif ($mergeWithName) {
             $name = $this->element->getAttribute('NAME');
-          return  
+            return  
                 '$element = $this->elements[\''.$id.'\'];
                 $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
                 echo  $element->toHtml();'; 
@@ -511,8 +511,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             
             if (!isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
                 // register it..  - so we dont overwrite it...
-                $this->getElementPhp($id);
-            } else if ($_HTML_TEMPLATE_FLEXY['elements'][$id]->attributes['type'] != $this->element->getAttribute('TYPE')) {
+                $_HTML_TEMPLATE_FLEXY['elements'][$id] = false;
+            } else if ($_HTML_TEMPLATE_FLEXY['elements'][$id] != false) {
                 
            
                 PEAR::raiseError(
