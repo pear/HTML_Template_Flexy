@@ -65,20 +65,29 @@
  
 
     <release>
-     <version>0.9.2</version>
-      <date>2004-06-24</date>
+     <version>1.0.0</version>
+      <date>2004-08-07</date>
       <notes><![CDATA[
-      Feature addition release
-      
-      support for id blocks
-        $flexy->compile('sometemplate.html#mytag');
-        will compile a file {compileDir}/sometemplate.html#mytag
-        which contains the tag and contents of <span id="mytag"> ... </span>
+      The Long Awaited Gold Release.
+       
+      Bug Fixes:
+        #1675 - CRLF fixes on windows
+        #------ Elements with matching key = value where incorrectly rendered.
         
-      flexy:function call="xxx" checks that the user defined function block exists 
-      
+      Tweaks:
+        * minor changes to simple Smarty Template Converter/Processor
+        * Default Compiler is now called Flexy
+        * Added Translator tool to package (see Translator.php source for usage)
+        * Translator Tool includes clearTemplateCache - removes all files.
+        * Some error message improvements
+        * Added Tree.php - A HTML to Tree par ser, which can be used to process HTML,
+            or will eventually replace the Tree parsing code in the compiler.
+            tests/treeTest.php shows example usage
+        * HTML_Template_Flexy_Element used with <FORM> tags, now honours override property
+        * Minor reduction in size of parser Nodes
+        
       ]]></notes>
-      <state>beta</state>
+      <state>stable</state>
      </release>
      
      
@@ -112,8 +121,12 @@
           <file>compileAll.php</file>
           
           
+          <!-- HTML->Tree builder -->
+          <file>Tree.php</file>
+
           <!-- The tokenizer and related Tokens -->
           <file>Tokenizer.php</file>
+          
           <file>Token.php</file>
           <dir name="Token" role="php">
               <file>Tag.php</file>
@@ -137,11 +150,17 @@
           
           
             <!-- The Standard Compiler -->
+            <file>Flexy.php</file>
+            <dir name="Flexy">
+              <file>Tag.php</file>
+              <file>Flexy.php</file>  
+            </dir>
+            
+            <!-- The old Standard Compiler depreciated (not used by default) -->
             <file>Standard.php</file>
             <dir name="Standard">
               <file>Tag.php</file>
               <file>Flexy.php</file>  
-              
             </dir>
             
             <!-- The Old Regex Compiler -->
@@ -166,11 +185,15 @@
         </dir>
         <dir name="tests" role="test">
           <file>test.php</file>
+          <file>treeTest.php</file>
+
           <dir name="templates" role="test">
+            <file>blocks.html</file> 
             <file>conditions.html</file> 
             <file>error_foreach.html</file> 
             <file>flexy_tojavascript.html</file> 
             <file>forms.html</file> 
+            <file>function.html</file> 
             <file>globals.html</file> 
             <file>image_view.html</file> 
             <file>includes.html</file> 
@@ -181,11 +204,9 @@
             <file>raw_php.html</file> 
             <file>raw_text.html</file> 
             <file>variables.html</file> 
-            <file>function.html</file> 
-            <file>blocks.html</file> 
           </dir>
           <dir name="smarty" role="test">
-          <!-- short test script to convert smarty templates int flexy ones  -->
+          <!-- short test script to convert smarty templates into flexy ones  -->
           <!-- May be relocated in the future  -->
             <file>smartytest.php</file>  
           </dir>
@@ -195,6 +216,7 @@
    <deps>
       <dep type="php" rel="ge" version="4.3"/>
       <dep type="pkg" rel="ge" version="1.1.0" optional="yes">HTML_Javascript</dep>
+      <!-- I dont really recommend File Gettext usage - it's not very tested -->
       <dep type="pkg" rel="ge" version="0.2.0" optional="yes">File_Gettext</dep>
       <dep type="pkg" rel="ge" version="0.0.1" optional="yes">Translation2</dep>
     </deps>
@@ -202,7 +224,23 @@
    
      
    <changelog>
-   
+    <release>
+     <version>0.9.2</version>
+      <date>2004-06-24</date>
+      <notes><![CDATA[
+      Feature addition release
+      
+      support for id blocks
+        $flexy->compile('sometemplate.html#mytag');
+        will compile a file {compileDir}/sometemplate.html#mytag
+        which contains the tag and contents of <span id="mytag"> ... </span>
+        
+      flexy:function call="xxx" checks that the user defined function block exists 
+      
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
    
 
     <release>
