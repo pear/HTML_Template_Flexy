@@ -41,3 +41,10 @@ Bug #84
     <td flexy:if="!a.showtext">{a.price:n}</td>
   </tr>
 </table>
+
+<h2>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</h2>
+<table width="100%" border="0">
+  <tr flexy:foreach="loop,a,b"> 
+    <td flexy:foreach="b,c,d">{d}</td>
+  </tr>
+</table>

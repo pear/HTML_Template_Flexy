@@ -1,3 +1,16 @@
+--TEST--
+Template Test: looping.html
+--FILE--
+<?php
+require_once 'testsuite.php';
+compilefile('looping.html');
+
+--EXPECTF--
+===Compiling looping.html===
+
+
+
+===Compiled file: looping.html===
 
 
 <h2>Looping</h2>
@@ -48,3 +61,32 @@ Bug #84
     <?php if ($this->options['strict'] || (is_array($b)  || is_object($b))) foreach($b as $c => $d) {?><td><?php echo htmlspecialchars($d);?></td><?php }?>
   </tr><?php }?>
 </table>
+
+
+===With data file: looping.html===
+
+
+<h2>Looping</h2>
+
+
+<p>a loop </p>
+<p>a loop with 2 vars </p>
+
+Bug #84
+
+
+<table>
+    </table>
+
+
+<h2>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</h2>
+<table width="100%" border="0">
+  </table>
+
+<h2>HTML tags example using foreach=&quot;loop,a&quot; or the tr using a highlight class.</h2>
+<table width="100%" border="0">
+  </table>
+
+<h2>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</h2>
+<table width="100%" border="0">
+  </table>

@@ -1,18 +1,1 @@
-a:4:{i:0;s:17:"Untitled Document";i:1;s:40:"Example Template for HTML_Template_Flexy";i:2;s:9:"Variables";i:3;s:131:"Standard variables 
-%s 
-%s
-%s
-%s
-%s
-%s
-%s
-%s
-%s
-%s
-%s
-%s
-Long string with NL2BR + HTMLSPECIALCHARS
-%s
-
-Everything: %s
-an Object: %s";}
+a:7:{i:0;s:17:"Untitled Document";i:1;s:40:"Example Template for HTML_Template_Flexy";i:2;s:9:"Variables";i:3;s:18:"Standard variables";i:4;s:41:"Long string with NL2BR + HTMLSPECIALCHARS";i:5;s:11:"Everything:";i:6;s:10:"an Object:";}
