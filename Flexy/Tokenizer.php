@@ -2085,7 +2085,7 @@ case 14:
     if ($this->ignorePHP && (strtoupper(substr($t,2,3)) != 'XML')) {
         return HTML_TEMPLATE_NONE;
     }
-    $this->value = HTML_Template_Flexy_Token::factory('PHP',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Processing',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 15:

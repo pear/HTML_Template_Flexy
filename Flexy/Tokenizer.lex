@@ -340,7 +340,7 @@ FLEXY_MODIFIER      = [hur]
     }
     
     
-    $this->value = HTML_Template_Flexy_Token::factory('PHP',$this->yytext(),$this->yyline);
+    $this->value = HTML_Template_Flexy_Token::factory('Processing',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
  
