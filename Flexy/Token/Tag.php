@@ -173,10 +173,19 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         $ret .=  "<". $this->oTag;
         foreach ($this->attributes as $k=>$v) {
+            // if it's a flexy tag ignore it.
+            
+            if (strtoupper(substr($k,0,5)) == 'FLEXY') {
+                continue;
+            }
+            
             if ($v === true) {
                 $ret .= " $k";
                 continue;
             }
+            
+            
+            
             
             // if it's a string just dump it.
             if (is_string($v)) {
