@@ -47,42 +47,12 @@
  
 
   <release>
-     <version>0.6</version>
-      <date>2003-12-20</date>
+     <version>0.6.1</version>
+      <date>2003-12-21</date>
       <notes><![CDATA[
       
-      This is a major fix release, along with quite a few new usefull features,
-      many thanks to the various bug reporters, and especially from the Damein Turner and 
-      The Seagull framework Team
-      
-      Hopefully, it is now the last beta before a stable release.....
-      
-        New features 
-        - <flexy:include src="xxx.html"/> to include other templates
-        - <flexy:toJavascript flexy:prefix="js_name_prefix_" jsvar="php_flexy_var" ....>
-          uses HTML_Javascript_Convert to import PHP variables into Javascript.
-        - new modifier :b (for NL2BR + HTMLSPECIALCHARS)
-        - support for mulitple paths in templateDir
-        - attribute flexy:raw="{checked}" allows you to to put raw data into a tag.
-        - -- double minus, is valid inside comments (not really valid XHTML though)
-        - global flexyIgnore option, to prevent global conversion to Elements.
-        - better support for elements where name="someval[]"
-        
-        Fixes
-        - array syntax supported in attributes (eg. urlencoded)
-        - setting values of elements with type works (bug #460)
-        - methods with multiple arguments fixed.
-        - HTML_Template_Flexy_Element::removeAttribute() works
-          (removing attributes is done by setting them to false)
-        - include error on EndTag
-        - closed element (eg. with /> at end, can be used with flexy:if=
-        - radio buttons should auto create id's if none are set.
-        - xdebug recursion level increased (as the compiler recursion is high)
-        - buffered output with $elements fixed.
-        
-         
-      Note: See Version 0.5  release notes concerning BC issues with 0.4 series
-      
+      Bugfix release
+        - got javascript script wrapper wrong.
         
 
       ]]></notes>
@@ -156,6 +126,52 @@
     </deps>
 
    <changelog>
+   
+   
+  <release>
+     <version>0.6</version>
+      <date>2003-12-20</date>
+      <notes><![CDATA[
+      
+      This is a major fix release, along with quite a few new usefull features,
+      many thanks to the various bug reporters, and especially from the Damein Turner and 
+      The Seagull framework Team
+      
+      Hopefully, it is now the last beta before a stable release.....
+      
+        New features 
+        - &lt;flexy:include src="xxx.html"/> to include other templates
+        - &lt;flexy:toJavascript flexy:prefix="js_name_prefix_" jsvar="php_flexy_var" ....>
+          uses HTML_Javascript_Convert to import PHP variables into Javascript.
+        - new modifier :b (for NL2BR + HTMLSPECIALCHARS)
+        - support for mulitple paths in templateDir
+        - attribute flexy:raw="{checked}" allows you to to put raw data into a tag.
+        - -- double minus, is valid inside comments (not really valid XHTML though)
+        - global flexyIgnore option, to prevent global conversion to Elements.
+        - better support for elements where name="someval[]"
+        
+        Fixes
+        - array syntax supported in attributes (eg. urlencoded)
+        - setting values of elements with type works (bug #460)
+        - methods with multiple arguments fixed.
+        - HTML_Template_Flexy_Element::removeAttribute() works
+          (removing attributes is done by setting them to false)
+        - include error on EndTag
+        - closed element (eg. with /> at end, can be used with flexy:if=
+        - radio buttons should auto create id's if none are set.
+        - xdebug recursion level increased (as the compiler recursion is high)
+        - buffered output with $elements fixed.
+        
+         
+      Note: See Version 0.5  release notes concerning BC issues with 0.4 series
+      
+        
+
+      ]]></notes>
+      <state>beta</state>
+     </release>
+   
+   
    
   <release>
      <version>0.5.1</version>
