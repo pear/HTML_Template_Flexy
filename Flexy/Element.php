@@ -242,11 +242,15 @@ class HTML_Template_Flexy_Element {
                         }
                         //print_r($this); echo "SET TO "; serialize($value);
                         if (substr($this->attributes['name'],-2) == '[]') {
-                            if (is_array($value) && in_array((string) $this->attributes['value'],$value))  {
+                            if (is_array($value) && 
+                                in_array((string) $this->attributes['value'],$value)
+                                ) {
                                 $this->attributes['checked'] =  true;
                             }
                             
-                        } else if ($this->attributes['value'] == $value) {
+                        } else if (isset($this->attributes['value']) && 
+                            ($this->attributes['value'] == $value)
+                            ) {
                             $this->attributes['checked'] =  true;
                         }
                         
