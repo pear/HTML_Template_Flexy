@@ -93,7 +93,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     var $prefix = '';
      /**
     * foreach attribute value for this tag
-    * used to ensure that if and foreach are not used together.
+    * used to ensure that if and foreach are not used toAher.
     *
     * @var array
     * @access public
@@ -162,7 +162,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         $this->reWriteURL("SRC");
         
         // handle elements
-        if (($ret =$this->parseTags()) !== false) {
+        if (($ret = $this->parseTags()) !== false) {
+           
             return $ret;
         }
         
@@ -604,12 +605,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         
         if (!isset($this->ucAttributes[$key])) {
-            return;
+            return false;
         }
         // general assumption - none of the tools can do much with dynamic
         // attributes - eg. stuff with flexy tags in it.
         if (!is_string($this->ucAttributes[$key])) {
-            return;
+            return false;
         }
         $v = $this->ucAttributes[$key];
          

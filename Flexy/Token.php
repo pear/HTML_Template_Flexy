@@ -125,7 +125,7 @@ class HTML_Template_Flexy_Token {
     */
     
     function compile(&$compiler) {
-        $compiler->toString($this);
+        return $compiler->toString($this);
     }
     
      
@@ -135,7 +135,8 @@ class HTML_Template_Flexy_Token {
     * @return   string   HTML
     * @access   public
     */
-    function compileChildren(&$compiler) {
+    function compileChildren( &$compiler) {
+         
         if (!$this->children) {
             return '';
         }

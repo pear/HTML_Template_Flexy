@@ -101,13 +101,7 @@ class HTML_Template_Flexy
     */
     var $elementsFile;
     
-    /**
-    * The private 'original' elements in the template as a id=>HTML_Element array
-    *
-    * @var object HTML_Template_Flexy_Element
-    * @access private
-    */
-    var $_elements = array();
+     
     /**
     * Array of HTML_elements to merge with form
     * 
@@ -176,7 +170,7 @@ class HTML_Template_Flexy
     */
     
     
-    function outputObject(&$t) 
+    function outputObject(&$t,$elements=array()) 
     {
         $options = PEAR::getStaticProperty('HTML_Template_Flexy','options');
         if (@$options['debug']) {
@@ -220,12 +214,25 @@ class HTML_Template_Flexy
             $email_date = $this->emailDate;
         }
         // this may disappear later it's a BC fudge to try and deal with 
-        // the old way of auto matching form elements to object Vars
-        
-        if ($this->elementsFile && file_exists($this->elementsFile)) {
-            require_once 'HTML/Template/Flexy/Element.php';
-            $this->_elements = unserialize(file_get_contents($this->elementsFile));
+        // the old way of setting $this->elements to be merged.
+        // the correct behavior is to use the extra field in outputObject.
+       
+        if (count($this->elements) && !count($elements)) {
+            $elements = $this->elements;
         }
+       
+        $this->elements = $this->getElements();
+        
+        // overlay elements..
+        
+        foreach($elements as $k=>$v) {
+            if (!$v) {
+                unset($this->elements[$k]);
+            }
+            $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
+        }
+        
+      
         
          // we use PHP's error handler to hide errors in the template.
         // this may be removed later, or replace with
@@ -261,7 +268,7 @@ class HTML_Template_Flexy
     *   @param      object object to output as $t
     *   @return     string - result
     */
-    function &bufferedOutputObject(&$t) 
+    function &bufferedOutputObject(&$t,$elements=array()) 
     {
         ob_start();
         $this->outputObject($t);
@@ -289,40 +296,7 @@ class HTML_Template_Flexy
     }
     
       
-    /**
-    *   classicParse - the older regex based code generator.
-    *   here all the replacing, filtering and writing of the compiled file is done
-    *   well this is not much work, but still its in here :-)
-    *
-    *   @access     private
-    *   @version    01/12/03
-    *   @author     Wolfram Kriesing <wolfram@kriesing.de>
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @return
-    */
-    function _classicParse()
-    {
-        // read the entire file into one variable
-        if ( $input = @file($this->currentTemplate) ) {
-            $fileContent = implode( '' , $input );
-        } else {
-            $fileContent = '';                      // if the file doesnt exist, write a template anyway, an empty one but write one
-        }
-        
-         
-        //  apply pre filter
-        $fileContent = $this->applyFilters( $fileContent , "/^pre_/i" );
-        $fileContent = $this->applyFilters( $fileContent , "/^(pre_|post_)/i",TRUE);
-        $fileContent = $this->applyFilters( $fileContent , "/^post_/i" );
-        // write the compiled template into the compiledTemplate-File
-        if( ($cfp = fopen( $this->compiledTemplate , 'w' )) ) {
-            fwrite($cfp,$fileContent);
-            fclose($cfp);
-            @chmod($this->compiledTemplate,0775);
-        }
-
-        return true;
-    }
+ 
 
     /**
     *   parse - the new tokenizer based generator
@@ -536,24 +510,27 @@ class HTML_Template_Flexy
                 $recompile = true;
             }
         }
-        $method = '_parse';
-        if (@$this->options['useLegacy']) {
-            $method = '_classicParse';
-        }
-        if( $recompile )  {             // or any of the config files
         
-            if( !is_writeable($compileDest)) {
-                PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
-                                "Please give write and enter-rights to it",
-                                null, PEAR_ERROR_DIE);
-            }
         
-            if( !$this->$method() ) {
-                return false;
-            }
+        
+        if(! $recompile )  {             // or any of the config files
+            return true;
         }
         
-        return true;
+        if( !is_writeable($compileDest)) {
+            PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
+                            "Please give write and enter-rights to it",
+                            null, PEAR_ERROR_DIE);
+        }
+        
+        // compile it..
+        
+        require_once 'HTML/Template/Flexy/Compiler.php';
+        $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
+        return $compiler->compile($this);
+        
+        //return $this->$method();
+        
     }
 
      /**
@@ -564,7 +541,7 @@ class HTML_Template_Flexy
     *   @author     Alan Knowles <alan@akbkhome.com>
     *
     */
-    function compileAll($dir = '')
+    function compileAll($dir = '',$regex='/.html$/')
     {
         
         $base =  $this->options['templateDir'];
@@ -578,7 +555,11 @@ class HTML_Template_Flexy
             }
              
             if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
-                $this->compileAll($dir . DIRECTORY_SEPARATOR  . $name);
+                $this->compileAll($dir . DIRECTORY_SEPARATOR  . $name,$regex);
+                continue;
+            }
+            
+            if (!preg_match($regex,$name)) {
                 continue;
             }
             echo "Compiling $dir". DIRECTORY_SEPARATOR  . "$name \n";
@@ -638,8 +619,74 @@ class HTML_Template_Flexy
         
     }
      
-
+    /**
+     * A general Utility method that merges HTML_Template_Flexy_Elements
      
+     *
+     * @param    HTML_Template_Flexy_Element   $original  (eg. from getElements())
+     * @param    HTML_Template_Flexy_Element   $new (with data to replace/merge)
+     * @return   HTML_Template_Flexy_Element   the combined/merged data.
+     * @access   public
+     */
+     
+    function mergeElement($original,$new)
+    {
+     
+        
+        // changing tags.. - should this be valid?
+        // hidden is one use of this....
+        if (!$original) {
+            return $new;
+        }
+        if ($new->tag && ($new->tag != $original->tag)) {
+            $original->tag = $new->tag;
+        }
+        
+        if ($new->override !== false) {
+            $original->override = $new->override;
+        }
+        //if $from is not an object:
+        // then it's a value set....
+        
+        if (count($new->children)) {
+            //echo "<PRE> COPY CHILDREN"; print_r($from->children);
+            $original->children = $new->children;
+        }
+        
+        foreach ($new->attributes as $key => $value) {
+            $original->attributes[$key] = $value;
+        }
+        $original->prefix = $new->prefix;
+        $original->suffix = $new->suffix;  
+        if ($new->value !== null) {
+            //echo "<PRE>";print_r($original);
+            $original->setValue($new->value);
+        } 
+       
+        return $original;
+        //echo "<PRE>RESULT:";
+         //print_r($this);
+    } // end func updateAttributes 
+     
+     
+    /**
+    * Get an array of elements from the template
+    *
+    * All form elements and anything marked as dynamic are converted in to elements
+    * (simliar to XML_Tree_Node) - you can then modify or merge them at the output stage
+ 
+    *
+    * @return   array   of HTML_Template_Flexy_Element sDescription
+    * @access   public
+    */
+    
+    function getElements() {
+        if ($this->elementsFile && file_exists($this->elementsFile)) {
+            require_once 'HTML/Template/Flexy/Element.php';
+            return unserialize(file_get_contents($this->elementsFile));
+        }
+        return array();
+    }
     
     
 }

@@ -86,8 +86,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         
         
-        if (@$this->options['debug']) {
-            echo "<B>Result: </B>".htmlspecialchars($data)."<BR>";
+        
+        if (   @$this->options['debug']) {
+            echo "<B>Result: </B><PRE>".htmlspecialchars($data)."</PRE><BR>";
             
         }
 
@@ -104,17 +105,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             }
             fwrite($cfp,$data);
             fclose($cfp);
-            @chmod($flexy->compiledTemplate,0775);
+             chmod($flexy->compiledTemplate,0775);
             // make the timestamp of the two items match.
             clearstatcache();
-            @touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
+             touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
             
         } else {
             PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,null,PEAR_ERROR_DIE);
         }
         // gettext strings
-        if (file_exists($flexy->gettextStringsFile)) {
-            unlink($flexy->gettextStringsFile);
+        if (file_exists($flexy->getTextStringsFile)) {
+            unlink($flexy->getTextStringsFile);
         }
         
         if($gettextStrings && ($cfp = fopen( $flexy->getTextStringsFile, 'w') ) ) {
@@ -162,6 +163,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $class = get_class($element);
         if (strlen($class) >= $len) {
             $type = substr($class,$len);
+            //echo "CALL $type";
             return $this->{'toString'.$type}($element);
         }
         
@@ -238,7 +240,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
 
     function toStringEndTag($element) 
     {
-        $this->toStringTag($element);
+        return $this->toStringTag($element);
     }
         
     
@@ -308,7 +310,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $prefix = 'echo ';
         
         $suffix = '';
-        switch ($this->modifier) {
+        switch ($element->modifier) {
             case 'h':
                 break;
             case 'u':
@@ -346,7 +348,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     {
         // ignore modifier at present!!
         list($prefix,$suffix) = $this->getModifierWrapper($element);
-        return $this->appendPhp( $prefix . $element->toVar($this->value) . $suffix .';');
+        return $this->appendPhp( $prefix . $element->toVar($element->value) . $suffix .';');
     }
    /**
     *   HTML_Template_Flexy_Token_Method toString 
@@ -564,17 +566,23 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     */
   
     function toStringTag($element) {
-        if (strpos($element->tag.':') === false) {
+        if (strpos($element->tag,':') === false) {
             $namespace = 'Tag';
         } else {
             $bits =  explode(':',$element->tag);
             $namespace = $bits[0];
         }
         if (empty($this->tagHandlers[$namespace])) {
-            $this->tagHandlers[$namespace] = 
-                HTML_Template_Flexy_Compiler_Standard::factory($tag,$this);
+            
+            require_once 'HTML/Template/Flexy/Compiler/Standard/Tag.php';
+            $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Standard_Tag::factory($namespace,$this);
+            if (!$this->tagHandlers[$namespace] ) {
+                PEAR::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
+                ' in file ' . $flexy->compiledTemplate,null,PEAR_ERROR_DIE);
+            }
+                
         }
-        $this->tagHandlers[$namespace]->toString($element);
+        return $this->tagHandlers[$namespace]->toString($element);
         
         
     }

@@ -41,10 +41,14 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     
     function &factory($type,&$compiler) {
         if (!$type) {
-            $type = 'tag';
+            $type = 'Tag';
         }
-        require_once 'HTML/Template/Flexy/Compiler/Standard/' . ucfirst(strtolower($type)) . '.php';
+        include_once 'HTML/Template/Flexy/Compiler/Standard/' . ucfirst(strtolower($type)) . '.php';
+        
         $class = 'HTML_Template_Flexy_Compiler_Standard_' . $type;
+        if (!class_exists($class)) {
+            return false;
+        }
         $ret = new $class;
         $ret->compiler = &$compiler;
         return $ret;
@@ -81,17 +85,18 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     {
         
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
-        
+         
         // store the element in a variable
         $this->element = $element;
-        //echo "toString: Line {$this->line} <{$this->tag}>\n"; 
+       // echo "toString: Line {$this->element->line} &lt;{$this->element->tag}&gt;\n"; 
         
         // if the FLEXYSTARTCHILDREN flag was set, only do children
         // normally set in BODY tag.
         // this will probably be superseeded by the Class compiler.
-        
+         
         if ($element->startChildren) {
-            return $element->compileChildren($this->complier);
+            
+            return $element->compileChildren($this->compiler);
         }
         
         $flexyignore = $this->parseAttributeIgnore();
@@ -103,6 +108,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         // handle elements
         if (($ret =$this->parseTags()) !== false) {
+            //echo "PARSETAGS RET";
             return $ret;
         }
         // these add to the close tag..
@@ -113,6 +119,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // spit ou the tag and attributes.
         
         $ret .=  "<". $element->oTag;
+      
         foreach ($element->attributes as $k=>$v) {
             // if it's a flexy tag ignore it.
             
@@ -149,6 +156,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                     $ret .= $item;
                     continue;
                 }
+                 
                 $ret .= $item->compile($this->compiler);
             }
         }
@@ -163,11 +171,12 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
         // output the children.
         
-        $ret .= $element->compilerChildren($this->compiler);
+        $ret .= $element->compileChildren($this->compiler);
         
         // output the closing tag.
         
         if ($element->close) {
+            
             $ret .= $element->close->compile($this->compiler);
         }
         
@@ -214,7 +223,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if ($foreach === false) {
             return '';
         }
-        $this->hasForeach = true;
+        //var_dump($foreach);
+        
+        $this->element->hasForeach = true;
         // create a foreach element to wrap this with.
         $foreachObj =  $this->element->factory('Foreach',
                 explode(',',$foreach),
@@ -227,7 +238,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                     tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                  null, PEAR_ERROR_DIE);
         }
-        $this->element->close->postfix = array($this->factory("End", '', $this->element->line));
+        $this->element->close->postfix = array($this->element->factory("End", '', $this->element->line));
 
         $this->element->clearAttribute('FLEXY:FOREACH');
         return $foreachObj->compile($this->compiler);
@@ -249,7 +260,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             return '';
         }
         
-        if ($this->hasForeach) {
+        if (isset($this->element->hasForeach)) {
             PEAR::raiseError(
                 "You may not use FOREACH and IF tags in the same tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                  null, PEAR_ERROR_DIE);
@@ -288,9 +299,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                     tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                  null, PEAR_ERROR_DIE);
         }
-        $this->element->close->postfix = array($this->element->factory("End",'', $this->line));
-        $this->clearAttribute('IF');
-        $this->clearAttribute('FLEXY:IF');
+        $this->element->close->postfix = array($this->element->factory("End",'', $this->element->line));
+        
+        $this->element->clearAttribute('FLEXY:IF');
         return $ifObj->compile($this->compiler);
     }
     
@@ -314,7 +325,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
             
         
-        $method = 'parseTag'.$this->tag;
+        $method = 'parseTag'.$this->element->tag;
         if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
             return $this->$method();
             // allow the parse methods to return output.
@@ -348,14 +359,16 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // this is for a case where you can use a sprintf as the name, and overlay it with a variable element..
         $_HTML_TEMPLATE_FLEXY['elements'][$id] = $this->toElement($this->element);
         
-        if ($var = $this->getAttribute('FLEXY:NAMEUSES')) {
-            $var = 'sprintf(\''.$id .'\','.$this->toVar($var) .')';
+        if ($var = $this->element->getAttribute('FLEXY:NAMEUSES')) {
+            
+            $var = 'sprintf(\''.$id .'\','.$this->element->toVar($var) .')';
             return  
-                'if (!isset($this->elements['.$var.'])) $this->elements['.$var.']= $this->_elements[\''.$id.'\'];
+                'if (!isset($this->elements['.$var.'])) $this->elements['.$var.']= $this->elements[\''.$id.'\'];
+                $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
                 $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
                 echo $this->elements['.$var.']->toHtml();'; 
         } else {
-           return 'echo $this->_elements[\''.$id.'\']->toHtml();';
+           return 'echo $this->elements[\''.$id.'\']->toHtml();';
         }
     }
     
@@ -454,7 +467,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         
         return 
-            $this->compiler->appendPhp('echo $this->_elements[\''.$id.'\']->toHtmlnoClose();') .
+            $this->compiler->appendPhp('echo $this->elements[\''.$id.'\']->toHtmlnoClose();') .
             $this->element->compileChildren($this->compiler) .
             $this->compiler->appendHtml( '</form>');
     
@@ -521,7 +534,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     * @access   string
     */
     function toElement($element) {
-        require_once 'HTML_Template_Flexy_Element';
+        require_once 'HTML/Template/Flexy/Element.php';
         $ret = new HTML_Template_Flexy_Element;
         
         if (get_class($element) != 'html_template_flexy_token_tag') {

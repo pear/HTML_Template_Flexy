@@ -55,7 +55,7 @@ class HTML_Template_Flexy_Compiler {
     {
         if (empty($options['compiler'])) {
             $options['compiler'] = 'Standard';
-
+        }
     
         require_once 'HTML/Template/Flexy/Compiler/'.ucfirst(strtolower($options['compiler'])) .'.php';
         $class = 'HTML_Template_Flexy_Compiler_'.$options['compiler'];
@@ -88,6 +88,7 @@ class HTML_Template_Flexy_Compiler {
     */
     function appendHtml($string) 
     {
+      
         return $string;
     }
     /**
@@ -102,6 +103,7 @@ class HTML_Template_Flexy_Compiler {
     
     function appendPhp($string) 
     {
+        
         return '<?php '.$string.'?>';
     }
     
@@ -109,3 +111,4 @@ class HTML_Template_Flexy_Compiler {
     
 
 }
+?>

@@ -45,6 +45,8 @@ if (!$options) {
     PEAR::raiseError("\nERROR: could not read ini file\n\n", null, PEAR_ERROR_DIE);
     exit;
 }
+
+set_time_limit(0);
 //DB_DataObject::debugLevel(5);
 $flexy= new HTML_Template_Flexy;
 $flexy->compileAll();
