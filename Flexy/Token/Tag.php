@@ -281,7 +281,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         switch ($type) {
             case "CHECKBOX":
                  $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'checkbox' 
+                    'checkbox', 
                     $name,
                     ''  , // label?
                     '' , // test 
@@ -295,7 +295,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             
             case "RESET":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'reset' 
+                    'reset' ,
                     $name,
                     $this->getAttribute('VALUE') ,
                     $this->getAttributes()  // wrapper needed...
@@ -304,7 +304,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 
             case "SUBMIT":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'submit' 
+                    'submit' ,
                     $name,
                     $this->getAttribute('VALUE') , // the text.
                     $this->getAttributes()  // wrapper needed...
@@ -313,7 +313,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 
             case "BUTTON":            
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'text' 
+                    'text' ,
                     $name,
                     $this->getAttribute('VALUE') ,
                     $this->getAttributes()  // wrapper needed...
@@ -322,7 +322,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 
             case "PASSWORD":     
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'password' 
+                    'password' ,
                     $name,
                     '' ,
                     $this->getAttributes()  // wrapper needed...
@@ -334,7 +334,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
 
             case "HIDDEN":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'hidden' 
+                    'hidden' ,
                     $name,
                     $this->getAttribute('VALUE'),
                     $this->getAttributes()  // wrapper needed...
@@ -345,7 +345,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             
             default:
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
-                    'text' 
+                    'text' ,
                     $name,
                     ''  , // the text.
                     $this->getAttributes()  // wrapper needed...
