@@ -26,8 +26,9 @@
 
 
 
-require_once 'HTML/Template/Flexy/Tokenizer.php';
 
+require_once 'HTML/Template/Flexy/Tokenizer.php';
+require_once 'HTML/Template/Flexy/Token.php';
  
 class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     

@@ -27,6 +27,7 @@
 
 
 require_once 'HTML/Template/Flexy/Tokenizer.php';
+require_once 'HTML/Template/Flexy/Token.php';
 
 // cache for po files..
 $GLOBALS['_html_template_flexy_compiler_standard']['PO'] = array();
