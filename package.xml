@@ -86,8 +86,10 @@
         - config option templateDirOrder=reverse, allows you to prefer the first found template,
           rather than the last found template (when using theme type configurations)
         - Engine uses File_Gettext if gettext is not found. (or textdomain is set.)
-        - Provisional Smarty to Flexy template convertor
-        - Provisional Smarty Assign API emulator added.
+        - Provisional SmartyConverter compiler, 
+          * provides a basic Coversion of Smarty to Flexy templates
+        - Provisional SmartyAPI emulator added.
+          * allows drop in replacement of flexy with simple code that uses Smarty.
         - strict option 
           so variable can emit errors if they are not defined.
         - multiSource option 
@@ -104,7 +106,6 @@
         - If you use multiple paths in the template_dir, then the path will be modified to
         write to {compileDir}/{basename(actualTemplateDir)}_{md5(actualTemplateDir)}/...template..
         
-        - 
         
   
        
@@ -127,8 +128,8 @@
                 <file>Element.php</file>
                 <file>Factory.php</file>
                 
-                <!-- This is alpha (do not depend on it yet.) -->
-                <file>SmartyEmulator.php</file>
+                <!-- Very simple smarty API emulator .. -->
+                <file>SmartyAPI.php</file>
                 
                 <!-- a compile all script -->
                 <file>compileAll.php</file>
@@ -179,7 +180,7 @@
                   
                   <!-- The Smarty Convertor code. (alpha) -->
                   <!-- see examples/smarty in cvs -->
-                  <file>SmartyEmulator.php</file> 
+                  <file>SmartyConvertor.php</file> 
                   
                   
                   
