@@ -421,7 +421,6 @@ class HTML_Template_Flexy
             $recompile = true;
         } else {
             return true;
-
         }
         
         

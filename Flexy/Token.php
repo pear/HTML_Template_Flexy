@@ -286,7 +286,17 @@ class HTML_Template_Flexy_Token {
          
         
         
-        // connect parent and child tags.
+        // connect open  and close tags.
+        
+        // this is done by having a stack for each of the tag types..
+        // then removing it when it finds the closing one
+        // eg.
+        //  <a href=""><img src=""></a>
+        //  ends up with a stack for <a>'s and a stack for <img>'s
+        //
+        //
+        //
+        
        
         for($i=1;$i<$total;$i++) {
             //echo "Checking TAG $i\n";
@@ -299,10 +309,17 @@ class HTML_Template_Flexy_Token {
                 if (!isset($stack[$tag]['pos'])) {
                     continue; // unmatched
                 }
+                
                 $npos = $stack[$tag]['pos'];
-                //echo "matching it to {$stack[$tag][$npos]}\n";
+                if (!isset($stack[$tag][$npos])) {
+                    // stack is empty!!!
+                    continue;
+                }
+                //echo "CLOSING {$stack[$tag][$npos]}:{$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$tag][$npos]]->tag} WITH {$i}:{$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->tag}<BR>";
                 $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$tag][$npos]]->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
                 $stack[$tag]['pos']--;
+                // take it off the stack so no one else uses it!!!
+                unset($stack[$tag][$npos]);
                 if ($stack[$tag]['pos'] < 0) {
                     // too many closes - just ignore it..
                     $stack[$tag]['pos'] = 0;
@@ -317,6 +334,7 @@ class HTML_Template_Flexy_Token {
             } else {
                 $npos = ++$stack[$tag]['pos'];
             }
+            
             $stack[$tag][$npos] = $i;
         }
                 
@@ -359,7 +377,7 @@ class HTML_Template_Flexy_Token {
     
     /**
     * Build the child array for each element.
-    * 
+    * RECURSIVE FUNCTION!!!!
     * @param   int  id of node to add children to.
     *
     * @access   public
@@ -373,7 +391,12 @@ class HTML_Template_Flexy_Token {
         $base->children = array();
         $start = $base->id +1;
         $end = $base->close->id;
+        
         for ($i=$start; $i<$end; $i++) {
+            //echo "{$base->id}:{$base->tag} ADDING {$i}{$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->tag}<BR>";
+            //if ($base->id == 1176) {
+            //    echo "<PRE>";print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]);
+            // }
             $base->children[] = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
             
@@ -523,5 +546,4 @@ class HTML_Template_Flexy_Token {
      
 }
  
-   
-?>
+  
