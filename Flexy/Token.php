@@ -275,7 +275,7 @@ class HTML_Template_Flexy_Token {
             if (!isset($res[$i])) {
                 continue;
             }
-            if (get_class($res[$i]) == 'html_template_flexy_token_text') {
+            if (strtolower(get_class($res[$i])) == 'html_template_flexy_token_text') {
                 if (!$res[$i]->isWord()) {
                     continue;
                 }

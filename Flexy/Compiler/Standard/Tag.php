@@ -605,7 +605,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         require_once 'HTML/Template/Flexy/Element.php';
         $ret = new HTML_Template_Flexy_Element;
         
-        if (get_class($element) != 'html_template_flexy_token_tag') {
+        if (strtolower(get_class($element)) != 'html_template_flexy_token_tag') {
             return $element->value;
         }
         

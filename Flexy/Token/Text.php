@@ -81,7 +81,7 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
             }
             $token = $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
             
-            switch (get_class($token)) {
+            switch (strtolower(get_class($token))) {
                 case 'html_template_flexy_token_text';
                     $this->value = $token->value . $this->value;
                     
@@ -124,7 +124,7 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         
             $token = $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
             
-            switch (get_class($token)) {
+            switch (strtolower(get_class($token))) {
                 case 'html_template_flexy_token_text';
                     $this->value .= $token->value;
                     unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]);
