@@ -156,61 +156,7 @@ class HTML_Template_Flexy_Token {
     }
     
     
-    /**
-    * generate HTML after doing flexy manipulations..
-    *
-    * @return   string   HTML
-    * @access   public
-    */
-    
-    
-    
-      
-    function toString() {
-        if (is_array($this->value)) {
-            echo "<PRE>";
-            print_r($this);
-            echo "</PRE>";
-            PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline.
-	        "You used a tag incorrectly: eg &lt;foreach=\"xxx\"..." . htmlspecialchars(print_r($this,true))
-                , null,PEAR_ERROR_DIE); 
-
-        }
-        $ret = $this->value;
-        $ret .= $this->childrentoString();
-        if ($this->close) {
-            $ret .= $this->close->toString();
-        }
-        
-        return $ret;
-    }
-    
-    /**
-    * generate HTML from children after doing flexy manipulations..
-    *
-    * @return   string   HTML
-    * @access   public
-    */
-    function childrentoString() {
-        if (!$this->children) {
-            return '';
-        }
-        if ($this->ignoreChildren) {
-            return;
-        }
-        $ret = '';
-        //echo "output $this->id";
-        //new Gtk_VarDump($this);
-        foreach ($this->children as $child) {
-            if (!$child) {
-                continue;
-            }
-            $ret .= $child->toString();
-        }
-        return $ret;
-    }
-    
-   
+    / 
     
     /* ======================================================= */
     /* Token Managmenet = parse and store all the tokens in 
