@@ -61,19 +61,26 @@
  
 
     <release>
-     <version>0.8.1</version>
-      <date>2004-04-24</date>
+     <version>0.8.2</version>
+      <date>2004-05-05</date>
       <notes><![CDATA[
       Bugfix release:
       
-        Moving to stable Planned Sometime after Late May 2004
+      Moving to stable Planned Sometime after Late May 2004
         
       Bugs / Fixes:
-        * Stoped Javascript being striped when language= tag not used.
-        * PHP5 tested
-        * javscript and php code not added to gettext string list.
+        * Bug #1274
+        * Test added for Bug #1310
+        * fix Flexy_Element::setOptions / Flexy_Element::setValue, using a value of 0 
+          highlighting everything.
+        * Closing Tags for XHTML closers correctly placed at end of tag.
+          (Flexy_Element only)
+        * url_rewriting now works in &lt;?xml-stylesheet tags. (they are treaded similar to
+          normal html tags now. (and only the opening &lt; is written using php.
+        * closers for namepaced tags are now output (big oops bug..)
+        
        
-      Add test suite to package.
+      
         
       ]]></notes>
       <state>beta</state>
@@ -157,6 +164,7 @@
             <file>flexy_tojavascript.html</file> 
             <file>forms.html</file> 
             <file>globals.html</file> 
+            <file>image_view.html</file> 
             <file>includes.html</file> 
             <file>javascript.html</file> 
             <file>looping.html</file> 
@@ -181,6 +189,26 @@
       <dep type="pkg" rel="ge" version="0.0.1" optional="yes">Translation2</dep>
     </deps>
 
+    <release>
+     <version>0.8.1</version>
+      <date>2004-04-24</date>
+      <notes><![CDATA[
+      Bugfix release:
+      
+        Moving to stable Planned Sometime after Late May 2004
+        
+      Bugs / Fixes:
+        * Stoped Javascript being striped when language= tag not used.
+        * PHP5 tested
+        * javscript and php code not added to gettext string list.
+       
+      Add test suite to package.
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
    <changelog>
    <release>
      <version>0.8.0</version>
