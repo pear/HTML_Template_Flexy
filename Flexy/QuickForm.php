@@ -42,21 +42,8 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
          <!-- BEGIN required --><span class="QuickFormRequired">*</span><!-- END required -->
          <!-- BEGIN error --><div class="QuickFormError">{error}</div><!-- END error -->';
     
+       /* -----------------------     PUBLIC METHODS AND VARS - used outside engine. ---------------------------- */
     
-    
-    
-    /* -----------------------     PUBLIC METHODS - used outside engine. ---------------------------- */
-    
-    /**
-    * get a reference to the Elements (so you can modify them/ set stuff)
-    *
-    * @return   array   associative array of elementsname => element (by reference)
-    * @access   public
-    */
-    function &getElements() 
-    {
-        return $this->_elements;
-    }
     
      /**
     * flag an element as hidden (so do not display it)
@@ -72,9 +59,32 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
         }
         $this->_elements[$this->_elementIndex[$elementname]]->hide = true;
     }
+     /**
+    * A nice easy way to access elements!
+    *
+    * @var array associative array of name => element.
+    * @access public
+    */  
     
+    var $elements;
     
-      /* -----------------------     semi private methods - used by engine. ---------------------------- */
+    /* -----------------------     semi private methods - used by engine. ---------------------------- */
+    
+    /**
+    * build the friendly elements array
+    *
+    * @return   none
+    * @access   public
+    */
+    function buildElementsArray() 
+    {
+        foreach ($this->_elementIndex as $name => $id) {
+            $this->elements[$name] = & $this->_elements[$id];
+        }
+    }
+ 
+    
+      
    
     
     /**
@@ -112,6 +122,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             $this->_elements[$this->_elementIndex[$elementname]]->hide) {
                 return '';
         }
+       
         return $this->_buildElement($this->_elements[$this->_elementIndex[$elementname]]);
     }
    
@@ -189,26 +200,30 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
             
             
             $e = call_user_func_array(array($ret[$form],'createElement'),$array[0]);
+           
+             
             //array_pop($ret->_elements);
             if (isset($array[2])) { // options..
                 foreach ($array[2] as $v) {
-                    $e->addOption($v[0],$v[1]);
+                     $e->addOption($v[0],$v[1]);
                 }
             }
             if (!isset($array[1])) {
                 $ret[$form]->addElement($e);
+                
                 continue;
             }
             foreach ($array[1] as $k=>$v) {
                 //echo "<PRE>USR FUNC:";print_r(array( array($e,$k),$v));echo "</PRE>";
-                call_user_func(array($e,$k),$v);
+                call_user_func(array( $e,$k),$v);
             }
             $ret[$form]->addElement($e);
             
+            
         }
-        // echo "<PRE>RETURN:";print_r($ret);echo "</PRE>";
-        
         return $ret;
+        
+         
     }
 
 }
