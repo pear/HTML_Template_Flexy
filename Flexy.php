@@ -797,8 +797,8 @@ class HTML_Template_Flexy
     * @see  HTML_Template_Flexy::ouptutObject
     * @status alpha
     */
-    function output($object = false)
+    function output($object = false) 
     {
-        return $this->ouputObject($object);
+        return $this->outputObject($object);
     }
 }
