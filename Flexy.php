@@ -231,6 +231,9 @@ class HTML_Template_Flexy
                             null, PEAR_ERROR_DIE);
         }
         
+       
+        
+        $this->_setQuickFormsSelects($t);
         
         include($this->compiledTemplate);
         if ($_error_reporting !== false) {
@@ -683,7 +686,59 @@ class HTML_Template_Flexy
     }
     
     
-    
+    /**
+     * If there is a select tag with approprieate flexyobject/name attribute
+     * and displayed object supports it (has getOptions($field_name) method)
+     * it sets this select's options to the contents of this function results.
+     * Look in manual for more information.  
+     *
+     * @access     private
+     * @author     Marcin Galczynski <marcin@galczynski.poznan.pl>
+     * @param      none
+     * @return     none
+     */    
+    function _setQuickFormsSelects($processedTop) 
+    {
+        if (!is_array($this->quickforms)) {
+            return;
+        }
+        $processed = $processedTop;
+        foreach($this->quickforms as $id=>$qform) {
+             
+            $subobjname = $this->quickforms[$id]->_attributes['name'];
+            
+            // look up the flexyobject setting - this is a BC routine so ignore flexy:object!
+            if (isset($this->quickforms[$id]->_attributes['flexyobject'])) {
+                $subobjname = $this->quickforms[$id]->_attributes['flexyobject'];
+            }
+            
+            // see if $object->formname is set..
+            if (strlen($subobjname) && isset($processedTop->$subobjname)) {
+                $processed = $processedTop->$subobjname;
+            }
+            
+            // is there a getOptions method. 
+            if (!method_exists($processed,'getOptions')) {
+                return;
+            } 
+            
+            if (is_object($processed) && is_array($this->quickforms[$id]->_elements)) {
+                // find all the select elements and ask the getoptions for a list..
+                
+                foreach($this->quickforms[$id]->_elements as $name=>$element) {
+                    if (($this->quickforms[$id]->_elements[$name]->_type == 'select')
+                        && (!isset($this->quickforms[$id]->_elements[$name]->_attributes['static']))
+                        && (!isset($this->quickforms[$id]->_elements[$name]->_attributes['flexyignore']))) {
+                            $this->quickforms[$id]->_elements[$name]->loadArray(
+                                call_user_func(
+                                    array(&$processed,'getOptions'),
+                                    $this->quickforms[$id]->_elements[$name]->_attributes['name'])
+                                );
+                    } 
+                }
+            }
+        }
+    }
     
     
     
