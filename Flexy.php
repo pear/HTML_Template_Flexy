@@ -782,7 +782,7 @@ class HTML_Template_Flexy
         if (!$this->plugin) {
             $this->plugin = new HTML_Template_Flexy_Assign;
         }
-        return $this->plugin->execute(func_get_args());
+        return $this->plugin->call(func_get_args());
     } 
     /**
     * 

@@ -21,8 +21,14 @@
 //  Provider for Assign API ( Eg. $flexy->assign(...) )
 //
 class HTML_Template_Flexy_Assign {
-
-    var $variables;
+    
+    /**
+    * The variables stored in the Assigner
+    *
+    * @var array
+    * @access public
+    */
+    var $variables = array();
 
  
     /**
@@ -73,12 +79,12 @@ class HTML_Template_Flexy_Assign {
     * 
     */
     
-    function assign()
+    function assign($args)
     {    
         // in Form 1, $args[0] is a string name and $args[1] is mixed.
         // in Form 2, $args[0] is an associative array.
         // in Form 3, $args[0] is an object.
-        $args = func_get_args();
+        
         $count = count($args);
         
         // -------------------------------------------------------------
