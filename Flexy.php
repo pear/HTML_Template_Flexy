@@ -801,4 +801,21 @@ class HTML_Template_Flexy
     {
         return $this->outputObject($object);
     }
+    
+    /**
+    * 
+    * render the template with data..
+    * 
+    * @param  optional mixed object to output
+    * 
+    * @return   mixed    PEAR_Error or true?
+    * @access   public
+    * @see  HTML_Template_Flexy::ouptutObject
+    * @status alpha
+    */
+    function toString($object = false) 
+    {
+        return $this->bufferedOutputObject($object);
+    }
+    
 }
