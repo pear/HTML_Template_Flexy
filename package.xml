@@ -2,25 +2,24 @@
 <!DOCTYPE package SYSTEM "../package.dtd">
 <package version="1.0">
   <name>HTML_Template_Flexy</name>
-  <summary>A Flexible Caching Template Engine Based on SimpleTemplate</summary>
+  <summary>An extremely powerful Tokenizer driven Template engine</summary>
   <description>
-  Flexy Template is a Template to php code convertor, based on Simple Template, and 
-  similar to Smarty. It should be very fast, and is easy to extend to develop or use 
-  any template syntax you like
+  HTML_Template_Flexy started it's life as a simplification of HTML_Template_Xipe, 
+  however in Version 0.2, It became one of the first template engines to use a real Lexer,
+  rather than regex'es, making it possible to do things like ASP.net or Cold Fusion tags. 
+  However, it still has a very simple set of goals.
+
+  - Very Simple API, easy to learn...
+  - Targeted at Object based systems - default behavior is to display object variables
+  - Designed to allow the documentation of available variables using PEAR standards, eg. PHPDoc comments around object variables
+  - Ability to edit the templates in WYSIWYG HTML editors, without breaking the tags
+  - Extremely Fast, for normal variables and looping (or blocks), both for designing and runtime.
   
-  Default filter (SimpleTags) includes
-  variables
-  foreach loops
-  conditionals
-  method calls
-  includes
-  Handles urlencoded tags - so you can edit the template in mozilla etc.
+  - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
   
-  Other filters include
-  RtfSimpletags  - to make RTF/Word documents
-  BodyOnly - to strip header and footer from a template
-  Php - to strip php code from template 
-  Email - For parsing email templates
+   
+  Note: Filter features of original HTML_Template_Flexy are now depreciated.
+  Note: This is not backwards compatible with version 0.1!
   
 </description>
   <license>PHP License</license>
@@ -34,13 +33,13 @@
   </maintainers>
   <release>
        <version>0.2</version>
-      <date>2003-02-01</date>
+      <date>2003-02-03</date>
       <notes>First PEAR release,
       - Introduction of Lex based Parser. - A real syntax checking 
         Template generator
-      - Ability to use HTML attributes like foreach="abc,b,c" in TR tags.
-      - Automatically converts form elements contents to $object->{fromname}
-        and adds errormessages.
+      - Ability to do Coldfusion style HTML attributes like foreach="abc,b,c" in TR or any tag.
+      - Automatically converts form elements (INPUT, TEXTAREA, SELECT) contents to suitable PHP code
+        and adds error messages.
         
       </notes>
       <state>beta</state>
