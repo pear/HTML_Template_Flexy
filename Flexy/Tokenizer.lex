@@ -824,6 +824,11 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     $this->value = $this->createToken('Comment');
 	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
+<IN_COMSTYLE>. {
+    // we allow anything inside of comstyle!!!
+    $this->value = $this->createToken('Comment');
+	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
 <IN_COMSTYLE>{COM}[^>]	{
 	// inside style comment -- without a >
     $this->value = $this->createToken('Comment');
@@ -934,8 +939,8 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<IN_MD,IN_COM,IN_COMSTYLE>.  {
-    return $this->raiseError("illegal character in markup declaration");
+<IN_MD,IN_COM>.  {
+    return $this->raiseError("illegal character in markup declaration (0x".dechex(ord($this->yytext())).')');
 }
 
  
@@ -1009,7 +1014,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
 <YYINITIAL>"{foreach:"{FLEXY_VAR}"}" {
-    return $this->raiseError('invalid sytnax for Foreach','',true);
+    return $this->raiseError('invalid syntax for Foreach','',true);
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
     $this->value = $this->createToken('Foreach', explode(',',substr($this->yytext(),9,-1)));
