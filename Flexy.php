@@ -439,6 +439,11 @@ class HTML_Template_Flexy
         
         
         if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
+            require_once 'System.php';
+            
+            System::mkdir(array('-p',$compileDest));
+        }
+        if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
             PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
                             "Please give write and enter-rights to it",
                             null, PEAR_ERROR_DIE);
