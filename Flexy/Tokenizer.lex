@@ -144,16 +144,16 @@ define('YY_EOF' , 258);
     * Flexible constructor
     *
     * @param   string       string to tokenize
-    * @param   string       
+    * @param   array        options array (see options above)       
     * 
     *
-    * @return   none|boolean|string|int|object    Description
-    * @access   public|private
-    * @see      see also methods.....
+    * @return   HTML_Template_Flexy_Tokenizer
+    * @access   public
     */
   
     
-    function &construct($data,$options= array()) {
+    function &construct($data,$options= array()) 
+    {
         $t = new HTML_Template_Flexy_Tokenizer($data);
         foreach($options as $k=>$v) {
             if (is_object($v) || is_array($v)) {
@@ -179,7 +179,8 @@ define('YY_EOF' , 258);
     */
   
     
-    function raiseError($s,$n='',$isFatal=false) {
+    function raiseError($s,$n='',$isFatal=false) 
+    {
         $this->error = "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
         return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
     }
@@ -193,7 +194,8 @@ define('YY_EOF' , 258);
     * @access   public
     */
   
-    function returnSimple() {
+    function returnSimple() 
+    {
         $this->value = $this->createToken('TextSimple',$this->yytext(),$this->yyline);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
@@ -205,7 +207,8 @@ define('YY_EOF' , 258);
     * @return   Object   some kind of token..
     * @access   public
     */
-    function createToken() {
+    function createToken() 
+    {
         $a = func_get_args();
         return call_user_func_array($this->options['token_factory'],$a);
     }
