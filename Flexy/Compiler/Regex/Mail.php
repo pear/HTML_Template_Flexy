@@ -48,7 +48,8 @@ class HTML_Template_Flexy_Compiler_Regex_Mail {
      
     function post_fix_php_cr ($input) 
     {
-        return  str_replace("?>\n","?>\n\n",$input);
+        $input = str_replace("?>\n","?>\n\n",$input);
+        return str_replace("?>\r\n","?>\r\n\r\n",$input);
     }
     
 }
