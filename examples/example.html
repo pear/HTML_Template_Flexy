@@ -277,7 +277,7 @@ Example error messages..
 <flexy:include src="test.html">
     This is where test.html goes..
 </flexy:include>
-
+<!-- alot of wysiwig editor bork on this - best to use the syntax above (eg. no XTML /> closers.) -->
 <flexy:include src="test.html" />
 
 
@@ -286,8 +286,8 @@ Example error messages..
     abcg="xyz"
     abcd="xyz"
     srcXxx="xyz"
-/>
-
+>
+</flexy:toJavascript>
 <flexy:toJavascript 
     flexy:prefix="test_abc_"
     abcg="xyz"
@@ -304,7 +304,12 @@ var test_abc_agcg = 0
 
 
 </script>
-</flexy:toJavascript>
+
+
+<!-- Bugs: 739
+<td flexy:foreach="xxxx">xxx</td> 
+ {foreach:xxxx} {end:} 
+-->
 
 
 <p>&nbsp;</p>

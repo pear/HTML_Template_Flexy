@@ -249,14 +249,26 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         $this->element->hasForeach = true;
         // create a foreach element to wrap this with.
+        
         $foreachObj =  $this->element->factory('Foreach',
                 explode(',',$foreach),
                 $this->element->line);
-                
+        // failed = probably not enough variables..    
+        
+        
+        if ($foreachObj === false) {
+            PEAR::raiseError(
+                "Missing Arguments: An flexy:foreach attribute was foundon Line {$this->element->line} 
+                in tag &lt;{$this->element->tag} flexy:foreach=&quot;$foreach&quot; .....&gt;<BR>
+                the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
+                 null, PEAR_ERROR_DIE);
+        }
+        
+        
         // does it have a closetag?
         if (!$this->element->close) {
             PEAR::raiseError(
-                "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name}
+                "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
                     tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
                  null, PEAR_ERROR_DIE);
         }

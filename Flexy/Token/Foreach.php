@@ -55,6 +55,10 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
   
     function setValue($value) {
         $this->loopOn=$value[0];
+        if (!isset($value[1]) || !strlen(trim($value[1]))) {
+            // error condition.
+            return false;
+        }
         $this->key=$value[1];
         $this->value=@$value[2];
     }
@@ -65,4 +69,4 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
  
  
    
-?>
+ 

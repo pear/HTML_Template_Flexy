@@ -139,8 +139,7 @@ define('YY_EOF' , 258);
     
     function raiseError($s,$n='',$isFatal=false) {
         echo "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
-	return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
-	
+        return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
     }
     
     /**
@@ -817,12 +816,11 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
  
 
 
-
+// foreach (borks on incorrect syntax...
 
 
 <YYINITIAL>"{foreach:"{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach',array(substr($this->yytext(),9,-1)),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return $this->raiseError('invalid sytnax for Foreach','',true);
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
     $this->value = HTML_Template_Flexy_Token::factory('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);

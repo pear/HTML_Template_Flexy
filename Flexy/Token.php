@@ -89,10 +89,10 @@ class HTML_Template_Flexy_Token {
         if (!class_exists($c) && !isset($loaded[$token])) {
             // make sure parse errors are picked up - now @ here..
             if (file_exists(dirname(__FILE__)."/Token/{$token}.php")) {
-                require_once'HTML/Template/Flexy/Token/'.$token.'.php';
+                require_once 'HTML/Template/Flexy/Token/'.$token.'.php';
             }
             $loaded[$token] = true;
-        }
+        } 
             
         $t = new HTML_Template_Flexy_Token;
         
@@ -100,7 +100,11 @@ class HTML_Template_Flexy_Token {
             $t = new $c;
         }
         $t->token = $token;
-        $t->setValue($value);
+        
+        if ($t->setValue($value) === false) {
+            // kick back error conditions..
+            return false;
+        }
         $t->line = $line;
         
         return $t;
@@ -217,10 +221,10 @@ class HTML_Template_Flexy_Token {
                     htmlspecialchars(substr($tokenizer->yy_buffer,0,$tokenizer->yy_buffer_end)) . 
                     "<font color='red'>". htmlspecialchars(substr($tokenizer->yy_buffer,$tokenizer->yy_buffer_end,100)) . 
                     ".......</font></PRE>";
-                // print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
-                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline . 
-                    " <PRE>" . htmlspecialchars(print_r($tokenizer,true)) . "</PRE>",
-                    null,PEAR_ERROR_DIE);
+                    // print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
+                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline 
+                  // . " <PRE>" . htmlspecialchars(print_r($tokenizer,true)) . "</PRE>"
+                   , null,PEAR_ERROR_DIE);
             }
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
                 continue;

@@ -112,7 +112,7 @@ class HTML_Template_Flexy_Tokenizer
     }
     function raiseError($s,$n='',$isFatal=false) {
         echo "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
-	return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
+        return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
     }
     /**
     * return text
@@ -2675,8 +2675,7 @@ case 24:
 }
 case 25:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach',array(substr($this->yytext(),9,-1)),$this->yyline);
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return $this->raiseError('invalid sytnax for Foreach','',true);
 }
 case 26:
 {

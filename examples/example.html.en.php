@@ -270,7 +270,7 @@ $x = new HTML_Template_Flexy($this->options);
 $x->compile('test.html');
 $x->outputObject($t);
 ?>
-
+<!-- alot of wysiwig editor bork on this - best to use the syntax above (eg. no XTML /> closers.) -->
 <?php 
 $x = new HTML_Template_Flexy($this->options);
 $x->compile('test.html');
@@ -284,13 +284,28 @@ $x->outputObject($t);
 <?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 <?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
-
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
 <?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 <?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 <?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+</script><script language="javascript">
+
+// you can put testing code in here so you can test the template.. -
+// as it is inside the flexy:toJavascript tag, it will get replaced..!
+var test_abc_agcg = 0
+
+
+
+
+
 </script>
+
+
+Bugs: 739
+<?php if (is_array($t->xxxx)  || is_object($t->xxxx)) foreach($t->xxxx as $) {?><td>xxx</td><?php }?>
+<!-- {foreach:xxxx} {end:} -->
+
 
 
 <p>&nbsp;</p>
