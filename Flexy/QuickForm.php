@@ -144,7 +144,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     * @return   object HTML_Template_Flexy_QuickForm
     * @access   public
     */
-    function loadFromSerialFile($filename,$defaults_array) 
+    function loadFromSerialFile($filename,$defaults) 
     {
         // does our file exist.
         if (!file_exists($filename)) {
