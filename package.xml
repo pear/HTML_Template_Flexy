@@ -14,6 +14,7 @@
   - Designed to allow the documentation of available variables using PEAR standards, eg. PHPDoc comments around object variables
   - Ability to edit the templates in WYSIWYG HTML editors, without breaking the tags
   - Extremely Fast, for normal variables and looping (or blocks), both for designing and runtime.
+  - Full dynamic element support (like ASP.NET), so you can pick elements to replace at runtime
   
   Features:
   - {variable} to echo $object->variable
@@ -23,12 +24,12 @@
   - {if:variable} to PHP If statement
   - {if:method()} to PHP If statement
   - {else:} and {end:} to close or alternate If statements
-  - FORM to HTML_QuickForms mapping
-  - replacement of INPUT, TEXTAREA and SELECT tags with HTML_QuickForm code
+  - FORM to HTML_Template_Flexy_Element's
+  - replacement of INPUT, TEXTAREA and SELECT tags with HTML_Template_Flexy_Element code
     use FLEXY:IGNORE to prevent replacements
   - FLEXY:START/FLEXY:STARTCHILDREN tags to define where output starts/finishes
   - support for urlencoded braces {} in HTML attributes.  
-  - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
+  - documentation in the pear manual
      
   
 </description>
@@ -44,17 +45,33 @@
   
 
   <release>
-     <version>0.4.1</version>
+     <version>0.5</version>
       <date>2003-06-11</date>
       <notes>
       
-       
-      Bug fixes
-    	- fixed #literal# support for method calls - hopefully finally (Yuri Dyakonov)
-        - BC support for  getOptions call on objects (Marcin Galczynski)
+      Warning: BC Breaking release
+      Due to the conclusion that the quickforms integration was not only messy, but 
+      a heavy weight to be carried. The whole form/dynamic element layer was re-engineered.
+      
+      
+      New Features
+        HTML_Template_Flexy_Element, is a small simple representation of  generic HTML,
+        it is used to store the representation of form elements, and any HTML element 
+        which contains the FLEXY:DYNAMIC attribute.
         
-      Features
-        - method calls with literals at end can now use modifiers (:h/:u etc.)
+        $template->elements, can be set to an associate array of (form name)=>Element
+        and the data in the elements array is merged with the visable template at runtime.
+        
+        You can make any tag 'dynamic', by just tagging it. - if you replace the element
+        in the elements array with an object that implements a toHtml method, This will be 
+        called rather than the drawn element.
+       
+        A Utility class, HTML_Template_Flexy_Factory offers common static methods, like
+        - creating element values from a key=>value array (eg. Dataobjects->toArrary())
+        - setting error messages (as suffixes to elements)
+        - flag something as required. (prefixing strings to elements)
+    
+       
 
       </notes>
       <state>beta</state>
@@ -101,6 +118,23 @@
    <changelog>
    
   
+  <release>
+     <version>0.4.1</version>
+      <date>2003-06-11</date>
+      <notes>
+      
+       
+      Bug fixes
+        - fixed #literal# support for method calls - hopefully finally (Yuri Dyakonov)
+        - BC support for  getOptions call on objects (Marcin Galczynski)
+        
+      Features
+        - method calls with literals at end can now use modifiers (:h/:u etc.)
+
+      </notes>
+      <state>beta</state>
+     </release>
+     
   <release>
      <version>0.4</version>
       <date>2003-04-17</date>
