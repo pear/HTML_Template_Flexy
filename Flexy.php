@@ -501,7 +501,7 @@ class HTML_Template_Flexy
             return PEAR::raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
                 $ret->code, $this->options['fatalError']);
         }
-            
+        return $ret;
         
         //return $this->$method();
         
