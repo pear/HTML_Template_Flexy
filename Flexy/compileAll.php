@@ -19,11 +19,12 @@
 // $Id$
 //
 
-@include('HTML/Template/Flexy.php');
+@include 'HTML/Template/Flexy.php';
 if (!class_exists('HTML_Template_Flexy')) {
     ini_set('include_path',dirname(__FILE__).'/../../../');
-    include('HTML/Template/Flexy.php');
+    include 'HTML/Template/Flexy.php';
 }
+require_once 'PEAR.php';
 
 if (!ini_get('register_argc_argv')) {
     PEAR::raiseError("\nERROR: You must turn register_argc_argv On in you php.ini file for this to work\neg.\n\nregister_argc_argv = On\n\n", null, PEAR_ERROR_DIE);

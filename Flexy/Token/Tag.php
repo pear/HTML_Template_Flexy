@@ -559,8 +559,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if (!isset($this->attributes[$key])) {
             return;
         }
+        // general assumption - none of the tools can do much with dynamic
+        // attributes - eg. stuff with flexy tags in it.
+        if (!is_string($this->attributes[$key])) {
+            return;
+        }
         $v = $this->attributes[$key];
-        
+         
         // unlikely :)
         if ($v=='') {
             return $v;

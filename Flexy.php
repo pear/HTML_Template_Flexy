@@ -423,6 +423,7 @@ class HTML_Template_Flexy
     */
     function compileAll($dir = '')
     {
+        
         $base =  $this->options['templateDir'];
         $dh = opendir($base . DIRECTORY_SEPARATOR  . $dir);
         while (($name = readdir($dh)) !== false) {
@@ -432,10 +433,12 @@ class HTML_Template_Flexy
             if ($name{0} == '.') {
                 continue;
             }
-            
+             
             if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
-                $this->compileAll($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name);
+                $this->compileAll($dir . DIRECTORY_SEPARATOR  . $name);
+                continue;
             }
+            echo "Compiling $dir". DIRECTORY_SEPARATOR  . "$name \n";
             $this->compile($dir . DIRECTORY_SEPARATOR  . $name);
         }
         
