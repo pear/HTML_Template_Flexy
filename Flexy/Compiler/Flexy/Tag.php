@@ -91,7 +91,15 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         }
         return HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,$compiler);
     }
-    
+    /**
+    *   
+    * Check that a file exists in the "include_path"
+    *
+    * @param   string    Filename
+    *
+    * @return    boolean  true if it is in there.
+    * @access   public
+    */
     function fileExistsInPath($filename) {
         if (isset($GLOBALS['_'.__CLASS__]['cache'][$filename])) {
             return $GLOBALS['_'.__CLASS__]['cache'][$filename];
@@ -641,14 +649,18 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                 $wrapper = array_shift($attributeValue);
                 array_pop($attributeValue); 
                 $ret .= "    {$output_avar} = '';\n";
+                //echo '<PRE>';print_r($attributeValue);echo '</PRE>';
                 foreach($attributeValue as $item) {
+                    
                     if (is_string($item)) {
                         $ret .= "    {$output_avar} .= {$wrapper}{$item}{$wrapper};\n";
                         continue;
                     }
-                    if (!is_object($item)) {
-                         return HTML_Template_Flexy::raiseError("something strange found in attribute".print_r($this->element,true),
-                         null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                    if (!is_object($item) || !is_a($item, 'HTML_Template_Flexy_Token_Var')) {
+                        return HTML_Template_Flexy::raiseError(
+                            "unsupported type found in attribute, use flexy:ignore to prevent parsing or remove it. " . 
+                                print_r($this->element,true),
+                            null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
                     }
                     
                     $var = $item->toVar($item->value);
