@@ -67,7 +67,7 @@ class HTML_Template_Flexy_Plugin {
         // array elements.
         array_shift($args);
         
-        return call_user_func_array(array($this->plugins[$class],$method), $args);
+        return call_user_func_array(array(&$this->plugins[$class],$method), $args);
     }
     
     /**
