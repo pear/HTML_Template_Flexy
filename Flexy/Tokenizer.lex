@@ -682,7 +682,11 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
      
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
- 
+<IN_COM>{COM}[^>] 	{
+	// inside comment -- without a >
+	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
 <IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
