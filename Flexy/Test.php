@@ -88,7 +88,7 @@ class HTML_Template_Flexy_Test {
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
             
             
-            new Gtk_VarDump($res);
+            //new Gtk_VarDump($res);
             echo $res->toString();
             print_r(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings']));
             print_r($this->_elements);

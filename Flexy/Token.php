@@ -125,8 +125,13 @@ class HTML_Template_Flexy_Token {
       
     function toString() {
         if (is_array($this->value)) {
-            var_dump($this);
-            exit;
+            echo "<PRE>";
+            print_r($this);
+            echo "</PRE>";
+            PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline.
+	        "You used a tag incorrectly: eg &lt;foreach=\"xxx\"..."
+                , null,PEAR_ERROR_DIE); 
+
         }
         $ret = $this->value;
         $ret .= $this->childrentoString();
