@@ -22,8 +22,8 @@
 // You should always work with the .lex file and generate by
 //
 // #mono phpLex/phpLex.exe Tokenizer.lex
-//
-//
+// The lexer is available at http://sourceforge.net/projects/php-sharp/
+// 
 // or the equivialant .NET runtime on windows...
 //
 //  Note need to change a few of these defines, and work out
@@ -239,7 +239,7 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{MDO}{TAGC}			{ 
     /* <!> */
-    $this->error(SGML_ERROR,"empty markup tag not handled"); 
+    $this->error(1,"empty markup tag not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
 
@@ -256,6 +256,9 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{MDO}{DSO}{WHITESPACE}			{
     /* <![ -- marked section */
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"marked section not handled"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }
@@ -263,6 +266,9 @@ FLEXY_MODIFIER      = [hur]
 
 <YYINITIAL>{MSC}{TAGC}		{ 
     /* ]]> -- marked section end */
+    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    // At the momemnt just ignore this!
     $this->error(SGML_ERROR,"unmatched marked sections end"); 
     return HTML_TEMPLATE_FLEXY_TOKEN_ERROR;
 }

@@ -444,9 +444,11 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
         }
         // override with flexy object
-        if ($name = $this->getAttribute('FLEXYOBJECT')) {
-            $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
+        if (isset($this->attributes['FLEXYOBJECT'])) {
+            $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] =  $this->getAttribute('FLEXYOBJECT');
+            unset($this->attributes['FLEXYOBJECT']);
         }
+        
         
     
     }
