@@ -310,7 +310,9 @@ class HTML_Template_Flexy
                             "Please check the file permisons on the directory and file ",
                             HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
-        
+        if (isset($this->assign)) {
+            extract($this->assign->variables);
+        }
         include($this->compiledTemplate);
         
         // Return the error handler to its previous state. 
@@ -714,4 +716,87 @@ class HTML_Template_Flexy
         return PEAR::raiseError($message, $type, $fatal);
     }
 
+
+    /**
+    * 
+    * Assign API - 
+    * 
+    * read the docs on HTML_Template_Flexy_Assign::assign()
+    *
+    * @param   varargs ....
+    * 
+    *
+    * @return   mixed    PEAR_Error or true?
+    * @access   public
+    * @see  HTML_Template_Flexy_Assign::assign()
+    * @status alpha
+    */
+  
+    function assign() {
+        require_once 'HTML/Template/Flexy/Assign.php';
+        // load assigner..
+        if (!isset($this->assign)) {
+            $this->assign = new HTML_Template_Flexy_Assign;
+        }
+        return $this->assign->assign(func_get_args());
+    }
+    /**
+    * 
+    * Assign API - by Reference
+    * 
+    * read the docs on HTML_Template_Flexy_Assign::assign()
+    *
+    * @param  key  string
+    * @param  value mixed
+    * 
+    * @return   mixed    PEAR_Error or true?
+    * @access   public
+    * @see  HTML_Template_Flexy_Assign::assign()
+    * @status alpha
+    */
+        
+    function assignRef($k,&$v) {
+        require_once 'HTML/Template/Flexy/Assign.php';
+        // load assigner..
+        if (!isset($this->assign)) {
+            $this->assign = new HTML_Template_Flexy_Assign;
+        }
+        $this->assign->assignRef($k,&$v);
+    } 
+    /**
+    * 
+    * Plugin (used by templates as $this->plugin(...) or {this.plugin(#...#,#....#)}
+    * 
+    * read the docs on HTML_Template_Flexy_Plugin()
+    *
+    * @param  varargs ....
+    * 
+    * @return   mixed    PEAR_Error or true?
+    * @access   public
+    * @see  HTML_Template_Flexy_Plugin
+    * @status alpha
+    */
+    function plugin($k,&$v) {
+        require_once 'HTML/Template/Flexy/Plugin.php';
+        // load pluginManager.
+        if (!$this->plugin) {
+            $this->plugin = new HTML_Template_Flexy_Assign;
+        }
+        return $this->plugin->execute(func_get_args());
+    } 
+    /**
+    * 
+    * output / display ? - outputs an object, without copy by references..
+    * 
+    * @param  optional mixed object to output
+    * 
+    * @return   mixed    PEAR_Error or true?
+    * @access   public
+    * @see  HTML_Template_Flexy::ouptutObject
+    * @status alpha
+    */
+    function output($object = false)
+    {
+        return $this->ouputObject($object);
+    }
 }
