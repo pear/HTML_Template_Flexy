@@ -412,7 +412,8 @@ FLEXY_MODIFIER      = [hur]
 
   
 <IN_ATTR>{NSNAME}{WHITESPACE}		{
-    // <img src="xxx" ^ismap> -- name */
+    // <img src="xxx" ...ismap...> the ismap */
+    
     $this->attributes[trim($this->yytext())] = true;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -447,7 +448,8 @@ FLEXY_MODIFIER      = [hur]
 //    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 //}
  
-<IN_ATTRVAL>"'"    {
+<IN_ATTRVAL> \'    {
+	//echo "STARTING SINGLEQUOTE";
     $this->attrVal = array( "'");
     $this->yybegin(IN_SINGLEQUOTE);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -461,15 +463,15 @@ FLEXY_MODIFIER      = [hur]
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_SINGLEQUOTE>(([^\{\%\'\]+|\\[^\']|"%"|"{")+)	{
+<IN_SINGLEQUOTE>(([^\{\%\'\\]+|\\[^\']|"%"|"{")+)	{
     
     $this->attrVal[] = $this->yytext();
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
-<IN_SINGLEQUOTE>"'" {
+<IN_SINGLEQUOTE> \' {
     $this->attrVal[] = "'";
-    //var_dump($this->attrVal);
+     //var_dump($this->attrVal);
     $s = "";
     foreach($this->attrVal as $v) {
         if (!is_string($v)) {
@@ -563,7 +565,7 @@ FLEXY_MODIFIER      = [hur]
 
   
   
-<IN_ATTRVAL> ([^ \"\t\n\r>]+){WHITESPACE}	{
+<IN_ATTRVAL> ([^ \'\"\t\n\r>]+){WHITESPACE}	{
     // <a href = ^http://foo/> -- unquoted literal HACK */                          
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);

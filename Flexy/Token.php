@@ -171,7 +171,7 @@ class HTML_Template_Flexy_Token {
             print_r($this);
             echo "</PRE>";
             PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline.
-	        "You used a tag incorrectly: eg &lt;foreach=\"xxx\"..."
+	        "You used a tag incorrectly: eg &lt;foreach=\"xxx\"..." . htmlspecialchars(print_r($this,true))
                 , null,PEAR_ERROR_DIE); 
 
         }
@@ -266,7 +266,8 @@ class HTML_Template_Flexy_Token {
                     "<font color='red'>". htmlspecialchars(substr($tokenizer->yy_buffer,$tokenizer->yy_buffer_end,100)) . 
                     ".......</font></PRE>";
                 // print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens']);
-                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline,
+                PEAR::raiseError('HTML_Template_Flexy::Syntax error in Template line:'. $tokenizer->yyline . 
+                    " <PRE>" . htmlspecialchars(print_r($tokenizer,true)) . "</PRE>",
                     null,PEAR_ERROR_DIE);
             }
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
