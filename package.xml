@@ -52,7 +52,8 @@
         - deal with reset items in forms (no replacement is done)
       Features
         - support variable[12] as a valid variable name.
-        
+        - does syntax checking on form element names 
+        - fixed {outputBody()} (no prefix var methods)
       </notes>
       <state>beta</state>
      </release>

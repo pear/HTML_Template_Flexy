@@ -401,10 +401,11 @@ class HTML_Template_Flexy_Token {
     
     function toVar($s) {
         
+        
         $parts = explode(".",$s);
         $ret =  $this->findVar($parts[0]);
         array_shift($parts);
-        if (!$parts) {
+        if (!count($parts)) {
             return $ret;
         }
         foreach($parts as $p) {
@@ -423,7 +424,7 @@ class HTML_Template_Flexy_Token {
     {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
     
-        if ($string == 't') {
+        if (!$string || $string == 't') {
             return '$t';
         }
         for ($s = $_HTML_TEMPLATE_FLEXY_TOKEN['state']; $s > 0; $s--) {

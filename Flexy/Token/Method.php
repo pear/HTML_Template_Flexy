@@ -112,9 +112,10 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         // check that method exists..
         // if (method_exists($object,'method');
         $bits = explode('.',$this->method);
-        $method = $bits[count($bits)-1];
-        unset($bits[count($bits)-1]);
+        $method = array_pop($bits);
+        
         $object = implode('.',$bits);
+        
         $prefix = 'if (isset('.$this->toVar($object).
             ') && method_exists('.$this->toVar($object) .",'{$method}')) " . $prefix;
         
