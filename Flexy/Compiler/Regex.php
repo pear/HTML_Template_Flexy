@@ -60,7 +60,7 @@ class HTML_Template_Flexy_Compiler_Regex {
             require_once("HTML/Template/Flexy/Compiler/Regex/{$filtername}.php");
             
             if (!class_exists($class)) {
-                return $this->raiseError("Failed to load filter $filter",null,PEAR_ERROR_DIE);
+                return HTML_Template_Flexy::raiseError("Failed to load filter $filter",null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             
             if (!@$this->filter_objects[$class])  {

@@ -158,11 +158,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             
             if (strtoupper($k) == 'FLEXY:RAW') {
                 if (!is_array($v) || !isset($v[1]) || !is_object($v[1])) {
-                    return PEAR::raiseError(
+                    return HTML_Template_Flexy::raiseError(
                         'flexy:raw only accepts a variable or method call as an argument, eg.'.
                         ' flexy:raw="{somevalue}" you provided something else.' .
                         " Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                         null,  $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                         null,   HTML_TEMPLATE_FLEXY_ERROR_DIE);
                 }
                 $add = $v[1]->compile($this->compiler);
                 if (is_a($add,'PEAR_Error')) {
@@ -331,20 +331,20 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         
         if ($foreachObj === false) {
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "Missing Arguments: An flexy:foreach attribute was foundon Line {$this->element->line} 
                 in tag &lt;{$this->element->tag} flexy:foreach=&quot;$foreach&quot; .....&gt;<BR>
                 the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         
         // does it have a closetag?
         if (!$this->element->close) {
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
                     tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         $this->element->close->postfix = array($this->element->factory("End", '', $this->element->line));
 
@@ -369,9 +369,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
         
         if (isset($this->element->hasForeach)) {
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "You may not use FOREACH and IF tags in the same tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         // allow if="!somevar"
@@ -389,11 +389,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?((\[|%5B)[A-Z0-9_]+(\]|%5D))*'.
                 '(\.[_A-Z][A-Z0-9_]*((\[|%5B)[A-Z0-9_]+(\]|%5D))*)*(\\([^)]*\))?$/i',$if)) {
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "IF tags only accept simple object.variable or object.method() values on 
                     Line {$this->element->line} &lt;{$this->element->tag}&gt;
                     {$if}",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         if (substr($if,-1) == ')') {
@@ -444,10 +444,10 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 $this->element->postfix = array($this->element->factory("End",'', $this->element->line));
             } else {
             
-                return PEAR::raiseError(
+                return HTML_Template_Flexy::raiseError(
                     "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name}
                         tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                     null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
                 }
         } else {
         
@@ -524,10 +524,10 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         static $tmpId=0;
         if (!$id) {
             
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
                 " Dynamic tags require an ID value",
-                null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
          
         if ((strtolower($this->element->getAttribute('type')) == 'checkbox' ) && 
@@ -544,10 +544,10 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
            // echo "<PRE>";print_r($this);print_r($_HTML_TEMPLATE_FLEXY['elements']);echo "</PRE>";
-            return PEAR::raiseError(
+            return HTML_Template_Flexy::raiseError(
                 "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} in Tag &lt;{$this->element->tag}&gt;:<BR> " . 
                  "The Dynamic tag Name '$id' has already been used previously by  tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         // this is for a case where you can use a sprintf as the name, and overlay it with a variable element..
@@ -595,8 +595,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         if ($lang == "PHP") {
             
-            return PEAR::raiseError('PHP code found in script',
-                HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,PEAR_ERROR_RETURN
+            return HTML_Template_Flexy::raiseError('PHP code found in script',
+                HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,HTML_TEMPLATE_FLEXY_ERROR_RETURN
             );
         }
         return false;
@@ -634,20 +634,20 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             } else if ($_HTML_TEMPLATE_FLEXY['elements'][$id] != false) {
                 
            
-                return PEAR::raiseError(
+                return HTML_Template_Flexy::raiseError(
                     "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} ".
                     "in Tag &lt;{$this->element->tag}&gt;:<BR>".
                     "The Dynamic tag Name '$id' has already been used previously by ".
                     "tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
-                     null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']
+                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE
                 );
             }
            
             $id = $this->element->getAttribute('ID');
             if (!$id) {
-                return PEAR::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
+                return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
                  Radio Input's require an ID tag..",
-                 null, $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             $mergeWithName = true;
             
@@ -770,8 +770,8 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             }
             $parts = explode (':', $bit);
             if (!isset($parts[1])) {
-                return PEAR::raiseError('HTML_Template_Flexy: url_rewrite syntax incorrect'. 
-                    print_r(array($bits,$bits),true),null,$GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['fatalError']);
+                return HTML_Template_Flexy::raiseError('HTML_Template_Flexy: url_rewrite syntax incorrect'. 
+                    print_r(array($bits,$bits),true),null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             $new = preg_replace('#^'.$parts[0].'#',$parts[1], $new);
         }

@@ -208,8 +208,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
             
         } else {
-            return PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,
-                HTML_TEMPLATE_FLEXY_ERROR_FILE ,PEAR_ERROR_RETURN);
+            return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,
+                HTML_TEMPLATE_FLEXY_ERROR_FILE ,HTML_TEMPLATE_FLEXY_ERROR_RETURN);
         }
         // gettext strings
         if (file_exists($flexy->getTextStringsFile)) {
@@ -869,9 +869,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             require_once 'HTML/Template/Flexy/Compiler/Standard/Tag.php';
             $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Standard_Tag::factory($namespace,$this);
             if (!$this->tagHandlers[$namespace] ) {
-                return PEAR::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
+                return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
                     ' in file ' . $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'],
-                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,PEAR_ERROR_RETURN);
+                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,HTML_TEMPLATE_FLEXY_ERROR_RETURN);
             }
                 
         }

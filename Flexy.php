@@ -212,8 +212,11 @@ class HTML_Template_Flexy
     
     function HTML_Template_Flexy( $options=array() )
     {
-        $baseoptions = &PEAR::getStaticProperty('HTML_Template_Flexy','options');
-       
+        
+        $baseoptions = array();
+        if (class_exists('PEAR')) {
+            $baseoptions = &PEAR::getStaticProperty('HTML_Template_Flexy','options');
+        }
         if ($baseoptions ) {
             foreach( $baseoptions as  $key=>$aOption)  {
                 $this->options[$key] = $aOption;
@@ -697,7 +700,7 @@ class HTML_Template_Flexy
     */
   
     
-    function raiseError($mesage, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) 
+    function raiseError($message, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) 
     {
         require_once 'PEAR.php';
         if (is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
