@@ -15,11 +15,8 @@
   - Ability to edit the templates in WYSIWYG HTML editors, without breaking the tags
   - Extremely Fast, for normal variables and looping (or blocks), both for designing and runtime.
   
-  - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
-  
    
-  Note: Filter features of original HTML_Template_Flexy are now depreciated.
-  Note: This is not backwards compatible with version 0.1!
+  
   
 </description>
   <license>PHP License</license>
@@ -40,7 +37,11 @@
       - Ability to do Coldfusion style HTML attributes like foreach="abc,b,c" in TR or any tag.
       - Automatically converts form elements (INPUT, TEXTAREA, SELECT) contents to suitable PHP code
         and adds error messages.
-        
+      
+      - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
+      
+      Note: Filter features of original HTML_Template_Flexy are now depreciated.
+      Note: This is not backwards compatible with version 0.1!  
       </notes>
       <state>beta</state>
      </release>
