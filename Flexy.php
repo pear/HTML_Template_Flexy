@@ -184,7 +184,11 @@ class HTML_Template_Flexy
     
     function outputObject(&$t,$elements=array()) 
     {
-       
+        if (!is_array($elements)) {
+            return PEAR::raiseError(
+                'second Argument to HTML_Template_Flexy::outputObject() was an '.gettype($elements) . ', not an array',
+                null,PEAR_ERROR_DIE);
+        }
         if (@$this->options['debug']) {
             echo "output $this->compiledTemplate<BR>";
         }
@@ -200,7 +204,7 @@ class HTML_Template_Flexy
         $this->elements = $this->getElements();
         
         // overlay elements..
-        
+       
         foreach($elements as $k=>$v) {
             if (!$v) {
                 unset($this->elements[$k]);
