@@ -38,6 +38,8 @@ define('HTML_TEMPLATE_FLEXY_ERROR_SYNTAX',-1);  // syntax error in template.
 define('HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS',-2);  // bad arguments to methods.
 define('HTML_TEMPLATE_FLEXY_ERROR_FILE',-2);  // file access problem
 
+define('HTML_TEMPLATE_FLEXY_ERROR_RETURN',1);  // RETURN ERRORS
+define('HTML_TEMPLATE_FLEXY_ERROR_DIE',8);  // FATAL DEATH
 /**
 * A Flexible Template engine - based on simpletemplate  
 *
@@ -132,7 +134,7 @@ class HTML_Template_Flexy
         'strict'        => false,       // All elements in the template must be defined - 
                                         // makes php E_NOTICE warnings appear when outputing template.
                                         
-        'fatalError'       => PEAR_ERROR_DIE,       // default behavior is to die on errors in template.
+        'fatalError'       => HTML_TEMPLATE_FLEXY_ERROR_DIE,       // default behavior is to die on errors in template.
         
     );
 
@@ -252,9 +254,9 @@ class HTML_Template_Flexy
     function outputObject(&$t,$elements=array()) 
     {
         if (!is_array($elements)) {
-            return PEAR::raiseError(
+            return $this->raiseError(
                 'second Argument to HTML_Template_Flexy::outputObject() was an '.gettype($elements) . ', not an array',
-                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS ,$this->options['fatalError']);
+                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS ,HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         if (@$this->options['debug']) {
             echo "output $this->compiledTemplate<BR>";
@@ -301,9 +303,9 @@ class HTML_Template_Flexy
             $_error_reporting = error_reporting(E_ALL ^ E_NOTICE);
         }
         if (!is_readable($this->compiledTemplate)) {
-              PEAR::raiseError( "Could not open the template: <b>'{$this->compiledTemplate}'</b><BR>".
+              return $this->raiseError( "Could not open the template: <b>'{$this->compiledTemplate}'</b><BR>".
                             "Please check the file permisons on the directory and file ",
-                            HTML_TEMPLATE_FLEXY_ERROR_FILE, $this->options['fatalError']);
+                            HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         include($this->compiledTemplate);
@@ -368,8 +370,8 @@ class HTML_Template_Flexy
     function compile( $file )
     {
         if (!$file) {
-            PEAR::raiseError('HTML_Template_Flexy::compile no file selected',
-                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS,$this->options['fatalError']);
+            return $this->raiseError('HTML_Template_Flexy::compile no file selected',
+                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS,HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         if (!@$this->options['locale']) {
@@ -415,9 +417,9 @@ class HTML_Template_Flexy
                  
                     
                 if (!$this->options['multiSource'] && ($this->currentTemplate  !== false)) {
-                    return PEAR::raiseError("You have more than one template Named {$file} in your paths, found in both".
+                    return $this->raiseError("You have more than one template Named {$file} in your paths, found in both".
                         "<BR>{$this->currentTemplate }<BR>{$tmplDir}" . DIRECTORY_SEPARATOR . $file,  
-                        HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS , $this->options['fatalError']);
+                        HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS , HTML_TEMPLATE_FLEXY_ERROR_DIE);
                     
                 }
                 
@@ -427,9 +429,9 @@ class HTML_Template_Flexy
         }
         if ($this->currentTemplate === false)  {
             // check if the compile dir has been created
-            return PEAR::raiseError("Could not find Template {$file} in any of the directories<br>" . 
+            return $this->raiseError("Could not find Template {$file} in any of the directories<br>" . 
                 implode("<BR>",$this->options['templateDir']) ,
-                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS, $this->options['fatalError']);
+                HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         
@@ -499,9 +501,9 @@ class HTML_Template_Flexy
             System::mkdir(array('-p',$compileDest));
         }
         if( !@is_dir($compileDest) || !is_writeable($compileDest)) {
-            PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
+            return $this->raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
                             "Please give write and enter-rights to it",
-                            HTML_TEMPLATE_FLEXY_ERROR_FILE, $this->options['fatalError']);
+                            HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         if (!file_exists(dirname($this->compiledTemplate))) {
@@ -515,8 +517,8 @@ class HTML_Template_Flexy
         $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
         $ret = $compiler->compile($this);
         if (is_a($ret,'PEAR_Error')) {
-            return PEAR::raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
-                $ret->code, $this->options['fatalError']);
+            return $this->raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
+                $ret->code,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         return $ret;
         
@@ -682,5 +684,31 @@ class HTML_Template_Flexy
     }
     
     
-}
+    /**
+    * Lazy loading of PEAR, and the error handler..
+    * This should load HTML_Template_Flexy_Error really..
+    * 
+    * @param   string message
+    * @param   int      error type.
+    * @param   int      an equivalant to pear error return|die etc.
+    *
+    * @return   object      pear error.
+    * @access   public
+    */
+  
+    
+    function raiseError($mesage, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) 
+    {
+        require_once 'PEAR.php';
+        if (is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
+            // rewrite DIE!
+            return PEAR::raiseError($message, $type, $this->options['fatalError']);
+        }
+        if (isset($GLOBALS['_HTML_TEMPLATE_FLEXY']['fatalError']) &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
+            
+            return PEAR::raiseError($message, $type,$GLOBALS['_HTML_TEMPLATE_FLEXY']['fatalError']);
+        }
+        return PEAR::raiseError($message, $type, $fatal);
+    }
 
+}
