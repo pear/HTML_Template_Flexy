@@ -672,7 +672,7 @@ class HTML_Template_Flexy
             return true;
         }
         foreach($this->quickforms as $k=>$v) {
-            if (isset($v->_attributes['name']) && v->_attributes['name'] == $active) {
+            if (isset($v->_attributes['name']) && ($v->_attributes['name'] == $active)) {
                 $this->quickform = & $this->quickforms[$k];
                 return true;
             }
