@@ -50,7 +50,7 @@ class HTML_Template_Flexy_Filter_Php
     {
         $input = str_replace("<?","__{<__?}__",$input);
         $input = str_replace("?>","<?php echo '?'.'>'; ?>",$input);
-        return str_replace("__{<__?}__","<?php echo '?'.'>'; ?>",$input);
+        return str_replace("__{<__?}__","<?php echo '<'.'>'; ?>",$input);
     }
     
     
