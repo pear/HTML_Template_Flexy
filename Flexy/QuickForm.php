@@ -117,7 +117,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     
     function formHeadtoHtml() 
     {
-        $ret ='<script language="javascript"><!--'.$this->getValidationScript() . '--></script>';
+        $ret ='<script type="text/javascript" language="javascript"><!--'.$this->getValidationScript() . '--></script>';
         $ret .= '<form ' . $this->_getAttrString($this->_attributes) . '>';
       
         foreach($this->_elementIndex as $name => $id) {
