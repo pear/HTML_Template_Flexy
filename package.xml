@@ -46,13 +46,17 @@
   </maintainers>
  
 
-  <release>
-     <version>0.6.1</version>
-      <date>2003-12-21</date>
+    <release>
+     <version>0.6.2</version>
+      <date>2004-01-20</date>
       <notes><![CDATA[
       
-      Bugfix release
-        - got javascript script wrapper wrong.
+      Minor Bugfix / mini feature release
+        - support flexy:if with method arguments eg.
+           flexy:if="somemethod(#with#,some,#args#)"
+        - foreach works on objects and arrays. : eg.
+          flexy:foreach="someobject"
+        
         
 
       ]]></notes>
@@ -126,7 +130,19 @@
     </deps>
 
    <changelog>
-   
+   <release>
+     <version>0.6.1</version>
+      <date>2003-12-21</date>
+      <notes><![CDATA[
+      
+      Bugfix release
+        - got javascript script wrapper wrong.
+        
+
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
    
   <release>
      <version>0.6</version>
