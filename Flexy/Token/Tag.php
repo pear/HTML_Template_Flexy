@@ -458,7 +458,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             }
             
         }
-         
+        if (!$id) {
+            return false;
+        }
         return $this->asElement( $id);
         
          

@@ -81,6 +81,35 @@
 
 {abc(#abc#,def,hij):u}
 
+A Full on test!
+
+
+Invoice number: {t.getelem(t.invoice,#number#)} Place: 
+{t.getelem(t.invoice,#place#)} Date: {t.getelem(t.invoice,#date#)} Payment: 
+{t.getelem(t.invoice,#payment#)} Payment date: 
+{t.getelem(t.invoice,#payment_date#)} Seller: Name 1: 
+{t.getelem(t.seller,#name1#)} Name 2: {t.getelem(t.seller,#name2#)} NIP: 
+{t.getelem(t.seller,#nip#)} Street: {t.getelem(t.seller,#street#)} City: 
+{t.getelem(t.seller,#code#)} {t.getelem(t.seller,#city#)} Buyer: Name 1: 
+{t.getelem(t.buyer,#name1#)} Name 2: {t.getelem(t.buyer,#name2#)} NIP: 
+{t.getelem(t.buyer,#nip#)} Street: {t.getelem(t.buyer,#street#)} City: 
+{t.getelem(t.buyer,#code#)} {t.getelem(t.buyer,#city#)}
+# 	Name {if:t.show_pkwiu}	PKWIU{end:} 	Count 	Netto 	VAT 	Brutto
+{foreach:t.positions,position} {t.getelem(position,#nr#)} 
+{t.getelem(position,#name#)} {if:t.show_pkwiu} 
+{t.getelem(position,#pkwiu#)}{end:} 	{t.getelem(position,#count#)} 
+{t.getelem(position,#netto#)} 	{t.getelem(position,#vat#)} 
+{t.getelem(position,#brutto#)}
+{end:} {if:t.edit_positions} # 	Name {if:t.show_pkwiu}	PKWIU{end:} 	Count 
+{if:t.getelem(position,#netto_mode#)}	Netto{else:}	{end:} 	VAT 
+{if:t.getelem(position,#netto_mode#)}	{else:}	Brutto{end:}
+{foreach:t.edit_positions,k,position} {t.getelem(position,#nr#)} 
+{if:t.show_pkwiu} 	{end:} 	{if:t.getelem(position,#netto_mode#)} 	{else:} 
+{end:} 	{if:t.getelem(position,#netto_mode#)} 	{else:}	{end:}
+{end:} {end:} # 	
+{foreach:t.sum,sum} {t.getelem(sum,#nr#)} 		{t.getelem(sum,#netto#)} 
+{t.getelem(sum,#vat#)} 	{t.getelem(sum,#brutto#)}
+{end:}
 
 
 <p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
@@ -116,7 +145,7 @@
     	ruleA="Test Text is a required field|required" 
 	ruleB="Test TextArea must be at least 5 characters|minlength|5">
     Checkbox <input name=test123a id=test123ab type='checkbox' checked>
-    Hidden <input name=test123a type='hidden' value='123'>
+    Hidden <input name=test123ab type='hidden' value='123'>
     <textarea name="fred">some text</textarea>
     <select name="aaa1">
         <option>aa</option>
