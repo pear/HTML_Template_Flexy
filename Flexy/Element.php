@@ -198,16 +198,25 @@ class HTML_Template_Flexy_Element {
      */
      
     function setValue($value) {
+     
         switch ($this->tag) {
             case 'input':
+                 
                 switch (strtolower($this->attributes['type'])) {
                     case 'checkbox':
-                        if ($value) {
+                        if (isset($this->attributes['checked'])) {
+                            unset($this->attributes['checked']);
+                        }
+                        if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] = true;
                         }
                         return;
                     case 'radio':
-                        if ($this->name == $value) {
+                        if (isset($this->attributes['checked'])) {
+                            unset($this->attributes['checked']);
+                        }
+                        
+                        if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] = true;
                         }
                         return;

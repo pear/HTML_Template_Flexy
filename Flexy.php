@@ -210,6 +210,10 @@ class HTML_Template_Flexy
             if (!$v) {
                 unset($this->elements[$k]);
             }
+            if (!isset($this->elements[$k])) {
+                $this->elements[$k] = $v;
+                continue;
+            }
             $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
         }
         

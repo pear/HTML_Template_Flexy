@@ -340,7 +340,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     * @access   public
     */
         
-    function getElementPhp($id) {
+    function getElementPhp($id,$mergeWithName=false) {
         
         global $_HTML_TEMPLATE_FLEXY;
         if (!$id) {
@@ -367,6 +367,14 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
                 $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
                 echo $this->elements['.$var.']->toHtml();'; 
+        } elseif ($mergeWithName) {
+            $name = $this->element->getAttribute('NAME');
+          return  
+                '$element = $this->elements[\''.$id.'\'];
+                $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
+                echo  $element->toHtml();'; 
+        
+        
         } else {
            return 'echo $this->elements[\''.$id.'\']->toHtml();';
         }
@@ -389,24 +397,24 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         // as a general rule, this uses name, rather than ID except on 
         // radio
+        $mergeWithName = false;
         $id = $this->element->getAttribute('NAME');
-        if (strtoupper($this->element->getAttribute('TYPE')) == 'RADIO') {
+        // checkboxes need more work.. - at the momemnt assume one with the same value...
+        if (in_array(strtoupper($this->element->getAttribute('TYPE')), array('RADIO'))) {
             $id = $this->element->getAttribute('ID');
             if (!$id) {
                 PEAR::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 
                  Radio Input's require an ID tag..",
                  null, PEAR_ERROR_DIE);
             }
+            $mergeWithName = true;
             
         }
         if (!$id) {
             return false;
         }
-        return $this->compiler->appendPhp($this->getElementPhp( $id));
-        
-         
-    
-        
+        return $this->compiler->appendPhp($this->getElementPhp( $id,$mergeWithName));
+
     }
     
     /**
