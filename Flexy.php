@@ -495,7 +495,7 @@ class HTML_Template_Flexy
         // Check against the template in the specified file (if it exists), or if none is specified, the current template.
         
         if( !file_exists( $this->compiledTemplate ) ||
-            filemtime( $$this->currentTemplate ) != filemtime( $this->compiledTemplate )
+            filemtime( $this->currentTemplate ) != filemtime( $this->compiledTemplate )
           ) 
         {
             return false;
