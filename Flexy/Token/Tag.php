@@ -218,6 +218,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         //value - fill out as PHP CODE
         
         $name =    $this->getAttribute('NAME');
+        if ($name == '') {
+            return;
+        }
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
             $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
         }
@@ -239,11 +242,11 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     $this->line);
                 $this->postfix = $posterror;
                 break;
-                
+            
+            case "RESET":               
             case "SUBMIT":
                 return;
  
-
 
 
 

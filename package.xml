@@ -28,7 +28,8 @@
   - FLEXYSTART/FLEXYSTARTCHILDREN tags to define where output starts/finishes
   - support for urlencoded braces {} in HTML attributes. 
   
-  
+  - docs temporarily at http://devel.akbkhome.com/peardoc2/package.html.html-template-flexy.html
+     
   
 </description>
   <license>PHP License</license>
@@ -43,20 +44,12 @@
   
 
   <release>
-       <version>0.3</version>
-      <date>2003-02-06</date>
+     <version>0.4</version>
+      <date>2003-02-15</date>
       <notes>
       Bug fixes
-        - allow usage with only constructor options
-        - fixed form elements - should be htmlspecialchars, rather than urlencoding
-        - new Tokenizer is enabled by default - set 'useLegacy' in config/options to
-          use the old regex replacer.
-        - no variables are added (eg. o.*, a.* etc. to the page unless useLegacy is set)
-        - parsers are now private methods. (internal change)
-        
-      New Features
-        - FLEXYSTART and FLEXYSTARTCHILDREN tags added so when use you include sub
-          templates, you can avoid including HEAD etc. tags.
+        - deal with blank names in forms (no replacement is done)
+        - deal with reset items in forms (no replacement is done)
         
       </notes>
       <state>beta</state>
@@ -98,6 +91,27 @@
   
    <changelog>
    
+  
+   <release>
+       <version>0.3</version>
+      <date>2003-02-06</date>
+      <notes>
+      Bug fixes
+        - allow usage with only constructor options
+        - fixed form elements - should be htmlspecialchars, rather than urlencoding
+        - new Tokenizer is enabled by default - set 'useLegacy' in config/options to
+          use the old regex replacer.
+        - no variables are added (eg. o.*, a.* etc. to the page unless useLegacy is set)
+        - parsers are now private methods. (internal change)
+        
+      New Features
+        - FLEXYSTART and FLEXYSTARTCHILDREN tags added so when use you include sub
+          templates, you can avoid including HEAD etc. tags.
+        
+      </notes>
+      <state>beta</state>
+     </release>
+     
    <release>
        <version>0.2</version>
       <date>2003-02-03</date>
