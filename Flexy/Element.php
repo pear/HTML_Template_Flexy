@@ -65,6 +65,10 @@ class HTML_Template_Flexy_Element {
     var $tag =  '';
     /**
      * Associative array of table attributes
+     * Note Special values:
+     *   true == only display the key 
+     *   false == remove
+     *
      * @var  array
      * @access   public
      */
@@ -136,7 +140,9 @@ class HTML_Template_Flexy_Element {
             if (is_array($value) || is_object($value)) {
                 continue;
             }
-        
+            if ($value === false) {
+                continue;
+            }
             if ($value === true) {
                 // this is not xhtml compatible..
                 $strAttr .= ' ' . $key;
@@ -412,7 +418,7 @@ class HTML_Template_Flexy_Element {
         }
         foreach ($attrs as $attr) { 
             if (isset($this->attributes[strtolower($attr)])) {
-                unset($this->attributes[strtolower($attr)]);
+                 $this->attributes[strtolower($attr)] = false;
             } 
         }
     } //end func removeAttribute
@@ -502,4 +508,3 @@ class HTML_Template_Flexy_Element {
     
     
 } // end class HTML_Common
-?>
