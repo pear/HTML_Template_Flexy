@@ -52,7 +52,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     * @access   public
     */
     
-    function HTML_Template_Flexy_QuickForm($a,$b,$c,$d,$e) {
+    function HTML_Template_Flexy_QuickForm($a=null,$b=null,$c=null,$d=null,$e=null) {
     
         parent::HTML_QuickForm($a,$b,$c,$d,$e);
     

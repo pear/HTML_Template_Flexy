@@ -33,14 +33,21 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect'] = false;
 class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
     /**
-    * HTML Tag: eg. Body or /Body
+    * HTML Tag: eg. Body or /Body - uppercase
     *
     * @var string
     * @access public
     */
     var $tag = '';
     /**
-    * Associative array of attributes.
+    * HTML Tag: (original case)
+    *
+    * @var string
+    * @access public
+    */
+    var $oTag = '';
+    /**
+    * Associative array of attributes. (original case)
     *
     * key is the left, value is the right..
     * note:
@@ -56,6 +63,18 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     */
 
     var $attributes = array();
+    
+    /**
+    * Associative array of attributes ucase to Original Case for attributes..
+    *
+    * @var array
+    * @access public
+    */
+
+    var $ucAttributes = array();
+    
+    
+    
     /**
     * postfix tokens 
     * used to add code to end of tags "<xxxx>here....children .. <close tag>"
@@ -106,9 +125,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     function setValue($value) 
     {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
-        $this->tag = $value[0];
+        $this->tag = strtoupper($value[0]);
+        $this->oTag = $value[0];
         if (isset($value[1])) {
             $this->attributes = $value[1];
+        }
+        foreach(array_keys($this->attributes) as $k) {
+            $this->ucAttributes[strtoupper($k)] =&  $this->attributes[$k];
         }
        
     }
@@ -148,7 +171,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         // spit ou the tag and attributes.
         
-        $ret .=  "<". $this->tag;
+        $ret .=  "<". $this->oTag;
         foreach ($this->attributes as $k=>$v) {
             if ($v === true) {
                 $ret .= " $k";
@@ -310,7 +333,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $ifObj =  $this->factory('If', $ifnegative.$if, $this->line);
         }
         
-        // does it have a closetag?
+        // does it have a closetag? - you must have one - so you will have to hack in <span flexy:if=..><img></span> on tags
+        // that do not have close tags - it's done this way to try and avoid mistakes.
         if (!$this->close) {
             PEAR::raiseError(
                 "An flexy:if attribute was found in &lt;{$this->name} tag without a corresponding &lt;/{$this->name}
@@ -335,8 +359,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     function parseTags() 
     {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
-      
-        $method = 'parseTag'.ucfirst(strtolower($this->tag));
+        // doesnt really need strtolower etc. as php functions are not case sensitive!
+        $method = 'parseTag'.$this->tag;
         if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
             return $this->$method();
             // allow the parse methods to return output.
@@ -517,7 +541,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             array('select',      $this->getAttribute('NAME'),  ''),
             array(
                 'setSize'        =>   $this->getAttribute('SIZE'),
-                'setMultiple' => isset($this->attributes['MULTIPLE']),
+                'setMultiple' =>  $this->getAttribute('MULTIPLE'),
                 'SetSelected' => $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['selectOptionSelected']
             ),
             $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['selectOptions']  // options..
@@ -581,10 +605,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
         }
         // override with flexy object
-        if (isset($this->attributes['FLEXYIGNORE'])) {
+        if (isset($this->ucAttributes['FLEXYIGNORE'])) {
             return false;
         }
-        
+        if (isset($this->ucAttributes['FLEXY:IGNORE'])) {
+            return false;
+        }
         
         
         require_once 'HTML/Template/Flexy/QuickForm.php';
@@ -659,7 +685,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if ($original == $new) {
             return;
         }
-        $this->attributes[$which] = '"'. $new . '"';
+        $this->ucAttributes[$which] = '"'. $new . '"';
     } 
     
     
@@ -684,19 +710,19 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         // this is weird case isset() returns false on this being null!
         
-        if (@$this->attributes[$key] === true) {
+        if (@$this->ucAttributes[$key] === true) {
             return true;
         }
         
-        if (!isset($this->attributes[$key])) {
+        if (!isset($this->ucAttributes[$key])) {
             return;
         }
         // general assumption - none of the tools can do much with dynamic
         // attributes - eg. stuff with flexy tags in it.
-        if (!is_string($this->attributes[$key])) {
+        if (!is_string($this->ucAttributes[$key])) {
             return;
         }
-        $v = $this->attributes[$key];
+        $v = $this->ucAttributes[$key];
          
         // unlikely :)
         if ($v=='') {
@@ -723,10 +749,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     function getAttributes() {
         $ret = array();
         foreach($this->attributes as $k=>$v) {
-            if (substr($k,0,6) == 'FLEXY:') {
+            if (substr(strtoupper($k),0,6) == 'FLEXY:') {
                 continue;
             }
-            $ret[strtolower($k)] = $this->getAttribute($k);
+            $ret[$k] = $this->getAttribute($k);
         }
         return $ret;
     }
@@ -750,7 +776,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         if ($this->tag == 'FORM') {
             $name = '__ALL__';
         }
-        foreach($this->attributes as $k=>$v) {
+        foreach($this->ucAttributes as $k=>$v) {
             if (substr($k,0,6) != 'FLEXY:') {
                 continue;
             }

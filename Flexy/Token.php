@@ -229,26 +229,26 @@ class HTML_Template_Flexy_Token {
             //  ?php if (!$this->bodyOnly) { .. <HTML> .... <BODY....>  ?php } ?
             // 
             
-            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART'])) {
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTART'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
-                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART']);
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTART']);
             }
             
-            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN'])) {
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTARTCHILDREN'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
                 $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
-                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN']);
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTARTCHILDREN']);
             }
             
-            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:START'])) {
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:START'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
-                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:START']);
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:START']);
             }
             
-            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:STARTCHILDREN'])) {
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:STARTCHILDREN'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
                 $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
-                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:STARTCHILDREN']);
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:STARTCHILDREN']);
             }
             
             

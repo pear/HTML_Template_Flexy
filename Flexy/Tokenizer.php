@@ -2008,7 +2008,7 @@ case 5:
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
-    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    $this->tagName = trim(substr($this->yytext(),1));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -2041,7 +2041,7 @@ case 9:
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
-    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    $this->tagName = trim(substr($this->yytext(),1));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
     $this->value = '';
@@ -2257,7 +2257,7 @@ case 35:
 case 36:
 {
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[strtoupper(trim($this->yytext()))] = true;
+    $this->attributes[trim($this->yytext())] = true;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -2271,7 +2271,7 @@ case 37:
 case 38:
 {
    // <a ^href = "xxx"> -- attribute name 
-    $this->attrKey = strtoupper(substr(trim($this->yytext()),0,-1));
+    $this->attrKey = substr(trim($this->yytext()),0,-1);
     $this->yybegin(IN_ATTRVAL);
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -2552,7 +2552,7 @@ case 78:
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
-    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    $this->tagName = trim(substr($this->yytext(),1));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -2577,7 +2577,7 @@ case 81:
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
-    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
+    $this->tagName = trim(substr($this->yytext(),1));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
     $this->value = '';
@@ -2611,7 +2611,7 @@ case 85:
 case 86:
 {
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[strtoupper(trim($this->yytext()))] = true;
+    $this->attributes[trim($this->yytext())] = true;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
