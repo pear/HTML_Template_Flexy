@@ -832,7 +832,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         $prefix = basename($GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']).':';
         if (@$this->options['debug']) {
-            echo __CLASS__.":TRANSLATING $string<BR>";
+            echo __CLASS__.":TRANSLATING $string<BR>\n";
         }
         if (function_exists('gettext') && !$this->options['textdomain']) {
             if (@$this->options['debug']) {

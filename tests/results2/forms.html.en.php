@@ -38,16 +38,38 @@
 <?php echo $this->elements['picture']->toHtml();?>
 
 <h2>Bug 1120:</h2>
-<?php echo $this->elements['form']->toHtmlnoClose();?>
+<form action="test">
 <?php echo $this->elements['testing']->toHtml();?>
 <?php echo $this->elements['_submit[2]']->toHtml();?>
 </form>
 
 <form action="<?php echo htmlspecialchars($t->someurl);?>">
-<input name="testing" value="<?php echo htmlspecialchars($t->somevalue);?>">
+<?php 
+if (!isset($this->elements['testing2']->attributes['value'])) {
+    $this->elements['testing2']->attributes['value'] = '';
+    $this->elements['testing2']->attributes['value'] .=  htmlspecialchars($t->somevalue);
+}
+echo $this->elements['testing2']->toHtml();?>
 <?php echo $this->elements['_submit[1]']->toHtml();?>
 </form>
 
 <H2> Bug 1275 XHTML output </H2>
 <?php echo $this->elements['testingxhtml']->toHtml();?>
 <?php echo $this->elements['xhtmllisttest']->toHtml();?>
+
+
+
+<?php 
+if (!isset($this->elements['test_mix']->attributes['action'])) {
+    $this->elements['test_mix']->attributes['action'] = '';
+    $this->elements['test_mix']->attributes['action'] .=  htmlspecialchars($t->someurl);
+}
+echo $this->elements['test_mix']->toHtmlnoClose();?>
+<?php 
+if (!isset($this->elements['testing5']->attributes['value'])) {
+    $this->elements['testing5']->attributes['value'] = '';
+    $this->elements['testing5']->attributes['value'] .=  htmlspecialchars($t->somevalue);
+}
+echo $this->elements['testing5']->toHtml();?>
+<?php echo $this->elements['_submit[3]']->toHtml();?>
+</form>

@@ -127,7 +127,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             
             return $element->compileChildren($this->compiler);
         }
-        
+        // look for flexy:ignore..
         $flexyignore = $this->parseAttributeIgnore();
         
         // rewriting should be done with a tag.../flag.
@@ -517,12 +517,17 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if (!method_exists($this,$method)) {
             return false;
         }
-        // do any of the attributes use flexy data...
-        foreach ($this->element->attributes as $k=>$v) {
-            if (is_array($v)) {
-                return false;
-            }
+        
+        if (($this->element->getAttribute('NAME') === false) &&
+            ($this->element->getAttribute('ID') === false) ) {
+            return false;
         }
+        // do any of the attributes use flexy data...
+        //foreach ($this->element->attributes as $k=>$v) {
+        //    if (is_array($v)) {
+        //        return false;
+        //   }
+        //}
         
         //echo "call $method" . serialize($this->element->attributes). "\n";
         
@@ -541,7 +546,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     * @access   public
     */
         
-    function getElementPhp($id,$mergeWithName=false) {
+    function getElementPhp($id,$mergeWithName=false,$varsOnly = false) {
         
         global $_HTML_TEMPLATE_FLEXY;
         static $tmpId=0;
@@ -586,27 +591,80 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                  null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
+        $ret = '';
+        
+
+        if ($this->elementUsesDynamic($this->element)) {
+           
+            foreach ($this->element->attributes as $attribute => $attributeValue) {
+                if (!is_array($attributeValue)) {
+                    continue;
+                }
+                unset($this->element->attributes[$attribute]);
+                // generate code to put data into value..
+                $output_avar = '$this->elements[\''.$id.'\']->attributes[\''.$attribute.'\']';
+                $ret .= "\nif (!isset({$output_avar})) {\n";
+                // get the " or ' that encapsulates the element.
+                $wrapper = array_shift($attributeValue);
+                array_pop($attributeValue); 
+                $ret .= "    {$output_avar} = '';\n";
+                foreach($attributeValue as $item) {
+                    if (is_string($item)) {
+                        $ret .= "    {$output_avar} .= {$wrapper}{$item}{$wrapper};\n";
+                        continue;
+                    }
+                    if (!is_object($item)) {
+                         return HTML_Template_Flexy::raiseError("something strange found in attribute".print_r($this->element,true),
+                         null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                    }
+                    
+                    $var = $item->toVar($item->value);
+                    if (is_a($var, 'PEAR_Error')) {
+                        return $var;
+                    }
+                    list($prefix,$suffix) = $this->compiler->getModifierWrapper($item);
+                    $prefix =  substr($prefix,4);
+                    
+                    $ret .= "    {$output_avar} .= {$prefix}{$var}{$suffix};\n";
+                }
+                $ret .= "}\n";
+            }
+         
+         
+        }
+        
+        
+        
+        
+        
+        
         // this is for a case where you can use a sprintf as the name, and overlay it with a variable element..
         $_HTML_TEMPLATE_FLEXY['elements'][$id] = $this->toElement($this->element);
+        
+        
+        
+        if ($varsOnly) { // used by form tag.
+            return $ret;
+        }
         
         if ($var = $this->element->getAttribute('FLEXY:NAMEUSES')) {
             
             $var = 'sprintf(\''.$id .'\','.$this->element->toVar($var) .')';
-            return  
+            return  $ret . 
                 'if (!isset($this->elements['.$var.'])) $this->elements['.$var.']= $this->elements[\''.$id.'\'];
                 $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
                 $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
                 echo $this->elements['.$var.']->toHtml();'; 
         } elseif ($mergeWithName) {
             $name = $this->element->getAttribute('NAME');
-            return  
+            return  $ret . 
                 '$element = $this->elements[\''.$id.'\'];
                 $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
                 echo  $element->toHtml();'; 
         
         
         } else {
-           return 'echo $this->elements[\''.$id.'\']->toHtml();';
+           return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();';
         }
     }
     
@@ -741,19 +799,20 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         $copy = clone($this->element);
         $copy->children = array();
         $id = $this->element->getAttribute('NAME');
-        if (!$id) {
-            $id = 'form';
-        }
+        // this is stupid!!! - it doesnt work anyway now..
+        //if (!$id) {
+        //    $id = 'form';
+        // }
         
         // this adds the element to the elements array.
         $old = clone($this->element);
         $this->element = $copy;
-        $this->getElementPhp($id);
+        $prefix = $this->getElementPhp($id,false,true);
         $this->element= $old;
         
         
         return 
-            $this->compiler->appendPhp('echo $this->elements[\''.$id.'\']->toHtmlnoClose();') .
+            $this->compiler->appendPhp($prefix .'echo $this->elements[\''.$id.'\']->toHtmlnoClose();') .
             $this->element->compileChildren($this->compiler) .
             $this->compiler->appendHtml( "</{$copy->oTag}>");
     
