@@ -72,9 +72,11 @@
         
        Features / Fixes
         #---- - Pass by reference warning fixed.
+        #---- - Left debuging code in plugins
         
-        
-        
+        A very nice introduction to plugin's exists here:
+            http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
+            
         
         
      ]]></notes>
@@ -260,8 +262,6 @@
         #---- - Plugins now show correct warning when loading fails.
         #---- - Plugins as modifiers work correctly 
                 (fixed previous bug if they started with h/r/t etc. they got ignored.)
-                A very nice introduction to plugin's exists here:
-                http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
                 
         #3129 - add note that setRequired/setError/freeze are depreciated 
                 (they should really be examples, that end user can modify, rather than a method)
