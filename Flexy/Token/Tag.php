@@ -675,6 +675,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         //print_r($this->children);
         foreach(array_keys($this->children) as $i) {
+            // not quite sure why this happens - but it does.
+            if (!is_object($this->children[$i]) || !method_exists($this->children[$i], 'toElement')) {
+                continue;
+            }
             $ret->children[] = $this->children[$i]->toElement();
         }
         return $ret;
