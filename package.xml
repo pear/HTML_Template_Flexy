@@ -47,10 +47,19 @@
      <version>0.4</version>
       <date>2003-04-17</date>
       <notes>
+      
+      Warning BC breaking release: 
+        - It is likely that form code may break with this due to the quickform integration
+        - likely issues: you will probably have to load the template and assign data to it
+          using $template->setQuickForm($this);
+          which will then expose $template->quickform as the template Object.
+        
+        
+      
       Bug fixes
 	- fixed #literal# support for method calls.
         - fixed #literal# chopping bug (Yuri Dyakonov)
-        - fixed XML support
+        - fixed XML/XHTML support (no more munging of cases)
         - fixed Fatal Error messages - with more details
         - fixed whitespace in doctype tags. (wierd lexer stuff)
         
