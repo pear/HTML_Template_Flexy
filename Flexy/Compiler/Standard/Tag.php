@@ -646,6 +646,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         $new = $original;
         
         foreach ($bits as $bit) {
+            if (!empty($bit)) {
+                continue;
+            }
             $parts = explode (':', $bit);
             if (!isset($parts[1])) {
                 PEAR::raiseError('HTML_Template_Flexy: url_rewrite syntax incorrect'. 
