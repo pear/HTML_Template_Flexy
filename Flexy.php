@@ -166,7 +166,7 @@ class HTML_Template_Flexy
         }
         
         if (is_string($this->options['templateDir'])) {
-            $this->options['templateDir'] = explode(';', $templateDirs);
+            $this->options['templateDir'] = explode(';',$this->options['templateDir'] );
         }
         
         
