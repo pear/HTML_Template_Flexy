@@ -148,9 +148,12 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
             return;
         }
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
         $i = $this->id -1;
         while ($i > 0) {
-        
+            if (empty($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i])) {
+                return;
+            }
             $token = $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
             
             switch (get_class($token)) {
