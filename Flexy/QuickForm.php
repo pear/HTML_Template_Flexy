@@ -227,6 +227,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     function addElementDef() 
     {
         $this->elementDefArray[] = func_get_args();
+        //echo "<PRE>STORE:";print_r($this->elementDefArray);
     }
    
     /**

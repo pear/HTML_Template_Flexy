@@ -621,8 +621,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         
         require_once 'HTML/Template/Flexy/QuickForm.php';
-        
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = new HTML_Template_Flexy_QuickForm;
+        if (!isset($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'])) {
+            $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = new HTML_Template_Flexy_QuickForm;
+        }
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElementDef(
             array(
                 'form',

@@ -44,6 +44,64 @@
   
 
   <release>
+     <version>0.5</version>
+      <date>2003-04-20</date>
+      <notes>
+      
+       
+      Bug fixes
+	- fixed #literal# support for method calls - hopefully finally (Yuri Dyakonov)
+        
+        
+      Features
+        - method calls with literals at end can now use modifiers (:h/:u etc.)
+
+      </notes>
+      <state>beta</state>
+     </release>
+     
+     
+     
+    <filelist>
+        <dir name="/" baseinstalldir="HTML/Template" role="php">
+            <file>Flexy.php</file>
+            <dir name="Flexy" role="php">
+                <file>example.ini</file>
+                <file>Tokenizer.php</file>
+                <file>Token.php</file>
+                <file>QuickForm.php</file>
+                <file>compileAll.php</file>
+                <dir name="Token" role="php">
+                    <file>Tag.php</file>
+                    <file>EndTag.php</file>
+                    <file>If.php</file>
+                    <file>Else.php</file>
+                    <file>End.php</file>
+                    <file>Foreach.php</file>
+                    <file>Include.php</file>
+                    <file>Var.php</file>
+                    <file>Method.php</file>
+                    <file>Processing.php</file>
+                    <file>Text.php</file>
+                </dir>
+                <file>Test.php</file>
+                <dir name="Filter" role="php">
+                    <file>BodyOnly.php</file>
+                    <file>Php.php</file>
+                    <file>RtfSimpleTags.php</file>
+                    <file>SimpleTags.php</file>
+                    <file>Mail.php</file>
+                    <file>Xml.php</file>
+                    <file>Math.php</file>
+               </dir>
+            </dir>
+        </dir>
+    </filelist>
+  
+   <changelog>
+   
+  
+  <release>
      <version>0.4</version>
       <date>2003-04-17</date>
       <notes>
@@ -92,46 +150,6 @@
      </release>
      
      
-     
-    <filelist>
-        <dir name="/" baseinstalldir="HTML/Template" role="php">
-            <file>Flexy.php</file>
-            <dir name="Flexy" role="php">
-                <file>example.ini</file>
-                <file>Tokenizer.php</file>
-                <file>Token.php</file>
-                <file>QuickForm.php</file>
-                <file>compileAll.php</file>
-                <dir name="Token" role="php">
-                    <file>Tag.php</file>
-                    <file>EndTag.php</file>
-                    <file>If.php</file>
-                    <file>Else.php</file>
-                    <file>End.php</file>
-                    <file>Foreach.php</file>
-                    <file>Include.php</file>
-                    <file>Var.php</file>
-                    <file>Method.php</file>
-                    <file>Processing.php</file>
-                    <file>Text.php</file>
-                </dir>
-                <file>Test.php</file>
-                <dir name="Filter" role="php">
-                    <file>BodyOnly.php</file>
-                    <file>Php.php</file>
-                    <file>RtfSimpleTags.php</file>
-                    <file>SimpleTags.php</file>
-                    <file>Mail.php</file>
-                    <file>Xml.php</file>
-                    <file>Math.php</file>
-               </dir>
-            </dir>
-        </dir>
-    </filelist>
-  
-   <changelog>
-   
-  
    <release>
        <version>0.3</version>
       <date>2003-02-06</date>

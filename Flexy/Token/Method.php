@@ -138,7 +138,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         $ret = '<?php ' . $prefix;
         $ret .=  $this->toVar($this->method) . "(";
         $s =0;
-        
+         
         foreach($this->args as $a) {
              
             if ($s) {
@@ -146,7 +146,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
             }
             $s =1;
             if ($a{0} == '#') {
-                $ret .= '"'. addslashes(substr($a,1,-2)) . '"';
+                $ret .= '"'. addslashes(substr($a,1,-1)) . '"';
                 continue;
             }
             $ret .= $this->toVar($a);

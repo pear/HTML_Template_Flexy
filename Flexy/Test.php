@@ -24,7 +24,7 @@
 // Used to test parsing and generation.
 //
 
-ini_set('include_path', realpath(dirname(__FILE__) . '/../../..'));
+//ini_set('include_path', ini_get('include_path').realpath(dirname(__FILE__) . '/../../..'));
 require_once 'Gtk/VarDump.php';
 require_once 'Console/Getopt.php';
 require_once 'HTML/Template/Flexy/Tokenizer.php';
