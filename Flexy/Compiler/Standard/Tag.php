@@ -322,7 +322,9 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         // doesnt really need strtolower etc. as php functions are not case sensitive!
         
         if ($this->element->getAttribute('FLEXY:DYNAMIC')) {
-            return $this->getElementPhp( $this->getAttribute('ID'));
+            return $this->compiler->appendPhp(
+                $this->getElementPhp( $this->element->getAttribute('ID') )
+            );
             
         }
             
