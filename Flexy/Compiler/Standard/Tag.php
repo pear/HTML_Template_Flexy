@@ -63,6 +63,11 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if (!$type) {
             $type = 'Tag';
         }
+        // if we dont have a handler - just use the basic handler.
+        if (!file_exists(dirname(__FILE__) . '/'. ucfirst(strtolower($type)) . '.php')) {
+            $type = 'Tag';
+        }
+            
         include_once 'HTML/Template/Flexy/Compiler/Standard/' . ucfirst(strtolower($type)) . '.php';
         
         $class = 'HTML_Template_Flexy_Compiler_Standard_' . $type;
@@ -453,8 +458,13 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore']) {
             return false;
         }
+        $tag = $this->element->tag;
+        if (strpos($tag,':') !== false) {
+            $bits = explode(':',$tag);
+            $tag = $bits[1];
+        }
         
-        $method = 'parseTag'.$this->element->tag;
+        $method = 'parseTag'.$tag;
         if (!method_exists($this,$method)) {
             return false;
         }

@@ -206,9 +206,12 @@ class HTML_Template_Flexy_Element {
     function setValue($value) {
         // store the value in all situations
         $this->value = $value;
-        
-        
-        switch ($this->tag) {
+        $tag = $this->tag;
+        if (strpos($tag,':') !==  false) {
+            $bits = explode(':',$tag);
+            $tag = $bits[1];
+        }
+        switch ($tag) {
             case 'input':
                 switch (isset($this->attributes['type']) ? strtolower($this->attributes['type']) : '') {
                     case 'checkbox':
@@ -457,7 +460,12 @@ class HTML_Template_Flexy_Element {
         }
         //echo "AFTER<PRE>";print_R($ret);
         // tags that never should have closers  
-        $close = in_array(strtoupper($ret->tag),array("INPUT","IMG")) ? '' : "</{$ret->tag}>{$suffix}" ;
+        $tag = $this->tag;
+        if (strpos($tag,':') !==  false) {
+            $bits = explode(':',$tag);
+            $tag = $bits[1];
+        }
+        $close = in_array(strtoupper($tag),array("INPUT","IMG")) ? '' : "</{$ret->tag}>{$suffix}" ;
         
         return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() .$close;
         
