@@ -69,10 +69,42 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         setlocale(LC_ALL, $this->options['locale']);
         
         
+        
+        
+        
+        
+        
         $data = $string;
         if ($string === false) {
             $data = file_get_contents($flexy->currentTemplate);
         }
+        
+        
+        
+        // PRE PROCESS {_(.....)} translation markers.
+        $got_gettext_markup = false;
+        
+        if (preg_match_all('/\{_\((.*)\)_\}/', $data,$matches)) {
+            // echo '<PRE>';print_r($matches);
+            // we may need to do some house cleaning here...
+            $gettextStrings = $matches[1];
+            $got_gettext_markup = true;
+            
+            
+            // replace them now..  
+            // ** leaving in the tag (which should be ignored by the parser..
+            // we then get rid of the tag after compiling..
+            foreach($matches[1] as $k=>$v) {
+                $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
+            }
+            
+        }
+            
+        
+        
+        
+        
+        
         
         $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
         $tokenizer->fileName = $flexy->currentTemplate;
@@ -104,6 +136,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
            $data =  str_replace("?>\n","?>\n\n",$data);
         }
         
+        // get rid of the gettext markup language stuff..
+        // this could probably be done with a single preg_replace... - send me it
+        // but I know this (well it seems to) is going to work :)
+        if ($got_gettext_markup &&  preg_match_all('/\{_\((.*)\)_\}/', $data,$fmatches)) {
+           // echo '<PRE>'.htmlspecialchars(print_r($fmatches,true));
+            foreach($fmatches[1] as  $v) {
+                $data = str_replace('{_('.$v.')_}', $v,$data);
+            }
+        }
+        
+        
         // at this point we are into writing stuff...
         if ($this->options['compileToString']) {
             $flexy->elements =  $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'];
@@ -124,7 +167,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
              chmod($flexy->compiledTemplate,0775);
             // make the timestamp of the two items match.
             clearstatcache();
-             touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
+            touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
             
         } else {
             PEAR::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,null,PEAR_ERROR_DIE);
