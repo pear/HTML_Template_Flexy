@@ -47,18 +47,15 @@
  
 
     <release>
-     <version>0.6.2</version>
-      <date>2004-01-20</date>
+     <version>0.6.4</version>
+      <date>2004-01-24</date>
       <notes><![CDATA[
       
-      Minor Bugfix / mini feature release
-        - support flexy:if with method arguments eg.
-           flexy:if="somemethod(#with#,some,#args#)"
-        - foreach works on objects and arrays. : eg.
-          flexy:foreach="someobject"
+      Minor Bugfix 
+        - fixed bug #615 constructor can not return errors 
+         * check for compileDir isDir is in the compile() anyway..
+         
         
-        
-
       ]]></notes>
       <state>beta</state>
      </release>
@@ -130,6 +127,40 @@
     </deps>
 
    <changelog>
+    <release>
+     <version>0.6.3</version>
+      <date>2004-01-21</date>
+      <notes><![CDATA[
+      
+      Minor Bugfix 
+        - fixed class="{some_method(with_some_args)}"
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
+   
+   
+    <release>
+     <version>0.6.2</version>
+      <date>2004-01-20</date>
+      <notes><![CDATA[
+      
+      Minor Bugfix / mini feature release
+        - support flexy:if with method arguments eg.
+           flexy:if="somemethod(#with#,some,#args#)"
+        - foreach works on objects and arrays. : eg.
+          flexy:foreach="someobject"
+        
+        
+
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+   
+   
    <release>
      <version>0.6.1</version>
       <date>2003-12-21</date>

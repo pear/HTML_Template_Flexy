@@ -172,11 +172,8 @@ class HTML_Template_Flexy
         if (is_string($this->options['templateDir'])) {
             $this->options['templateDir'] = explode(';',$this->options['templateDir'] );
         }
-        
-        
-        if(!@is_dir($this->options['compileDir']) ) {
-            return new PEAR_Error('The compile-directory doesnt exist yet!');
-        }
+         
+       
     }
 
     /**
@@ -310,6 +307,8 @@ class HTML_Template_Flexy
     
     function compile( $file )
     {
+         
+        
         if (!$file) {
             PEAR::raiseError('HTML_Template_Flexy::compile no file selected',null,PEAR_ERROR_DIE);
         }
