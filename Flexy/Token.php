@@ -313,6 +313,51 @@ class HTML_Template_Flexy_Token {
         //
         //
         
+        
+       
+       
+        for($i=1;$i<$total;$i++) {
+            //echo "Checking TAG $i\n";
+            if (empty($res[$i]->tag)) {
+                continue;
+            }
+            if ($res[$i]->tag{0} == '/') { // it's a close tag..
+                //echo "GOT END TAG: {$res[$i]->tag}\n";
+                $tag = strtoupper(substr($res[$i]->tag,1));
+                if (!count($stack)) {
+                    continue;
+                }
+                $ssc = count($stack) - 1;
+                for($s = $ssc; $s > -1; $s--) {
+                    if (!isset($stack[$s])) {
+                        echo "MISSED STACK? $s<BR><PRE>";print_r($stack);exit;
+                    }
+                    if (!isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$s]])) {
+                        echo "STACKED BAD OFFSET : {$stack[$s]}<BR><PRE>";print_r($stack);exit;
+                    }
+                    $tok =  &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$s]];
+                    if (strtoupper($tok->tag) == $tag) {
+                        // got the matching closer..
+                        //echo "MATCH: {$i}:{$tok->tag} to  {$stack[$s]}:$tag<BR>";
+                        $tok->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
+                        $sc = count($stack);
+                        for ($ss = $ssc;$ss!=$s;$ss--) {
+                            array_pop($stack);
+                            
+                        }
+                        
+                        continue 2;
+                    }
+                }
+                continue;
+            }
+            $stack[] = $i;
+            // tag with no closer (or unmatched in stack..)
+        }
+        //print_R($stack);
+        //exit;
+        /*
+       
        
         for($i=1;$i<$total;$i++) {
             //echo "Checking TAG $i\n";
@@ -340,6 +385,7 @@ class HTML_Template_Flexy_Token {
                     // too many closes - just ignore it..
                     $stack[$tag]['pos'] = 0;
                 }
+                 
                 continue;
             }
             // new entry on stack..
@@ -352,7 +398,10 @@ class HTML_Template_Flexy_Token {
             }
             
             $stack[$tag][$npos] = $i;
+           
+            
         }
+        */
                 
         // create a dummy close for the end
         $i = $total;
