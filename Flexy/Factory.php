@@ -94,16 +94,19 @@ class HTML_Template_Flexy_Factory {
     * setErrors - sets the suffix of an element to a value..
     *  
     * HTML_Element_Factory::setErrors($elements,array('name','not long enough'));
-    * 
-    * @param   array   (return by referncekey(tag name) => HTML_Element
+    *
+    * @depreciated  - this is really outside the scope of Factory - it should be 
+    *                   seperated into a rendering toolkit of some kind.
+ 
+    * @param   array    of HTML_Element's
     * @param    array   key(tag name) => error
     * @param    string sprintf error format..
     *
-    * @return   array    Array of HTML_Elements
+    * @return   array    Array of HTML_Elements 
     * @access   public
     */
   
-    function setErrors($ret,$set,$format='<span class="error">%s</span>') {
+    function &setErrors(&$ret,$set,$format='<span class="error">%s</span>') {
         // check what you send this.. !!!
         if (!is_array($set)) {
             return HTML_Template_Flexy::raiseError(
@@ -127,16 +130,20 @@ class HTML_Template_Flexy_Factory {
     * setRequired - sets the prefix of an element to a value..
     *  
     * HTML_Element_Factory::setRequired($elements,array('name',true));
+    *
+    * @depreciated  - this is really outside the scope of Factory - it should be 
+    *               seperated into a rendering toolkit
     * 
-    * @param   array   (return by referncekey(tag name) => HTML_Element
-    * @param    array   key(tag name) => error
+    * @param    array   of HTML_Element's
+    * @param    array  key(tag name) => error
     * @param    string sprintf error format..
+    *
     *
     * @return   array    Array of HTML_Elements
     * @access   public
     */
   
-    function setRequired($ret,$set,$format='<span class="required">*</span>') {
+    function &setRequired(&$ret,$set,$format='<span class="required">*</span>') {
         
         
         $ret = array();
@@ -160,12 +167,16 @@ class HTML_Template_Flexy_Factory {
     *  
     * $ar = HTML_Element_Factory::freeze($ar);
     *
+    * @depreciated  - this is really outside the scope of Factory - it should be 
+    *               seperated into a rendering toolkit
+    * 
+    *
     * @param   array   (return by referncekey(tag name) => HTML_Element
     *
     * @return   array    Array of HTML_Elements
     * @access   public
     */
-    function freeze($array) {
+    function freeze(&$array) {
     
         foreach($array as $k=>$v) {
             $array[$k]->override = $array[$k]->value;
@@ -174,5 +185,3 @@ class HTML_Template_Flexy_Factory {
     
 
 }
-
-?>
