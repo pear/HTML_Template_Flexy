@@ -43,11 +43,11 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
 -->
  
-<?php require_once 'HTML/Javascript/Convert.php'; ?>
+<?php require_once 'HTML/Javascript/Convert.php';?>
 <script language='javascript'>
-<?php echo HTML_Javscript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
-<?php echo HTML_Javscript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
-<?php echo HTML_Javscript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
 </script>
 
 
@@ -216,14 +216,34 @@ Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspe
 
 
 <H1>Internal Methods Testing<H1>
-** Only use this for simple includes - otherwise define your own method.. eg. 
-<?php if (isset($t) && method_exists($t,'includeBody')) echo htmlspecialchars($t->includeBody());?> - as you can manage caching far better..
+ 
 
-The currenly only registered method - include!
+<?php 
+$x = new HTML_Template_Flexy($this->options);
+$x->compile('test.html');
+$x->outputObject($t);
+?>
 
-<?php $x = new HTML_Template_Flexy($this->options);$x->compile('test.html');$x->outputObject($t);?>
+<?php 
+$x = new HTML_Template_Flexy($this->options);
+$x->compile('test.html');
+$x->outputObject($t);
+?>
 
 
+<?php require_once 'HTML/Javascript/Convert.php';?>
+<script language='javascript'>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+</script>
+
+<?php require_once 'HTML/Javascript/Convert.php';?>
+<script language='javascript'>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcg',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_abcd',$t->xyz,true);?>
+<?php echo HTML_Javascript_Convert::convertVar('test_abc_srcXxx',$t->xyz,true);?>
+</script>
 
 
 <p>&nbsp;</p>

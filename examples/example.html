@@ -227,14 +227,39 @@ Invoice number: {t.getelem(t.invoice,#number#)} Place:
 
 
 <H1>Internal Methods Testing<H1>
-** Only use this for simple includes - otherwise define your own method.. eg. 
-{includeBody()} - as you can manage caching far better..
+ 
 
-The currenly only registered method - include!
+<flexy:include src="test.html">
+    This is where test.html goes..
+</flexy:include>
 
-{include(#test.html#)}
+<flexy:include src="test.html" />
 
 
+<flexy:toJavascript 
+    flexy:prefix="test_abc_"
+    abcg="xyz"
+    abcd="xyz"
+    srcXxx="xyz"
+/>
+
+<flexy:toJavascript 
+    flexy:prefix="test_abc_"
+    abcg="xyz"
+    abcd="xyz"
+    srcXxx="xyz"
+><script language="javascript">
+
+// you can put testing code in here so you can test the template.. -
+// as it is inside the flexy:toJavascript tag, it will get replaced..!
+var test_abc_agcg = 0
+
+
+
+
+
+</script>
+</flexy:toJavascript>
 
 
 <p>&nbsp;</p>

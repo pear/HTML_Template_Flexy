@@ -41,7 +41,7 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
     
     /**
     * toString - display tag, attributes, postfix and any code in attributes.
-    * Note first thing it does is call any parseTag Method that exists..
+    * Relays into namspace::method to get results..
     *
     * 
     * @see parent::toString()
@@ -54,17 +54,22 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
             return '';
         }
         // things we dont handle...
-        if (!method_exists($this,$method.'toString')) {
+        if (!method_exists($this,$method.'ToString')) {
             return '';
         }
-        return $this->{$method.'toString'}($element);
+        return $this->{$method.'ToString'}($element);
         
     }
+   /**
+    * toJavascript handler
+    * <flexy:toJavascript flexy:prefix="some_prefix_"  javascriptval="php.val" ....>
+    * 
+    * @see parent::toString()
+    */
     
-    
-    function toJavascripttoString($element) {
-        $ret = "<?php require_once 'HTML/Javascript/Convert.php'; ?>\n";
-        $ret .= "<script language='javascript'>\n";
+    function toJavascriptToString($element) {
+        $ret = $this->compiler->appendPhp( "require_once 'HTML/Javascript/Convert.php';");
+        $ret .= $this->compiler->appendHTML("\n<script language='javascript'>\n");
         $prefix = ''. $element->getAttribute('FLEXY:PREFIX');
         
         
@@ -73,14 +78,43 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
             if (strpos($k,':')) {
                 continue;
             }
+            if ($k == '/') {
+                continue;
+            }
             $v = substr($v,1,-1);
-            $ret .= '<?php echo HTML_Javascript_Convert::convertVar('.$element->toVar($v) .',\''.$prefix . $k.'\',true);?>'. "\n";
-
+            $ret .= $this->compiler->appendPhp('echo HTML_Javascript_Convert::convertVar(\''.$prefix . $k.'\','.$element->toVar($v) .',true);');
+            $ret .= $this->compiler->appendHTML("\n");
         }
-        $ret .= "</script>";
+        $ret .= $this->compiler->appendHTML("</script>");
         return $ret;
     }
-     
+    /**
+    * include handler
+    * <flexy:include file="test.html">
+    * 
+    * @see parent::toString()
+    */
+    function includeToString($element) {
+        // this is disabled by default...
+        // we ignore modifier pre/suffix
+    
+    
+    
+       
+        $arg = $element->getAttribute('SRC');
+        if (!$arg) {
+            return $this->compiler->appendHTML("<B>Flexy:Include without a src=filename</B>");
+        }
+        
+        // compile the child template....
+        // output... include $this->options['compiled_templates'] . $arg . $this->options['locale'] . '.php'
+        return $this->compiler->appendPHP( "\n".
+                "\$x = new HTML_Template_Flexy(\$this->options);\n".
+                "\$x->compile('{$arg}');\n".
+                "\$x->outputObject(\$t);\n"
+            );
+    
+    }
     
     /**
     * Convert flexy tokens to HTML_Template_Flexy_Elements.
