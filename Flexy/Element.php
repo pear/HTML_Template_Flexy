@@ -517,6 +517,9 @@ class HTML_Template_Flexy_Element {
     function toHtmlnoClose($overlay=false)
     {
         $ret = $this;
+        if ($ret->override !== false) {
+            return $ret->override;
+        }
         if ($overlay !== false) {
             $ret = HTML_Template_Flexy::mergeElement($this,$overlay);
         }
