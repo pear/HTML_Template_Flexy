@@ -345,7 +345,7 @@ class HTML_Template_Flexy_Translator {
                 continue;
             }
             
-            $oo = $o; $oo['debug'] = 1; 
+            $oo = $o;// $oo['debug'] = 1; 
             $x = new HTML_Template_Flexy( $oo );
             $r = $x->compile($fname);
             
