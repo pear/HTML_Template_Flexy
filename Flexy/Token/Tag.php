@@ -91,15 +91,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @access public
     */
     var $prefix = '';
-     /**
-    * foreach attribute value for this tag
-    * used to ensure that if and foreach are not used toAher.
-    *
-    * @var array
-    * @access public
-    */
-    var $foreach = '';
-    
+     
         
     /**
     * Alias to closing tag (built externally).
@@ -109,13 +101,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     */
     var $close; // alias to closing tag.
     
-    /**
-    * flag to only output the children - set in the core parser.
-    *
-    * @var boolean
-    * @access public
-    */
-    var $startChildren = false;
+    
     
     /**
     * Setvalue - gets name, attribute as an array

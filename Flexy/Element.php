@@ -349,6 +349,11 @@ class HTML_Template_Flexy_Element {
             case '':  // dummy objects.
                 $this->value = $value;
                 return;
+            case 'menuitem':
+                require_once 'HTML/Template/Flexy/Element/Xul.php';
+                HTML_Template_Flexy_Element_Xul::setValue($this,$value);
+                return ;
+                
             default:
                 if (is_array($value)) {
                     return;
@@ -387,12 +392,20 @@ class HTML_Template_Flexy_Element {
             return;
         }
         
+        
+        $tag = '';
         $namespace = '';
         if (false !== strpos($this->tag, ':')) {
             
             $bits = explode(':',$this->tag);
             $namespace = $bits[0] . ':';
+            $tag = strtolower($bits[1]);
             
+        }
+        // if we have specified a xultag!!?
+        if (strlen($tag) && ($tag != 'select')) {
+                require_once 'HTML/Template/Flexy/Element/Xul.php';
+                return HTML_Template_Flexy_Element_Xul::setOptions($this,$array,$noValue);
         }
         
         foreach($array as $k=>$v) {
