@@ -120,7 +120,13 @@ class HTML_Template_Flexy_Element {
      */
     function HTML_Template_Flexy_Element($tag='', $attributes=null)
     {
+        
         $this->tag = strtolower($tag);
+        if (false !== strpos($tag, ':')) {
+            $bits = explode(':',$this->tag);
+            $this->tag = $bits[0] . ':'.strtolower($bits[1]);
+        }
+        
         $this->setAttributes($attributes);
     } // end constructor
 
@@ -135,6 +141,7 @@ class HTML_Template_Flexy_Element {
     {
         $strAttr = '';
         $xhtmlclose = '';
+        
         foreach ($this->attributes as $key => $value) {
         
             // you shouldn't do this, but It shouldnt barf when you do..
@@ -379,15 +386,24 @@ class HTML_Template_Flexy_Element {
             $this->children = array();
             return;
         }
+        
+        $namespace = '';
+        if (false !== strpos($this->tag, ':')) {
+            
+            $bits = explode(':',$this->tag);
+            $namespace = $bits[0] . ':';
+            
+        }
+        
         foreach($array as $k=>$v) {
             if (is_array($v)) {     // optgroup
-                $child = new HTML_Template_Flexy_Element('optgroup',array('label'=>$kk));
+                $child = new HTML_Template_Flexy_Element($namespace . 'optgroup',array('label'=>$kk));
                 foreach($v as $kk=>$vv) {
                     $atts=array();
                     if (($kk != $vv) && !$noValue) {
                         $atts = array('value'=>$kk);
                     }
-                    $add = new HTML_Template_Flexy_Element('option',$atts);
+                    $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
                     $add->children = array(htmlspecialchars($vv));
                     $child->children[] = $add;
                 }
@@ -398,7 +414,7 @@ class HTML_Template_Flexy_Element {
             if (($k !== $v) && !$noValue) {
                 $atts = array('value'=>$k);
             }
-            $add = new HTML_Template_Flexy_Element('option',$atts);
+            $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
             $add->children = array(htmlspecialchars($v));
             $this->children[] = $add;
         }
@@ -472,12 +488,13 @@ class HTML_Template_Flexy_Element {
             $suffix = $suffix->toHtml();
         }
         //echo "AFTER<PRE>";print_R($ret);
-        // tags that never should have closers  
+      
         $tag = $this->tag;
         if (strpos($tag,':') !==  false) {
             $bits = explode(':',$tag);
             $tag = $bits[1];
         }
+        // tags that never should have closers  
         $close = in_array(strtoupper($tag),array("INPUT","IMG")) ? '' : "</{$ret->tag}>{$suffix}" ;
         
         return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() .$close;
@@ -533,4 +550,4 @@ class HTML_Template_Flexy_Element {
     
     
     
-} // end class HTML_Common
+} // end class HTML_Template_Flexy_Element

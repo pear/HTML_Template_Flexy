@@ -78,7 +78,10 @@
           
       New Features:
         * strings from option tags, and value of input tags are added to gettext array.
-        
+        * ability to generate namespaced options (eg. for XUL)
+          $x = new HTML_Template_Flexy_Element('html:select');
+          $x->setOptions(array(1=>'test'));
+          
        
       
         

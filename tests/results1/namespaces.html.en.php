@@ -30,4 +30,9 @@
              </html:tr>
             </html:table>
         </html:form>
+        <?php echo $this->elements['atest']->toHtml();?>
+        <!-- example of how to make the above work correctly.. -->
+        <html:select name="atest">
+            <?php if ($this->options['strict'] || (is_array($t->categories)  || is_object($t->categories))) foreach($t->categories as $data) {?><html:option value="<?php echo htmlspecialchars($data->value);?>" onselect="parent.onSelect_ProdCat();"><?php echo htmlspecialchars($data->name);?></html:option><?php }?>
+        </html:select>
 </window>

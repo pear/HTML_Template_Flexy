@@ -34,4 +34,13 @@
              </html:tr>
             </html:table>
         </html:form>
+        <html:select name="atest">
+            <html:option flexy:foreach="categories,data" value="{data.value}" 
+                onselect="parent.onSelect_ProdCat();">{data.name}</html:option>
+        </html:select>
+        <!-- example of how to make the above work correctly.. -->
+        <html:select name="atest" flexy:ignore="yes">
+            <html:option flexy:foreach="categories,data" value="{data.value}" 
+                onselect="parent.onSelect_ProdCat();">{data.name}</html:option>
+        </html:select>
 </window>
