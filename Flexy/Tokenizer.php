@@ -1530,7 +1530,7 @@ case 4:
 case 5:
 {
     //<name -- start tag */
-     $this->tagName = trim(substr($this->yytext(),1));
+     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -1558,7 +1558,7 @@ case 8:
 case 9:
 {
     /* </title> -- end tag */
-    $this->tagName = trim(substr($this->yytext(),1));
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
     $this->value = '';
@@ -1728,7 +1728,7 @@ case 34:
 case 35:
 {
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[trim($this->yytext())] = null;
+    $this->attributes[strtoupper(trim($this->yytext()))] = null;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -1742,7 +1742,7 @@ case 36:
 case 37:
 {
    // <a ^href = "xxx"> -- attribute name 
-    $this->attrKey = substr(trim($this->yytext()),0,-1);
+    $this->attrKey = strtoupper(substr(trim($this->yytext()),0,-1));
     $this->yybegin(IN_ATTRVAL);
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -2049,7 +2049,7 @@ case 76:
 case 77:
 {
     //<name -- start tag */
-     $this->tagName = trim(substr($this->yytext(),1));
+     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -2071,7 +2071,7 @@ case 79:
 case 80:
 {
     /* </title> -- end tag */
-    $this->tagName = trim(substr($this->yytext(),1));
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
     $this->value = '';
@@ -2098,7 +2098,7 @@ case 83:
 case 84:
 {
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[trim($this->yytext())] = null;
+    $this->attributes[strtoupper(trim($this->yytext()))] = null;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }

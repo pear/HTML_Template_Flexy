@@ -89,7 +89,6 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     function setValue($value) {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         $this->tag = $value[0];
-        $this->UCtag = strtoupper($value[0]);
         if (isset($value[1])) {
             $this->attributes = $value[1];
         }
@@ -113,7 +112,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
     
         $ret = '';
-        if ($foreach = $this->getAttribute('foreach')) {
+        if ($foreach = $this->getAttribute('FOREACH')) {
             $foreachObj =  $this->factory('Foreach',
                     explode(',',$foreach),
                     $this->line);
@@ -132,15 +131,22 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 $ret .= " $k";
                 continue;
             }
+            
+            // if it's a string just dump it.
             if (is_string($v)) {
                 $ret .=  " {$k}={$v}";
                 continue;
             }
+            
+            // normally the value is an array of string, however
+            // if it is an object - then it's a conditional key.
+            // eg.  if (something) echo ' SELECTED';
+            
             if (is_object($v)) {
                 $ret .= " " .$v->toString();
                 continue;
             }
-                
+            
             
             $ret .=  " {$k}=";
             foreach($v as $item) {
@@ -181,12 +187,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         // form elements : format:
         //value - fill out as PHP CODE
         
-        $name =    $this->getAttribute('name');
+        $name =    $this->getAttribute('NAME');
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
             $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
         }
         
-        $type = strtoupper($this->getAttribute('type'));
+        $type = strtoupper($this->getAttribute('TYPE'));
         $thisvar = str_replace(']','',$name);
         $thisvar = str_replace('[','.',$thisvar);
         
@@ -253,7 +259,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         // form elements : format:
         //value - fill out as PHP CODE
         
-        $name =    $this->getAttribute('name');
+        $name =    $this->getAttribute('NAME');
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
             $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
         }
@@ -288,12 +294,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * the options is the pullldown will have to be
     *        $t->theform->getOptions('the_name_of_the_tag')
     *
-    * the tag is generated using HTML_Select
-    *
-    * However this requires that toString outputs something different. - eg.
-    * an overriden value..
     * 
-    * otherwise, It needs to generate a child like:
+    * I did look at HTML_Select - but since we output tags - this does most of the work anyway.
     * - for a key=>value array.
     * foreach($t->theform->getOptions('name') as $_k=>$_v) {
     *    printf('<OPTION VALUE="%s"%s>%s</OPTION>',
@@ -316,17 +318,20 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
           
         $call_object = '$t';
         
-        if ($this->getAttribute('static')) {
-            return;
-        }
-         
-         
-        $basename =    $this->getAttribute('name');
+        $basename =    $this->getAttribute('NAME');
         $name = $basename;
         if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
             $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
             $call_object =  $this->toVar($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']);
         }
+        
+        $_HTML_TEMPLATE_FLEXY_TOKEN['activeSelect'] = $name;
+        
+        if ($this->getAttribute('STATIC')) {
+            return;
+        }
+         
+         
         
         
         
@@ -344,8 +349,44 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             );
         
     }
-    
-    
+     /**
+    * Deal with Options (on a static select list)
+    *
+    * bascially add an attribute tag:
+    *   if ($this->theform->thename_of_the_Tag == 'name/or contents') echo " SELECTED";
+    * 
+    *
+    * @return   none
+    * @access   public
+    */  
+    function parseTagOption() 
+    {
+        
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+          
+         
+        $name =    $_HTML_TEMPLATE_FLEXY_TOKEN['activeSelect'];
+ 
+        $php = '<? ';
+        
+        if ($this->getAttribute('SELECTED') === null) {
+           // then it's the default..
+           // if no value is available for $this->the_form->the name of the tag...
+           // just leave it allown
+           $php .= "if (empty(".$this->toVar($name).")) echo ' SELECTED';";
+        }
+        $value =    $this->getAttribute('value');
+        if (empty($value)) {
+            $value = $this->childrenToString();
+        }
+        
+        
+        $php .= "if (".$this->toVar($name)." == \"". addslashes($value) . "\") echo ' SELECTED';";
+        $php .= "?>";
+        
+        $this->attributes['SELECTED'] =  $this->factory("PHP", $php, $this->line);
+        
+    }
     
     
     
@@ -368,7 +409,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
      
-        if ($name = $this->getAttribute('name')) {
+        if ($name = $this->getAttribute('NAME')) {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
         }
         
@@ -384,7 +425,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @access   string
     */
     function getAttribute($key) {
-        // really need to do a foreach/ strtoupper
+        // all attribute keys are stored Upper Case,
+        // however just to make sure we have not done a type :)
+        $key = strtoupper($key); 
+        
         if (!isset($this->attributes[$key])) {
             return '';
         }

@@ -214,7 +214,7 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{ETAGO}{NAME}{WHITESPACE} {
     /* </title> -- end tag */
-    $this->tagName = trim(substr($this->yytext(),1));
+    $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'EndTag';
     $this->yybegin(IN_ENDTAG);
     $this->value = '';
@@ -281,7 +281,7 @@ FLEXY_MODIFIER      = [hur]
   
 <YYINITIAL>{STAGO}{NAME}{WHITESPACE}		{
     //<name -- start tag */
-     $this->tagName = trim(substr($this->yytext(),1));
+     $this->tagName = strtoupper(trim(substr($this->yytext(),1)));
     $this->tokenName = 'Tag';
     $this->value = '';
     $this->attributes = array();
@@ -320,7 +320,7 @@ FLEXY_MODIFIER      = [hur]
   
 <IN_ATTR>{NAME}{SPACE}*={WHITESPACE}		{
    // <a ^href = "xxx"> -- attribute name 
-    $this->attrKey = substr(trim($this->yytext()),0,-1);
+    $this->attrKey = strtoupper(substr(trim($this->yytext()),0,-1));
     $this->yybegin(IN_ATTRVAL);
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -329,7 +329,7 @@ FLEXY_MODIFIER      = [hur]
   
 <IN_ATTR>{NAME}{WHITESPACE}		{
     // <img src="xxx" ^ismap> -- name */
-    $this->attributes[trim($this->yytext())] = null;
+    $this->attributes[strtoupper(trim($this->yytext()))] = null;
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
