@@ -235,13 +235,13 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     
         if (is_array($this->options['Translation2'])) {
             require_once 'Translation2.php';
-            $this->options['Translation2'] = new Translation2(
+            $this->options['Translation2'] =  &Translation2::factory(
                 $this->options['Translation2']['driver'],
-                @$this->options['Translation2']['options']
+                isset($this->options['Translation2']['options']) ? $this->options['Translation2']['options'] : array(),
+                isset($this->options['Translation2']['params']) ? $this->options['Translation2']['params'] : array()
             );
         }
-        
-        
+                
         if (is_a($this->options['Translation2'],'Translation2')) {
             $this->options['Translation2']->setLang($this->options['locale']);
             // fixme - needs to be more specific to which template to use..
