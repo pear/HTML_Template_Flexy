@@ -1,5 +1,26 @@
 <?php
-
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+// +----------------------------------------------------------------------+
+// | PHP Version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2002 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 2.02 of the PHP license,      |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Authors:  nobody <nobody@localhost>                                  |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+//
+//  Controller Type Class providing translation faciliites
+//
+ 
 /*
 
 usage : 
@@ -7,27 +28,73 @@ usage :
 $t = new HTML_Template_Flexy_Translator(array(
     'baseLang'      => 'en',
     'targetLangs'   => array('es','fr','zh'),
+    'appURL'       => '/admin/translate.php',
 
 ));
-$t->process($_GET['lang'],isset($_POST ? $_POST : array()); // read data.. etc.
-
-print_R($t);
+$t->process(isset($_GET ? $_GET : array(),isset($_POST ? $_POST : array()); // read data.. etc.
+// you can replace this pretty easily with your own templates..
+$t->outputDefautTemplate();
 
 */
 
 class HTML_Template_Flexy_Translator {
-
+    
+    /**
+    * Options for Translator tool.
+    *
+    * @var array
+    * @access public 
+    */
     var $options = array(
-        'baseLang'  => 'en',
-        'targetLangs' => array('fr'),
-        'templateDir' => '',
-        'compileDir'  => '',
-        'url_rewrite'     => '', // for image rewriting.. -- needs better thinking through!
-        'appURL'            => '',
+        'baseLang'          => 'en',            // the language the templates are in.
+        'targetLangs'       => array('fr'),     // the language the templates are being translated to.
+        'templateDir'       => '',              // these are read from global config if not set.
+        'compileDir'        => '',        
+        'url_rewrite'       => '',              // for image rewriting.. -- needs better thinking through!
+        'appURL'            => '',              // url to translation too : eg. /admin/translator.php
     );
+    /**
+    * app URL (copied from above)
+    *
+    * @var string
+    * @access public 
+    */
     var $appURL;
     var $languages = array();
+    /**
+    * Array of templates and the words found in each one.
+    *
+    * @var array
+    * @access public 
+    */
+    var $words= array();   
+    /**
+    * Array of objects with name, md5's, has it been set, the translation etc.
+    *
+    * @var array
+    * @access public 
+    */
+    var $status = array();
+    /**
+    * The current language
+    *
+    * @var array
+    * @access public 
+    */
+    var $translate = ''; // language being displayed /edited.
     
+    
+    /**
+    * constructor
+    *
+    * Just set options (no checking done)
+    * 
+    * 
+    * @param   array   see options array in file.
+    * @return   none
+    * @access   public
+    */
+  
     function HTML_Template_Flexy_Translator($options) {
         foreach($options as $k=>$v) {
             $this->options[$k]  = $v;
@@ -50,14 +117,17 @@ class HTML_Template_Flexy_Translator {
     }
     
     
+    /**
+    * process the input 
+    *
+    * 
+    * @param   array   $_GET; (translate = en)
+    * @param   array   $_POST; (translate = en, en[{md5}] = translation)
     
+    * @return   none
+    * @access   public
+    */
     
-    
-    var $template = 'translate.tpl.html';
-    var $words= array(); // parsed from templates.
-    var $status = array();
-    
-    var $translate = ''; // language being displayed /edited.
     
     function process($get,$post) {
         //DB_DataObject::debugLevel(1);
@@ -170,7 +240,15 @@ class HTML_Template_Flexy_Translator {
    
     
     
-
+  
+    /**
+    * compile all the templates in a specified folder.
+    *
+    * 
+    * @param   string   subdirectory of templateDir or empty
+    * @return   none
+    * @access   public
+    */
 
     function compileAll($d='') {
         set_time_limit(0); // this could take quite a while!!!
@@ -217,6 +295,15 @@ class HTML_Template_Flexy_Translator {
     }
 
 
+    /**
+    * delete all the compiled templates in  a specified language
+    *
+    * 
+    * @param   string   language
+    * @param   string   subdirectory of templateDir or empty
+    * @return   none
+    * @access   public
+    */
     function clearTemplateCache($lang='en',$d = '') {
         
         $dname = $d ? $this->options['templateDir'] .'/'.$d  : $this->options['templateDir'];
@@ -246,7 +333,12 @@ class HTML_Template_Flexy_Translator {
         }
         clearstatcache();
     }
-
+   /**
+    * output the default template with the editing facilities.
+    * 
+    * @return   none
+    * @access   public
+    */
     function outputDefaultTemplate() {
         $o = array(
             'compileDir' => ini_get('session.save_path') . '/HTML_Template_Flexy_Translate',
