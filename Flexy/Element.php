@@ -183,52 +183,6 @@ class HTML_Template_Flexy_Element {
     } // end func _parseAttributes
 
      
-    /**
-     * Overlays an object onto the attributes an children of this one..
-     * this can accept an empty value - in which case it does nothing..
-     *
-     * @param    HTML_Element   $from  override settings from another element.
-     * @access   public
-     */
-     
-    function mergeElement($from=false)
-    {
-        //echo "<PRE>MERGE:";
-       //print_r($from);
-       //print_r($this);
-        
-        if (!$from) {
-            return;
-        }
-        
-        // changing tags.. - should this be valid?
-        // hidden is one use of this....
-        if ($from->tag && ($from->tag != $this->tag)) {
-            $this->tag = $from->tag;
-        }
-        
-        if ($from->override !== false) {
-            $this->override = $from->override;
-        }
-        //if $from is not an object:
-        // then it's a value set....
-        
-        if (count($from->children)) {
-            //echo "<PRE> COPY CHILDREN"; print_r($from->children);
-            $this->children = $from->children;
-        }
-        
-        foreach ($from->attributes as $key => $value) {
-            $this->attributes[$key] = $value;
-        }
-        $this->prefix = $from->prefix;
-        $this->suffix = $from->suffix;  
-        if ($from->value !== null) {
-            $this->setValue($from->value);
-        } 
-        //echo "<PRE>RESULT:";
-         //print_r($this);
-    } // end func updateAttributes 
      
        
     /**
@@ -358,6 +312,10 @@ class HTML_Template_Flexy_Element {
      */
      
     function setOptions($array) {
+        if (!is_array($array)) {
+            $this->children = array();
+            return;
+        }
         foreach($array as $k=>$v) {
             if (is_array($v)) {     // optgroup
                 $child = new HTML_Template_Flexy_Element('optgroup',array('label'=>$kk));
