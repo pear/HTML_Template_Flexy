@@ -302,11 +302,15 @@ var test_abc_agcg = 0
 </script>
 
 
-Bugs: 739
-<?php if (is_array($t->xxxx)  || is_object($t->xxxx)) foreach($t->xxxx as $) {?><td>xxx</td><?php }?>
-<!-- {foreach:xxxx} {end:} -->
+<!-- Bug: 739
+<td flexy:foreach="xxxx">xxx</td> 
+ {foreach:xxxx} {end:} 
+-->
 
 
+Bug: 874 
+
+<?php if (isset($t->supporter) && method_exists($t->supporter,'isFreq')) if ($t->supporter->isFreq("XAPP,OXRP")) { ?><span>do something </span><?php }?>
 
 <p>&nbsp;</p>
 </body>
