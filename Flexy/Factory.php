@@ -38,13 +38,45 @@ class HTML_Template_Flexy_Factory {
     * @access   public
     */
   
-    function fromArray($ar,$ret=array()) {
-    
+    function fromArray($ar,$ret=array()) 
+    {
+        
         foreach($ar as $k=>$v) {
+            if (is_array($v)) {
+                $ret = HTML_Template_Flexy_Factory::fromArrayPrefixed($k,$v,$ret);
+            }
+            
             if (!isset($ret[$k])) {
                 $ret[$k] = new HTML_Template_Flexy_Element();
             }
             $ret[$k]->setValue($v);
+        }
+        return $ret;
+    }
+    
+    /**
+    * flatten - takes a multi dimensional array, and builds the 'xxx[sss][xx]' => value
+    * 
+    * @param   array   key(tag name) => value   
+    * @param   array   key(tag name) => value   
+    * @param   optional array   key(tag name) => HTML_Element
+    *
+    * @return   array    Array of HTML_Elements
+    * @access   public
+    */
+  
+    function fromArrayPrefixed($prefix, $ar,$ret=array()) 
+    {
+      
+        foreach($ar as $k=>$v) {
+            if (is_array($v)) {
+                $ret = HTML_Template_Flexy_Factory::flatten($prefix.'['.$k.']',$v,$ret);
+            }
+            
+            if (!isset($ret[$prefix.'['.$k.']'])) {
+                $ret[$prefix.'['.$k.']'] = new HTML_Template_Flexy_Element();
+            }
+            $ret[$prefix.'['.$k.']']->setValue($v);
         }
         return $ret;
     }
