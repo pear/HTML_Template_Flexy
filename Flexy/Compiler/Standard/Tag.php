@@ -339,14 +339,23 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
         
         
+        
         // does it have a closetag?
         if (!$this->element->close) {
-            return HTML_Template_Flexy::raiseError(
-                "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
-                    tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+        
+            if ($this->element->getAttribute('/') === false) {
+            
+            
+                return HTML_Template_Flexy::raiseError(
+                    "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
+                        tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+            }
+            // it's an xhtml tag!
+            $this->element->postfix = array($this->element->factory("End", '', $this->element->line));
+        } else {
+            $this->element->close->postfix = array($this->element->factory("End", '', $this->element->line));
         }
-        $this->element->close->postfix = array($this->element->factory("End", '', $this->element->line));
 
         $this->element->clearAttribute('FLEXY:FOREACH');
         return $foreachObj->compile($this->compiler);
