@@ -4,7 +4,7 @@
   <name>HTML_Template_Flexy</name>
   <summary>A Flexible Caching Template Engine Based on SimpleTemplate</summary>
   <description>
-  Flexy Template is a Template to php code convertor, based on Simple Template, and 
+  Flexy Template is a Template Engine to php code convertor, based on Simple Template, and 
   similar to Smarty. It should be very fast, and is easy to extend to develop or use 
   any template syntax you like
   
