@@ -102,66 +102,76 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         
         $data = $string;
+        $res = false;
         if ($string === false) {
             $data = file_get_contents($flexy->currentTemplate);
+            // cache result
+            if (isset($_HTML_TEMPLATE_FLEXY_COMPILER['cache'][$flexy->currentTemplate])) {
+                $res = $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][$flexy->currentTemplate];
+            }
+            
+            
         }
         
-        
-        
-        // PRE PROCESS {_(.....)} translation markers.
-        $got_gettext_markup = false;
-        
-        
-        
-        if (strpos($data,'{_(') !== false) {
-            $matches = array();
-            $lmatches = explode ('{_(', $data);
-            array_shift($lmatches);
-            // shift the first..
-            foreach ($lmatches as $k) {
-                if (false === strpos($k,')_}')) {
-                    continue;
+        // only parse file if we havent done it already!
+        if ($res === false) {
+            // PRE PROCESS {_(.....)} translation markers.
+            $got_gettext_markup = false;
+            
+            
+            
+            if (strpos($data,'{_(') !== false) {
+                $matches = array();
+                $lmatches = explode ('{_(', $data);
+                array_shift($lmatches);
+                // shift the first..
+                foreach ($lmatches as $k) {
+                    if (false === strpos($k,')_}')) {
+                        continue;
+                    }
+                    $x = explode(')_}',$k);
+                    $matches[] = $x[0];
                 }
-                $x = explode(')_}',$k);
-                $matches[] = $x[0];
+            
+            
+               //echo '<PRE>';print_r($matches);
+                // we may need to do some house cleaning here...
+                $gettextStrings = $matches;
+                $got_gettext_markup = true;
+                
+                
+                // replace them now..  
+                // ** leaving in the tag (which should be ignored by the parser..
+                // we then get rid of the tags during the toString method in this class.
+                foreach($matches as $v) {
+                    $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
+                }
+                
             }
-        
-        
-           //echo '<PRE>';print_r($matches);
-            // we may need to do some house cleaning here...
-            $gettextStrings = $matches;
-            $got_gettext_markup = true;
+                
             
             
-            // replace them now..  
-            // ** leaving in the tag (which should be ignored by the parser..
-            // we then get rid of the tags during the toString method in this class.
-            foreach($matches as $v) {
-                $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
+            
+            
+            
+            
+            $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
+            $tokenizer->fileName = $flexy->currentTemplate;
+            
+            
+            //$tokenizer->debug=1;
+            if ($this->options['nonHTML']) {
+                $tokenizer->ignoreHTML = true;
+            }
+            if ($this->options['allowPHP']) {
+                $tokenizer->ignorePHP = false;
             }
             
+            $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
+            if ($string === false) {
+                $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][$flexy->currentTemplate] = $res;
+            }
         }
-            
-        
-        
-        
-        
-        
-        
-        $tokenizer = new HTML_Template_Flexy_Tokenizer($data);
-        $tokenizer->fileName = $flexy->currentTemplate;
-        
-        
-        //$tokenizer->debug=1;
-        if ($this->options['nonHTML']) {
-            $tokenizer->ignoreHTML = true;
-        }
-        if ($this->options['allowPHP']) {
-            $tokenizer->ignorePHP = false;
-        }
-        
-        $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-         
         
         if (is_a($res,'PEAR_Error')) {
             return $res;
