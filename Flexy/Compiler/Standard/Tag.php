@@ -358,12 +358,13 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         }
          
         if ((strtolower($this->element->getAttribute('type')) == 'checkbox' ) && 
-                (substr($this->element->getAttribute('name'),-2) == '[]') &&
-                ($this->element->getAttribute('id') === false)) {
+                (substr($this->element->getAttribute('name'),-2) == '[]')) {
+            if ($this->element->getAttribute('id') === false) {
+                $id = 'tmpId'. (++$tmpId);
+                $this->element->attributes['id'] = $id;
+                $this->element->ucAttributes['ID'] = $id;
+            } 
             $mergeWithName =  true;
-            $id = 'tmpId'. (++$tmpId);
-            $this->element->attributes['id'] = $id;
-            $this->element->ucAttributes['ID'] = $id;
         }
         
         
