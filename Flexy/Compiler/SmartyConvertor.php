@@ -92,7 +92,7 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
         }
         
         require_once 'HTML/Template/Flexy/Compiler/Standard.php';
-        $flexyCompiler = HTML_Template_Flexy_Compiler_Standard;
+        $flexyCompiler = new HTML_Template_Flexy_Compiler_Standard;
         $flexyCompiler->compile($flexy,$data);
         return true;
     }
@@ -191,7 +191,13 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
             case (preg_match('/^config_load\s/', $str)):
                 // convert to $t->TemplateConfigLoad()
                 $args = $this->convertAttributesToKeyVal(substr($str,strpos( $str,' ')));
-                return '{templateConfigLoad(#'.$args['file'].'#,#'.$args['section'].')}';
+                return '{plugin(#smartyConfigLoad#,#'.$args['file'].'#,#'.$args['section'].'#)}';
+            
+            case (preg_match('/^include\s/', $str)):
+                // convert to $t->TemplateConfigLoad()
+                $args = $this->convertAttributesToKeyVal(substr($str,strpos( $str,' ')));
+             
+                return '{plugin(#smartyInclude#,#'.$args['file'].'#)}';
            
             case ($str == 'ldelim'):
                 return '{';
@@ -277,8 +283,9 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
         $bits = explode('->',$var);
         $var = implode('.',$bits);
         $mods = implode('|',$mods);
+        
         if (strlen($mods)) {
-            $mods = "<!--  UNSUPPORTED MODIFIERS: $mods -->";
+            return '{plugin(#smartyModifiers#,'.$var.',#'.$mods.'#):h}';
         }
         return '{'.$var .'}' . $mods;
     }
