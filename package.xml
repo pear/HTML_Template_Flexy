@@ -65,17 +65,36 @@
  
     
       <release>
-     <version>1.0.3</version>
-      <date>2004-10-11</date>
+     <version>1.1.0</version>
+      <date>2004-12-10</date>
       <notes><![CDATA[
       Minor Feature Release
+       
+       Changes
+        Note: This release may include some changes which may break BC, (in which case they 
+        _are_ bugs and will be fixed.).
+        
+       
+      
                                                                                                                               
        Features
         #------ Forms without names, now are not generated as HTML_Elements, rather than given a default name.
         #------ support for -ve numbers in {arrays[-1]}
         #------ support for variable replacements in commented out blocks of styles
         #2074 - allow literal numbers in methods, eg. {somemethod(3,#astring#,avar)}  
-                                                                                                                              
+                Features
+        #------ Limited support for Xul in Elements
+        #2097   Support for mixing flexy vars within dynamic elements. 
+                (If this causes problems, please file a bug report.)
+        #------ Forms without names render as plain HTML, rather than generating dynamic
+                elements.
+        #------ createToken code is simplified and supports writing the position of a token
+                (generally for usage in the Tree.php file for parsing html only.)
+        #------ Fixed tree builder so it is more tolerant of malformed HTML (eg. form tags
+                with closures in the wrong part of the html tree)
+        #------ Style element now works with flexy tags (rather than ignoring them within 
+                comments)
+                
       ]]></notes>
       <state>stable</state>
      </release>
@@ -90,7 +109,7 @@
           
           <!-- The HTML Element and a factory helper class for it. -->
           <file>Element.php</file>
-	<dir name="Element" role="php">
+          <dir name="Element" role="php">
               <file>Xul.php</file>
          </dir>
           <file>Factory.php</file>
@@ -217,21 +236,7 @@
    
      
    <changelog>
-
-
-  <release>
-     <version>1.0.2</version>
-      <date>2004-09-06</date>
-      <notes><![CDATA[
-      Minor Feature Release
-                                                                                                                              
-       Features
-        #------ Limited support for Xul in Element
  
-      ]]></notes>
-      <state>stable</state>
-     </release>
-
 
 
  <release>

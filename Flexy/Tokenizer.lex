@@ -413,7 +413,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     }
     
     if ($this->inStyle) {
-        $this->value = $this->createToken('Text');
+        $this->value = $this->createToken('Comment');
         $this->yybegin(IN_COMSTYLE);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
