@@ -414,7 +414,8 @@ class HTML_Template_Flexy_Token {
          
             $base->children[] = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
             
-            if (is_object($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]) && 
+                is_object($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
             
                 // if the close id is greater than my id - ignore it! - 
                 if ($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close->id > $end) {

@@ -63,46 +63,20 @@
     </maintainer>
   </maintainers>
  
-    
       <release>
-     <version>1.1.1</version>
-      <date>2004-12-22</date>
+     <version>1.1.2</version>
+      <date>2004-12-28</date>
       <notes><![CDATA[
-      Minor Feature Release
-       
-       Changes
-        Note: This release does break BC in templates using the Translation tools,
-        (which since they are undocumented should really be regarded as beta I guess.).
+      Minor BugFix Release
         
-        Support for Conversion of 
-        <b>this is {atag} in a sentence</b>
-        
-        to a translatable string:
-        "this is %s in a sentence"
-        
-        Is now NOT supported, it will result in 2 strings
-        "this is"
-        "in a sentence"
-                
-        To effect a similar result, the translation markers should 
-        now be used:
-        
-        <b>{_(this is {atag} in a sentence)_}</b>
-        
-        will convert into a translatable string
-        "this is {atag} in a sentence"
-       
-       
        Features / Fixes
-        #------ support for translatable markers in html attributes added:
-                eg. <a href="{_(http://www.example.com)_}">.....
-        #3003   {var} replaced with %s - fixed by removing all string merging code.
+        #3041 - Removed Warning raised during compilation.
         
         
      ]]></notes>
       <state>stable</state>
      </release>
-
+    
      
      
     <filelist>
@@ -240,6 +214,48 @@
    
      
    <changelog>
+   
+      <release>
+     <version>1.1.1</version>
+      <date>2004-12-22</date>
+      <notes><![CDATA[
+      Minor Feature Release
+       
+       Changes
+        Note: This release does break BC in templates using the Translation tools,
+        (which since they are undocumented should really be regarded as beta I guess.).
+        
+        Support for Conversion of 
+        <b>this is {atag} in a sentence</b>
+        
+        to a translatable string:
+        "this is %s in a sentence"
+        
+        Is now NOT supported, it will result in 2 strings
+        "this is"
+        "in a sentence"
+                
+        To effect a similar result, the translation markers should 
+        now be used:
+        
+        <b>{_(this is {atag} in a sentence)_}</b>
+        
+        will convert into a translatable string
+        "this is {atag} in a sentence"
+       
+       
+       Features / Fixes
+        #------ support for translatable markers in html attributes added:
+                eg. <a href="{_(http://www.example.com)_}">.....
+        #3003   {var} replaced with %s - fixed by removing all string merging code.
+        
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+
+   
+   
   <release>
      <version>1.1.0</version>
       <date>2004-12-18</date>
