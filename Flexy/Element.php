@@ -410,7 +410,7 @@ class HTML_Template_Flexy_Element {
         
         foreach($array as $k=>$v) {
             if (is_array($v)) {     // optgroup
-                $child = new HTML_Template_Flexy_Element($namespace . 'optgroup',array('label'=>$kk));
+                $child = new HTML_Template_Flexy_Element($namespace . 'optgroup',array('label'=>$k));
                 foreach($v as $kk=>$vv) {
                     $atts=array();
                     if (($kk != $vv) && !$noValue) {
