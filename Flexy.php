@@ -546,6 +546,11 @@ class HTML_Template_Flexy
         if (!$original) {
             return $new;
         }
+        
+        if (!$new) {
+            return $original;
+        }
+        
         if ($new->tag && ($new->tag != $original->tag)) {
             $original->tag = $new->tag;
         }
@@ -561,8 +566,11 @@ class HTML_Template_Flexy
             $original->children = $new->children;
         }
         
-        foreach ($new->attributes as $key => $value) {
-            $original->attributes[$key] = $value;
+        if (is_array($new->attributes)) {
+        
+            foreach ($new->attributes as $key => $value) {
+                $original->attributes[$key] = $value;
+            }
         }
         $original->prefix = $new->prefix;
         $original->suffix = $new->suffix;  

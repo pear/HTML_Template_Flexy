@@ -96,8 +96,12 @@ class HTML_Template_Flexy_Factory {
     */
   
     function setErrors($ret,$set,$format='<span class="error">%s</span>') {
-        
-        
+        // check what you send this.. !!!
+        if (!is_array($set)) {
+            PEAR::raiseError(
+                'invalid arguments "$set" (should be an array) sent to HTML_Template_Flexy_Factory::setErrors', 
+                0, PEAR_ERROR_DIE);
+        }
         foreach($set as $k=>$v) {
             if (!$v) {
                 continue;
