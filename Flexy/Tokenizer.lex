@@ -13,7 +13,7 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors:  nobody <nobody@localhost>                                  |
+// | Authors:  Alan Knowles <alan@akbkhome.com>                           |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -30,7 +30,6 @@
 // how to modifiy the lexer to handle the changes..
 //
 
-require_once 'HTML/Template/Flexy/Token.php';
 
 
 define('HTML_TEMPLATE_FLEXY_TOKEN_NONE',1);
@@ -84,23 +83,26 @@ define('YY_EOF' , 258);
 
 %{
         
+     
     /**
-    * ignoreHTML flag
+    * options array : meanings:
+    *    ignore_php - default is to remove all PHP code from template.
+    *           although this may not produce a tidy result - eg. close ?> in comments
+    *           it will have the desired effect of blocking injection of PHP from templates.
+    *    ignore_html - return all tags as  text tokens
+    *
     *
     * @var      boolean  public
     * @access   public
     */
-    var $ignoreHTML = false;
     
-    /**
-    * ignorePHP flag - default is to remove all PHP code from template.
-    * although this may not produce a tidy result - eg. close ?> in comments
-    * it will have the desired effect of blocking injection of PHP from templates.
-    *
-    * @var      boolean  public
-    * @access   public
-    */
-    var $ignorePHP = true;
+    
+    var $options = array(
+        'ignore_html' => false,
+        'ignore_php'  => true,
+        'token_factory'  => array('HTML_Template_Flexy_Token','factory'),
+    );
+     
     
     /**
     * the start position of a cdata block
@@ -138,6 +140,31 @@ define('YY_EOF' , 258);
     
     var $error;
     
+    /**
+    * Flexible constructor
+    *
+    * @param   string       string to tokenize
+    * @param   string       
+    * 
+    *
+    * @return   none|boolean|string|int|object    Description
+    * @access   public|private
+    * @see      see also methods.....
+    */
+  
+    
+    function &construct($data,$options= array()) {
+        $t = new HTML_Template_Flexy_Tokenizer($data);
+        foreach($options as $k=>$v) {
+            if (is_object($v) || is_array($v)) {
+                $t->options[$k] = &$v;
+                continue;
+            }
+            $t->options[$k] = $v;
+        }
+        return $t;
+    }
+    
     
     /**
     * raise an error: = return an error token and set the error variable.
@@ -167,11 +194,21 @@ define('YY_EOF' , 258);
     */
   
     function returnSimple() {
-        $this->value = HTML_Template_Flexy_Token::factory('TextSimple',$this->yytext(),$this->yyline);
+        $this->value = $this->createToken('TextSimple',$this->yytext(),$this->yyline);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
     }
     
-     
+    /**
+    * Create a token based on the value of $this->options['token_call']
+    *
+    *
+    * @return   Object   some kind of token..
+    * @access   public
+    */
+    function createToken() {
+        $a = func_get_args();
+        return call_user_func_array($this->options['token_factory'],$a);
+    }
    
 
 %}
@@ -270,27 +307,27 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <YYINITIAL>{CRO}{NUMBER}{REFERENCE_END}?	 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 
 <YYINITIAL>{CRO}{NAME}{REFERENCE_END}?		{
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
   
 <YYINITIAL>{ERO}{NAME}{REFERENCE_END}?	{
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
   
 <YYINITIAL>{ETAGO}{NSNAME}?{WHITESPACE}"/"{STAGO} {
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
    
@@ -301,7 +338,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
   
 <YYINITIAL>{ETAGO}{NSNAME}{WHITESPACE} {
     /* </title> -- end tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -315,7 +352,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <YYINITIAL>{ETAGO}{TAGC}        {
     /* </> -- empty end tag */  
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty end tag not handled");
@@ -324,10 +361,10 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
             
 <YYINITIAL>{MDO}{NAME}{WHITESPACE}      {
     /* <!DOCTYPE -- markup declaration */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -336,7 +373,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
   
 <YYINITIAL>{MDO}{TAGC}      {
     /* <!> */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty markup tag not handled"); 
@@ -346,12 +383,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <YYINITIAL>{MDO}{COM}           {
     /* <!--  -- comment declaration */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->yyCommentBegin = $this->yy_buffer_end;
     
-    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -376,7 +413,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
  
 <IN_CDATA>{MSC}{TAGC}      { 
     /* ]]> -- marked section end */
-    $this->value = HTML_Template_Flexy_Token::factory('Cdata',
+    $this->value = $this->createToken('Cdata',
         substr($this->yy_buffer,$this->yyCdataBegin ,$this->yy_buffer_end - $this->yyCdataBegin - 3 ),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -429,7 +466,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_ATTR>{PIC_PHP}	{
     // <em^/ -- NET tag */
     $this->attributes["?"] = true;
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
         
@@ -439,12 +476,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_PHP>{PIC_PHP} { 
     /* php end */
-    if ($this->ignorePHP) {
+    if ($this->options['ignore_php']) {
 
         $this->yybegin(YYINITIAL);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Php',
+    $this->value = $this->createToken('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -460,7 +497,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}		{
     //<name -- start tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -475,7 +512,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
   
 <YYINITIAL>{STAGO}{TAGC}			{  
     // <> -- empty start tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty tag"); 
@@ -485,7 +522,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <YYINITIAL>([^\<\&\{\)]|(<[^<&a-zA-Z!->?])|(&[^<&#a-zA-Z]))+|"{"|")"     {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -618,7 +655,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
  
 <IN_SCRIPT>{END_SCRIPT} {
     // </script>
-    $this->value = HTML_Template_Flexy_Token::factory('EndTag',
+    $this->value = $this->createToken('EndTag',
         array('/script'),
         $this->yyline);
 
@@ -629,13 +666,13 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_SCRIPT>([^<]+) {
     // general text in script..
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <IN_SCRIPT>{STAGO} {
     // just < .. 
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -656,7 +693,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
   // <a name=foo ^>,</foo^> -- tag close */
 <IN_ATTR,IN_TAG>{TAGC}		{
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
     
@@ -688,7 +725,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_ATTR>{NET}{WHITESPACE}{TAGC}	{
     // <em^/ -- NET tag */
     $this->attributes["/"] = true;
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
         
@@ -727,7 +764,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
   // end tag -- non-permissive */
 <IN_ENDTAG>{TAGC} { 
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName),
         $this->yyline);
         array($this->tagName);
@@ -748,7 +785,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
     
-    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
      
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -760,57 +797,57 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 <IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    $this->value = HTML_Template_Flexy_Token::factory('DSComment',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSComment',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
 <IN_MD>{PERO}{NAME}{REFERENCE_END}?{WHITESPACE}		{
     // <!doctype ^%foo;> -- parameter entity reference */
-    $this->value = HTML_Template_Flexy_Token::factory('EntityRef',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('EntityRef',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
 <IN_MD>{PERO}{SPACES}			{
     // <!entity ^% foo system "..." ...> -- parameter entity definition */
-    $this->value = HTML_Template_Flexy_Token::factory('EntityPar',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('EntityPar',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
  
 <IN_MD>{NUMBER}{WHITESPACE} 	{   
-    $this->value = HTML_Template_Flexy_Token::factory('Number',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Number',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NAME}{WHITESPACE}			{ 
-    $this->value = HTML_Template_Flexy_Token::factory('Name',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Name',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NUMBER_TOKEN}{WHITESPACE}		{ 
-    $this->value = HTML_Template_Flexy_Token::factory('NumberT',$this->yytext(),$this->yyline);    
+    $this->value = $this->createToken('NumberT',$this->yytext(),$this->yyline);    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{NAME_TOKEN}{WHITESPACE}	{ 
-    $this->value = HTML_Template_Flexy_Token::factory('NameT',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('NameT',$this->yytext(),$this->yyline);
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_MD>{LITERAL}{WHITESPACE}      { 
-    $this->value = HTML_Template_Flexy_Token::factory('Literal',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Literal',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
 <IN_MD>{WHITESPACE} { 
-    $this->value = HTML_Template_Flexy_Token::factory('WhiteSpace',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('WhiteSpace',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
 
 <IN_COM>[-]*{COM}{TAGC}			{   
     
-    $this->value = HTML_Template_Flexy_Token::factory('Comment',
+    $this->value = $this->createToken('Comment',
         '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),
         $this->yyline
     );
@@ -818,13 +855,13 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 <IN_DSCOM>{COM}{TAGC}			{   
-    $this->value = HTML_Template_Flexy_Token::factory('DSEnd', $this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSEnd', $this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
 <IN_MD>{TAGC}			{   
-    $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('CloseTag',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
@@ -834,7 +871,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
   
 <IN_MD>{DSO}			{
     // <!doctype foo ^[  -- declaration subset */
-    $this->value = HTML_Template_Flexy_Token::factory('BeginDS',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('BeginDS',$this->yytext(),$this->yyline);
     $this->yybegin(IN_DS);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -848,21 +885,21 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_DS>{MSC}{TAGC}			{
     // ]]> -- marked section end */
-     $this->value = HTML_Template_Flexy_Token::factory('DSEnd',$this->yytext(),$this->yyline);
+     $this->value = $this->createToken('DSEnd',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
   
 <IN_DS>{DSC}			{ 
     // ] -- declaration subset close */
-    $this->value = HTML_Template_Flexy_Token::factory('DSEndSubset',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSEndSubset',$this->yytext(),$this->yyline);
     $this->yybegin(IN_DSCOM); 
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <IN_DS>[^\]]+			{ 
-    $this->value = HTML_Template_Flexy_Token::factory('Declaration',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Declaration',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -873,12 +910,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
    
 
 <YYINITIAL>{FLEXY_GTSTART} {
-    $this->value = HTML_Template_Flexy_Token::factory('GetTextStart','',$this->yyline);
+    $this->value = $this->createToken('GetTextStart','',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
  
 <YYINITIAL>{FLEXY_GTEND} {
-    $this->value = HTML_Template_Flexy_Token::factory('GetTextEnd','',$this->yyline);
+    $this->value = $this->createToken('GetTextEnd','',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -895,7 +932,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
    
  
 <YYINITIAL>"{if:"{FLEXY_NEGATE}?{FLEXY_VAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::factory('If',substr($this->yytext(),4,-1),$this->yyline);
+    $this->value = $this->createToken('If',substr($this->yytext(),4,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -917,20 +954,20 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return $this->raiseError('invalid sytnax for Foreach','',true);
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = $this->createToken('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}","{FLEXY_SIMPLEVAR}"}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = $this->createToken('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <YYINITIAL>"{end:}" {
-    $this->value = HTML_Template_Flexy_Token::factory('End', '',$this->yyline);
+    $this->value = $this->createToken('End', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <YYINITIAL>"{else:}" {
-    $this->value = HTML_Template_Flexy_Token::factory('Else', '',$this->yyline);
+    $this->value = $this->createToken('Else', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -953,7 +990,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     } else {
         $n = substr($n,0,-1);
     }
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Var'  , $n, $this->yyline);
+    $this->attrVal[] = $this->createToken('Var'  , $n, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
@@ -962,7 +999,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     $t =  $this->yytext();
     $t = substr($t,1,-1);
 
-    $this->value = HTML_Template_Flexy_Token::factory('Var'  , $t, $this->yyline);
+    $this->value = $this->createToken('Var'  , $t, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
@@ -989,7 +1026,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
         $this->flexyMethod .= substr($t,1,-1);
     }
         
-    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -1012,7 +1049,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     }
     
     $this->flexyArgs[] = $t;
-    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -1060,7 +1097,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     if ($p = strpos($t,':')) {
         $this->flexyMethod .= substr($t,$p,2);
     }
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);    
+    $this->attrVal[] = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);    
     $this->yybegin($this->flexyMethodState);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }

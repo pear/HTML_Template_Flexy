@@ -32,7 +32,8 @@ require_once 'HTML/Template/Flexy/Tokenizer.php';
 $GLOBALS['_html_template_flexy_compiler_standard']['PO'] = array();
 
 
-class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler {
+class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler 
+{
     
     
     
@@ -151,12 +152,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             
             
             //$tokenizer->debug=1;
-            if ($this->options['nonHTML']) {
-                $tokenizer->ignoreHTML = true;
-            }
-            if ($this->options['allowPHP']) {
-                $tokenizer->ignorePHP = false;
-            }
+            $tokenizer->options['ignore_html'] = $this->options['nonHTML'];
+            $tokenizer->options['ignore_php']  = !$this->options['allowPHP'];
             
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
          

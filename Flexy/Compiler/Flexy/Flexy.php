@@ -194,7 +194,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
         if (is_string($element->ucAttributes['CALL'])) {
             $arg = $element->getAttribute('CALL');
             return $this->compiler->appendPHP( 
-                    "if (function_exists('_html_template_flexy_compiler_flexy_flexy_'.{$arg})) " .
+                    "if (function_exists('_html_template_flexy_compiler_flexy_flexy_{$arg}')) " .
                     " _html_template_flexy_compiler_flexy_flexy_{$arg}(\$t,\$this);");
         }
         

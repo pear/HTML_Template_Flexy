@@ -114,14 +114,12 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             $tokenizer->fileName = $flexy->currentTemplate;
             
             
+              
             //$tokenizer->debug=1;
-            if ($this->options['nonHTML']) {
-                $tokenizer->ignoreHTML = true;
-            }
-            if ($this->options['allowPHP']) {
-                $tokenizer->ignorePHP = false;
-            }
-            
+            $tokenizer->options['ignore_html'] = $this->options['nonHTML'];
+            $tokenizer->options['ignore_php']  = !$this->options['allowPHP'];
+          
+            require_once 'HTML/Template/Flexy/Token.php';
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
          
             $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)] = $res;

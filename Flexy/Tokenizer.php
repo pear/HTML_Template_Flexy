@@ -13,7 +13,7 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors:  nobody <nobody@localhost>                                  |
+// | Authors:  Alan Knowles <alan@akbkhome.com>                           |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -29,7 +29,6 @@
 //  Note need to change a few of these defines, and work out
 // how to modifiy the lexer to handle the changes..
 //
-require_once 'HTML/Template/Flexy/Token.php';
 define('HTML_TEMPLATE_FLEXY_TOKEN_NONE',1);
 define('HTML_TEMPLATE_FLEXY_TOKEN_OK',2);
 define('HTML_TEMPLATE_FLEXY_TOKEN_ERROR',3);
@@ -68,21 +67,21 @@ class HTML_Template_Flexy_Tokenizer
 {
 
     /**
-    * ignoreHTML flag
+    * options array : meanings:
+    *    ignore_php - default is to remove all PHP code from template.
+    *           although this may not produce a tidy result - eg. close ?> in comments
+    *           it will have the desired effect of blocking injection of PHP from templates.
+    *    ignore_html - return all tags as  text tokens
+    *
     *
     * @var      boolean  public
     * @access   public
     */
-    var $ignoreHTML = false;
-    /**
-    * ignorePHP flag - default is to remove all PHP code from template.
-    * although this may not produce a tidy result - eg. close ?> in comments
-    * it will have the desired effect of blocking injection of PHP from templates.
-    *
-    * @var      boolean  public
-    * @access   public
-    */
-    var $ignorePHP = true;
+    var $options = array(
+        'ignore_html' => false,
+        'ignore_php'  => true,
+        'token_factory'  => array('HTML_Template_Flexy_Token','factory'),
+    );
     /**
     * the start position of a cdata block
     *
@@ -112,6 +111,28 @@ class HTML_Template_Flexy_Tokenizer
     */
     var $error;
     /**
+    * Flexible constructor
+    *
+    * @param   string       string to tokenize
+    * @param   string       
+    * 
+    *
+    * @return   none|boolean|string|int|object    Description
+    * @access   public|private
+    * @see      see also methods.....
+    */
+    function &construct($data,$options= array()) {
+        $t = new HTML_Template_Flexy_Tokenizer($data);
+        foreach($options as $k=>$v) {
+            if (is_object($v) || is_array($v)) {
+                $t->options[$k] = &$v;
+                continue;
+            }
+            $t->options[$k] = $v;
+        }
+        return $t;
+    }
+    /**
     * raise an error: = return an error token and set the error variable.
     *
     * 
@@ -135,8 +156,19 @@ class HTML_Template_Flexy_Tokenizer
     * @access   public
     */
     function returnSimple() {
-        $this->value = HTML_Template_Flexy_Token::factory('TextSimple',$this->yytext(),$this->yyline);
+        $this->value = $this->createToken('TextSimple',$this->yytext(),$this->yyline);
         return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    }
+    /**
+    * Create a token based on the value of $this->options['token_call']
+    *
+    *
+    * @return   Object   some kind of token..
+    * @access   public
+    */
+    function createToken() {
+        $a = func_get_args();
+        return call_user_func_array($this->options['token_factory'],$a);
     }
 
 
@@ -2616,19 +2648,19 @@ case 3:
 {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 4:
 {
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 5:
 {
     //<name -- start tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -2641,7 +2673,7 @@ case 5:
 case 6:
 {  
     // <> -- empty start tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty tag"); 
@@ -2657,19 +2689,19 @@ case 7:
 case 8:
 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 9:
 {
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 10:
 {
     /* </title> -- end tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -2681,7 +2713,7 @@ case 10:
 case 11:
 {
     /* </> -- empty end tag */  
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty end tag not handled");
@@ -2689,17 +2721,17 @@ case 11:
 case 12:
 {
     /* <!DOCTYPE -- markup declaration */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 13:
 {
     /* <!> */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     return $this->raiseError("empty markup tag not handled"); 
@@ -2732,7 +2764,7 @@ case 15:
 }
 case 16:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('GetTextEnd','',$this->yyline);
+    $this->value = $this->createToken('GetTextEnd','',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 17:
@@ -2752,17 +2784,17 @@ case 19:
 {
     $t =  $this->yytext();
     $t = substr($t,1,-1);
-    $this->value = HTML_Template_Flexy_Token::factory('Var'  , $t, $this->yyline);
+    $this->value = $this->createToken('Var'  , $t, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 20:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('GetTextStart','',$this->yyline);
+    $this->value = $this->createToken('GetTextStart','',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 21:
 {
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     /* </name <  -- unclosed end tag */
@@ -2771,11 +2803,11 @@ case 21:
 case 22:
 {
     /* <!--  -- comment declaration */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->yyCommentBegin = $this->yy_buffer_end;
-    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
     $this->yybegin(IN_COM);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -2789,17 +2821,17 @@ case 23:
 }
 case 24:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('If',substr($this->yytext(),4,-1),$this->yyline);
+    $this->value = $this->createToken('If',substr($this->yytext(),4,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 25:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('End', '',$this->yyline);
+    $this->value = $this->createToken('End', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 26:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('Else', '',$this->yyline);
+    $this->value = $this->createToken('Else', '',$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 27:
@@ -2815,12 +2847,12 @@ case 28:
 }
 case 29:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = $this->createToken('Foreach', explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 30:
 {
-    $this->value = HTML_Template_Flexy_Token::factory('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
+    $this->value = $this->createToken('Foreach',  explode(',',substr($this->yytext(),9,-1)),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 31:
@@ -2871,7 +2903,7 @@ case 34:
     } else {
         $n = substr($n,0,-1);
     }
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Var'  , $n, $this->yyline);
+    $this->attrVal[] = $this->createToken('Var'  , $n, $this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 case 35:
@@ -2886,7 +2918,7 @@ case 36:
 }
 case 37:
 {
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
     if (strtoupper($this->tagName) == 'SCRIPT') {
@@ -2923,7 +2955,7 @@ case 41:
 {
     // <em^/ -- NET tag */
     $this->attributes["/"] = true;
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -2933,7 +2965,7 @@ case 42:
 {
     // <em^/ -- NET tag */
     $this->attributes["?"] = true;
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName,$this->attributes),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -2992,7 +3024,7 @@ case 50:
 }
 case 51:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory($this->tokenName,
+    $this->value = $this->createToken($this->tokenName,
         array($this->tagName),
         $this->yyline);
         array($this->tagName);
@@ -3024,7 +3056,7 @@ case 53:
 }
 case 54:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('WhiteSpace',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('WhiteSpace',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 55:
@@ -3033,59 +3065,59 @@ case 55:
 }
 case 56:
 {   
-    $this->value = HTML_Template_Flexy_Token::factory('Number',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Number',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 57:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('Name',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Name',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 58:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('NameT',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('NameT',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 59:
 {   
-    $this->value = HTML_Template_Flexy_Token::factory('CloseTag',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('CloseTag',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 60:
 {
     // <!doctype foo ^[  -- declaration subset */
-    $this->value = HTML_Template_Flexy_Token::factory('BeginDS',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('BeginDS',$this->yytext(),$this->yyline);
     $this->yybegin(IN_DS);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 61:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('NumberT',$this->yytext(),$this->yyline);    
+    $this->value = $this->createToken('NumberT',$this->yytext(),$this->yyline);    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 62:
 {
     // <!entity ^% foo system "..." ...> -- parameter entity definition */
-    $this->value = HTML_Template_Flexy_Token::factory('EntityPar',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('EntityPar',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 63:
 {
     // <!doctype ^%foo;> -- parameter entity reference */
-    $this->value = HTML_Template_Flexy_Token::factory('EntityRef',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('EntityRef',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 64:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('Literal',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Literal',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 65:
 {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 case 66:
@@ -3095,7 +3127,7 @@ case 66:
 }
 case 67:
 {   
-    $this->value = HTML_Template_Flexy_Token::factory('Comment',
+    $this->value = $this->createToken('Comment',
         '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),
         $this->yyline
     );
@@ -3104,20 +3136,20 @@ case 67:
 }
 case 68:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('Declaration',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Declaration',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 69:
 { 
     // ] -- declaration subset close */
-    $this->value = HTML_Template_Flexy_Token::factory('DSEndSubset',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSEndSubset',$this->yytext(),$this->yyline);
     $this->yybegin(IN_DSCOM); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 70:
 {
     // ]]> -- marked section end */
-     $this->value = HTML_Template_Flexy_Token::factory('DSEnd',$this->yytext(),$this->yyline);
+     $this->value = $this->createToken('DSEnd',$this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -3147,7 +3179,7 @@ case 72:
         $t = substr($t,0,-2);
     }
     $this->flexyArgs[] = $t;
-    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -3157,7 +3189,7 @@ case 73:
     if ($t{1} == ':') {
         $this->flexyMethod .= substr($t,1,-1);
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
+    $this->value = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -3182,7 +3214,7 @@ case 76:
     if ($p = strpos($t,':')) {
         $this->flexyMethod .= substr($t,$p,2);
     }
-    $this->attrVal[] = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);    
+    $this->attrVal[] = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);    
     $this->yybegin($this->flexyMethodState);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -3194,19 +3226,19 @@ case 77:
 case 78:
 {
     // general text in script..
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 79:
 {
     // just < .. 
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 80:
 {
     // </script>
-    $this->value = HTML_Template_Flexy_Token::factory('EndTag',
+    $this->value = $this->createToken('EndTag',
         array('/script'),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -3219,7 +3251,7 @@ case 81:
 case 82:
 { 
     /* ]]> -- marked section end */
-    $this->value = HTML_Template_Flexy_Token::factory('Cdata',
+    $this->value = $this->createToken('Cdata',
         substr($this->yy_buffer,$this->yyCdataBegin ,$this->yy_buffer_end - $this->yyCdataBegin - 3 ),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -3229,12 +3261,12 @@ case 83:
 {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    $this->value = HTML_Template_Flexy_Token::factory('DSComment',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSComment',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 84:
 {   
-    $this->value = HTML_Template_Flexy_Token::factory('DSEnd', $this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSEnd', $this->yytext(),$this->yyline);
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
@@ -3246,11 +3278,11 @@ case 85:
 case 86:
 { 
     /* php end */
-    if ($this->ignorePHP) {
+    if ($this->options['ignore_php']) {
         $this->yybegin(YYINITIAL);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;    
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Php',
+    $this->value = $this->createToken('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
         $this->yyline);
     $this->yybegin(YYINITIAL);
@@ -3264,19 +3296,19 @@ case 89:
 {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 90:
 {
     // &abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 91:
 {
     //<name -- start tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -3297,19 +3329,19 @@ case 92:
 case 93:
 {
     // &#123;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 94:
 {
     // &#abc;
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 95:
 {
     /* </title> -- end tag */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
     $this->tagName = trim(substr($this->yytext(),1));
@@ -3321,10 +3353,10 @@ case 95:
 case 96:
 {
     /* <!DOCTYPE -- markup declaration */
-    if ($this->ignoreHTML) {
+    if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    $this->value = HTML_Template_Flexy_Token::factory('Doctype',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Doctype',$this->yytext(),$this->yyline);
     $this->yybegin(IN_MD);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -3401,7 +3433,7 @@ case 105:
 }
 case 106:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('WhiteSpace',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('WhiteSpace',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 107:
@@ -3410,40 +3442,40 @@ case 107:
 }
 case 108:
 {   
-    $this->value = HTML_Template_Flexy_Token::factory('Number',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Number',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 109:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('Name',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Name',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 110:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('NameT',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('NameT',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 111:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('NumberT',$this->yytext(),$this->yyline);    
+    $this->value = $this->createToken('NumberT',$this->yytext(),$this->yyline);    
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 112:
 {
     // <!doctype ^%foo;> -- parameter entity reference */
-    $this->value = HTML_Template_Flexy_Token::factory('EntityRef',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('EntityRef',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 113:
 { 
-    $this->value = HTML_Template_Flexy_Token::factory('Literal',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Literal',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 case 114:
 {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    //$this->value = HTML_Template_Flexy_Token::factory('Comment',$this->yytext(),$this->yyline);
+    //$this->value = $this->createToken('Comment',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 case 115:
@@ -3478,7 +3510,7 @@ case 119:
 {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
-    $this->value = HTML_Template_Flexy_Token::factory('DSComment',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('DSComment',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 120:
@@ -3494,7 +3526,7 @@ case 123:
 {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 124:
@@ -3542,7 +3574,7 @@ case 133:
 {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 134:
@@ -3589,7 +3621,7 @@ case 292:
 {
     //abcd -- data characters  
     // { and ) added for flexy
-    $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
+    $this->value = $this->createToken('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 case 293:
