@@ -98,10 +98,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     * @access public
     */    
     var $hasForeach = false;
-    
-    
-    
-    
+     
     /**
     * toString - display tag, attributes, postfix and any code in attributes.
     * Note first thing it does is call any parseTag Method that exists..
@@ -592,10 +589,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         }
         
         $ret = '';
-        
+        $unset = '';
 
         if ($this->elementUsesDynamic($this->element)) {
-           
+            $used = array();
             foreach ($this->element->attributes as $attribute => $attributeValue) {
                 if (!is_array($attributeValue)) {
                     continue;
@@ -603,6 +600,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                 unset($this->element->attributes[$attribute]);
                 // generate code to put data into value..
                 $output_avar = '$this->elements[\''.$id.'\']->attributes[\''.$attribute.'\']';
+                $used[] = "'{$attribute}'";
                 $ret .= "\nif (!isset({$output_avar})) {\n";
                 // get the " or ' that encapsulates the element.
                 $wrapper = array_shift($attributeValue);
@@ -627,15 +625,18 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                     
                     $ret .= "    {$output_avar} .= {$prefix}{$var}{$suffix};\n";
                 }
+                
                 $ret .= "}\n";
             }
-         
-         
+            $ret .= "\$_attributes_used = array(".implode(',',$used).");\n"; 
+            $unset = "\n".'if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {'."\n".
+                     '    unset($this->elements[\''. $id .'\']->attributes[$_a]);'."\n" .
+                     "}}\n";
+        
+        
         }
         
-        
-        
-        
+     
         
         
         // this is for a case where you can use a sprintf as the name, and overlay it with a variable element..
@@ -644,7 +645,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         
         if ($varsOnly) { // used by form tag.
-            return $ret;
+            return array($ret,$unset);
         }
         
         if ($var = $this->element->getAttribute('FLEXY:NAMEUSES')) {
@@ -654,17 +655,17 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                 'if (!isset($this->elements['.$var.'])) $this->elements['.$var.']= $this->elements[\''.$id.'\'];
                 $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
                 $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
-                echo $this->elements['.$var.']->toHtml();'; 
+                echo $this->elements['.$var.']->toHtml();' .$unset; 
         } elseif ($mergeWithName) {
             $name = $this->element->getAttribute('NAME');
             return  $ret . 
                 '$element = $this->elements[\''.$id.'\'];
                 $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
-                echo  $element->toHtml();'; 
+                echo  $element->toHtml();' . $unset; 
         
         
         } else {
-           return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();';
+           return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();'. $unset;
         }
     }
     
@@ -807,12 +808,12 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         // this adds the element to the elements array.
         $old = clone($this->element);
         $this->element = $copy;
-        $prefix = $this->getElementPhp($id,false,true);
+        list($prefix,$suffix) = $this->getElementPhp($id,false,true);
         $this->element= $old;
         
         
         return 
-            $this->compiler->appendPhp($prefix .'echo $this->elements[\''.$id.'\']->toHtmlnoClose();') .
+            $this->compiler->appendPhp($prefix .'echo $this->elements[\''.$id.'\']->toHtmlnoClose();'.$suffix) .
             $this->element->compileChildren($this->compiler) .
             $this->compiler->appendHtml( "</{$copy->oTag}>");
     

@@ -49,7 +49,12 @@ if (!isset($this->elements['testing2']->attributes['value'])) {
     $this->elements['testing2']->attributes['value'] = '';
     $this->elements['testing2']->attributes['value'] .=  htmlspecialchars($t->somevalue);
 }
-echo $this->elements['testing2']->toHtml();?>
+$_attributes_used = array('value');
+echo $this->elements['testing2']->toHtml();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['testing2']->attributes[$_a]);
+}}
+?>
 <?php echo $this->elements['_submit[1]']->toHtml();?>
 </form>
 
@@ -64,12 +69,22 @@ if (!isset($this->elements['test_mix']->attributes['action'])) {
     $this->elements['test_mix']->attributes['action'] = '';
     $this->elements['test_mix']->attributes['action'] .=  htmlspecialchars($t->someurl);
 }
-echo $this->elements['test_mix']->toHtmlnoClose();?>
+$_attributes_used = array('action');
+echo $this->elements['test_mix']->toHtmlnoClose();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['test_mix']->attributes[$_a]);
+}}
+?>
 <?php 
 if (!isset($this->elements['testing5']->attributes['value'])) {
     $this->elements['testing5']->attributes['value'] = '';
     $this->elements['testing5']->attributes['value'] .=  htmlspecialchars($t->somevalue);
 }
-echo $this->elements['testing5']->toHtml();?>
+$_attributes_used = array('value');
+echo $this->elements['testing5']->toHtml();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['testing5']->attributes[$_a]);
+}}
+?>
 <?php echo $this->elements['_submit[3]']->toHtml();?>
 </form>
