@@ -353,8 +353,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         
         $this->postfix = array(
-            $this->create("PHP", "<?php if (isset(\$this->errors['".$name."'])) { ".
-                "echo  htmlspecialchars(\$this->errors['".$name. "']); } ?>",$this->line));
+            $this->create("PHP", "<?php if (isset(\$this->errors['".urlencode($name)."'])) { ".
+                "echo  htmlspecialchars(\$this->errors['".urlencode($name). "']); } ?>",$this->line));
         // this should use <div name="form.error"> or something...
             
         
