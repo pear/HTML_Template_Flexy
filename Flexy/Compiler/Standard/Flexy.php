@@ -74,7 +74,7 @@ class HTML_Template_Flexy_Compiler_Standard_Flexy  {
                 continue;
             }
             $v = substr($v,1,-1);
-            $ret .= '<?php echo HTML_Javscript_Convert::convertVar(\''.$prefix . $k.'\','.$element->toVar($v) .',true);?>'. "\n";
+            $ret .= '<?php echo HTML_Javascript_Convert::convertVar(\''.$prefix . $k.'\','.$element->toVar($v) .',true);?>'. "\n";
         }
         $ret .= "</script>";
         return $ret;
