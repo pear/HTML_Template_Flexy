@@ -63,20 +63,23 @@
     </maintainer>
   </maintainers>
  
-
-    <release>
-     <version>1.0.2</version>
-      <date>2004-09-06</date>
+    
+      <release>
+     <version>1.0.3</version>
+      <date>2004-10-11</date>
       <notes><![CDATA[
       Minor Feature Release
-       
-       Features 
-        #------ Limited support for Xul in Element  
-        
+                                                                                                                              
+       Features
+        #------ Forms without names, now are not generated as HTML_Elements, rather than given a default name.
+        #------ support for -ve numbers in {arrays[-1]}
+        #------ support for variable replacements in commented out blocks of styles
+        #2074 - allow literal numbers in methods, eg. {somemethod(3,#astring#,avar)}  
+                                                                                                                              
       ]]></notes>
       <state>stable</state>
      </release>
-     
+
      
      
     <filelist>
@@ -216,6 +219,18 @@
    <changelog>
 
 
+  <release>
+     <version>1.0.2</version>
+      <date>2004-09-06</date>
+      <notes><![CDATA[
+      Minor Feature Release
+                                                                                                                              
+       Features
+        #------ Limited support for Xul in Element
+ 
+      ]]></notes>
+      <state>stable</state>
+     </release>
 
 
 
