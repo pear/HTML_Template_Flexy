@@ -495,7 +495,7 @@ class HTML_Template_Flexy
         }
         if (!is_readable($this->compiledTemplate)) {
               return $this->raiseError( "Could not open the template: <b>'{$this->compiledTemplate}'</b><BR>".
-                            "Please check the file permisons on the directory and file ",
+                            "Please check the file permissions on the directory and file ",
                             HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
