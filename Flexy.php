@@ -92,22 +92,30 @@ class HTML_Template_Flexy
     * @var string
     * @access public
     */
-    var $gettextStringsFilename;
+    var $gettextStringsFile;
     /**
-    * The quickform wrapper object - only used when forms are available..
+    * The serialized elements array file.
     *
-    * @var object HTML_Template_Flexy_QuickForm
+    * @var string
     * @access public
     */
-    var $quickform;
+    var $elementsFile;
+    
     /**
-    * Array of quickforms used on the page (1 form - one quickform)
-    * use setActiveQuickform(name|id) to activate $template->quickform->elements[]
+    * The private 'original' elements in the template as a id=>HTML_Element array
     *
-    * @var array of  HTML_Template_Flexy_QuickForm s
+    * @var object HTML_Template_Flexy_Element
+    * @access private
+    */
+    var $_elements = array();
+    /**
+    * Array of HTML_elements to merge with form
+    * 
+    *
+    * @var array of  HTML_Template_Flexy_Elements
     * @access public
     */
-    var $quickforms;
+    var $elements = array();
     /**
     *   Constructor 
     *
@@ -214,11 +222,8 @@ class HTML_Template_Flexy
         // this may disappear later it's a BC fudge to try and deal with 
         // the old way of auto matching form elements to object Vars
         
-        if (!$this->quickform && file_exists($this->quickformFile)) {
-            $this->setQuickForm($t);
-            if (isset($t->data)) {
-                $this->setQuickForm($t->data);
-            }
+        if ($this->elementsFile && file_exists($this->elementsFile)) {
+            $this->_elements = unserialize(file_get_contents($this->elementsFile));
         }
         
          // we use PHP's error handler to hide errors in the template.
@@ -237,9 +242,7 @@ class HTML_Template_Flexy
                             null, PEAR_ERROR_DIE);
         }
         
-       
         
-        $this->_setQuickFormsSelects($t);
         
         include($this->compiledTemplate);
         if ($_error_reporting !== false) {
@@ -341,10 +344,11 @@ class HTML_Template_Flexy
         // and that can then manage all the tokens in one place..
         
         require_once 'HTML/Template/Flexy/Tokenizer.php';
+        $this->_elements = array();
         
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = &$this->quickform;
-        
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] = &$this->_elements;
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $this->currentTemplate;
         
         setlocale(LC_ALL, $this->options['locale']);
         
@@ -387,17 +391,17 @@ class HTML_Template_Flexy
             fclose($cfp);
         }
         
-        // quickformfile
-        @unlink($this->quickformFile);
-        if($this->quickform &&
-            ($cfp = fopen( $this->quickformFile, 'w') ) ) {
+        // elements
+        @unlink($this->elementsFile);
+        if($this->_elements &&
+            ($cfp = fopen( $this->elementsFile, 'w') ) ) {
             
-            //echo "<PRE>";print_r($this->quickform);echo "</PRE>";
+          
             
-            fwrite($cfp,serialize($this->quickform->elementDefArray));
+            fwrite($cfp,serialize($this->_elements));
             fclose($cfp);
             // now clear it.
-            $this->quickform = false;
+        
         }
         
         return true;
@@ -494,7 +498,7 @@ class HTML_Template_Flexy
         
         $this->compiledTemplate    = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
         $this->getTextStringsFile  = $compileDest.DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
-        $this->quickformFile       = $compileDest.DIRECTORY_SEPARATOR .$filename.'.quickform.serial';
+        $this->elementsFile        = $compileDest.DIRECTORY_SEPARATOR .$filename.'.elements.serial';
         
         
         
@@ -587,164 +591,8 @@ class HTML_Template_Flexy
     }
 
       
-    /**
-    *   actually it will only be used to apply the pre and post filters
-    *
-    *   @access     public
-    *   @version    01/12/10
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param      string  $input      the string to filter
-    *   @param      array   $prefix     the subset of methods to use.
-    *   @return     string  the filtered string
-    */
-    function applyFilters( $input , $prefix = "",$negate=FALSE)
-    {
-        $this->debug("APPLY FILTER $prefix<BR>");
-        $filters = $this->options['filters'];
-        $this->debug(serialize($filters)."<BR>");
-        foreach($filters as $filtername) {
-            $class = "HTML_Template_Flexy_Filter_{$filtername}";
-            require_once("HTML/Template/Flexy/Filter/{$filtername}.php");
-            
-            if (!class_exists($class)) {
-                return $this->raiseError("Failed to load filter $filter",null,PEAR_ERROR_DIE);
-            }
-            
-            if (!@$this->filter_objects[$class])  {
-                $this->filter_objects[$class] = new $class;
-                $this->filter_objects[$class]->_set_engine($this);
-            }
-            $filter = &$this->filter_objects[$class];
-            $methods = get_class_methods($class);
-            $this->debug("METHODS:");
-            $this->debug(serialize($methods)."<BR>");
-            foreach($methods as $method) {
-                if ($method{0} == "_") {
-                    continue; // private
-                }
-                if ($method  == $class) {
-                    continue; // constructor
-                }
-                $this->debug("TEST: $negate $prefix : $method");
-                if ($negate &&  preg_match($prefix,$method)) {
-                    continue;
-                }
-                if (!$negate && !preg_match($prefix,$method)) {
-                    continue;
-                }
-                
-                $this->debug("APPLYING $filtername $method<BR>");
-                $input = $filter->$method($input);
-            }
-        }
-
-        return $input;
-    }
-    /**
-    *   set the quickform object. (and load it..)
-    *
-    *   @access     public
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param      optional array $data       default data for the form.
-    *   @param      optional array $data       default data for the 2nd form.    
-    *   @param      optional array $data       ... and so on for as many forms on the page.
-    *   @return     none
-    */
     
-    function setQuickForm() 
-    {
-        if (!$this->quickformFile) {
-            return $this->raiseError("You must compile()/setup the template before setting the quickform data",null,PEAR_ERROR_DIE);
-        }
-        // dont care if thers no quickform file
-        if (!file_exists($this->quickformFile)) {
-            return false;
-        }
-        require_once 'HTML/Template/Flexy/QuickForm.php';
-          
-        $args = func_get_args(); 
-        $this->quickforms = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,$args);
-        $this->setActiveQuickForm(0);
-         
-    }
-     /**
-    *   set the active quickform either by number or name
-    *
-    *   @access     public
-    *   @author     Alan Knowles <alan@akbkhome.com>
-    *   @param      integer or string  id or name of form
-    *   @return     true if found, false if not
-    */
-    function setActiveQuickForm($active) {
-        if (isset($this->quickforms[$active])) {
-            $this->quickform = & $this->quickforms[$active];
-            $this->quickform->buildElementsArray();
-            return true;
-        }
-        foreach($this->quickforms as $k=>$v) {
-            if (isset($v->_attributes['name']) && ($v->_attributes['name'] == $active)) {
-                $this->quickform = & $this->quickforms[$k];
-                $this->quickform->buildElementsArray();
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    
-    /**
-     * If there is a select tag with approprieate flexyobject/name attribute
-     * and displayed object supports it (has getOptions($field_name) method)
-     * it sets this select's options to the contents of this function results.
-     * Look in manual for more information.  
-     *
-     * @access     private
-     * @author     Marcin Galczynski <marcin@galczynski.poznan.pl>
-     * @param      none
-     * @return     none
-     */    
-    function _setQuickFormsSelects($processedTop) 
-    {
-        if (!is_array($this->quickforms)) {
-            return;
-        }
-        $processed = $processedTop;
-        foreach($this->quickforms as $id=>$qform) {
-             
-            $subobjname = $this->quickforms[$id]->_attributes['name'];
-            
-            // look up the flexyobject setting - this is a BC routine so ignore flexy:object!
-            if (isset($this->quickforms[$id]->_attributes['flexyobject'])) {
-                $subobjname = $this->quickforms[$id]->_attributes['flexyobject'];
-            }
-            
-            // see if $object->formname is set..
-            if (strlen($subobjname) && isset($processedTop->$subobjname)) {
-                $processed = $processedTop->$subobjname;
-            }
-            
-            // is there a getOptions method. 
-            if (!method_exists($processed,'getOptions')) {
-                return;
-            } 
-            
-            if (is_object($processed) && is_array($this->quickforms[$id]->_elements)) {
-                // find all the select elements and ask the getoptions for a list..
-                
-                foreach($this->quickforms[$id]->_elements as $name=>$element) {
-                    if (($this->quickforms[$id]->_elements[$name]->_type == 'select')
-                        && (!isset($this->quickforms[$id]->_elements[$name]->_attributes['static']))
-                        && (!isset($this->quickforms[$id]->_elements[$name]->_attributes['flexyignore']))) {
-                            $this->quickforms[$id]->_elements[$name]->loadArray(
-                                call_user_func(
-                                    array(&$processed,'getOptions'),
-                                    $this->quickforms[$id]->_elements[$name]->_attributes['name'])
-                                );
-                    } 
-                }
-            }
-        }
-    }
+     
     
     
     
