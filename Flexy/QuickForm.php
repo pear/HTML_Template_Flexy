@@ -67,7 +67,10 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     */
     function hideElement($elementname) 
     {
-        $this->_elements[$this->_elementIndex[$elementname]]->hide = true;;
+        if (!isset($this->_elementIndex[$elementname])) {
+            return false;
+        }
+        $this->_elements[$this->_elementIndex[$elementname]]->hide = true;
     }
     
     
