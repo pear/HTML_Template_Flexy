@@ -103,6 +103,8 @@
                   <file>Standard.php</file>
                   <dir name="Standard">
                     <file>Tag.php</file>
+                    <file>Flexy.php</file>
+                    <file>Functions.php</file>
                   </dir>
                   
                   <!-- The Old Regex Compiler -->

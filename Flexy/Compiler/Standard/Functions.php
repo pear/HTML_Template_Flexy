@@ -4,10 +4,10 @@
 /**
 * Compiler That deals with any internal functions
 * This is BETA - a better method for doing this needs to be thought through..
-* I guess this class should deal with the main namespace
-* and the parent (standard compiler can redirect other namespaces to other classes.
 *
-* one instance of these exists for each namespace.
+* It sits in the folder that deals with namespaces..
+* so it may eventually handle <functions:include file="xxxx.html">
+* at present it just deals with {include(#xxxxx.html#)}
 *
 *
 * @version    $Id$
