@@ -508,6 +508,22 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         $id = $this->element->getAttribute('NAME');
         // checkboxes need more work.. - at the momemnt assume one with the same value...
         if (in_array(strtoupper($this->element->getAttribute('TYPE')), array('RADIO'))) {
+            
+            if (!isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
+                // register it..  - so we dont overwrite it...
+                $this->getElementPhp($id);
+            } else if ($_HTML_TEMPLATE_FLEXY['elements'][$id]->attributes['type'] != $this->element->getAttribute('TYPE')) {
+                
+           
+                PEAR::raiseError(
+                    "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} ".
+                    "in Tag &lt;{$this->element->tag}&gt;:<BR>".
+                    "The Dynamic tag Name '$id' has already been used previously by ".
+                    "tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
+                     null, PEAR_ERROR_DIE
+                );
+            }
+           
             $id = $this->element->getAttribute('ID');
             if (!$id) {
                 PEAR::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt: 

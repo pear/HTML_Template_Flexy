@@ -437,26 +437,27 @@ class HTML_Template_Flexy_Element {
      */
     function toHtml($overlay=false)
     {
+         
         
+        $ret = $this;
         if ($overlay !== false) {
-            $this->mergeElement($overlay);
+            $ret = HTML_Template_Flexy::mergeElement($this,$overlay);
         }
         
-        if ($this->override !== false) {
-            return $this->override;
+        if ($ret->override !== false) {
+            return $ret->override;
         }
-        $prefix = $this->prefix;
+        $prefix = $ret->prefix;
         if (is_object($prefix)) {
             $prefix = $prefix->toHtml();
         }
-        $suffix = $this->suffix;
+        $suffix = $ret->suffix;
         if (is_object($suffix)) {
             $suffix = $suffix->toHtml();
         }
-        //if ($this->children) {
-            return "{$prefix}<{$this->tag}".$this->attributesToHTML() . '>'.$this->childrenToHTML() . "</{$this->tag}>{$suffix}" ;
-        //} 
-        //return "{$prefix}<{$this->tag}".$this->attributesToHTML() . " />{$suffix}";
+        
+        
+        return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() . "</{$ret->tag}>{$suffix}" ;
         
          
     } // end func toHtml
@@ -472,14 +473,13 @@ class HTML_Template_Flexy_Element {
      */
     function toHtmlnoClose($overlay=false)
     {
-        
+        $ret = $this;
         if ($overlay !== false) {
-            // FIXME!!!
-            $this->mergeElement($overlay);
+            $ret = HTML_Template_Flexy::mergeElement($this,$overlay);
         }
         
   
-        return "<{$this->tag}".$this->attributesToHTML() . '>' . $this->childrenToHTML();
+        return "<{$ret->tag}".$ret->attributesToHTML() . '>' . $ret->childrenToHTML();
        
          
     } // end func toHtml
