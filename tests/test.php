@@ -38,7 +38,7 @@ $options =  array(
     
     'templateDir'   =>  dirname(__FILE__) .'/templates',            // where are your templates
     'forceCompile'  =>  true,  // only suggested for debugging
-    'fatalError'  =>  PEAR_ERROR_RETURN,  // only suggested for debugging
+    'fatalError'  =>  HTML_TEMPLATE_FLEXY_ERROR_RETURN,  // only suggested for debugging
     'url_rewrite' => 'images/:/myproject/images/',
     
 );

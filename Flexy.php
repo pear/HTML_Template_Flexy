@@ -473,7 +473,7 @@ class HTML_Template_Flexy
             // how to display them...
             $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
         }
-     
+        //echo '<PRE>'; print_r(array($elements,$this->elements));
       
         
         // we use PHP's error handler to hide errors in the template.
@@ -566,7 +566,7 @@ class HTML_Template_Flexy
             if (!$this->options['debug']) {
                 return;
             }
-        } else if (!$GLOBALS['_HTML_TEMPLATE_FLEXY']['debug']) {
+        } else if (!@$GLOBALS['_HTML_TEMPLATE_FLEXY']['debug']) {
             return;
         }
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
@@ -671,7 +671,7 @@ class HTML_Template_Flexy
     
     function raiseError($message, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) 
     {
-        $this->debug("<B>HTML_Template_Flexy::raiseError</B>$message");
+        HTML_Template_Flexy::debug("<B>HTML_Template_Flexy::raiseError</B>$message");
         require_once 'PEAR.php';
         if (is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
             // rewrite DIE!

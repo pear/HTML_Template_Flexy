@@ -442,7 +442,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $prefix = 'echo ';
         
         $suffix = '';
-        $modifier = $element->modifier . ' ';
+        $modifier = strlen(trim($element->modifier)) ? $element->modifier : ' ';
+        
         switch ($modifier{0}) {
             case 'h':
                 break;
@@ -466,10 +467,16 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
                 // add language ?
                 $suffix = '))';
                 break;
-            default:
+            case ' ':
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?
                 $suffix = ')';
+                break;
+            default:
+               $prefix = 'echo $this->plugin("'.trim($element->modifier) .'",';
+               $suffix = ')'; 
+            
+            
         }
         
         return array($prefix,$suffix);
