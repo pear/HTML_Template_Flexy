@@ -45,7 +45,7 @@
   - support for urlencoded braces {} in HTML attributes.  
   - documentation in the pear manual
   
-  - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/examples
+  - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
   
   
 </description>
@@ -72,7 +72,8 @@
         * Stoped Javascript being striped when language= tag not used.
         * PHP5 tested
         * javscript and php code not added to gettext string list.
-   
+       
+      Add test suite to package.
         
       ]]></notes>
       <state>beta</state>
@@ -81,74 +82,97 @@
      
      
     <filelist>
-        <dir name="/" baseinstalldir="HTML/Template" role="php">
-            <file>Flexy.php</file>
-            <dir name="Flexy" role="php">
-                <file>example.ini</file>
-                
-                <!-- The HTML Element and a factory helper class for it. -->
-                <file>Element.php</file>
-                <file>Factory.php</file>
-                
-                <!-- Very simple smarty API emulator .. -->
-                <file>SmartyAPI.php</file>
-                
-                <!-- a compile all script -->
-                <file>compileAll.php</file>
-                
-                <!-- The tokenizer and related Tokens -->
-                <file>Tokenizer.php</file>
-                <file>Token.php</file>
-                <dir name="Token" role="php">
-                    <file>Tag.php</file>
-                    <file>EndTag.php</file>
-                    <file>If.php</file>
-                    <file>Else.php</file>
-                    <file>End.php</file>
-                    <file>Foreach.php</file>
-                    <file>Var.php</file>
-                    <file>Method.php</file>
-                    <file>Processing.php</file>
-                    <file>Text.php</file>
-                </dir>
-                <file>Test.php</file>
-                
-                <!-- the compiler Interface/Factory -->
-                <file>Compiler.php</file>
-                
-                <dir name="Compiler" role="php">
-                
-                
-                
-                  <!-- The Standard Compiler -->
-                  <file>Standard.php</file>
-                  <dir name="Standard">
-                    <file>Tag.php</file>
-                    <file>Flexy.php</file>  
-                    
-                  </dir>
-                  
-                  <!-- The Old Regex Compiler -->
-                  <file>Regex.php</file>
-                  <dir name="Regex" role="php">
-                      <file>BodyOnly.php</file>
-                      <file>Php.php</file>
-                      <file>RtfSimpleTags.php</file>
-                      <file>SimpleTags.php</file>
-                      <file>Mail.php</file>
-                      <file>Xml.php</file>
-                      <file>Math.php</file>
-                  </dir>
-                  
-                  <!-- The Smarty Convertor code. (alpha) -->
-                  <!-- see examples/smarty in cvs -->
-                  <file>SmartyConvertor.php</file> 
-                  
-                  
-                  
-                </dir>
+      <dir name="/" baseinstalldir="HTML/Template" role="php">
+        <file>Flexy.php</file>
+        <dir name="Flexy" role="php">
+          <file>example.ini</file>
+          
+          <!-- The HTML Element and a factory helper class for it. -->
+          <file>Element.php</file>
+          <file>Factory.php</file>
+          
+          <!-- Very simple smarty API emulator .. -->
+          <file>SmartyAPI.php</file>
+          
+          <!-- a compile all script -->
+          <file>compileAll.php</file>
+          
+          <!-- The tokenizer and related Tokens -->
+          <file>Tokenizer.php</file>
+          <file>Token.php</file>
+          <dir name="Token" role="php">
+              <file>Tag.php</file>
+              <file>EndTag.php</file>
+              <file>If.php</file>
+              <file>Else.php</file>
+              <file>End.php</file>
+              <file>Foreach.php</file>
+              <file>Var.php</file>
+              <file>Method.php</file>
+              <file>Processing.php</file>
+              <file>Text.php</file>
+          </dir>
+          <file>Test.php</file>
+          
+          <!-- the compiler Interface/Factory -->
+          <file>Compiler.php</file>
+          
+          <dir name="Compiler" role="php">
+          
+          
+          
+            <!-- The Standard Compiler -->
+            <file>Standard.php</file>
+            <dir name="Standard">
+              <file>Tag.php</file>
+              <file>Flexy.php</file>  
+              
             </dir>
+            
+            <!-- The Old Regex Compiler -->
+            <file>Regex.php</file>
+            <dir name="Regex" role="php">
+                <file>BodyOnly.php</file>
+                <file>Php.php</file>
+                <file>RtfSimpleTags.php</file>
+                <file>SimpleTags.php</file>
+                <file>Mail.php</file>
+                <file>Xml.php</file>
+                <file>Math.php</file>
+            </dir>
+            
+            <!-- The Smarty Convertor code. (alpha) -->
+            <!-- see examples/smarty in cvs -->
+            <file>SmartyConvertor.php</file> 
+            
+            
+            
+          </dir>
         </dir>
+        <dir name="tests" role="test">
+          <file>test.php</file>
+          <dir name="templates" role="test">
+            <file>conditions.html</file> 
+            <file>error_foreach.html</file> 
+            <file>flexy_tojavascript.html</file> 
+            <file>forms.html</file> 
+            <file>globals.html</file> 
+            <file>includes.html</file> 
+            <file>javascript.html</file> 
+            <file>looping.html</file> 
+            <file>methods.html</file> 
+            <file>namespaces.html</file> 
+            <file>raw_php.html</file> 
+            <file>raw_text.html</file> 
+            <file>variables.html</file> 
+          </dir>
+          <dir name="smarty" role="test">
+          <!-- short test script to convert smarty templates int flexy ones  -->
+          <!-- May be relocated in the future  -->
+            <file>smartytest.php</file>  
+          </dir>
+        </dir>
+      </dir>
     </filelist>
    <deps>
       <dep type="php" rel="ge" version="4.3"/>
