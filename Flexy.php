@@ -74,13 +74,45 @@ class HTML_Template_Flexy
         'compileDir'    =>  '',         // where do you want to write to.. (defaults to session.save_path)
         'templateDir'   =>  '',         // where are your templates
         
-        // where the template comes from.
+        // where the template comes from. ------------------------------------------
         'multiSource'   => false,       // Allow same template to exist in multiple places
                                         // So you can have user themes....
         'templateDirOrder' => '',       // set to 'reverse' to assume that first template
         
+         
+        'debug'         => false,       // prints a few messages
         
-        // get text/transalation suppport
+        
+        // compiling conditions ------------------------------------------
+        'compiler'      => 'Standard',  // which compiler to use. (Standard,Regex, Raw)
+        'forceCompile'  =>  false,      // only suggested for debugging
+
+        // regex Compiler       ------------------------------------------
+        'filters'       => array(),     // used by regex compiler.
+        
+        // standard Compiler    ------------------------------------------
+        'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
+        'allowPHP'      => false,       // allow PHP in template
+        
+        'flexyIgnore'   => 0,           // turn on/off the tag to element code
+        'numberFormat'  => ",2,'.',','",  // default number format  {xxx:n} format = eg. 1,200.00 
+        
+        'url_rewrite'   => '',          // url rewriting ability:
+                                        // eg. "images/:test1/images/,js/:test1/js"
+                                        // changes href="images/xxx" to href="test1/images/xxx"
+                                        // and src="js/xxx.js" to src="test1/js/xxx.js"
+                                        
+        'compileToString' => false,     // should the compiler return a string 
+                                        // rather than writing to a file.
+        'privates'      => false,       // allow access to _variables (eg. suido privates
+        'globals'       => false,       // allow access to _GET/_POST/_REQUEST/GLOBALS/_COOKIES/_SESSION
+
+        'globalfunctions' => false,     // allow GLOBALS.date(#d/m/Y#) to have access to all PHP's methods
+                                        // warning dont use unless you trust the template authors
+                                        // exec() becomes exposed.
+         
+        // get text/transalation suppport ------------------------------------------
+        //  (standard compiler only)
         'locale'        => 'en',        // works with gettext or File_Gettext
         'textdomain'    => '',          // for gettext emulation with File_Gettext
                                         // eg. 'messages' (or you can use the template name.
@@ -100,38 +132,13 @@ class HTML_Template_Flexy
                                         //
                                         //  'Translation2' => new Translation2('dataobjectsimple','')
                                         
-                                        
-        'forceCompile'  =>  false,      // only suggested for debugging
-
-        'debug'         => false,       // prints a few messages
+      
         
-        
-        // compiling conditions.
-        'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
-        'allowPHP'      => false,       // allow PHP in template
-        'filters'       => array(),     // used by regex compiler.                
-        'flexyIgnore'   => 0,           // turn on/off the tag to element code
-        'numberFormat'  => ",2,'.',','",  // default number format  {xxx:n} format = eg. 1,200.00 
-        
-        'url_rewrite'   => '',          // url rewriting ability:
-                                        // eg. "images/:test1/images/,js/:test1/js"
-                                        // changes href="images/xxx" to href="test1/images/xxx"
-                                        // and src="js/xxx.js" to src="test1/js/xxx.js"
-                                        
-        'compiler'      => 'Standard',  // which compiler to use. (Standard,Regex, Raw)
-        'compileToString' => false,     // should the compiler return a string 
-                                        // rather than writing to a file.
-        'privates'      => false,       // allow access to _variables (eg. suido privates
-        'globals'       => false,       // allow access to _GET/_POST/_REQUEST/GLOBALS/_COOKIES/_SESSION
-
-        'globalfunctions' => false,     // allow GLOBALS.date(#d/m/Y#) to have access to all PHP's methods
-                                        // warning dont use unless you trust the template authors
-                                        // exec() becomes exposed.
-        
+        // output options           ------------------------------------------
         'strict'        => false,       // All elements in the template must be defined - 
                                         // makes php E_NOTICE warnings appear when outputing template.
                                         
-        'fatalError'       => HTML_TEMPLATE_FLEXY_ERROR_DIE,       // default behavior is to die on errors in template.
+        'fatalError'    => HTML_TEMPLATE_FLEXY_ERROR_DIE,       // default behavior is to die on errors in template.
         
         'plugins'       => array(),     // load classes to be made available via the plugin method
                                         // eg. = array('Savant') - loads the Savant methods.
@@ -305,6 +312,7 @@ class HTML_Template_Flexy
         
         if ($this->options['compiler'] == 'Raw') {
             $this->compiledTemplate = $this->currentTemplate;
+            $this->debug("Using Raw Compiler");
             return true;
         }
         
@@ -350,13 +358,14 @@ class HTML_Template_Flexy
         $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$file.'.elements.serial';
           
         $recompile = false;
-        // we only compile if not uptodate or forced to.
-        $isuptodate = !file_exists( $this->compiledTemplate ) || 
-            (filemtime( $this->currentTemplate ) != filemtime( $this->compiledTemplate ));
+        
+        $isuptodate = file_exists( $this->compiledTemplate ) ?
+            (filemtime( $this->currentTemplate ) == filemtime( $this->compiledTemplate )) : 0;
             
         if( @$this->options['forceCompile'] || !$isuptodate ) {
             $recompile = true;
         } else {
+            $this->debug("File looks like it is uptodate.");
             return true;
         }
         
@@ -553,7 +562,11 @@ class HTML_Template_Flexy
     function debug($string) 
     {  
         
-        if (!$this->options['debug']) {
+        if (is_a($this,'HTML_Template_Flexy')) {
+            if (!$this->options['debug']) {
+                return;
+            }
+        } else if (!$GLOBALS['_HTML_TEMPLATE_FLEXY']['debug']) {
             return;
         }
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
@@ -658,6 +671,7 @@ class HTML_Template_Flexy
     
     function raiseError($message, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) 
     {
+        $this->debug("<B>HTML_Template_Flexy::raiseError</B>$message");
         require_once 'PEAR.php';
         if (is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
             // rewrite DIE!
