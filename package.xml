@@ -3,8 +3,11 @@
 <package version="1.0">
   <name>HTML_Template_Flexy</name>
   <summary>A Flexible Caching Template Engine Based on SimpleTemplate</summary>
-  <description>Flexy Template is a Template to php code convertor, based on Simple Template, and 
-  similar to Smarty. It should be very fast, and is easy to extend to develop or use any template syntax you like
+  <description>
+  Flexy Template is a Template to php code convertor, based on Simple Template, and 
+  similar to Smarty. It should be very fast, and is easy to extend to develop or use 
+  any template syntax you like
+  
   Default filter (SimpleTags) includes
   variables
   foreach loops
@@ -17,7 +20,6 @@
   RtfSimpletags  - to make RTF/Word documents
   BodyOnly - to strip header and footer from a template
   Php - to strip php code from template 
-  Tags - Similar to Simpletemplate.
   Email - For parsing email templates
   
 </description>
@@ -32,7 +34,7 @@
   </maintainers>
   <release>
        <version>0.1</version>
-      <date>2002-08-23</date>
+      <date>2002-09-07</date>
       <notes>First PEAR release,
       - Renamed to HTML_Flexy_Template to conform to PEAR standards
       - Added more phpdoc comments to filters
@@ -45,7 +47,7 @@
       - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
       </notes>
       <state>beta</state>
-     
+     </release>
     <filelist>
         <dir name="/" baseinstalldir="HTML/Template" role="php">
             <file>Flexy.php</file>
@@ -63,17 +65,24 @@
             </dir>
         </dir>
     </filelist>
-  </release>
+  
    <changelog>
-   <release>
+     <release>
        <version>0.1</version>
-      <date>2002-08-23</date>
+      <date>2002-09-07</date>
       <notes>First PEAR release,
-      Renamed to HTML_Flexy_Template to conform to PEAR standards
-      Added more phpdoc comments to filters
+      - Renamed to HTML_Flexy_Template to conform to PEAR standards
+      - Added more phpdoc comments to filters
+      - Removed getTemplateDir method (legacy/unused)
+      - Added multilanguage support options['locale'] - in theory a i18n filter could be added.
+        Othewise it just checks to see if a template/compiled template with ????.{locale}.???
+        exists
+      - added staticQuickTemplate($template,$object) for quickly including subtemplates.
+      - added {q_include:#aaaaa.html#} to simpletags to support quicktemplate.
+      - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
       </notes>
       <state>beta</state>
-      </release>
+     </release>
     
   </changelog>
 </package>
