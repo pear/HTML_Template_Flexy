@@ -68,8 +68,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 5
                         )
 
@@ -108,8 +106,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 3
                 )
 
@@ -162,8 +158,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 14
                         )
 
@@ -283,8 +277,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 7
                 )
 
@@ -335,8 +327,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 25
                         )
 
@@ -492,8 +482,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 16
                 )
 
@@ -793,8 +781,6 @@ Bug #84
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 53
                         )
 
@@ -847,8 +833,6 @@ Bug #84
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 51
                                         )
 
@@ -901,8 +885,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 49
                                                         )
 
@@ -979,8 +961,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 45
                                                 )
 
@@ -1020,8 +1000,6 @@ Bug #84
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 43
                                 )
 
@@ -1059,8 +1037,6 @@ Bug #84
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 41
                 )
 
@@ -1113,8 +1089,6 @@ Bug #84
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 61
                         )
 
@@ -1225,8 +1199,6 @@ Bug #84
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 55
                 )
 
@@ -1277,8 +1249,6 @@ Bug #84
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 77
                         )
 
@@ -1331,8 +1301,6 @@ Bug #84
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 75
                                         )
 
@@ -1385,8 +1353,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 69
                                                         )
 
@@ -1422,8 +1388,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 67
                                                 )
 
@@ -1474,8 +1438,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 73
                                                         )
 
@@ -1511,8 +1473,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 71
                                                 )
 
@@ -1552,8 +1512,6 @@ Bug #84
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 65
                                 )
 
@@ -1595,8 +1553,6 @@ Bug #84
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 63
                 )
 
@@ -1648,8 +1604,6 @@ Bug #84
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 85
                         )
 
@@ -1760,8 +1714,6 @@ Bug #84
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 79
                 )
 
@@ -1812,8 +1764,6 @@ Bug #84
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 105
                         )
 
@@ -1866,8 +1816,6 @@ Bug #84
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 103
                                         )
 
@@ -1920,8 +1868,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 93
                                                         )
 
@@ -1960,8 +1906,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 91
                                                 )
 
@@ -2012,8 +1956,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 97
                                                         )
 
@@ -2051,8 +1993,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 95
                                                 )
 
@@ -2103,8 +2043,6 @@ Bug #84
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 101
                                                         )
 
@@ -2142,8 +2080,6 @@ Bug #84
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 99
                                                 )
 
@@ -2223,8 +2159,6 @@ Bug #84
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 89
                                 )
 
@@ -2266,8 +2200,6 @@ Bug #84
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 87
                 )
 

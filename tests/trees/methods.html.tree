@@ -67,8 +67,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 5
                         )
 
@@ -107,8 +105,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 3
                 )
 
@@ -159,8 +155,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 10
                         )
 
@@ -221,8 +215,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 7
                 )
 
@@ -273,8 +265,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 15
                         )
 
@@ -335,8 +325,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 12
                 )
 
@@ -438,8 +426,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 17
                 )
 
@@ -541,8 +527,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 19
                 )
 
@@ -644,8 +628,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 21
                 )
 
@@ -748,8 +730,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 23
                 )
 
@@ -851,8 +831,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 25
                 )
 
@@ -906,8 +884,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 28
                         )
 
@@ -984,8 +960,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 27
                 )
 
@@ -1039,8 +1013,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 32
                         )
 
@@ -1079,8 +1051,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 30
                 )
 
@@ -1673,8 +1643,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 60
                         )
 
@@ -1713,8 +1681,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 58
                 )
 

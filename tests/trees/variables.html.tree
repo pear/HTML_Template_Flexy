@@ -137,8 +137,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 70
                         )
 
@@ -186,8 +184,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 10
                                 )
 
@@ -238,8 +234,6 @@ html_template_flexy_token Object
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 14
                                         )
 
@@ -278,8 +272,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 12
                                 )
 
@@ -331,8 +323,6 @@ html_template_flexy_token Object
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 68
                                         )
 
@@ -385,8 +375,6 @@ html_template_flexy_token Object
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 20
                                                         )
 
@@ -425,8 +413,6 @@ html_template_flexy_token Object
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 18
                                                 )
 
@@ -478,8 +464,6 @@ html_template_flexy_token Object
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 24
                                                         )
 
@@ -518,8 +502,6 @@ html_template_flexy_token Object
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 22
                                                 )
 
@@ -571,8 +553,6 @@ html_template_flexy_token Object
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 66
                                                         )
 
@@ -1380,8 +1360,6 @@ an Object: %s
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 56
                                                                 )
 
@@ -1469,8 +1447,6 @@ an Object: %s
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 58
                                                                 )
 
@@ -1558,8 +1534,6 @@ an Object: %s
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 60
                                                                 )
 
@@ -1648,8 +1622,6 @@ an Object: %s
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 62
                                                                 )
 
@@ -1737,8 +1709,6 @@ an Object: %s
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 64
                                                                 )
 
@@ -1776,8 +1746,6 @@ an Object: %s
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 26
                                                 )
 
@@ -1815,8 +1783,6 @@ an Object: %s
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 16
                                 )
 
@@ -1854,8 +1820,6 @@ an Object: %s
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 8
                 )
 

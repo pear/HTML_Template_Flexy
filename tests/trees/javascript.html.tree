@@ -132,8 +132,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 8
                 )
 
@@ -184,8 +182,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 21
                         )
 
@@ -238,8 +234,6 @@ html_template_flexy_token Object
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 14
                                         )
 
@@ -278,8 +272,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 12
                                 )
 
@@ -329,8 +321,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 16
                                 )
 
@@ -381,8 +371,6 @@ html_template_flexy_token Object
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 19
                                         )
 
@@ -445,8 +433,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 18
                                 )
 
@@ -487,8 +473,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 10
                 )
 
@@ -540,8 +524,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 27
                         )
 
@@ -647,8 +629,6 @@ function CheckDuplicates2 (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 23
                 )
 
@@ -747,8 +727,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 32
                         )
 
@@ -773,8 +751,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 31
                 )
 
@@ -825,8 +801,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 35
                         )
 
@@ -851,8 +825,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 34
                 )
 
@@ -903,8 +875,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 38
                         )
 
@@ -929,8 +899,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 37
                 )
 
@@ -981,8 +949,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 42
                         )
 
@@ -1035,8 +1001,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 40
                 )
 
@@ -1087,8 +1051,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 46
                         )
 
@@ -1130,8 +1092,6 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 44
                 )
 

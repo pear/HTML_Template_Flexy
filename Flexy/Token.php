@@ -243,16 +243,15 @@ class HTML_Template_Flexy_Token {
             // - I think the body of the page should be wrapped: ..
             //  ?php if (!$this->bodyOnly) { .. <HTML> .... <BODY....>  ?php } ?
             // 
-            
+            // old values alias to new ones..
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTART'])) {
-                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
                 unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTART']);
+                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:START'] = true;
             }
             
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTARTCHILDREN'])) {
-                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
-                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
                 unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXYSTARTCHILDREN']);
+                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:STARTCHILDREN'] = true;
             }
             
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:START'])) {
@@ -262,8 +261,6 @@ class HTML_Template_Flexy_Token {
             
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:STARTCHILDREN'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
-                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
-                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->ucAttributes['FLEXY:STARTCHILDREN']);
             }
             
             
@@ -291,8 +288,8 @@ class HTML_Template_Flexy_Token {
                 if (!$res[$i]->isWord()) {
                     continue;
                 }
-                $res[$i]->backSearch();
-                $i = $res[$i]->forwardSearch($total);
+                $res[$i]->backSearch($res);
+                $i = $res[$i]->forwardSearch($res);
             }
         }
          

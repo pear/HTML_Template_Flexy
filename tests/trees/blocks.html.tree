@@ -48,8 +48,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 4
                         )
 
@@ -92,8 +90,6 @@ This is block 1
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 2
                 )
 
@@ -145,8 +141,6 @@ This is block 1
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 8
                         )
 
@@ -189,8 +183,6 @@ This is block 2
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 6
                 )
 

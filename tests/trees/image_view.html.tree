@@ -67,8 +67,6 @@ html_template_flexy_token Object
 
                             [postfix] => 
                             [prefix] => 
-                            [foreach] => 
-                            [startChildren] => 
                             [id] => 44
                         )
 
@@ -122,8 +120,6 @@ html_template_flexy_token Object
 
                                             [postfix] => 
                                             [prefix] => 
-                                            [foreach] => 
-                                            [startChildren] => 
                                             [id] => 42
                                         )
 
@@ -176,8 +172,6 @@ html_template_flexy_token Object
 
                                                             [postfix] => 
                                                             [prefix] => 
-                                                            [foreach] => 
-                                                            [startChildren] => 
                                                             [id] => 40
                                                         )
 
@@ -230,8 +224,6 @@ html_template_flexy_token Object
 
                                                                             [postfix] => 
                                                                             [prefix] => 
-                                                                            [foreach] => 
-                                                                            [startChildren] => 
                                                                             [id] => 38
                                                                         )
 
@@ -265,8 +257,6 @@ html_template_flexy_token Object
 
                                                                                             [postfix] => 
                                                                                             [prefix] => 
-                                                                                            [foreach] => 
-                                                                                            [startChildren] => 
                                                                                             [id] => 27
                                                                                         )
 
@@ -417,8 +407,6 @@ html_template_flexy_token Object
 
                                                                                                     [postfix] => 
                                                                                                     [prefix] => 
-                                                                                                    [foreach] => 
-                                                                                                    [startChildren] => 
                                                                                                     [id] => 26
                                                                                                 )
 
@@ -477,8 +465,6 @@ html_template_flexy_token Object
 
                                                                                     [postfix] => 
                                                                                     [prefix] => 
-                                                                                    [foreach] => 
-                                                                                    [startChildren] => 
                                                                                     [id] => 25
                                                                                 )
 
@@ -505,8 +491,6 @@ html_template_flexy_token Object
 
                                                                                     [postfix] => 
                                                                                     [prefix] => 
-                                                                                    [foreach] => 
-                                                                                    [startChildren] => 
                                                                                     [id] => 28
                                                                                 )
 
@@ -557,8 +541,6 @@ html_template_flexy_token Object
 
                                                                                             [postfix] => 
                                                                                             [prefix] => 
-                                                                                            [foreach] => 
-                                                                                            [startChildren] => 
                                                                                             [id] => 36
                                                                                         )
 
@@ -699,8 +681,6 @@ html_template_flexy_token Object
 
                                                                                     [postfix] => 
                                                                                     [prefix] => 
-                                                                                    [foreach] => 
-                                                                                    [startChildren] => 
                                                                                     [id] => 30
                                                                                 )
 
@@ -786,8 +766,6 @@ html_template_flexy_token Object
 
                                                                     [postfix] => 
                                                                     [prefix] => 
-                                                                    [foreach] => 
-                                                                    [startChildren] => 
                                                                     [id] => 24
                                                                 )
 
@@ -827,8 +805,6 @@ html_template_flexy_token Object
 
                                                     [postfix] => 
                                                     [prefix] => 
-                                                    [foreach] => 
-                                                    [startChildren] => 
                                                     [id] => 22
                                                 )
 
@@ -866,8 +842,6 @@ html_template_flexy_token Object
 
                                     [postfix] => 
                                     [prefix] => 
-                                    [foreach] => 
-                                    [startChildren] => 
                                     [id] => 20
                                 )
 
@@ -915,8 +889,6 @@ html_template_flexy_token Object
 
                     [postfix] => 
                     [prefix] => 
-                    [foreach] => 
-                    [startChildren] => 
                     [id] => 18
                 )
 

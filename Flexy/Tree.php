@@ -94,7 +94,7 @@ class HTML_Template_Flexy_Tree {
     * @static
     */
   
-    function construct($data,$options) 
+    function construct($data,$options=array()) 
     {
     
         // local caching!
@@ -105,6 +105,7 @@ class HTML_Template_Flexy_Tree {
         
         $t = new HTML_Template_Flexy_Tree;
         $t->options = $t->options + $options;
+        require_once 'HTML/Template/Flexy/Token.php';
         $t->tokens = array(new HTML_Template_Flexy_Token);
         $t->tokens[0]->id =0;
         
@@ -136,7 +137,7 @@ class HTML_Template_Flexy_Tree {
   
     
     function tokenize($data) {
-        
+        require_once 'HTML/Template/Flexy/Tokenizer.php';
         $tokenizer =  &HTML_Template_Flexy_Tokenizer::construct($data,$this->options);
         
         // initialize state - this trys to make sure that
@@ -216,8 +217,8 @@ class HTML_Template_Flexy_Tree {
             if (!$res[$i]->isWord()) {
                 continue;
             }
-            $res[$i]->backSearch();
-            $i = $res[$i]->forwardSearch($total);
+            $res[$i]->backSearch($this->tokens);
+            $i = $res[$i]->forwardSearch($this->tokens);
         }
          
         

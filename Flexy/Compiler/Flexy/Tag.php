@@ -123,7 +123,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         // normally set in BODY tag.
         // this will probably be superseeded by the Class compiler.
          
-        if ($element->startChildren) {
+        if (isset($element->ucAttributes['FLEXY:STARTCHILDREN'])) {
             
             return $element->compileChildren($this->compiler);
         }

@@ -84,7 +84,7 @@ class HTML_Template_Flexy
         
         
         // compiling conditions ------------------------------------------
-        'compiler'      => 'Standard',  // which compiler to use. (Standard,Regex, Raw)
+        'compiler'      => 'Flexy',  // which compiler to use. (Flexy,Regex, Raw,Xipe)
         'forceCompile'  =>  false,      // only suggested for debugging
 
         // regex Compiler       ------------------------------------------
@@ -112,7 +112,7 @@ class HTML_Template_Flexy
                                         // exec() becomes exposed.
          
         // get text/transalation suppport ------------------------------------------
-        //  (standard compiler only)
+        //  (flexy compiler only)
         'locale'        => 'en',        // works with gettext or File_Gettext
         'textdomain'    => '',          // for gettext emulation with File_Gettext
                                         // eg. 'messages' (or you can use the template name.
