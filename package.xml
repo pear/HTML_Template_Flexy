@@ -71,9 +71,9 @@
       Feature addition release
       
       support for function blocks
-      &lt;flexy:function name=&quot;myfunction&quot;&gt; define a  block here  &lt;/flexy:function&gt;
-      &lt;flexy:function call=&quot;myfunction&quot;&gt; calls the function &lt;/flexy:function&gt;
-      &lt;flexy:function call=&quot;{somevar}&quot;&gt; variable function calls &lt;/flexy:function&gt;
+      <flexy:function name="myfunction"> define a  block here  </flexy:function>
+      <flexy:function call="myfunction"> calls the function </flexy:functio>
+      <flexy:function call="{somevar}"> variable function calls </flexy:function>
       
       support for static template compiles
       options[compiler] = raw
