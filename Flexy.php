@@ -184,15 +184,10 @@ class HTML_Template_Flexy
     
     function outputObject(&$t,$elements=array()) 
     {
-        $options = PEAR::getStaticProperty('HTML_Template_Flexy','options');
-        if (@$options['debug']) {
+       
+        if (@$this->options['debug']) {
             echo "output $this->compiledTemplate<BR>";
-            
         }
-        
-        $this->emailBoundary = md5("FlexyMail".microtime());
-        $this->emailDate = date("D j M Y G:i:s O");
-        
   
         // this may disappear later it's a BC fudge to try and deal with 
         // the old way of setting $this->elements to be merged.
@@ -219,14 +214,14 @@ class HTML_Template_Flexy
         
       
         
-         // we use PHP's error handler to hide errors in the template.
+        // we use PHP's error handler to hide errors in the template.
         // this may be removed later, or replace with
         // options['strict'] - so you have to declare
         // all variables
         
         
         $_error_reporting = false;
-        if (!$options['debug']) {
+        if (!$this->options['debug']) {
             $_error_reporting = error_reporting(E_ALL ^ E_NOTICE);
         }
         if (!is_readable($this->compiledTemplate)) {
@@ -235,9 +230,10 @@ class HTML_Template_Flexy
                             null, PEAR_ERROR_DIE);
         }
         
-        
-        
         include($this->compiledTemplate);
+        
+        // restore error handler.
+        
         if ($_error_reporting !== false) {
             error_reporting($_error_reporting);
         }
