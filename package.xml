@@ -72,7 +72,7 @@
         * fixed overzealous closing on some tags 
         * fixed double html escaping of some dynamic attributes
         * ignore empty url_rewrite options (eg. images/:/templates/images,,)
-        * fixed recursion death, on <s> tags
+        * fixed recursion death, on &lt;s&gt; tags
         * fixed flexy {variables} inside attributes='that are single quoted'
         * unknown namespaces are assumed to be HTML (so XUL with html works ok)
         
@@ -192,6 +192,7 @@
       <dep type="php" rel="ge" version="4.3"/>
       <dep type="pkg" rel="ge" version="1.1.0" optional="yes">HTML_Javascript</dep>
       <dep type="pkg" rel="ge" version="0.2.0" optional="yes">File_Gettext</dep>
+      <dep type="pkg" rel="ge" version="0.0.1" optional="yes">Translation2</dep>
     </deps>
 
    <changelog>
