@@ -596,6 +596,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
   
     function translateString($string)
     {
+        
+        $prefix = basename($GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']).':';
         if (@$this->options['debug']) {
             echo __CLASS__.":TRANSLATING $string<BR>";
         }
@@ -603,7 +605,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             if (@$this->options['debug']) {
                 echo __CLASS__.":USING GETTEXT?<BR>";
             }
-            return  gettext($string);
+            $t = gettext($string);
+            if ($t != $string) {
+                return $t;
+            }
+            $tt = gettext($prefix.$string);
+            if ($tt != $prefix.$string) {
+                return $tt;
+            }
+            // give up it's not translated anywhere...
+            return $t;
+             
         }
         if (!$this->options['textdomain'] || !$this->options['textdomainDir']) {
             // text domain is not set..
@@ -650,6 +662,11 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         // we should have it loaded now...
         // this is odd - data is a bit messed up with CR's
         $string = str_replace('\n',"\n",$string);
+        
+        if (isset($po->strings[$prefix.$string])) {
+            return $po->strings[$prefix.$string];
+        }
+        
         if (!isset($po->strings[$string])) {
             if (@$this->options['debug']) {
                     echo __CLASS__.":no match:<BR>";
@@ -659,6 +676,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         if (@$this->options['debug']) {
             echo __CLASS__.":MATCHED: {$po->strings[$string]}<BR>";
         }
+        
         // finally we have a match!!!
         return $po->strings[$string];
         
@@ -689,7 +707,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Standard_Tag::factory($namespace,$this);
             if (!$this->tagHandlers[$namespace] ) {
                 PEAR::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
-                ' in file ' . $flexy->compiledTemplate,null,PEAR_ERROR_DIE);
+                ' in file ' . $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'],null,PEAR_ERROR_DIE);
             }
                 
         }
