@@ -21,5 +21,5 @@
         </tree>
         <?php echo $this->elements['test']->toHtmlnoClose();?>
             <?php echo $this->elements['test2']->toHtml();?>
-        </form>
+        </html:form>
 </window>
