@@ -132,13 +132,22 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             unset($this->attributes['FLEXYIGNORE']);
         }
         
+        // rewriting should be done with a tag.../flag.
+        
         $this->reWriteURL("HREF");
         $this->reWriteURL("SRC");
         
+        
         $method = 'parseTag'.ucfirst(strtolower($this->tag));
         
+        
         if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
-            $this->$method();
+            $ret = $this->$method();
+            // allow the parse methods to return output.
+            
+            if ($ret !== false) {
+                return $ret;
+            }
         }
         
         $ret = '';
@@ -241,143 +250,86 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     }
     
     /**
-    * Reads an Input tag and converts it to show variables based on the current form name
+    * Reads an Input tag - build a quickform object for it
     *
-    * Eg. filling in the value with  $this->{fieldname}, adding in 
-    * echo $this->errors['fieldname'] at the end.
-    * TODO : formating using DIV tags, and support for 'required tag'
     *
-    * @return   none
+    * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
   
     function parseTagInput() 
     {
-        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        global $_HTML_TEMPLATE_FLEXY;
         // form elements : format:
         //value - fill out as PHP CODE
         
         $name =    $this->getAttribute('NAME');
         if ($name == '') {
-            return;
+            return false;
         }
-        if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
-            $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
-        }
+         
         
         $type = strtoupper($this->getAttribute('TYPE'));
-        // still depating the wisdome of this replacement
-        
-        // at least do some error checking here..
-        
-        
-        //FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
-        //FLEXY_ARRAY         = ("["{DIGIT}+"]")
-        //FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?)*)
-       
-        // this has quite a few limitations...it also accepts colname[aaaabbb] 
-        
-        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?)*$/i',$name)) {
-            $this->postfix = array( $this->factory("Text","<B><font color=red>Invalid name used for flexy tag :$name: </font></b>",$this->line));
-            return;
-        }
-        
-        // this will be replaced with a configurable error object - eg FLEXYERROROBJECT="abcd"
-        
-        $errorname = $this->toVar("flexyError." . $this->getAttribute('NAME'));
-        
-        
-        $posterror = array(
-            $this->factory("PHP", "<?php if (isset({$errorname})) { ".
-                "echo  htmlspecialchars({$errorname}); } ?>",$this->line));
-        
-        
+            
         $e = false;
         
         
-        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
+        if ($_HTML_TEMPLATE_FLEXY['quickform']) {
             $t =strtolower($type);
             if (!$t) {
                 $t = 'text';
             }
-            $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
+            $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElement(
                 $t, 
-                $this->getAttribute('NAME'),
+                $name,
                 ''  , // the text.
                 $this->getAttributes()  // wrapper needed...
             );
+        } else {
+            return false;
         }
-         
-        
-        
         
         switch ($type) {
             case "CHECKBOX":
                 // technically this should be a bit more complex
                 // it needs to compare the 'value' field of the checkbox 
                 // against the current value.
-                $this->attributes['CHECKED'] = 
-                    $this->factory("PHP",
-                    "<?php if (". $this->toVar($name).") { ?>CHECKED<?php } ?>",
-                    $this->line);
-                $this->postfix = $posterror;
-                
-                if ($e) {
-                    $e->setChecked($this->getAttribute('CHECKED'));
-                }
-                
+                $e->setChecked($this->getAttribute('CHECKED'));
                 break;
             
             case "RESET":               
             case "SUBMIT":
             case "BUTTON":            
-                return;
+                break;
  
 
 
 
             case "HIDDEN":
-                $this->attributes['VALUE'] = array(
-                    "\"",
-                    $this->factory("Var",$name,$this->line),
-                    "\"");
-                if ($e) {
-                    $e->setValue($this->getAttribute('VALUE'));
-                }
-                return;
+             
+                $e->setValue($this->getAttribute('VALUE'));
+                // hidden elements are displayed after the form tag.
+                return '';
             
             default:
-                $this->attributes['VALUE'] = array(
-                    "\"",
-                    $this->factory("Var",$name,$this->line),
-                    "\"");
                 
-                $this->postfix = $posterror;
-                if ($e) {
-                    $e->setSize($this->getAttribute('SIZE'));
-                    $e->setMaxLength($this->getAttribute('MAXLENGTH'));
-                    $e->setValue($this->getAttribute('VALUE'));
-                }
-                
-                return;
+                $e->setSize($this->getAttribute('SIZE'));
+                $e->setMaxLength($this->getAttribute('MAXLENGTH'));
+                $e->setValue($this->getAttribute('VALUE'));
+                break;
             
         }
+        $this->_quickFormCalls();
         
-        
-        $this->postfix = $posterror;
-        // this should use <div name="form.error"> or something...
-            
+        return '<?php echo $this->quickform->elementToHtml("'.$name .'"); ?>';
+    
         
     }
     
     /**
-    * Deal with a TextArea tag - empty the contents (eg. flag ignoreChildren), and add code..
+    * Deal with a TextArea tag - build a quickform object for it
     *
-    * Eg. filling in the value with  $this->{fieldname}, adding in 
-    * echo $this->errors['fieldname'] at the end.
-    * TODO : formating using DIV tags, and support for 'required tag'
-    *
-    * @return   none
+    * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
   
@@ -388,28 +340,6 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         //value - fill out as PHP CODE
         
         $name =    $this->getAttribute('NAME');
-        if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
-            $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
-        }
-        
-        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\]|\[[A-Z0-9_]+\])?)*$/i',$name)) {
-            $this->postfix = array( $this->factory("Text","<B><font color=red>Invalid name used for flexy tag :$name: </font></b>",$this->line));
-            return;
-        }
-        
-        // this will be replaced with a configurable error object - eg FLEXYERROROBJECT="abcd"
-        
-        $errorname = $this->toVar("flexyError." . $this->getAttribute('NAME'));
-        
-   
-        
-        $posterror = array(
-            $this->factory("PHP", "<?php if (isset({$errorname})) { ".
-                "echo  htmlspecialchars({$errorname}); } ?>",$this->line));
-        
-        
-        $this->postfix = array( $this->factory("Var",$name ,$this->line) );
-        $this->close->postfix = $posterror;
         
         if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
              
@@ -423,41 +353,21 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $e->setWrap($this->getAttribute('WRAP'));
             $e->setRows($this->getAttribute('ROWS'));
             $e->setCols($this->getAttribute('ROWS'));
+        } else {
+            return false;
         }
         
-        
-        $this->children = array();
-        return;
+        return '<?php echo $this->quickform->elementToHtml("'.$name .'"); ?>';
  
             
         
         
     }
     /**
-    * Deal with Selects
+    * Deal with Selects - build a quickform object for it (unless flexyignore is set)
     *
-    * if you set static="true" in the select tag - it will get left alone
-    * (you can also turn it off by setting the flexy option ignoreTags TODO!
     *
-    * the value of the select is going to be $t->theform->the_name_of_the_tag
-    *
-    * the options is the pullldown will have to be
-    *        $t->theform->getOptions('the_name_of_the_tag')
-    *
-    * 
-    * I did look at HTML_Select - but since we output tags - this does most of the work anyway.
-    * - for a key=>value array.
-    * foreach($t->theform->getOptions('name') as $_k=>$_v) {
-    *    printf('<OPTION VALUE="%s"%s>%s</OPTION>',
-    *               htmlspecialchars($k), 
-    *               ($k == $this->theform->thename_of_the_tag) ? ' SELECTED' : '', 
-    *               htmlspecialchars($v)
-    *           )
-    *    
-    * }
-    * 
-    *
-    * @return   none
+    * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
   
@@ -465,23 +375,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     {
         
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
-          
-        $call_object = '$t';
-        
-        $basename =    $this->getAttribute('NAME');
-        $name = $basename;
-        if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
-            $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
-            $call_object =  $this->toVar($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']);
-        }
-        
-        $_HTML_TEMPLATE_FLEXY_TOKEN['activeSelect'] = $name;
-        
-        if ($this->getAttribute('STATIC')) {
-            unset($this->attributes['STATIC']);
-            return;
-        }
-         
+                  
+        $name =    $this->getAttribute('NAME');
          
         // this ones for quickforms...
         
@@ -490,74 +385,55 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
                 'select', 
                 $this->getAttribute('NAME'),
-                ''  , // the text.
-                $this->getAttributes() // wrapper needed...
+                '' // , // the text.
+                //$this->getAttributes() // wrapper needed...
             );
             $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect'] = &$e; 
             $e->setSize($this->getAttribute('SIZE'));
             $e->setMultiple($this->getAttribute('MULTIPLE'));
+        } else {
+            return false;
         }
+        // build the options.
+        $this->childrenToString();
+        
+        // hopefully this will clear the reference and not the original..
+        unset($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']);
+        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect'] = false;
+        
+        return '<?php echo $this->quickform->elementToHtml("'.$name .'"); ?>';
         
         
-        
-        $this->children =   array(
-                $this->factory("PHP", 
-                    "<?php if (method_exists({$call_object},'getOptions'))
-                    foreach(". $call_object ."->getOptions('{$basename}') as \$_k=>\$_v) {
-                        printf(\"<OPTION VALUE=\\\"%s\\\"%s>%s</OPTION>\",
-                                   htmlspecialchars(\$_k), 
-                                   (\$_k == " . $this->toVar($name) .") ? ' SELECTED' : '', 
-                                   htmlspecialchars(\$_v)
-                               ); } ?>",
-                    $this->line)
-            );
         
     }
      /**
-    * Deal with Options (on a static select list)
+    * Deal with Options - fills in the quickform with the data..
     *
-    * bascially add an attribute tag:
-    *   if ($this->theform->thename_of_the_Tag == 'name/or contents') echo " SELECTED";
     * 
     *
-    * @return   none
+    * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */  
     function parseTagOption() 
     {
         
-        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        global $_HTML_TEMPLATE_FLEXY_TOKEN_TAG;
           
          
-        $name =    $_HTML_TEMPLATE_FLEXY_TOKEN['activeSelect'];
- 
-        $php = '<? ';
         
-        if ($this->getAttribute('SELECTED')) {
-           // then it's the default..
-           // if no value is available for $this->the_form->the name of the tag...
-           // just leave it allown
-           $php .= "if (empty(".$this->toVar($name).")) echo ' SELECTED';";
-        }
-        $value =    $this->getAttribute('VALUE');
-        if (empty($value)) {
-          
-            $value = $this->childrenToString();
-            
+        $value = $this->getAttribute('VALUE');
+        $text = $this->childrenToString();
+        if (!$value) {
+            $value = $text;
         }
         
-        
-        $php .= "if (".$this->toVar($name)." == \"". addslashes($value) . "\") echo ' SELECTED';";
-        $php .= "?>";
-        
-        $this->attributes['SELECTED'] =  $this->factory("PHP", $php, $this->line);
-        
-        if ($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']) {
-            $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']->addOption(
-                $this->childrenToString(), $value);
+        if (!empty($_HTML_TEMPLATE_FLEXY_TOKEN_TAG['activeSelect'])) {
+            $_HTML_TEMPLATE_FLEXY_TOKEN_TAG['activeSelect']->addOption($text, $value);
             if ($this->getAttribute('SELECTED')) {
-                $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']->setSelected( $value);
+                $_HTML_TEMPLATE_FLEXY_TOKEN_TAG['activeSelect']->setSelected( $value);
             }
+        } else {
+            return false;
         }
     }
     
@@ -565,16 +441,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     
     
      /**
-    * Reads an Form tag and stores the current name (used as a prefix for input
-    * in the form.
-    *
-    
-    * Eg. 
-    * <form name="theform"><input name="an_input">
-    * gets converted to:
-    * <form name="theform"><input name="an_input" value="<? echo htmlspecialchars($t->theform->an-input); ?>">
-    *
-    * @return   none
+    * Reads an Form tag - and set up the quickform object header etc.
+    *    
+    * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
   
@@ -586,10 +455,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = $name;
         }
         // override with flexy object
-        if (isset($this->attributes['FLEXYOBJECT'])) {
-            $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] =  $this->getAttribute('FLEXYOBJECT');
-            unset($this->attributes['FLEXYOBJECT']);
+        if (isset($this->attributes['FLEXYIGNORE'])) {
+            return false;
         }
+        
+        
+        
         require_once 'HTML/Template/Flexy/QuickForm.php';
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = new HTML_Template_Flexy_QuickForm(
             $this->getAttribute('NAME'),
@@ -598,6 +469,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $this->getAttribute('TARGET') ,
             $this->getAttributes() // need to do some filtering on this..
         ); 
+        
+       
+        
+        return '<?php echo $this->quickform->formHeadToHtml(); ?>' .
+            $this->childrenToString() .
+            '</form>';
+        
     
     }
     
@@ -661,8 +539,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * TODO 
     * does not handle values with flexytags in them
     *
-    * @return   none
-    * @access   string
+    * @return   string ( 
+    * @access   public
     */
     function getAttribute($key) {
         // all attribute keys are stored Upper Case,
@@ -700,7 +578,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 return $v;
         }
     }
-    
+      
+    /**
+    * getAttributes = returns all the attributes key/value without quotes
+    *
+    *
+    * @return   array
+    * @access   string
+    */
     
     function getAttributes() {
         $ret = array();
@@ -709,7 +594,37 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         return $ret;
     }
+    /**
+    * check for any quickform tags - filter* and rule*
+    * arguments are seperated with a | (pipe)
+    * eg. ruleB="Test TextArea must be at least 5 characters|minlength|5"
+    * eg. filerA="trim"
+    * 
+    * if you add a filter to form  - it will assume that it affects elements
+    *
+    * @return   none
+    * @access   string
+    */
+       
+    function _quickFormCalls()   
+    {
         
+        global $_HTML_TEMPLATE_FLEXY;
+        $name = $this->getAttribute('NAME');
+        if ($this->tag == 'FORM') {
+            $name = '__ALL__';
+        }
+        foreach($this->attributes as $k=>$v) {
+            if (substr($k,0,4) == 'RULE') {
+                $args = explode('|',$this->getAttribute($k));
+                array_unshift($args,$name);
+                call_user_func_array(array(&$_HTML_TEMPLATE_FLEXY['quickform'],'addRule'), $args);
+            }
+            if (substr($k,0,4) == 'FILTER') {
+                $_HTML_TEMPLATE_FLEXY['quickform']->addFilter($name,$this->getAttribute($k));
+            }
+        }
+    }
 }
 
  

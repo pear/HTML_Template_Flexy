@@ -205,10 +205,19 @@ class HTML_Template_Flexy
             $email_boundary = $this->emailBoundary;
             $email_date = $this->emailDate;
         }
-        // we use PHP's error handler to hide errors in the template.
+        // this may disappear later it's a BC fudge to try and deal with 
+        // the old way of auto matching form elements to object Vars
+        
+        if (!$this->quickForm && file_exists($this->quickformFile)) {
+            $this->setQuickForm($t);
+            $this->setQuickForm($t->data);
+        }
+        
+         // we use PHP's error handler to hide errors in the template.
         // this may be removed later, or replace with
         // options['strict'] - so you have to declare
         // all variables
+        
         
         $_error_reporting = false;
         if (!$options['debug']) {
@@ -349,12 +358,25 @@ class HTML_Template_Flexy
             fclose($cfp);
             @chmod($this->compiledTemplate,0775);
         }
-        if( ($cfp = fopen( $this->gettextStringsFile, 'w' )) ) {
+        
+        // gettext strings
+        @unlink($this->gettextStringsFile);
+        
+        if($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'] &&
+            ($cfp = fopen( $this->gettextStringsFile, 'w') ) ) {
+            
             fwrite($cfp,serialize(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'])));
             fclose($cfp);
         }
         
-        
+        // quickformfile
+        @unlink($this->quickformFile);
+        if($this->quickform &&
+            ($cfp = fopen( $this->quickformFile, 'w') ) ) {
+            
+            fwrite($cfp,serialize($this->quickform));
+            fclose($cfp);
+        }
         
         return true;
     }
@@ -450,6 +472,7 @@ class HTML_Template_Flexy
         
         $this->compiledTemplate    = $compileDest.DIRECTORY_SEPARATOR .$filename.'.'.$this->options['locale'].'.php';
         $this->getTextStringsFile  = $compileDest.DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
+        $this->quickformFile       = $compileDest.DIRECTORY_SEPARATOR .$filename.'.quickform.serial';
   
         $recompile = false;
         if( @$this->options['forceCompile'] ) {
@@ -593,7 +616,42 @@ class HTML_Template_Flexy
 
         return $input;
     }
-
+    /**
+    *   set the quickform object. (and load it..)
+    *
+    *   @access     public
+    *   @author     Alan Knowles <alan@akbkhome.com>
+    *   @param      optional object|array $data       default data for the form.
+    *   @return     none
+    */
+    
+    function setQuickForm($data = false) 
+    {
+        if (!$this->quickformFile) {
+            return $this->raiseError("You must compile()/setup the template before setting the quickform data",null,PEAR_ERROR_DIE);
+        }
+        // dont care if thers no quickform file
+        if (!file_exists($this->quickformFile)) {
+            return false;
+        }
+        if (!$this->quickform) {
+            $this->quickform = HTML_Template_Flexy_QuickFrom::loadFromSerialFile($this->quickFormFile);
+        }
+        
+        if ($data === false) {
+            return;
+        }
+        
+        if (is_array($data)) {
+            $this->quickform->setDefaults($data);
+        }
+        
+        if (is_object($data)) {
+            $this->quickform->setDefaults((array)$data);
+        }
+     
+    
+    }
      /**
     *   if debugging is on, print the debug info to the screen
     *

@@ -78,18 +78,28 @@
 
 
 <form name="test">
-    Input<input name=test123>
+    Input<input name=test123 
+    	ruleA="Test Text is a required field|required" 
+	ruleB="Test TextArea must be at least 5 characters|minlength|5">
     Checkbox <input name=test123a type='checkbox' checked>
     Hidden <input name=test123a type='hidden' value='123'>
     <textarea name="fred">some text</textarea>
-    <select name="aaa">
-        <option>bb</option>
+    <select name="aaa1">
+        <option>aa</option>
+	<option selected>bb</option>
+        <option>cc</option>
     </select>
-    <select name="aaa" flexyignore>
-        <option>bb</option>
+    <select name="aaa2" flexyignore>
+        <option>aa</option>
+	<option selected>bb</option>
+        <option>cc</option>
+
     </select>
-    <select name="aaa" static>
-        <option>bb</option>
+    <select name="aaa3" static>
+        <option>aa</option>
+	<option selected>bb</option>
+        <option>cc</option>
+
     </select>
 </form>
 
