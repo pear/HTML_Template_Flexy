@@ -13,6 +13,15 @@
 
 		@import url(<?php echo htmlspecialchars($t->ROOT_CSS);?>/main.css);
 
+.tdbodywarningCopy {
+	background-color: #eecccc;
+	FONT-FAMILY: arial, geneva, helvetica, sans-serif;
+	font-size : 10px;
+	COLOR: #000000;
+	padding: 0px;
+	border: 0px dashed #000000;
+}
+
 		-->
         
 </style>
