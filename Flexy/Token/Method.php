@@ -46,7 +46,14 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
     * @access public
     */
     var $isConditional;
-     /**
+    /**
+    * if the statement is negative = eg. !somevar..
+    * @var string
+    * @access public
+    */
+    var $isNegative = '';
+ 
+    /**
     * arguments, either variables or literals eg. #xxxxx yyyy#
     * 
     * @var array
@@ -63,7 +70,12 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         $method = $value[0];
         if (substr($value[0],0,3) == 'if:') {
             $this->isConditional = true;
-            $method = substr($value[0],3);
+            if ($value[0]{3} == '!') {
+                $this->isNegative = '!';
+                $method = substr($value[0],4);
+            } else {
+                $method = substr($value[0],3);
+            }
         }
         
         if (strpos($method,":")) {
@@ -103,7 +115,7 @@ class HTML_Template_Flexy_Token_Method extends HTML_Template_Flexy_Token {
         
         
         if ($this->isConditional) {
-            $prefix = 'if (';
+            $prefix = 'if ('.$this->isNegative;
             $this->pushState();
             $suffix = ')';
         }  

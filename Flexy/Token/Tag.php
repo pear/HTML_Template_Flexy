@@ -158,10 +158,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                      null, PEAR_ERROR_DIE);
             }
             
+            // allow if="!somevar"
+            $ifnegative = '';
+            if ($if{0} == '!') {
+                $ifnegative = '!';    
+                $if = substr($if,1);
+            }
             // if="xxxxx"
             // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
-            
-             
             if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\])?)*(\(\))?$/i',$if)) {
                 PEAR::raiseError(
                     "IF tags only accept simple object.variable or object.method() values on Line {$this->line} &lt;{$this->tag}&gt;",
@@ -170,10 +174,10 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             
             if (substr($if,-1) == ')') {
                 $ifObj =  $this->factory('Method',
-                        array('if:'.substr($if,0,-2), array()),
+                        array('if:'.$ifnegative.substr($if,0,-2), array()),
                         $this->line);
             } else {
-                $ifObj =  $this->factory('If', $if, $this->line);
+                $ifObj =  $this->factory('If', $ifnegative.$if, $this->line);
             }
             
             $ret = $ifObj->toString();

@@ -32,12 +32,25 @@ class HTML_Template_Flexy_Token_If extends HTML_Template_Flexy_Token{
     */
     
     var $condition;
+     /**
+    * if the statement is negative = eg. !somevar..
+    * @var string
+    * @access public
+    */
+    
+    
+    var $isNegative = '';
+    
     /**
     * Setvalue - a string
     * @see parent::setValue()
     */
     function setValue($value) {
         //var_dump($value);
+        if (strlen($value) && $value{0} == '!') {
+            $this->isNegative = '!';
+            $value = substr($value,1);
+        }
         $this->condition=$value;
     }
     /**
@@ -45,7 +58,7 @@ class HTML_Template_Flexy_Token_If extends HTML_Template_Flexy_Token{
     * @see parent::toString(), $this->toVar()
     */
     function toString() {
-        $ret = "<?php if (".$this->toVar($this->condition) .")  { ?>";
+        $ret = "<?php if (".$this->isNegative.$this->toVar($this->condition) .")  { ?>";
         $this->pushState();
         return $ret;
         
