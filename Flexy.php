@@ -381,7 +381,7 @@ class HTML_Template_Flexy
         
         if (is_array($this->options['templateDir'])) {
             
-            foreach ($this->options['templateDir'] as $tmplDir) {
+            foreach (array_unique($this->options['templateDir']) as $tmplDir) {
                 if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
                     continue;
                 }
