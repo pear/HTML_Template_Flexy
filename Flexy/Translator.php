@@ -95,7 +95,7 @@ class HTML_Template_Flexy_Translator {
     * @access   public
     */
   
-    function HTML_Template_Flexy_Translator($options) {
+    function HTML_Template_Flexy_Translator($options= array()) {
         foreach($options as $k=>$v) {
             $this->options[$k]  = $v;
         }
