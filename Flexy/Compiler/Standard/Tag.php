@@ -26,6 +26,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     var $compiler;
 
     /**
+    *  IS THIS USED!!!!????
     * Factory method to create Tag Handlers
     *
     * Long Description

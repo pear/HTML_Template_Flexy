@@ -380,60 +380,11 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     {
 
         
-        // set up the modifier at present!!
-        list($prefix,$suffix) = $this->getModifierWrapper($element);
         
-        // add the '!' to if
-        
-        if ($element->isConditional) {
-            $prefix = 'if ('.$element->isNegative;
-            $element->pushState();
-            $suffix = ')';
-        }  
-        
-        
-        // check that method exists..
-        // if (method_exists($object,'method');
-        $bits = explode('.',$element->method);
-        $method = array_pop($bits);
-        
-        $object = implode('.',$bits);
-        
-        $prefix = 'if (isset('.$element->toVar($object).
-            ') && method_exists('.$element->toVar($object) .",'{$method}')) " . $prefix;
-        
-        
-        
-        $ret  =  $prefix;
-        $ret .=  $element->toVar($element->method) . "(";
-        $s =0;
-         
-        foreach($element->args as $a) {
-             
-            if ($s) {
-                $ret .= ",";
-            }
-            $s =1;
-            if ($a{0} == '#') {
-                $ret .= '"'. addslashes(substr($a,1,-1)) . '"';
-                continue;
-            }
-            $ret .= $element->toVar($a);
-            
-        }
-        $ret .= ")" . $suffix;
-        
-        if ($element->isConditional) {
-            $ret .= ' { ';
-        } else {
-            $ret .= ";";
-        }
-        
-        
-        
-        return $this->appendPhp($ret);
-            
-    }
+        require_once 'HTML/Template/Flexy/Compiler/Standard/Functions.php';
+        return HTML_Template_Flexy_Compiler_Standard_Functions::handle($this,$element);
+
+   }
    /**
     *   HTML_Template_Flexy_Token_Processing toString 
     *

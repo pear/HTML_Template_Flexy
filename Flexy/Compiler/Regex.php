@@ -25,7 +25,7 @@ class HTML_Template_Flexy_Compiler_Regex {
     {
         $this->flexy = &$flexy;
         // read the entire file into one variable
-        $fileContent file_get_contents($flexy->currentTemplate);
+        $fileContent = file_get_contents($flexy->currentTemplate);
          
         //  apply pre filter
         $fileContent = $this->applyFilters( $fileContent , "/^pre_/i" );
@@ -54,7 +54,7 @@ class HTML_Template_Flexy_Compiler_Regex {
     {
         $this->flexy->debug("APPLY FILTER $prefix<BR>");
         $filters = $this->options['filters'];
-        $this->debug(serialize($filters)."<BR>");
+        $this->flexy->debug(serialize($filters)."<BR>");
         foreach($filters as $filtername) {
             $class = "HTML_Template_Flexy_Compiler_Regex_{$filtername}";
             require_once("HTML/Template/Flexy/Compiler/Regex/{$filtername}.php");
@@ -78,7 +78,7 @@ class HTML_Template_Flexy_Compiler_Regex {
                 if ($method  == $class) {
                     continue; // constructor
                 }
-                $this->debug("TEST: $negate $prefix : $method");
+                $this->flexy->debug("TEST: $negate $prefix : $method");
                 if ($negate &&  preg_match($prefix,$method)) {
                     continue;
                 }
