@@ -72,11 +72,12 @@ class HTML_Template_Flexy_Test {
     }
     
     var $files; // array of files to compile
+    var $quickform;
     
     function parse() {
         foreach($this->files as $file) {
         
-            
+            $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = &$this->quickform;
             //$this->debug(1, "Tokenizing ". $file);
             $data = file_get_contents($file);
             //echo strlen($data);
@@ -90,6 +91,7 @@ class HTML_Template_Flexy_Test {
             new Gtk_VarDump($res);
             echo $res->toString();
             print_r(array_unique($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings']));
+            print_r($this->quickform);
         }
         
         

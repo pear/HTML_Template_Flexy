@@ -289,6 +289,25 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 "echo  htmlspecialchars({$errorname}); } ?>",$this->line));
         
         
+        $e = false;
+        
+        
+        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
+            $t =strtolower($type);
+            if (!$t) {
+                $t = 'text';
+            }
+            $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
+                $t, 
+                $this->getAttribute('NAME'),
+                '' //, // the text.
+                //$this->attributes // wrapper needed...
+            );
+        }
+         
+        
+        
+        
         switch ($type) {
             case "CHECKBOX":
                 // technically this should be a bit more complex
@@ -299,6 +318,11 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     "<?php if (". $this->toVar($name).") { ?>CHECKED<?php } ?>",
                     $this->line);
                 $this->postfix = $posterror;
+                
+                if ($e) {
+                    $e->setChecked($this->getAttribute('CHECKED'));
+                }
+                
                 break;
             
             case "RESET":               
@@ -314,6 +338,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     "\"",
                     $this->factory("Var",$name,$this->line),
                     "\"");
+                $e->setValue($this->getAttribute('VALUE'));
                 return;
             
             default:
@@ -321,9 +346,15 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     "\"",
                     $this->factory("Var",$name,$this->line),
                     "\"");
-               
-               $this->postfix = $posterror;
-               return;
+                
+                $this->postfix = $posterror;
+                if ($e) {
+                    $e->setSize($this->getAttribute('SIZE'));
+                    $e->setMaxLength($this->getAttribute('MAXLENGTH'));
+                    $e->setValue($this->getAttribute('VALUE'));
+                }
+                
+                return;
             
         }
         
@@ -374,6 +405,25 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         $this->postfix = array( $this->factory("Var",$name ,$this->line) );
         $this->close->postfix = $posterror;
+        
+        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
+            $t =strtolower($type);
+            if (!$t) {
+                $t = 'text';
+            }
+            $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
+                'textarea', 
+                $this->getAttribute('NAME'),
+                '' //, // the text.
+                //$this->attributes // wrapper needed...
+            );
+            $e->setValue($this->childrenToString());
+            $e->setWrap($this->getAttribute('WRAP'));
+            $e->setRows($this->getAttribute('ROWS'));
+            $e->setCols($this->getAttribute('ROWS'));
+        }
+        
+        
         $this->children = array();
         return;
  
@@ -518,8 +568,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] =  $this->getAttribute('FLEXYOBJECT');
             unset($this->attributes['FLEXYOBJECT']);
         }
-        
-        
+        require_once 'HTML/Template/Flexy/QuickForm.php';
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = new HTML_Template_Flexy_QuickForm(
+            $this->getAttribute('NAME'),
+            $this->getAttribute('METHOD'),
+            $this->getAttribute('ACTION'),
+            $this->getAttribute('TARGET') //,
+            //$this->attributes // need to do some filtering on this..
+        ); 
     
     }
     

@@ -94,6 +94,15 @@ class HTML_Template_Flexy
     */
     var $gettextStringsFilename;
     /**
+    * The quickform wrapper object - only used when forms are available..
+    * Not quite sure how to deal with multiple forms in one template - probably better to 
+    * just use muliple templates for multiple forms.
+    *
+    * @var object HTML_Template_Flexy_QuickForm
+    * @access public
+    */
+    var $quickform;
+    /**
     *   Constructor 
     *
     *   Initializes the Template engine, for each instance, accepts options or
@@ -307,6 +316,7 @@ class HTML_Template_Flexy
         require_once 'HTML/Template/Flexy/Tokenizer.php';
         
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'] = $this->options;
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform'] = &$this->quickform;
         
         
         setlocale(LC_ALL, $this->options['locale']);
