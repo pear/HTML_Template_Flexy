@@ -207,6 +207,8 @@ REFC    = ";"
 STAGO   = "<"
 TAGC    = ">"
 
+
+
 NAME_START_CHARACTER    = ({LCLETTER}|{UCLETTER})
 NAME_CHARACTER          = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
 NAME_CHARACTER_WITH_NAMESPACE  = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR}|":")
@@ -226,7 +228,8 @@ REFERENCE_END           = ({REFC}|{RE})
 LITERAL                 = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
 
  
-
+FLEXY_GTSTART       = "{_("
+FLEXY_GTEND         = ")_}"
 
 FLEXY_START         = ("%7B"|"%7b"|"{")
 FLEXY_NEGATE        = "!"
@@ -414,9 +417,9 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
   
-<YYINITIAL>([^\<\&\{]|(<[^<&a-zA-Z!->?])|(&[^<&#a-zA-Z]))+|"{"     {
+<YYINITIAL>([^\<\&\{\)]|(<[^<&a-zA-Z!->?])|(&[^<&#a-zA-Z]))+|"{"|")"     {
     //abcd -- data characters  
-    // { added for flexy
+    // { and ) added for flexy
     $this->value = HTML_Template_Flexy_Token::factory('Text',$this->yytext(),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -798,6 +801,30 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
  // EXCERPT ACTIONS: STOP */
 
+   
+   
+   
+
+<YYINITIAL>{FLEXY_GTSTART} {
+    $this->value = HTML_Template_Flexy_Token::factory('GetTextStart','',$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+ 
+<YYINITIAL>{FLEXY_GTEND} {
+    $this->value = HTML_Template_Flexy_Token::factory('GetTextEnd','',$this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+}
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    
  
 <YYINITIAL>"{if:"{FLEXY_NEGATE}?{FLEXY_VAR}"}" {

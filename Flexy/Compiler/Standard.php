@@ -93,7 +93,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             
             // replace them now..  
             // ** leaving in the tag (which should be ignored by the parser..
-            // we then get rid of the tag after compiling..
+            // we then get rid of the tags during the toString method in this class.
             foreach($matches[1] as $k=>$v) {
                 $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
             }
@@ -136,15 +136,7 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
            $data =  str_replace("?>\n","?>\n\n",$data);
         }
         
-        // get rid of the gettext markup language stuff..
-        // this could probably be done with a single preg_replace... - send me it
-        // but I know this (well it seems to) is going to work :)
-        if ($got_gettext_markup &&  preg_match_all('/\{_\((.*)\)_\}/', $data,$fmatches)) {
-           // echo '<PRE>'.htmlspecialchars(print_r($fmatches,true));
-            foreach($fmatches[1] as  $v) {
-                $data = str_replace('{_('.$v.')_}', $v,$data);
-            }
-        }
+         
         
         
         // at this point we are into writing stuff...
@@ -198,8 +190,15 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         return true;
     }
-
     
+    /**
+    * Flag indicating compiler is inside {_( .... )_} block, and should not
+    * add to the gettextstrings array.
+    *
+    * @var boolean 
+    * @access public
+    */
+    var $inGetTextBlock = false;
     
     /**
     * This is the base toString Method, it relays into toString{TokenName}
@@ -215,7 +214,17 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     function toString($element) 
     {
         static $len = 26; // strlen('HTML_Template_Flexy_Token_');
+        //echo $element->token . ':' . htmlspecialchars($element->value)."<BR>";
+        if ($element->token == 'GetTextStart') {
+            $this->inGetTextBlock = true;
+            return '';
+        }
+        if ($element->token == 'GetTextEnd') {
+            $this->inGetTextBlock = false;
+            return '';
+        }
         
+            
         $class = get_class($element);
         if (strlen($class) >= $len) {
             $type = substr($class,$len);
@@ -564,6 +573,13 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         if (!count($element->argTokens) && !$element->isWord()) {
             return $this->appendHtml($element->value);
         }
+        
+        // ignore anything wrapped with {_( .... )_}
+        if ($this->inGetTextBlock) {
+            return $this->appendHtml($element->value);
+        }
+        
+        
         
         $front = '';
         $rear = '';
