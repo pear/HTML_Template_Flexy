@@ -228,7 +228,7 @@ class HTML_Template_Flexy_Token {
                 //echo "ERROR";
                 
                 //print_r($tokenizer);
-                $err = "<PRE>" . $tokenizer->error;
+                $err = "<PRE>" . $tokenizer->error . "\n" .
                     htmlspecialchars(substr($tokenizer->yy_buffer,0,$tokenizer->yy_buffer_end)) . 
                     "<font color='red'>". htmlspecialchars(substr($tokenizer->yy_buffer,$tokenizer->yy_buffer_end,100)) . 
                     ".......</font></PRE>";
