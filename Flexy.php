@@ -454,7 +454,7 @@ class HTML_Template_Flexy
             $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
             if (!file_exists($compileDest)) {
                 require_once 'System.php';
-                System::mkdir($compileDest);
+                System::mkdir(array('-p',$compileDest));
             }
             $isTmp = true;
         
