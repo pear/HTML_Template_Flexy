@@ -132,7 +132,7 @@ class HTML_Template_Flexy_Element {
         $strAttr = '';
         foreach ($this->attributes as $key => $value) {
         
-            // you should do this, but It shouldnt barf when you do..
+            // you shouldn't do this, but It shouldnt barf when you do..
             if (is_array($value) || is_object($value)) {
                 continue;
             }
