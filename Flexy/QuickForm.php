@@ -98,7 +98,7 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
                 check the source for extra FORM tags :',null,PEAR_ERROR_DIE);
         }
         foreach ($this->_elementIndex as $name => $id) {
-            echo "$name => $id<BR>";
+            
             $this->elements[$name] = & $this->_elements[$id];
         }
     }
