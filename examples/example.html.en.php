@@ -7,7 +7,8 @@
 
 <BODY>
 <P>Example Template for HTML_Template_Flexy</P>
-a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
+
+ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
  asfasfdas
 
 <H2>Variables</H2>
@@ -15,7 +16,8 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
 <P>Standard variables 
 <?php echo htmlspecialchars($t->hello); ?> 
 <?php echo $t->world; ?>
-<?php echo urlencode($t->test); ?><IMG SRC="<?php echo htmlspecialchars($t->getImageDir); ?>/someimage.jpg">
+<?php echo urlencode($t->test); ?>
+<IMG SRC="<?php echo htmlspecialchars($t->getImageDir); ?>/someimage.jpg">
 <IMG SRC="<?php echo $t->getImageDir; ?>/someimage.jpg">
 <IMG SRC="<?php echo urlencode($t->getImageDir); ?>/someimage.jpg">
 
@@ -24,8 +26,8 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
 </P>
 
 <H2>Methods</H2>
-<P>Calling a method<?php if (isset($t->a) && method_exists($t->a,'helloWorld')) echo htmlspecialchars($t->a->helloWorld()); ?></P>
-<P>or<?php if (isset($t) && method_exists($t,'includeBody')) echo $t->includeBody(); ?></P>
+<P>Calling a method <?php if (isset($t->a) && method_exists($t->a,'helloWorld')) echo htmlspecialchars($t->a->helloWorld()); ?></P>
+<P>or <?php if (isset($t) && method_exists($t,'includeBody')) echo $t->includeBody(); ?></P>
 <IMG SRC="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir()); ?>/someimage.jpg">
 <IMG SRC="<?php if (isset($t) && method_exists($t,'getImageDir')) echo $t->getImageDir(); ?>/someimage.jpg">
 <IMG SRC="<?php if (isset($t) && method_exists($t,'getImageDir')) echo urlencode($t->getImageDir()); ?>/someimage.jpg">
@@ -34,7 +36,7 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
 <IMG SRC="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir()); ?>/someimage.jpg">
 
 <H2>Conditions</H2>
-<P>a condition <?php if ($t->condition)  { ?> hello<?php } else {?> world<?php } ?></P>
+<P>a condition <?php if ($t->condition)  { ?> hello <?php } else {?> world <?php } ?></P>
 
 
 <H2>Looping</H2>
@@ -46,11 +48,17 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
     <?php echo htmlspecialchars($b); ?>
 <?php } ?></P>
 
+<TABLE>
+    <?php if (is_array($t->xyz)) foreach($t->xyz as $abcd => $def) { ?><TR>
+        <TD><?php echo htmlspecialchars($abcd); ?>, <?php if (isset($t) && method_exists($t,'test')) echo htmlspecialchars($t->test($def)); ?></TD>
+    </TR><?php } ?>
+</TABLE>
+
 
 <P>HTML tags example using foreach=&quot;loop,a&quot; or the tr</P>
 <TABLE WIDTH="100%" BORDER="0">
   <?php if (is_array($t->loop)) foreach($t->loop as $a) { ?><TR> 
-    <TD>a is </TD>
+    <TD>a is</TD>
     <TD><?php echo htmlspecialchars($a); ?></TD>
   </TR><?php } ?>
 </TABLE>
@@ -76,12 +84,9 @@ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
 
 
 <?php echo $this->quickform->formHeadToHtml(); ?>
-Input
- <?php echo $this->quickform->elementToHtml("test123"); ?>
-Checkbox
- <?php echo $this->quickform->elementToHtml("test123a"); ?>
-Hidden
- 
+    Input<?php echo $this->quickform->elementToHtml("test123"); ?>
+    Checkbox <?php echo $this->quickform->elementToHtml("test123a"); ?>
+    Hidden 
     <?php echo $this->quickform->elementToHtml("fred"); ?>
     <?php echo $this->quickform->elementToHtml("aaa1"); ?>
     <SELECT NAME="aaa2">
@@ -161,8 +166,8 @@ html_template_flexy_quickform Object
                         (
                             [name] => test123a
                             [type] => checkbox
-                            [value] => 1
                             [checked] => checked
+                            [value] => 1
                         )
 
                     [_tabOffset] => 0
@@ -171,13 +176,7 @@ html_template_flexy_quickform Object
                     [_type] => checkbox
                     [_flagFrozen] => 
                     [_persistantFreeze] => 1
-                    [_text] => Array
-                        (
-                            [name] => test123a
-                            [type] => checkbox
-                            [checked] => 1
-                        )
-
+                    [_text] => 
                 )
 
             [2] => html_quickform_hidden Object

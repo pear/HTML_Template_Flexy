@@ -58,7 +58,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     var $attributes = array();
     /**
     * postfix tokens 
-    * used to add code to end of tags
+    * used to add code to end of tags "<xxxx>here....children .. <close tag>"
     *
     * @var array
     * @access public
@@ -66,12 +66,20 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     var $postfix = '';
      /**
     * prefix tokens 
-    * used to add code to beginning of tags TODO
+    * used to add code to beginning of tags TODO  "here<xxxx>....children .. <close tag>"
     *
     * @var array
     * @access public
     */
     var $prefix = '';
+     /**
+    * foreach attribute value for this tag
+    * used to ensure that if and foreach are not used together.
+    *
+    * @var array
+    * @access public
+    */
+    var $foreach = '';
     
         
     /**
@@ -83,7 +91,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     var $close; // alias to closing tag.
     
     /**
-    * flag to only output the children
+    * flag to only output the children - set in the core parser.
     *
     * @var boolean
     * @access public
@@ -95,15 +103,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * @see parent::setValue()
     */
   
-    function setValue($value) {
+    function setValue($value) 
+    {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         $this->tag = $value[0];
         if (isset($value[1])) {
             $this->attributes = $value[1];
         }
-        
-        
-        
        
     }
     /**
@@ -113,7 +119,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     * 
     * @see parent::toString()
     */
-    function toString() {
+    function toString() 
+    {
         
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         
@@ -124,81 +131,23 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             return $this->childrenToString();
         }
         
-        $flexyignore = $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'];
-        
-        if ($this->getAttribute('FLEXYIGNORE')) {
-            
-            $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = true;
-            unset($this->attributes['FLEXYIGNORE']);
-        }
+        $flexyignore = $this->parseAttributeIgnore();
         
         // rewriting should be done with a tag.../flag.
         
         $this->reWriteURL("HREF");
         $this->reWriteURL("SRC");
         
-        
-        $method = 'parseTag'.ucfirst(strtolower($this->tag));
-        
-        
-        if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
-            $ret = $this->$method();
-            // allow the parse methods to return output.
-            
-            if ($ret !== false) {
-                return $ret;
-            }
+        // handle quickforms
+        if (($ret =$this->parseTags()) !== false) {
+            return $ret;
         }
         
-        $ret = '';
-        if ($foreach = $this->getAttribute('FOREACH')) {
-            $foreachObj =  $this->factory('Foreach',
-                    explode(',',$foreach),
-                    $this->line);
-            $ret = $foreachObj->toString();
-            // does it have a closetag?
-            
-            $this->close->postfix = array($this->factory("End", '', $this->line));
-            unset($this->attributes['FOREACH']);
-        }
+        $ret  = $this->parseAttributeForeach();
+        $ret .= $this->parseAttributeIf();
         
+        // spit ou the tag and attributes.
         
-        if ($if = $this->getAttribute('IF')) {
-            if ($foreach) {
-                PEAR::raiseError(
-                    "You may not use FOREACH and IF tags in the same tag on Line {$this->line} &lt;{$this->tag}&gt;",
-                     null, PEAR_ERROR_DIE);
-            }
-            
-            // allow if="!somevar"
-            $ifnegative = '';
-            if ($if{0} == '!') {
-                $ifnegative = '!';    
-                $if = substr($if,1);
-            }
-            // if="xxxxx"
-            // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
-            if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\])?)*(\(\))?$/i',$if)) {
-                PEAR::raiseError(
-                    "IF tags only accept simple object.variable or object.method() values on Line {$this->line} &lt;{$this->tag}&gt;",
-                     null, PEAR_ERROR_DIE);
-            }
-            
-            if (substr($if,-1) == ')') {
-                $ifObj =  $this->factory('Method',
-                        array('if:'.$ifnegative.substr($if,0,-2), array()),
-                        $this->line);
-            } else {
-                $ifObj =  $this->factory('If', $ifnegative.$if, $this->line);
-            }
-            
-            $ret = $ifObj->toString();
-            // does it have a closetag?
-            
-            $this->close->postfix = array($this->factory("End",'', $this->line));
-            unset($this->attributes['IF']);
-        }
-    
         $ret .=  "<". $this->tag;
         foreach ($this->attributes as $k=>$v) {
             if ($v === true) {
@@ -233,12 +182,20 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             }
         }
         $ret .= ">";
+        
+        // post stuff this is probably in the wrong place...
+        
         if ($this->postfix) {
             foreach ($this->postfix as $e) {
                 $ret .= $e->toString();
             }
         }
+        // output the children.
+        
         $ret .= $this->childrenToString();
+        
+        // output the closing tag.
+        
         if ($this->close) {
             $ret .= $this->close->toString();
         }
@@ -248,6 +205,138 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         return $ret;
     }
+    /**
+    * Reads an flexy:foreach attribute - 
+    *
+    *
+    * @return   string to add to output.
+    * @access   public
+    */
+    
+    function parseAttributeIgnore() 
+    {
+    
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        
+        $flexyignore = $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'];
+        
+        if ($this->getAttribute('FLEXYIGNORE') || $this->getAttribute('FLEXY:IGNORE')) {
+            
+            $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = true;
+            $this->clearAttribute('FLEXYIGNORE');
+            $this->clearAttribute('FLEXY:IGNORE');
+        }
+        return $flexyignore;
+
+    }
+    
+    /**
+    * Reads an flexy:foreach attribute - 
+    *
+    *
+    * @return   string to add to output.
+    * @access   public
+    */
+    
+    function parseAttributeForeach() 
+    {
+        $foreach = $this->getAttribute('FOREACH') . $this->getAttribute('FLEXY:FOREACH');
+        if (!$foreach) {
+            return '';
+        }
+        $this->foreach = $foreach;
+        
+        $foreachObj =  $this->factory('Foreach',
+                explode(',',$foreach),
+                $this->line);
+        // does it have a closetag?
+        
+        $this->close->postfix = array($this->factory("End", '', $this->line));
+        $this->clearAttribute('FOREACH');
+        $this->clearAttribute('FLEXY:FOREACH');
+        return $foreachObj->toString();
+
+    }
+    /**
+    * Reads an flexy:if attribute - 
+    *
+    *
+    * @return   string to add to output.
+    * @access   public
+    */
+    
+    function parseAttributeIf() 
+    {
+        // dont use the together, if is depreciated..
+        $if = $this->getAttribute('IF') . $this->getAttribute('FLEXY:IF');
+        
+        if (!$if) {
+            return '';
+        }
+        
+        if ($this->foreach) {
+            PEAR::raiseError(
+                "You may not use FOREACH and IF tags in the same tag on Line {$this->line} &lt;{$this->tag}&gt;",
+                 null, PEAR_ERROR_DIE);
+        }
+        
+        // allow if="!somevar"
+        $ifnegative = '';
+        
+        if ($if{0} == '!') {
+            $ifnegative = '!';    
+            $if = substr($if,1);
+        }
+        // if="xxxxx"
+        // if="xxxx.xxxx()" - should create a method prefixed with 'if:'
+        // these checks should really be in the if/method class..!!!
+        
+        if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?(\.[_A-Z][A-Z0-9_]*(\[[0-9]+\])?)*(\(\))?$/i',$if)) {
+            PEAR::raiseError(
+                "IF tags only accept simple object.variable or object.method() values on Line {$this->line} &lt;{$this->tag}&gt;",
+                 null, PEAR_ERROR_DIE);
+        }
+        
+        if (substr($if,-1) == ')') {
+            $ifObj =  $this->factory('Method',
+                    array('if:'.$ifnegative.substr($if,0,-2), array()),
+                    $this->line);
+        } else {
+            $ifObj =  $this->factory('If', $ifnegative.$if, $this->line);
+        }
+        
+        // does it have a closetag?
+        
+        $this->close->postfix = array($this->factory("End",'', $this->line));
+        $this->clearAttribute('IF');
+        $this->clearAttribute('FLEXY:IF');
+        return  $ifObj->toString();
+    }
+    
+     /**
+    * Reads Tags - and realays
+    *
+    *
+    * @return   string | false = html output or ignore (just output the tag)
+    * @access   public
+    */
+    
+    
+    function parseTags() 
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+      
+        $method = 'parseTag'.ucfirst(strtolower($this->tag));
+        if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
+            return $this->$method();
+            // allow the parse methods to return output.
+        }
+        return false;
+    }
+           
+        
+    
+    
     
     /**
     * Reads an Input tag - build a quickform object for it
@@ -664,6 +753,19 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             }
         }
     }
+    /**
+    * clearAttributes = removes an attribute from the object.
+    *
+    *
+    * @return   array
+    * @access   string
+    */
+    function clearAttribute($string) {
+        if (isset($this->attributes[$string])) {
+            unset($this->attributes[$string]);
+        }
+    }
+    
 }
 
  

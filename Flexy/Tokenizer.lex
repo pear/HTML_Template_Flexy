@@ -191,8 +191,10 @@ TAGC    = ">"
 
 NAME_START_CHARACTER	= ({LCLETTER}|{UCLETTER})
 NAME_CHARACTER		    = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR})
+NAME_CHARACTER_WITH_NAMESPACE  = ({NAME_START_CHARACTER}|{DIGIT}|{LCNMCHAR}|{UCNMCHAR}|":")
 
 NAME		            = ({NAME_START_CHARACTER}{NAME_CHARACTER}*)
+NSNAME		            = ({NAME_START_CHARACTER}{NAME_CHARACTER_WITH_NAMESPACE}*)
 NUMBER		            = {DIGIT}+
 NUMBER_TOKEN            = {DIGIT}+{NAME_CHARACTER}*
 NAME_TOKEN	            = {NAME_CHARACTER}+
@@ -249,7 +251,7 @@ FLEXY_MODIFIER      = [hur]
 }
 
   
-<YYINITIAL>{ETAGO}{NAME}?{WHITESPACE}"/"{STAGO} {
+<YYINITIAL>{ETAGO}{NSNAME}?{WHITESPACE}"/"{STAGO} {
     if ($this->ignoreHTML) {
         return $this->returnSimple();
     }
@@ -259,7 +261,7 @@ FLEXY_MODIFIER      = [hur]
 }
 
   
-<YYINITIAL>{ETAGO}{NAME}{WHITESPACE} {
+<YYINITIAL>{ETAGO}{NSNAME}{WHITESPACE} {
     /* </title> -- end tag */
     if ($this->ignoreHTML) {
         return $this->returnSimple();
@@ -356,7 +358,7 @@ FLEXY_MODIFIER      = [hur]
  
 				 
   
-<YYINITIAL>{STAGO}{NAME}{WHITESPACE}		{
+<YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}		{
     //<name -- start tag */
     if ($this->ignoreHTML) {
         return $this->returnSimple();
@@ -400,7 +402,7 @@ FLEXY_MODIFIER      = [hur]
 
 
   
-<IN_ATTR>{NAME}{SPACE}*={WHITESPACE}		{
+<IN_ATTR>{NSNAME}{SPACE}*={WHITESPACE}		{
    // <a ^href = "xxx"> -- attribute name 
     $this->attrKey = strtoupper(substr(trim($this->yytext()),0,-1));
     $this->yybegin(IN_ATTRVAL);
@@ -409,7 +411,7 @@ FLEXY_MODIFIER      = [hur]
 }
 
   
-<IN_ATTR>{NAME}{WHITESPACE}		{
+<IN_ATTR>{NSNAME}{WHITESPACE}		{
     // <img src="xxx" ^ismap> -- name */
     $this->attributes[strtoupper(trim($this->yytext()))] = true;
     $this->value = '';
