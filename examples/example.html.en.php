@@ -52,9 +52,9 @@ function CheckDuplicates (AddListContainer, RemoveListContainer) {
  
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
 
 
@@ -112,6 +112,10 @@ an Object: <?php echo '<pre>'; echo htmlspecialchars(print_r($t->object,true)); 
 
 <H2>Conditions</H2>
 <p>a condition <?php if ($t->condition)  {?> hello <?php } else {?> world <?php }?></p>
+<p>a negative condition <?php if (!$t->condition)  {?> hello <?php } else {?> world <?php }?></p>
+<p>a conditional method <?php if (isset($t) && method_exists($t,'condition')) if ($t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
+<p>a negative conditional method <?php if (isset($t) && method_exists($t,'condition')) if (!$t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
+
 
 <?php if ($t->test)  {?><span>test</span><?php }?>
 <?php if (isset($t) && method_exists($t,'test')) if ($t->test()) { ?><span>test</span><?php }?>
@@ -276,16 +280,16 @@ $x->outputObject($t);
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);?>
-<?php echo HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (PEAR::isError($__tmp)) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
 
 

@@ -230,7 +230,7 @@ LITERAL                 = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
 
 
 FLEXY_START         = ("%7B"|"%7b"|"{")
-
+FLEXY_NEGATE        = "!"
 FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
 FLEXY_ARRAY         = (("["|"%5B"|"%5b")({DIGIT}|{NAME_START_CHARACTER}|"_")+("]"|"%5D"|"%5d"))
 FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*)*)
@@ -801,12 +801,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
    
  
-<YYINITIAL>"{if:"{FLEXY_VAR}"}" {
+<YYINITIAL>"{if:"{FLEXY_NEGATE}?{FLEXY_VAR}"}" {
     $this->value = HTML_Template_Flexy_Token::factory('If',substr($this->yytext(),4,-1),$this->yyline);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<YYINITIAL>"{if:"{FLEXY_VAR}"(" {
+<YYINITIAL>"{if:"{FLEXY_NEGATE}?{FLEXY_VAR}"(" {
     $this->value =  '';
     $this->flexyMethod = substr($this->yytext(),1,-1);
     $this->flexyArgs = array();
