@@ -549,11 +549,35 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         
         return  $ret . $rear;
         
-        
+    }
+    
+    
+    
+     /**
+    *   HTML_Template_Flexy_Token_Tag toString 
+    *
+    * @param    object    HTML_Template_Flexy_Token_Tag
+    * 
+    * @return   string     string to build a template
+    * @access   public 
+    * @see      toString*
+    */
+  
+    function toStringTag($element) {
+        if (strpos($element->tag.':') === false) {
+            $namespace = 'Tag';
+        } else {
+            $bits =  explode(':',$element->tag);
+            $namespace = $bits[0];
+        }
+        if (empty($this->tagHandlers[$namespace])) {
+            $this->tagHandlers[$namespace] = 
+                HTML_Template_Flexy_Compiler_Standard::factory($tag,$this);
+        }
+        $this->tagHandlers[$namespace]->toString($element);
         
         
     }
-      
     
 
 }
