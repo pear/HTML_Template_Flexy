@@ -54,6 +54,7 @@
         - support variable[12] as a valid variable name.
         - does syntax checking on form element names 
         - fixed {outputBody()} (no prefix var methods)
+        - added url_rewrite for HREF and SRC tags - see example.ini for more details
       </notes>
       <state>beta</state>
      </release>

@@ -129,13 +129,15 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             unset($this->attributes['FLEXYIGNORE']);
         }
         
+        $this->reWriteURL("HREF");
+        $this->reWriteURL("SRC");
         
         $method = 'parseTag'.ucfirst(strtolower($this->tag));
         
         if (!$_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] && method_exists($this,$method)) {
             $this->$method();
         }
-    
+        
         $ret = '';
         if ($foreach = $this->getAttribute('FOREACH')) {
             $foreachObj =  $this->factory('Foreach',
@@ -474,6 +476,61 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
     
     }
+    
+    
+    /**
+    * reWriteURL - can using the config option 'url_rewrite'
+    *  format "from:to,from:to"
+    * only handle left rewrite. 
+    * so 
+    *  "/images:/myroot/images"
+    * would change
+    *   /images/xyz.gif to /myroot/images/xyz.gif
+    *   /images/stylesheet/imagestyles.css to  /myroot/images/stylesheet/imagestyles.css
+    *   note /imagestyles did not get altered.
+    * will only work on strings (forget about doing /images/{someimage}
+    *
+    *
+    * @param    string attribute to rewrite
+    * @return   none
+    * @access   public
+    */
+    function reWriteURL($which) 
+    {
+        global  $_HTML_TEMPLATE_FLEXY;
+        
+        
+        if (!is_string($original = $this->getAttribute($which))) {
+            return;
+        }
+        
+        if ($original == '') {
+            return;
+        }
+        
+        if (empty($_HTML_TEMPLATE_FLEXY['currentOptions']['url_rewrite'])) {
+            return;
+        }
+        
+        $bits = explode(",",$_HTML_TEMPLATE_FLEXY['currentOptions']['url_rewrite']);
+        $new = $original;
+        
+        foreach ($bits as $bit) {
+            $parts = explode (':', $bit);
+            $new = preg_replace('#^'.$parts[0].'#',$parts[1], $new);
+        }
+        
+        
+        if ($original == $new) {
+            return;
+        }
+        $this->attributes[$which] = '"'. $new . '"';
+    } 
+    
+    
+        
+    
+    
     /**
     * getAttribute = reads an attribute value and strips the quotes 
     *
