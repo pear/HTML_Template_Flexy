@@ -183,10 +183,18 @@ class HTML_Template_Flexy_Token {
         // first record is a filler - to stick all the children on !
         // reset my globals..
   
+        $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'] = array();
+        $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
+        
+        
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = array(new HTML_Template_Flexy_Token);
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->id =0;
         $i=1;
         
+        
+        // initialize state - this trys to make sure that
+        // you dont do to many elses etc.
+       
         
         // step one just tokenize it.
         while ($t = $tokenizer->yylex()) {  
@@ -281,7 +289,7 @@ class HTML_Template_Flexy_Token {
     /**
     * Build the child array for each element.
     * 
-    * @param   object    Tokenizer to run.. - Theoretically other Tokenizers could be done for email,rtf etc.
+    * @param   int  id of node to add children to.
     *
     * @access   public
     * @static
@@ -312,6 +320,7 @@ class HTML_Template_Flexy_Token {
             
     /**
     * Flag to ignore children - Used to block output for select/text area etc.
+    * may not be required as I moved the Tag parsing into the toString ph
     *
     * @var boolean ingore children
     * @access public
@@ -329,15 +338,7 @@ class HTML_Template_Flexy_Token {
     * raw variables are assumed to be $this->, unless defined by foreach..
     * it also monitors syntax - eg. end without an if/foreach etc.
     */
-
-    /**
-    * reset the state = do this before parsing another file.
-    *
-    * @access   public
-    */
-    function reset() {
-        $_HTML_TEMPLATE_FLEXY_TOKEN['state'] = 0;
-    }
+ 
     
     /**
     * tell the generator you are entering a block

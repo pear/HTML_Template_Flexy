@@ -157,7 +157,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 $ret .= $e->toString();
             }
         }
-        $ret .= $this->childrentoString();
+        $ret .= $this->childrenToString();
         if ($this->close) {
             $ret .= $this->close->toString();
         }
@@ -277,6 +277,78 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         
     }
+    /**
+    * Deal with Selects
+    *
+    * if you set static="true" in the select tag - it will get left alone
+    * (you can also turn it off by setting the flexy option ignoreTags TODO!
+    *
+    * the value of the select is going to be $t->theform->the_name_of_the_tag
+    *
+    * the options is the pullldown will have to be
+    *        $t->theform->getOptions('the_name_of_the_tag')
+    *
+    * the tag is generated using HTML_Select
+    *
+    * However this requires that toString outputs something different. - eg.
+    * an overriden value..
+    * 
+    * otherwise, It needs to generate a child like:
+    * - for a key=>value array.
+    * foreach($t->theform->getOptions('name') as $_k=>$_v) {
+    *    printf('<OPTION VALUE="%s"%s>%s</OPTION>',
+    *               htmlspecialchars($k), 
+    *               ($k == $this->theform->thename_of_the_tag) ? ' SELECTED' : '', 
+    *               htmlspecialchars($v)
+    *           )
+    *    
+    * }
+    * 
+    *
+    * @return   none
+    * @access   public
+    */
+  
+    function parseTagSelect() 
+    {
+        
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+          
+        $call_object = '$t';
+        
+        if ($this->getAttribute('static')) {
+            return;
+        }
+         
+         
+        $basename =    $this->getAttribute('name');
+        $name = $basename;
+        if ($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']) {
+            $name = $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] .'.'.$name;
+            $call_object =  $this->toVar($_HTML_TEMPLATE_FLEXY_TOKEN['activeForm']);
+        }
+        
+        
+        
+        
+        $this->children =   array(
+                $this->factory("PHP", 
+                    "<?php if (method_exists({$call_object},'getOptions'))
+                    foreach(". $call_object ."->getOptions('{$basename}') as \$_k=>\$_v) {
+                        printf(\"<OPTION VALUE=\\\"%s\\\"%s>%s</OPTION>\",
+                                   htmlspecialchars(\$_k), 
+                                   (\$_k == " . $this->toVar($name) .") ? ' SELECTED' : '', 
+                                   htmlspecialchars(\$_v)
+                               ); } ?>",
+                    $this->line)
+            );
+        
+    }
+    
+    
+    
+    
+    
     
      /**
     * Reads an Form tag and stores the current name (used as a prefix for input
