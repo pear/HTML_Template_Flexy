@@ -243,7 +243,7 @@ class HTML_Template_Flexy
     function compile( $file )
     {
         if (!$file) {
-            PEAR::RaiseError('HTML_Template_Flexy::compile no file selected',null,PEAR_ERROR_DIE);
+            PEAR::raiseError('HTML_Template_Flexy::compile no file selected',null,PEAR_ERROR_DIE);
         }
         if (!@$this->options['locale']) {
             $this->options['locale']='en';
@@ -264,13 +264,13 @@ class HTML_Template_Flexy
 
         $compileDest = $this->options['compileDir'];
         if ( !@is_dir($compileDest) ) {               // check if the compile dir has been created
-            PEAR::RaiseError(   "'compileDir' could not be accessed<br>".
+            PEAR::raiseError(   "'compileDir' could not be accessed<br>".
                                 "1. please create the 'compileDir' which is: <b>'$compileDest'</b><br>2. give write-rights to it",
                                 null, PEAR_ERROR_DIE);
         }
 
         if( !is_writeable($compileDest)) {
-             PEAR::RaiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
+             PEAR::raiseError(   "can not write to 'compileDir', which is <b>'$compileDest'</b><br>".
                                 "1. please give write and enter-rights to it",
                                 null, PEAR_ERROR_DIE);
         }
@@ -288,7 +288,7 @@ class HTML_Template_Flexy
                 if( !@is_dir($compileDest) ) {
                     umask(0000);                        // make that the users of this group (mostly 'nogroup') can erase the compiled templates too
                     if( !@mkdir($compileDest,0770) ) {
-                        PEAR::RaiseError(   "couldn't make directory: <b>'$aDir'</b> under <b>'".$this->options['compileDir']."'</b><br>".
+                        PEAR::raiseError(   "couldn't make directory: <b>'$aDir'</b> under <b>'".$this->options['compileDir']."'</b><br>".
                                             "1. please give write permission to the 'compileDir', so SimpleTemplate can create directories inside",
                                              null, PEAR_ERROR_DIE);
                     }
@@ -314,7 +314,7 @@ class HTML_Template_Flexy
         
         if( !@file_exists($this->currentTemplate ))  {
             // check if the compile dir has been created
-            PEAR::RaiseError("Template {$this->currentTemplate} does not exist<br>",  null, PEAR_ERROR_DIE);
+            PEAR::raiseError("Template {$this->currentTemplate} does not exist<br>",  null, PEAR_ERROR_DIE);
         }
          
  
