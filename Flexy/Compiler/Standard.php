@@ -599,6 +599,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             $bits =  explode(':',$element->tag);
             $namespace = $bits[0];
         }
+	if ($namespace{0} == '/') {
+		return '';
+        }
         if (empty($this->tagHandlers[$namespace])) {
             
             require_once 'HTML/Template/Flexy/Compiler/Standard/Tag.php';
