@@ -315,7 +315,7 @@ class HTML_Template_Flexy_Token {
         //
         
         
-       
+        //echo '<PRE>' . htmlspecialchars(print_R($res,true));//exit;
        
         for($i=1;$i<$total;$i++) {
             //echo "Checking TAG $i\n";
@@ -329,6 +329,7 @@ class HTML_Template_Flexy_Token {
                     continue;
                 }
                 $ssc = count($stack) - 1;
+                /* go up the stack trying to find a match */
                 for($s = $ssc; $s > -1; $s--) {
                     if (!isset($stack[$s])) {
                         echo "MISSED STACK? $s<BR><PRE>";print_r($stack);exit;
@@ -339,70 +340,21 @@ class HTML_Template_Flexy_Token {
                     $tok =  &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$s]];
                     if (strtoupper($tok->tag) == $tag) {
                         // got the matching closer..
-                        //echo "MATCH: {$i}:{$tok->tag} to  {$stack[$s]}:$tag<BR>";
+                        // echo "MATCH: {$i}:{$tok->tag}({$tok->line}) to  {$stack[$s]}:$tag<BR>";
                         $tok->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
-                        $sc = count($stack);
-                        for ($ss = $ssc;$ss!=$s;$ss--) {
-                            array_pop($stack);
-                            
-                        }
                         
-                        continue 2;
+                        array_splice($stack,$s);
+                        //print_R($stack);
+                         
+                        break;
                     }
                 }
                 continue;
             }
             $stack[] = $i;
             // tag with no closer (or unmatched in stack..)
-        }
-        //print_R($stack);
-        //exit;
-        /*
-       
-       
-        for($i=1;$i<$total;$i++) {
-            //echo "Checking TAG $i\n";
-            if (!@$res[$i]->tag) {
-                continue;
-            }
-            if ($res[$i]->tag{0} == '/') { // it's a close tag..
-                //echo "GOT END TAG: {$res[$i]->tag}\n";
-                $tag = strtoupper(substr($res[$i]->tag,1));
-                if (!isset($stack[$tag]['pos'])) {
-                    continue; // unmatched
-                }
-                
-                $npos = $stack[$tag]['pos'];
-                if (!isset($stack[$tag][$npos])) {
-                    // stack is empty!!!
-                    continue;
-                }
-                //echo "CLOSING {$stack[$tag][$npos]}:{$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$tag][$npos]]->tag} WITH {$i}:{$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->tag}<BR>";
-                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$stack[$tag][$npos]]->close = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
-                $stack[$tag]['pos']--;
-                // take it off the stack so no one else uses it!!!
-                unset($stack[$tag][$npos]);
-                if ($stack[$tag]['pos'] < 0) {
-                    // too many closes - just ignore it..
-                    $stack[$tag]['pos'] = 0;
-                }
-                 
-                continue;
-            }
-            // new entry on stack..
-            $tag = strtoupper($res[$i]->tag);
-            
-            if (!isset($stack[$tag])) {
-                $npos = $stack[$tag]['pos'] = 0;
-            } else {
-                $npos = ++$stack[$tag]['pos'];
-            }
-            
-            $stack[$tag][$npos] = $i;
-           
-            
-        }
-        */
+        } 
+      
                 
         // create a dummy close for the end
         $i = $total;
@@ -418,7 +370,7 @@ class HTML_Template_Flexy_Token {
         
         HTML_Template_Flexy_Token::buildChildren(0);
         //new Gtk_VarDump($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]);
-       
+        //echo '<PRE>';print_R($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$_HTML_TEMPLATE_FLEXY_TOKEN['base']]  ); 
         return $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$_HTML_TEMPLATE_FLEXY_TOKEN['base']];
     }
     /**
@@ -463,8 +415,10 @@ class HTML_Template_Flexy_Token {
             //if ($base->id == 1176) {
             //    echo "<PRE>";print_r($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]);
             // }
+         
             $base->children[] = &$_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i];
-            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
+            
+            if (is_object($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close)) {
             
                 // if the close id is greater than my id - ignore it! - 
                 if ($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->close->id > $end) {
