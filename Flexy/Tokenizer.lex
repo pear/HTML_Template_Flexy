@@ -169,7 +169,7 @@ LITERAL		            = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
 
 FLEXY_START         = ("%7B"|"%7b"|"{")
 FLEXY_VALID_CHARS   = ({LCLETTER}|{UCLETTER}|"_"|"."|{DIGIT})
-FLEXY_VAR           = ({NAME_START_CHARACTER}{FLEXY_VALID_CHARS}*)
+FLEXY_VAR           = ({NAME_START_CHARACTER}{FLEXY_VALID_CHARS}*("["{DIGIT}+"]")?)
 FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
 FLEXY_END            = ("%7D"|"%7d"|"}")
 FLEXY_LITERAL       = [^#]*

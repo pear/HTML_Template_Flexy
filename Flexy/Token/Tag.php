@@ -226,6 +226,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
         
         $type = strtoupper($this->getAttribute('TYPE'));
+        // still depating the wisdome of this replacement
+        
         $thisvar = str_replace(']','',$name);
         $thisvar = str_replace('[','.',$thisvar);
         
@@ -238,13 +240,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             case "CHECKBOX":
                 $this->attributes['CHECKED'] = 
                     $this->factory("PHP",
-                    "<?php if (". $this->toVar($thisvar).") { ?>CHECKED<?php } ?>",
+                    "<?php if (". $this->toVar($name).") { ?>CHECKED<?php } ?>",
                     $this->line);
                 $this->postfix = $posterror;
                 break;
             
             case "RESET":               
             case "SUBMIT":
+            case "BUTTON":            
                 return;
  
 
@@ -253,14 +256,14 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             case "HIDDEN":
                 $this->attributes['VALUE'] = array(
                     "\"",
-                    $this->factory("Var",$thisvar,$this->line),
+                    $this->factory("Var",$name,$this->line),
                     "\"");
                 return;
             
             default:
                 $this->attributes['VALUE'] = array(
                     "\"",
-                    $this->factory("Var",$thisvar,$this->line),
+                    $this->factory("Var",$name,$this->line),
                     "\"");
                
                $this->postfix = $posterror;
