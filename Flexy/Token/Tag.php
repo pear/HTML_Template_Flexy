@@ -401,9 +401,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
              null, PEAR_ERROR_DIE);
         }
         if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
-            echo "<PRE>";print_r($this);echo "</PRE>";
-             PEAR::raiseError("Error:{$GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']} on Line {$this->line} &lt;{$this->tag}&gt;: 
-             Dynamic tags have already used ID $id",
+           // echo "<PRE>";print_r($this);print_r($_HTML_TEMPLATE_FLEXY['elements']);echo "</PRE>";
+             PEAR::raiseError("Error:{$GLOBALS['_HTML_TEMPLATE_FLEXY']['filename']} on Line {$this->line} in Tag &lt;{$this->tag}&gt;:<BR> 
+             The Dynamic tag Name '$id' has already been used previously by  tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
              null, PEAR_ERROR_DIE);
         }
         
