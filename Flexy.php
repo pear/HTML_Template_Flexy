@@ -660,10 +660,34 @@ class HTML_Template_Flexy
         
         $this->quickform = HTML_Template_Flexy_QuickForm::loadFromSerialFile($this->quickformFile,$data);
          
-        
-     
-    
     }
+     /**
+    *   set the active quickform either by number or name
+    *
+    *   @access     public
+    *   @author     Alan Knowles <alan@akbkhome.com>
+    *   @param      integer or string  id or name of form
+    *   @return     true if found, false if not
+    */
+    function setActiveQuickForm($active) {
+        if (isset($this->quickforms[$active])) {
+            $this->quickform = & $this->quickforms[$active];
+            return true;
+        }
+        foreach($this->quickforms as $k=>$v) {
+            if (isset($v->_attributes['name']) && v->_attributes['name'] == $active) {
+                $this->quickform = & $this->quickforms[$k];
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    
+    
+    
      /**
     *   if debugging is on, print the debug info to the screen
     *

@@ -593,10 +593,11 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         ); 
         
         
-        return '<?php echo $this->quickform->formHeadToHtml("'.$this->getAttribute('NAME').'"); ?>' .
+        return '<?php $this->setActiveQuickForm('. $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId'].'); echo $this->quickform->formHeadToHtml(); ?>' .
             $this->childrenToString() .
             '</form>';
-        
+            
+        $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId']++;
         //print_r($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']);
     }
     

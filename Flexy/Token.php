@@ -193,6 +193,9 @@ class HTML_Template_Flexy_Token {
         
         $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = false;
         
+        $_HTML_TEMPLATE_FLEXY_TOKEN['activeFormId'] = 0;
+        $_HTML_TEMPLATE_FLEXY_TOKEN['activeForm'] = '';
+        
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'] = array(new HTML_Template_Flexy_Token);
         $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][0]->id =0;
         $_HTML_TEMPLATE_FLEXY_TOKEN['gettextStrings'] = array();

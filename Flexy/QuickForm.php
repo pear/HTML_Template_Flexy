@@ -85,10 +85,8 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
     */
   
     
-    function formHeadtoHtml($form) 
+    function formHeadtoHtml() 
     {
-        
-         
         $ret ='<script language="javascript"><!--'.$this->_buildRules() . '--></script>';
         $ret .= '<form ' . $this->_getAttrString($this->_attributes) . '>';
       
