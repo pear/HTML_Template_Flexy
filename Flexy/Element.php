@@ -372,7 +372,7 @@ class HTML_Template_Flexy_Element {
                         $atts = array('value'=>$kk);
                     }
                     $add = new HTML_Template_Flexy_Element('option',$atts);
-                    $add->children = array($vv);
+                    $add->children = array(htmlspecialchars($vv));
                     $child->children[] = $add;
                 }
                 $this->children[] = $child;
@@ -383,7 +383,7 @@ class HTML_Template_Flexy_Element {
                 $atts = array('value'=>$k);
             }
             $add = new HTML_Template_Flexy_Element('option',$atts);
-            $add->children = array($v);
+            $add->children = array(htmlspecialchars($v));
             $this->children[] = $add;
         }
        
