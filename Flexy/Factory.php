@@ -55,7 +55,7 @@ class HTML_Template_Flexy_Factory {
     }
     
     /**
-    * flatten - takes a multi dimensional array, and builds the 'xxx[sss][xx]' => value
+    * fromArrayPrefixed - takes a multi dimensional array, and builds the 'xxx[sss][xx]' => value
     * 
     * @param   array   key(tag name) => value   
     * @param   array   key(tag name) => value   

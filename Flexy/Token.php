@@ -116,12 +116,54 @@ class HTML_Template_Flexy_Token {
         $this->value = $value;
     }
 
+    
+    /**
+    * compile to String (vistor method) replaces toString
+    *
+    * @return   string   HTML
+    * @access   public
+    */
+    
+    function compile(&$compiler) {
+        $compiler->toString($this);
+    }
+    
+     
+    /**
+    * compile children (visitor approach).
+    *
+    * @return   string   HTML
+    * @access   public
+    */
+    function compileChildren(&$compiler) {
+        if (!$this->children) {
+            return '';
+        }
+        if ($this->ignoreChildren) {
+            return;
+        }
+        $ret = '';
+        //echo "output $this->id";
+        //new Gtk_VarDump($this);
+        foreach ($this->children as $child) {
+            if (!$child) {
+                continue;
+            }
+            $ret .= $child->compile($compiler);
+        }
+        return $ret;
+    }
+    
+    
     /**
     * generate HTML after doing flexy manipulations..
     *
     * @return   string   HTML
     * @access   public
     */
+    
+    
+    
       
     function toString() {
         if (is_array($this->value)) {
@@ -273,7 +315,9 @@ class HTML_Template_Flexy_Token {
         $stack = array();
         $total = $i +1;
         
-         
+        
+        // merge variables into strings. so printf && gettext work.
+        
         for($i=1;$i<$total;$i++) {
             if (!isset($res[$i])) {
                 continue;
