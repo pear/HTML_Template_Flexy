@@ -47,8 +47,13 @@
   <release>
      <version>0.5.2</version>
       <date>2003-09-08</date>
-      <notes>
-      
+      <notes><![CDATA[
+        New features 
+        - <flexy:include src="xxx.html"/> to include other templates
+        - <flexy:toJavascript flexy:prefix="js_name_prefix_" jsvar="php_flexy_var" ....>
+          uses HTML_Javascript_Convert to import PHP variables into Javascript.
+        
+        
         Fixes
         - array syntax supported in attributes (eg. urlencoded)
          
@@ -56,7 +61,7 @@
       
         
 
-      </notes>
+      ]]></notes>
       <state>beta</state>
      </release>
      
@@ -86,7 +91,6 @@
                     <file>Else.php</file>
                     <file>End.php</file>
                     <file>Foreach.php</file>
-                    <file>Include.php</file>
                     <file>Var.php</file>
                     <file>Method.php</file>
                     <file>Processing.php</file>
@@ -104,7 +108,8 @@
                   <dir name="Standard">
                     <file>Tag.php</file>
                     <file>Flexy.php</file>
-                    <file>Functions.php</file>
+                    
+                    <file>Functions.php</file> <!-- to be nuked -->
                   </dir>
                   
                   <!-- The Old Regex Compiler -->
