@@ -67,6 +67,15 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'] = $flexy->currentTemplate;
         
         
+        if (is_array($this->options['Translation2'])) {
+            require_once 'Translation2.php';
+            $this->options['Translation2'] = new Translation2(
+                $this->options['Translation2']['driver'],
+                @$this->options['Translation2']['options']
+            );
+        }
+        
+        
         if (is_a($this->options['Translation2'],'Translation2')) {
             $this->options['Translation2']->setLang($this->options['locale']);
             // fixme - needs to be more specific to which template to use..
@@ -662,8 +671,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
   
     function translateString($string)
     {
+         
         
-        // first see if we are using translation2
+        
         if (is_a($this->options['Translation2'],'Translation2')) {
             $result = $this->options['Translation2']->get($string);
             if (!empty($result)) {

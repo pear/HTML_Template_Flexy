@@ -76,9 +76,18 @@ class HTML_Template_Flexy
                                                             // so the french po file is:
                                                             // /var/www/site.com/local/fr/LC_MESSAGE/{textdomain}.po
                             
-                            'Translation2'  => false,       // set to 'Translation2' => new Translation2('dataobjectsimple','')
-                                                            // to make Translation2 a provider.
+                            'Translation2'  => false,       // to make Translation2 a provider.
                                                             // rather than gettext.
+                                                            // set to:
+                                                            //  'Translation2' => array(
+                                                            //         'driver' => 'dataobjectsimple',
+                                                            //         'options' => array()
+                                                            //  );
+                                                            // or the slower way.. 
+                                                            //   = as it requires loading the code..
+                                                            //
+                                                            //  'Translation2' => new Translation2('dataobjectsimple','')
+                                                            
                                                             
                             'forceCompile'  =>  false,      // only suggested for debugging
 
