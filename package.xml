@@ -41,7 +41,7 @@
         Othewise it just checks to see if a template/compiled template with ????.{locale}.???
         exists
       - added staticQuickTemplate($template,$object) for quickly including subtemplates.
-      - added {q_include(#aaaaa.html#)} to simpletags to support quicktemplate.
+      - added {q_include:#aaaaa.html#} to simpletags to support quicktemplate.
       - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
       </notes>
       <state>beta</state>
