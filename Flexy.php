@@ -67,7 +67,7 @@ define('HTML_TEMPLATE_FLEXY_ERROR_DIE',8);  // FATAL DEATH
 class HTML_Template_Flexy  
 {
 
-    /*on 
+    /* 
     *   @var    array   $options    the options for initializing the template class
     */
     var $options = array(   
@@ -190,9 +190,7 @@ class HTML_Template_Flexy
     *   @access public
     *   @param    array    $options (Optional)
     */
-    
-
-    
+      
     function HTML_Template_Flexy( $options=array() )
     {
         
@@ -233,7 +231,7 @@ class HTML_Template_Flexy
     *   @version    01/12/03
     *   @author     Wolfram Kriesing <wolfram@kriesing.de>
     *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
-    *   @return     boolean true on success. PEAR_Error on failure..
+    *   @return     boolean true on success. (or string, if compileToString) PEAR_Error on failure..
     */
     function compile( $file )
     {
@@ -303,7 +301,7 @@ class HTML_Template_Flexy
         }
         
         
-        /* Savant compatible compiler */
+        // Savant compatible compiler 
         
         if ($this->options['compiler'] == 'Raw') {
             $this->compiledTemplate = $this->currentTemplate;
@@ -321,7 +319,7 @@ class HTML_Template_Flexy
         
         
         $compileSuffix = ((count($this->options['templateDir']) > 1) && $this->options['multiSource']) ? 
-             DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
+            DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
         
         
         $compileDest = @$this->options['compileDir'];
@@ -483,6 +481,9 @@ class HTML_Template_Flexy
                             "Please check the file permisons on the directory and file ",
                             HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
+        
+        // are we using the assign api!
+        
         if (isset($this->assign)) {
             if (!$t) {
                 $t = (object) $this->assign->variables;
