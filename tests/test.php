@@ -14,7 +14,7 @@ function compileAll($options, $files=array()) {
         if ($file{0} == '.') {
             continue;
         }
-        if (is_dir(dirname(__FILE__).'/tests/'.$file)) {
+        if (is_dir(dirname(__FILE__).'/templates/'.$file)) {
             continue;
         }
         // skip if not listed in files (and it's an array)
@@ -23,7 +23,7 @@ function compileAll($options, $files=array()) {
         }
         
         $x = new HTML_Template_Flexy($options);
-        echo "compile $file\n";
+        echo "compile  $file \n";
         $res = $x->compile($file);
         if ($res !== true) {
             echo "Compile failure: ".$res->toString() . "\n";
@@ -40,6 +40,7 @@ $options =  array(
     'forceCompile'  =>  true,  // only suggested for debugging
     'fatalError'  =>  HTML_TEMPLATE_FLEXY_ERROR_RETURN,  // only suggested for debugging
     'url_rewrite' => 'images/:/myproject/images/',
+   
     
 );
 // basic options..
@@ -49,19 +50,25 @@ $options['compileDir']    =  dirname(__FILE__) .'/results1';
 
 $a = $_SERVER['argv'];
 array_shift($a);
+if ($a) {
+    $options['debug'] = 1;
+    $options['fatalError']  =   HTML_TEMPLATE_FLEXY_ERROR_DIE;
+}  
 //compileAll($options,$a);
-
+echo "PASS ONE: Bail out when globals / privates etc. found\n";
 // test allowPHP 
-$options['compileDir']    =  dirname(__FILE__) .'/results2';
+
 $options['allowPHP']      =  true;
-compileAll($options,array('raw_php.html'));
+compileAll($options,$a);
 
-
+echo "PASS TWO: Compile when globals / privates etc. found\n";
+$options['compileDir']    =  dirname(__FILE__) .'/results2';
 // test GLOBALS, privates etc.
 $options['globals']         =  true;
 $options['privates']        =  true;
 $options['globalfunctions'] =  true;
-compileAll($options,array('globals.html'));
+$options['fatalError']  =   HTML_TEMPLATE_FLEXY_ERROR_DIE;
+compileAll($options,$a);
 
 if ($a) {
     exit;

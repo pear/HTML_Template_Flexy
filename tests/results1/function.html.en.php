@@ -1,5 +1,5 @@
 <?php 
-function _html_template_flexy_compiler_standard_flexy_test1($t,$this) {
+function _html_template_flexy_compiler_flexy_flexy_test1($t,$this) {
 ?>this is the contents of test1<?php 
 }
 ?>
@@ -13,8 +13,8 @@ function _html_template_flexy_compiler_standard_flexy_test1($t,$this) {
 </table><?php }?>
 <table>
 <tr><td>
-   <?php  _html_template_flexy_compiler_standard_flexy_test1($t,$this);?>
-   <?php  call_user_func_array('_html_template_flexy_compiler_standard_flexy_'.$t->a_value,array($t,$this));?>
+   <?php if (function_exists('_html_template_flexy_compiler_flexy_flexy_test1'))  _html_template_flexy_compiler_flexy_flexy_test1($t,$this);?>
+   <?php if (function_exists('_html_template_flexy_compiler_flexy_flexy_'.$t->a_value)) call_user_func_array('_html_template_flexy_compiler_flexy_flexy_'.$t->a_value,array($t,$this));?>
 </td></tr>
 </table>
 

@@ -43,4 +43,26 @@
             <html:option flexy:foreach="categories,data" value="{data.value}" 
                 onselect="parent.onSelect_ProdCat();">{data.name}</html:option>
         </html:select>
+        
+        <!-- test toElement  -->
+         <menulist id="supplier_id">
+            <menupopup>
+                    <menuitem id="itemSubCatAll" label="-- Select --" value="0"/>
+            </menupopup>
+        </menulist>
+        
+        <!-- test using flexy stuff -->
+        <menulist id="supplier_id2">
+            <menupopup>
+                    <menuitem flexy:foreach="x,y" id="itemSubCatAll" label="{y.name}" value="{y.value}"/>
+            </menupopup>
+        </menulist>
+        
+        <!-- test args on menupopup -->
+           <menulist id="product_category">
+            <menupopup onpopuphiding="cTree.categorySelect(this.parentNode.value,1);">
+                <menuitem id="prodCatAll" label="-- All --" value="0" />
+            </menupopup>
+        </menulist>
+        
 </window>
