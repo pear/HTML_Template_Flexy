@@ -81,6 +81,12 @@ $elements['List'] = new HTML_Template_Flexy_Element('select');
 $elements['List']->setValue(2001);
 $elements['picture'] = new HTML_Template_Flexy_Element('img', "width='400' height='400' src='any.gif'");
 
+
+$elements['xhtmllisttest'] = new HTML_Template_Flexy_Element;
+$elements['xhtmllisttest']->setOptions(array('0'=>'--select something--','bbb'=>'somevalue'));
+$elements['xhtmllisttest']->setValue('bbb');
+
+
 // write the data to a file.
 $data = $x->bufferedOutputObject($tmp,$elements);
 $fh = fopen(dirname(__FILE__) . '/results2/forms.result.html','w');

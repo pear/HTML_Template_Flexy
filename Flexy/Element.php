@@ -141,6 +141,10 @@ class HTML_Template_Flexy_Element {
             if (is_array($value) || is_object($value)) {
                 continue;
             }
+            
+            if ($key == 'flexy:xhtml') {
+                continue;
+            }
             if ($value === false) {
                 continue;
             }
@@ -150,7 +154,11 @@ class HTML_Template_Flexy_Element {
                     $xhtmlclose = ' /';
                     continue;
                 }
-                $strAttr .= ' ' . $key;
+                if (isset($this->attributes['flexy:xhtml'])) {
+                    $strAttr .= " {$key}=\"{$key}\"";
+                } else {
+                    $strAttr .= ' ' . $key;
+                }
             } else {
                 $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
             }
@@ -227,12 +235,12 @@ class HTML_Template_Flexy_Element {
                         }
                         //print_r($this); echo "SET TO "; serialize($value);
                         if (substr($this->attributes['name'],-2) == '[]') {
-                            if (is_array($value) && in_array($this->attributes['value'],$value))  {
-                                $this->attributes['checked'] = true;
+                            if (is_array($value) && in_array((string) $this->attributes['value'],$value))  {
+                                $this->attributes['checked'] =  true;
                             }
                             
                         } else if ($this->attributes['value'] == $value) {
-                            $this->attributes['checked'] = true;
+                            $this->attributes['checked'] =  true;
                         }
                         
                         
@@ -243,7 +251,7 @@ class HTML_Template_Flexy_Element {
                         }
                         
                         if ($this->attributes['value'] == $value) {
-                            $this->attributes['checked'] = true;
+                            $this->attributes['checked'] =  true;
                         }
                         return;
                     
@@ -264,7 +272,9 @@ class HTML_Template_Flexy_Element {
                 }
                 
                 // its setting the default value..
+                
                 foreach($this->children as $i=>$child) {
+                    
                     if (is_string($child)) {
                         continue;
                     }
@@ -273,9 +283,10 @@ class HTML_Template_Flexy_Element {
                         
                             // does the value exist and match..
                             if (isset($child->attributes['value']) 
-                                && in_array($child->attributes['value'], $value)) 
+                                && in_array((string) $child->attributes['value'], $value)) 
                             {
-                                $this->children[$i]->children[$ii]->attributes['selected'] = true;
+                                $this->children[$i]->children[$ii]->attributes['selected'] = 
+                                    isset($this->attributes['flexy:xhtml']) ? 'selected' : true;
                                 continue;
                             }
                             if (isset($child->attributes['value']) && 
@@ -285,15 +296,7 @@ class HTML_Template_Flexy_Element {
                                 continue;
                             }
                             // value doesnt exst..
-                            if (in_array($child->children[0],$value)) {
-                                $this->children[$i]->children[$ii]->attributes['selected'] = true;
-                                continue;
-                            }
-                            
-                            if (in_array($child->children[0],$value)) {
-                                $this->children[$i]->children[$ii]->attributes['selected'] = true;
-                                continue;
-                            }
+                          
                             if (isset($this->children[$i]->children[$ii]->attributes['selected'])) {
                                 unset($this->children[$i]->children[$ii]->attributes['selected']);
                                 continue;
@@ -303,34 +306,34 @@ class HTML_Template_Flexy_Element {
                     }
                     
                     // standard option value...
+                    //echo "testing {$child->attributes['value']} against ". print_r($value,true)."\n";
+                    // does the value exist and match..
                     
-                     // does the value exist and match..
                     if (isset($child->attributes['value']) 
-                        && in_array($child->attributes['value'], $value)) 
+                        && in_array((string) $child->attributes['value'], $value)) 
                     {
-                        $this->children[$i]->attributes['selected'] = true;
+                       // echo "MATCH!\n";
+                      
+                        $this->children[$i]->attributes['selected'] = 
+                            isset($this->attributes['flexy:xhtml']) ? 'selected' : true;;
                         continue;
                     }
                     if (isset($child->attributes['value']) && 
                         isset($this->children[$i]->attributes['selected'])) 
                     {
+                        //echo "clearing selected\n";
                         unset($this->children[$i]->attributes['selected']);
                         continue;
                     }
                     // value doesnt exst..
-                    if (in_array($child->children[0],$value)) {
-                        $this->children[$i]->attributes['selected'] = true;
-                        continue;
-                    }
                     
-                    if (in_array($child->children[0],$value)) {
-                        $this->children[$i]->attributes['selected'] = true;
-                        continue;
-                    }
                     if (isset($this->children[$i]->attributes['selected'])) {
+                        //echo "clearing selected\n";
                         unset($this->children[$i]->attributes['selected']);
                         continue;
                     }
+                    
+                    
                 }
                 return;
             case 'textarea':

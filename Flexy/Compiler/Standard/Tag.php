@@ -791,12 +791,19 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         $ret->tag = strtolower($element->tag);
         
         $ats = $element->getAttributes();
+        
+        if (isset($element->attributes['flexy:xhtml'])) {
+            $ats['flexy:xhtml'] = true;
+        }
+        
         foreach(array_keys($ats)  as $a) { 
             $ret->attributes[$a] = $this->unHtmlEntities($ats[$a]);
         }
+        //print_r($ats);
         if (!$element->children) {
             return $ret;
         }
+        
         //print_r($this->children);
         foreach(array_keys($element->children) as $i) {
             // not quite sure why this happens - but it does.

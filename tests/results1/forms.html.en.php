@@ -48,3 +48,6 @@
 <?php echo $this->elements['_submit[1]']->toHtml();?>
 </form>
 
+<H2> Bug 1275 XHTML output </H2>
+<?php echo $this->elements['testingxhtml']->toHtml();?>
+<?php echo $this->elements['xhtmllisttest']->toHtml();?>
