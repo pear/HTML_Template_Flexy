@@ -61,56 +61,18 @@
  
 
     <release>
-     <version>0.8.0</version>
-      <date>2004-04-22</date>
+     <version>0.8.1</version>
+      <date>2004-04-24</date>
       <notes><![CDATA[
-      Feature addition release:
+      Bugfix release:
       
-        Moving to stable is posponed another month, so these new features get a thorough testing.
+        Moving to stable Planned Sometime after Late May 2004
         
       Bugs / Fixes:
-        * fixed overzealous closing on some tags 
-        * fixed double html escaping of some dynamic attributes
-        * ignore empty url_rewrite options (eg. images/:/templates/images,,)
-        * fixed recursion death, on &lt;s&gt; tags
-        * fixed flexy {variables} inside attributes='that are single quoted'
-        * unknown namespaces are assumed to be HTML (so XUL with html works ok)
-        
-      Features:
-        * Translation2 transparent translation backend support
-          $options['Translation2'] = array(
-                  'driver' => 'dataobjectsimple',
-                  'options' => array()
-            )
-          will instantate Translation2 once , and call it to translate 
-          all strings found when compiling.
-          
-        * Strings to be translated can be explicitly marked by encapsulating them
-          in {_( ....... )_} 
-          Parsing is done prior to tokenizing, so you can include {variables} inside
-          the translation strings.
-          
-        * Access to private variables and methods now possible eg. 
-          {_myprivate_var}
-          ** requires option['privates'] = true
-          
-        * Access to super global variables now possible eg. 
-          {_SESSION[lang]} {_GET[posted]} {_POST[posted]}
-          {_REQUEST[lang]} {GLOBALS[posted]} {_COOKIES[posted]}
-          ** requires option['globals'] = true
-          (as per all variable, these are html escaped by default, for security reasons,
-           over-ride with the :h modifier)
-        
-        * Access to php functions now possible
-          {GLOBALS.date(mydate,#d/m/y#)}
-          ** requires option['globalfunctions'] = true
-          ** this is a big security hole if you dont trust your template authors,
-             it exposes exec() etc.
-          
-        * New Test infrastructure in CVS - enabling better unit testing.
-        
-        
-         
+        * Stoped Javascript being striped when language= tag not used.
+        * PHP5 tested
+        * javscript and php code not added to gettext string list.
+   
         
       ]]></notes>
       <state>beta</state>
@@ -196,7 +158,63 @@
     </deps>
 
    <changelog>
-   
+   <release>
+     <version>0.8.0</version>
+      <date>2004-04-22</date>
+      <notes><![CDATA[
+      Feature addition release:
+      
+        Moving to stable is posponed another month, so these new features get a thorough testing.
+        
+      Bugs / Fixes:
+        * fixed overzealous closing on some tags 
+        * fixed double html escaping of some dynamic attributes
+        * ignore empty url_rewrite options (eg. images/:/templates/images,,)
+        * fixed recursion death, on &lt;s&gt; tags
+        * fixed flexy {variables} inside attributes='that are single quoted'
+        * unknown namespaces are assumed to be HTML (so XUL with html works ok)
+        
+      Features:
+        * Translation2 transparent translation backend support
+          $options['Translation2'] = array(
+                  'driver' => 'dataobjectsimple',
+                  'options' => array()
+            )
+          will instantate Translation2 once , and call it to translate 
+          all strings found when compiling.
+          
+        * Strings to be translated can be explicitly marked by encapsulating them
+          in {_( ....... )_} 
+          Parsing is done prior to tokenizing, so you can include {variables} inside
+          the translation strings.
+          
+        * Access to private variables and methods now possible eg. 
+          {_myprivate_var}
+          ** requires option['privates'] = true
+          
+        * Access to super global variables now possible eg. 
+          {_SESSION[lang]} {_GET[posted]} {_POST[posted]}
+          {_REQUEST[lang]} {GLOBALS[posted]} {_COOKIES[posted]}
+          ** requires option['globals'] = true
+          (as per all variable, these are html escaped by default, for security reasons,
+           over-ride with the :h modifier)
+        
+        * Access to php functions now possible
+          {GLOBALS.date(mydate,#d/m/y#)}
+          ** requires option['globalfunctions'] = true
+          ** this is a big security hole if you dont trust your template authors,
+             it exposes exec() etc.
+          
+        * New Test infrastructure in CVS - enabling better unit testing.
+        
+        
+         
+        
+      ]]></notes>
+      <state>beta</state>
+     </release>
+     
+     
     <release>
      <version>0.7.1</version>
       <date>2004-04-07</date>
