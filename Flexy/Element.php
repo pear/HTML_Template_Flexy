@@ -240,6 +240,10 @@ class HTML_Template_Flexy_Element {
                         if (isset($this->attributes['checked'])) {
                             unset($this->attributes['checked']);
                         }
+                        // if value is nto set, it doesnt make any difference what you set ?
+                        if (!isset($this->attributes['value'])) {
+                            return;
+                        }
                         //print_r($this); echo "SET TO "; serialize($value);
                         if (substr($this->attributes['name'],-2) == '[]') {
                             if (is_array($value) && 
@@ -247,10 +251,9 @@ class HTML_Template_Flexy_Element {
                                 ) {
                                 $this->attributes['checked'] =  true;
                             }
-                            
-                        } else if (isset($this->attributes['value']) && 
-                            ($this->attributes['value'] == $value)
-                            ) {
+                            return;
+                        }
+                        if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] =  true;
                         }
                         

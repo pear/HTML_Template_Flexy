@@ -70,13 +70,23 @@ compilefile('forms.html',
 <?php echo $this->elements['picture']->toHtml();?>
 
 <h2>Bug 1120:</h2>
-<?php echo $this->elements['form']->toHtmlnoClose();?>
+<form action="test">
 <?php echo $this->elements['testing']->toHtml();?>
 <?php echo $this->elements['_submit[2]']->toHtml();?>
 </form>
 
 <form action="<?php echo htmlspecialchars($t->someurl);?>">
-<input name="testing2" value="<?php echo htmlspecialchars($t->somevalue);?>">
+<?php 
+if (!isset($this->elements['testing2']->attributes['value'])) {
+    $this->elements['testing2']->attributes['value'] = '';
+    $this->elements['testing2']->attributes['value'] .=  htmlspecialchars($t->somevalue);
+}
+$_attributes_used = array('value');
+echo $this->elements['testing2']->toHtml();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['testing2']->attributes[$_a]);
+}}
+?>
 <?php echo $this->elements['_submit[1]']->toHtml();?>
 </form>
 
@@ -86,8 +96,28 @@ compilefile('forms.html',
 
 
 
-<form name="test_mix" action="<?php echo htmlspecialchars($t->someurl);?>">
-<input name="testing5" value="<?php echo htmlspecialchars($t->somevalue);?>">
+<?php 
+if (!isset($this->elements['test_mix']->attributes['action'])) {
+    $this->elements['test_mix']->attributes['action'] = '';
+    $this->elements['test_mix']->attributes['action'] .=  htmlspecialchars($t->someurl);
+}
+$_attributes_used = array('action');
+echo $this->elements['test_mix']->toHtmlnoClose();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['test_mix']->attributes[$_a]);
+}}
+?>
+<?php 
+if (!isset($this->elements['testing5']->attributes['value'])) {
+    $this->elements['testing5']->attributes['value'] = '';
+    $this->elements['testing5']->attributes['value'] .=  htmlspecialchars($t->somevalue);
+}
+$_attributes_used = array('value');
+echo $this->elements['testing5']->toHtml();
+if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
+    unset($this->elements['testing5']->attributes[$_a]);
+}}
+?>
 <?php echo $this->elements['_submit[3]']->toHtml();?>
 </form>
 Array
@@ -512,24 +542,6 @@ Array
             [value] => 
         )
 
-    [form] => html_template_flexy_element Object
-        (
-            [tag] => form
-            [attributes] => Array
-                (
-                    [action] => test
-                )
-
-            [children] => Array
-                (
-                )
-
-            [override] => 
-            [prefix] => 
-            [suffix] => 
-            [value] => 
-        )
-
     [testing] => html_template_flexy_element Object
         (
             [tag] => input
@@ -557,6 +569,24 @@ Array
                     [type] => submit
                     [value] => x
                     [name] => _submit[2]
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [testing2] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [name] => testing2
                 )
 
             [children] => Array
@@ -631,6 +661,42 @@ Array
             [value] => 
         )
 
+    [test_mix] => html_template_flexy_element Object
+        (
+            [tag] => form
+            [attributes] => Array
+                (
+                    [name] => test_mix
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [testing5] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [name] => testing5
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
     [_submit[3]] => html_template_flexy_element Object
         (
             [tag] => input
@@ -654,8 +720,6 @@ Array
 
 
 ===With data file: forms.html===
-
-Notice: Undefined index:  value in /mnt/alansdisk/src/php/pear/HTML_Template_Flexy/Flexy/Element.php on line 249
 
 <h2>Form Not Parsed</h2>
 
@@ -697,11 +761,11 @@ Notice: Undefined index:  value in /mnt/alansdisk/src/php/pear/HTML_Template_Fle
 
 <img name="picture" id="picture">
 <h2>Bug 1120:</h2>
-<form action="test"><input name="testing" value="test"><input type="submit" value="x" name="_submit[2]"></form>
+<form action="test">
+<input name="testing" value="test"><input type="submit" value="x" name="_submit[2]"></form>
 
 <form action="">
-<input name="testing2" value="">
-<input type="submit" name="_submit[1]"></form>
+<input name="testing2" value=""><input type="submit" name="_submit[1]"></form>
 
 <H2> Bug 1275 XHTML output </H2>
 <input type="checkbox" name="testingxhtml"><select name="xhtmllisttest">
@@ -709,6 +773,4 @@ Notice: Undefined index:  value in /mnt/alansdisk/src/php/pear/HTML_Template_Fle
 </select>
 
 
-<form name="test_mix" action="">
-<input name="testing5" value="">
-<input type="submit" name="_submit[3]"></form>
+<form name="test_mix" action=""><input name="testing5" value=""><input type="submit" name="_submit[3]"></form>
