@@ -349,12 +349,22 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     function getElementPhp($id,$mergeWithName=false) {
         
         global $_HTML_TEMPLATE_FLEXY;
+        static $tmpId=0;
         if (!$id) {
             
              PEAR::raiseError("Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: 
              Dynamic tags require an ID value",
              null, PEAR_ERROR_DIE);
         }
+        if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id]) && (strtolower($this->element->getAttribute('type')) == 'checkbox' )) {
+        
+            $id = 'tmpId'. (++$tmpId);
+            $this->element->attributes['id'] = $id;
+            $this->element->ucAttributes['ID'] = $id;
+        }
+        
+        
+        
         if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
            // echo "<PRE>";print_r($this);print_r($_HTML_TEMPLATE_FLEXY['elements']);echo "</PRE>";
              PEAR::raiseError("Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} in Tag &lt;{$this->element->tag}&gt;:<BR> 
