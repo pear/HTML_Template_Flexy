@@ -89,6 +89,8 @@ class HTML_Template_Flexy
                             'strict'        => false,       // All elements in the template must be defined !
                             'multiSource'   => false,       // Allow same template to exist in multiple places
                                                             // So you can have user themes....
+                            'templateDirOrder' => '',       // set to 'reverse' to assume that first template
+                                                            // is the one use, rather than last (default)
                         );
 
     
@@ -358,7 +360,11 @@ class HTML_Template_Flexy
         
         // look in all the posible locations for the template directory..
         if ($this->currentTemplate  === false) {
-            foreach (array_unique($this->options['templateDir']) as $tmplDir) {
+            $dirs = array_unique($this->options['templateDir']);
+            if ($this->options['templateDirOrder'] == 'reverse') {
+                $dirs = array_reverse($dirs);
+            }
+            foreach ($dirs as $tmplDir) {
                 if (!@file_exists($tmplDir . DIRECTORY_SEPARATOR . $file))  {
                     continue;
                 }
