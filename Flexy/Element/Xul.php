@@ -23,10 +23,7 @@
  *
  * All methods are static, and expect the first argument to be a HTML_Template_Flexy_Element
  *
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @version     1.6
- * @since       PHP 4.0.3pl1
- * @abstract
+ * @author      Alan Knowles <alan@akbkhome.com>
  */
 class HTML_Template_Flexy_Element_Xul {
 
