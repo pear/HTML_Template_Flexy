@@ -20,11 +20,15 @@
 //
 //  Base Compiler Class
 //  Standard 'Original Flavour' Flexy compiler
+.
+/*------------------------------------------------------------------------------------------
+                                        NOTICE: 
+                             THIS COMPILER IS DEPRECIATED 
+                                USE THE FLEXY COMPILER 
+     
+                      The Flexy Compiler should be Compatible
 
-// this does the main conversion, (eg. for {vars and methods}) 
-// it relays into Compiler/Tag & Compiler/Flexy for tags and namespace handling.
-
-
+------------------------------------------------------------------------------------------*/
 
 require_once 'HTML/Template/Flexy/Tokenizer.php';
 require_once 'HTML/Template/Flexy/Token.php';
