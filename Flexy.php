@@ -417,7 +417,7 @@ class HTML_Template_Flexy
         $this->getTextStringsFile  = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.gettext.serial';
         $this->elementsFile        = $compileDest . $compileSuffix . DIRECTORY_SEPARATOR .$filename.'.elements.serial';
         
-        print_r( $this->compiledTemplate );
+        //print_r( $this->compiledTemplate );
         
         $recompile = false;
         if( @$this->options['forceCompile'] ) {
