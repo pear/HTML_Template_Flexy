@@ -85,15 +85,16 @@ class HTML_Template_Flexy_Plugin {
         // ahref = maps to {class_prefix}_ahref::ahref
         
         if (empty($this->plugins)) {
-            foreach ($this->flexy->options['plugins'] as $p) {
-                if (is_array($p)) {
-                    include_once $p[0];
-                    $this->plugins[$p[1]] = new $p[1];
-                    $this->plugins[$p[1]]->flexy = &$this->flexy;
+            foreach ($this->flexy->options['plugins'] as $cname=>$file) {
+                if (!is_int($cname)) {
+                    include_once $file;
+                    $this->plugins[$cname] = new $cname
+                    $this->plugins[$cname]->flexy = &$this->flexy;
                     continue;
                 }
-                require_once 'HTML/Template/Flexy/Plugins/'. $p[0] . '.php';
-                $class = "HTML_Template_Flexy_Plugins_{$p[0]}";
+                $cname = $file;
+                require_once 'HTML/Template/Flexy/Plugins/'. $cname . '.php';
+                $class = "HTML_Template_Flexy_Plugins_{$cname}";
                 $this->plugins[$class] = new $class;
                 $this->plugins[$class]->flexy = &$this->flexy;
             }

@@ -133,6 +133,10 @@ class HTML_Template_Flexy
                                         
         'fatalError'       => HTML_TEMPLATE_FLEXY_ERROR_DIE,       // default behavior is to die on errors in template.
         
+        'plugins'       => array(),     // load classes to be made available via the plugin method
+                                        // eg. = array('Savant') - loads the Savant methods.
+                                        // = array('MyClass_Plugins' => 'MyClass/Plugins.php')
+                                        //    Class, and where to include it from..
     );
 
     
@@ -773,11 +777,12 @@ class HTML_Template_Flexy
     * @see  HTML_Template_Flexy_Plugin
     * @status alpha
     */
-    function plugin($k,&$v) {
+    function plugin() {
         require_once 'HTML/Template/Flexy/Plugin.php';
         // load pluginManager.
-        if (!$this->plugin) {
-            $this->plugin = new HTML_Template_Flexy_Assign;
+        if (!isset($this->plugin)) {
+            $this->plugin = new HTML_Template_Flexy_Plugin;
+            $this->plugin->flexy = &$this;
         }
         return $this->plugin->call(func_get_args());
     } 
