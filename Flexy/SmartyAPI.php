@@ -64,6 +64,14 @@ clear_config
 _* (all the privates)
 */
 
+/**
+* Smarty API emulator for Flexy 
+* - designed to make transitions simpler
+* - provides only basic support for variables
+* - uses flexy templates (that have been converted previosly with the converor)
+*  
+* @version    $Id$
+*/
 
 class HTML_Template_Flexy_SmartyAPI {
     

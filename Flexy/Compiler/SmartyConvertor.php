@@ -13,7 +13,7 @@
 // | obtain it through the world-wide-web, please send a note to          |
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
-// | Authors:  nobody <nobody@localhost>                                  |
+// | Authors:  Alan Knowles <alan@akbkhome.com>                           |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -22,15 +22,60 @@
 //  takes a smarty template, and converts it to a flexy one.
 //  then does a standard flexy compile.
 //
-//  really designed to be used with compileToString
-//  see
-// 
-//  Calls the relivent smarty compilers, then calls flexy to do the rest..
+//  anything that is not supported gets changed to HTML comments
+
+/* Usage:
+a simple script: 'convertsmarty.php'
+
+#!/usr/bin/php
+   $file = $_SERVER['argv'][1];
+   $x = new HTML_Template_Flexy(array(
+                    'compileDir'    =>  dirname(__FILE__) ,      // where do you want to write to..
+                    'templateDir'   =>  $dir ,     // where are your templates
+                    'locale'        => 'en',    // works with gettext
+                    'forceCompile'  =>  true,  // only suggested for debugging
+                    'debug'         => false,   // prints a few errors
+                    'nonHTML'       => false,  // dont parse HTML tags (eg. email templates)
+                    'allowPHP'      => false,   // allow PHP in template
+                    'compiler'      => 'SmartyConvertor', // which compiler to use.
+                    'compileToString' => true,    // returns the converted template (rather than actually 
+                                                   // converting to PHP.
+                    'filters'       => array(),    // used by regex compiler..
+                    'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00 ( {xxx:n} )
+                    'flexyIgnore'   => 0        // turn on/off the tag to element code
+                ));
+    
+    echo $x->compile(basename($file));
+
+then run it at the command line:
+php convertsmarty.php /path/to/a/smarty/template.tpl > /path/to/the/flexy/templates.html
+*/
+
 
 require_once 'HTML/Template/Flexy/Compiler.php';
 
+/**
+* The Smarty Converter implementation.
+* designed primarily to be used as above, to convert from one to another.
+* however it could be used inline to convert simple smarty templates into 
+* flexy ones - then compile them on the fly.
+*
+* @version    $Id$
+*/
 class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_Compiler {
     
+    /**
+    * compile implementation
+    *
+    * see HTML_Template_Flexy_Compiler::compile()
+    * 
+    * @param   object    The core flexy object.
+    * @param   string    optionally a string to compile.
+    *
+    * @return   true | string   string when compiling to String.
+    * @access   public
+    */
+  
     function compile(&$flexy,$string=false) 
     {
         $data = $string;
@@ -41,8 +86,7 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
         
         
         $data = $this->convertToFlexy($data);
-        echo $data;
-        exit;
+        
         if ($flexy->options['compileToString']) {
             return $data;
         }
@@ -54,7 +98,18 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
     }
     
     
-    function convertToFlexy($data) {
+    
+    /**
+    * The core work of parsing a smarty template and converting it into flexy.
+    *
+    * @param   string       the contents of the smarty template
+    *
+    * @return   string         the flexy version of the template.
+    * @access   public|private
+    * @see      see also methods.....
+    */
+    function convertToFlexy($data) 
+    {
     
         $leftq = preg_quote('{', '!');
         $rightq = preg_quote('}', '!');
@@ -82,8 +137,6 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
     
     }
     
-    
-        
     /**
     * stack for conditional and closers.
     *
@@ -94,6 +147,16 @@ class HTML_Template_Flexy_Compiler_SmartyConvertor extends HTML_Template_Flexy_C
             'if' => 0,
         );
     
+    
+    
+    /**
+    * compile a smarty { tag } into a flexy one.
+    *
+    * @param   string           the tag
+    *
+    * @return   string      the converted version
+    * @access   private
+    */
     function _compileTag($str) 
     {
         // skip comments
