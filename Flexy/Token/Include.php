@@ -39,19 +39,7 @@ class HTML_Template_Flexy_Token_Include extends HTML_Template_Flexy_Token{
 
     
     
-    function toString() {
-        $v = $this->toVar($this->value);
-         
-        $options = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions'];
-       
-        $ret = "<?php  if (isset($v) &&
-                    file_exists(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\")) 
-                    include(\"{$options['compileDir']}/\".{$v}.\".{$options['locale']}.php\"); ?>";
-            
-        return $ret;     
-    
-    }
-
+     
 
 
 

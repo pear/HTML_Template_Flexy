@@ -25,19 +25,7 @@
 *
 */
 class HTML_Template_Flexy_Token_Processing extends HTML_Template_Flexy_Token {
-    /**
-    * toString - generate PHP code 
-    * @see parent::toString(), $this->pullState()
-    */
-    function toString() {
-        // if it's XML then quote it..
-        if (strtoupper(substr($this->value,2,3)) == 'XML') { 
-            return '<?php  echo \'' . str_replace("'","\\"."'", $this->value) . '\'; ?>';
-        }
-        // otherwise it's PHP code - so echo it..
-        return $this->value;
-    }
-
+   
 
 }
 

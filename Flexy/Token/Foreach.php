@@ -58,25 +58,7 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
         $this->key=$value[1];
         $this->value=@$value[2];
     }
-    /**
-    * toString - generate PHP code 
-    * @see parent::toString(), $this->pullState()
-    */
-    function toString() {
-        $ret = "<?php if (is_array(".
-            $this->toVar($this->loopOn) . ")) " .
-            "foreach(".$this->toVar($this->loopOn). " ";
-        $ret .= "as \${$this->key}";
-        if ($this->value) {
-            $ret .=  " => \${$this->value}";
-        }
-        $ret .= ") { ?>";
-        
-        $this->pushState();
-        $this->pushVar($this->key);
-        $this->pushVar($this->value);
-        return $ret;
-    }
+     
 
 }
 

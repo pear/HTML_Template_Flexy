@@ -53,16 +53,7 @@ class HTML_Template_Flexy_Token_If extends HTML_Template_Flexy_Token{
         }
         $this->condition=$value;
     }
-    /**
-    * toString - generate PHP code 
-    * @see parent::toString(), $this->toVar()
-    */
-    function toString() {
-        $ret = "<?php if (".$this->isNegative.$this->toVar($this->condition) .")  { ?>";
-        $this->pushState();
-        return $ret;
-        
-    }
+    
 
 }
 

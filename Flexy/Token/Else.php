@@ -25,20 +25,7 @@
 *
 */
 class HTML_Template_Flexy_Token_Else extends HTML_Template_Flexy_Token {
-    /**
-    * toString - generate PHP code 
-    * @see parent::toString(), $this->pullState()
-    */
-    function toString() {
-        // pushpull states to make sure we are in an area.. - should really check to see 
-        // if the state it is pulling is a if...
-        if ($this->pullState() === false) {
-            echo "Unmatched End on Line {$this->line}";
-            return false;
-        }
-        $this->pushState();
-        return "<?php } else {?>";
-    }
+   
 
 
 }

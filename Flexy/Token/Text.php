@@ -47,89 +47,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean'] = array_flip($GLOBALS['_H
 */
 
 class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
-    /**
-    * toString - generate PHP code 
-    * this calls gettext on the string prior to outputing it.
-    * does weird things to try and make sensible strings for gettext
-    *
-    * @see parent::toString(), $this->pullState()
-    */
-    
-    
-    function toString() {
-        // if it's XML then quote it..
-        
-        
-        if (!strlen(trim($this->value) )) {
-            return $this->value;
-        }
-        if (!count($this->argTokens) && !$this->isWord()) {
-            return $this->value;
-        }
-        
-        $front = '';
-        $rear = '';
-        for ($i=0;$i<strlen($this->value); $i++) {
-            if (strpos(" \n\t\r\0\x0B", $this->value{$i}) !== false) {
-                $front .= $this->value{$i};
-                continue;
-            }
-            break;
-        }
-         
-        for ($i=strlen($this->value)-1;$i>-1; $i--) {
-            if (strpos(" \n\t\r\0\x0B", $this->value{$i}) !== false) {
-                $rear = $this->value{$i} . $rear;
-                continue;
-            }
-            break;            
-        }
-        
-        $value = trim($this->value);
-        
-        
-        
-        $value = strtr($value,$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['clean']);
-        
-        if (!count($this->argTokens)) {
-           
-            
-            $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'][] = $value;
-            if (function_exists('gettext')) {
-                $value = gettext($value);
-            }
-            $value = strtr($value,$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean']);
-        
-            return $front .  $value  . $rear;
-        }
-        //print_r($this->argTokens );
-        $args = array();
-        $argsMake = '';
-        foreach($this->argTokens as $i=>$token) {
-            
-            $args[] =$token->toString();
-            
-        }
-        $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN']['gettextStrings'][] = $value;
-        if (function_exists('gettext')) {
-            $value = gettext($value);
-        }
-        $value = strtr($value,$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean']);
-        
-        
-        
-        $bits = explode('%s',$value);
-        $ret = $front;
-        foreach($bits as $i=>$v) {
-            $ret.=$v.@$args[$i];
-        }
-        
-        return  $ret . $rear;
-        
-        
-        
-        
-    }
+     
       
     
       
@@ -243,16 +161,7 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         }
         return  preg_match('/[a-z]/i',$this->value);
     }
-    /**
-    * Convert flexy tokens to HTML_Elements. (in this case - it's just a string)
-    *
-    *
-    * @return   array
-    * @access   string
-    */
-    function toElement() {
-        return  $this->value;
-    }
+     
 }
 
 

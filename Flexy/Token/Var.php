@@ -46,40 +46,7 @@ class HTML_Template_Flexy_Token_Var extends HTML_Template_Flexy_Token {
         }
         $this->value = $value;
     }
-    /**
-    * toString - generate PHP code 
-    * @see parent::toString(), $this->pullState()
-    */
-    function toString() {
-        // ignore modifier at present!!
-        $prefix = 'echo ';
-        
-        $suffix = '';
-        switch ($this->modifier) {
-            case 'h':
-                break;
-            case 'u':
-                $prefix = 'echo urlencode(';
-                $suffix = ')';
-                break;
-            case 'r':
-                $prefix = 'echo \'<pre>\'; echo htmlspecialchars(print_r(';
-                $suffix = ',true)); echo \'</pre>\';';
-                break;                
-                
-                
-            default:
-                $prefix = 'echo htmlspecialchars(';
-                // add language ?
-                $suffix = ')';
-        }
-        
-        
-            
-        
-        
-        return "<?php {$prefix}" . $this->toVar($this->value) . "{$suffix}; ?>";
-    }
+     
 
 }
  
