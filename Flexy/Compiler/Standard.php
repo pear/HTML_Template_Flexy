@@ -272,9 +272,10 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
     
         
     
-        $ret = "if (is_array(".
-            $element->toVar($element->loopOn) . ")) " .
-            "foreach(".$element->toVar($element->loopOn). " ";
+        $ret = 'if (is_array('.
+            $element->toVar($element->loopOn) . ")  || " .
+            'is_object(' . $element->toVar($element->loopOn) . ')) ' .
+            'foreach(' . $element->toVar($element->loopOn) . " ";
             
         $ret .= "as \${$element->key}";
         
