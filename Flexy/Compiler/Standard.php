@@ -81,7 +81,14 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
         if (is_a($this->options['Translation2'],'Translation2')) {
             $this->options['Translation2']->setLang($this->options['locale']);
             // fixme - needs to be more specific to which template to use..
-            $this->options['Translation2']->setPageID(basename($flexy->currentTemplate));
+            foreach ($this->options['templateDir'] as $tt) {
+                $n = basename($flexy->currentTemplate);
+                if (substr($flexy->currentTemplate,0,strlen($tt)) == $tt) {
+                    $n = substr($flexy->currentTemplate,strlen($tt)+1);
+                }
+                //echo $n;
+            }
+            $this->options['Translation2']->setPageID($n);
         } else {
             setlocale(LC_ALL, $this->options['locale']);
         }
