@@ -136,7 +136,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
                 }
                  
                 $ret .= ' ' . $v->compile($this->compiler);
-            
+                continue;
             
             }
             
