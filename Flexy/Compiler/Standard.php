@@ -21,7 +21,9 @@
 //  Base Compiler Class
 //  Standard 'Original Flavour' Flexy compiler
 
- 
+// this does the main conversion, (eg. for {vars and methods}) 
+// it relays into Compiler/Tag & Compiler/Flexy for tags and namespace handling.
+
 
 
 require_once 'HTML/Template/Flexy/Tokenizer.php';
@@ -377,8 +379,9 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             return $loopon;
         }
         
-        $ret = 'if (is_array('. $loopon. ")  || " .
-            'is_object(' . $loopon  . ')) ' .
+        $ret = 'if ($this->options[\'strict\'] || ('.
+            'is_array('. $loopon. ')  || ' .
+            'is_object(' . $loopon  . '))) ' .
             'foreach(' . $loopon  . " ";
             
         $ret .= "as \${$element->key}";
@@ -531,8 +534,8 @@ class HTML_Template_Flexy_Compiler_Standard extends HTML_Template_Flexy_Compiler
             // we should check if they something weird like: GLOBALS.xxxx[sdf](....)
             $var = $method;
         } else {
-            $prefix = 'if (isset('.$var.
-                ') && method_exists('.$var .",'{$method}')) " . $prefix;
+            $prefix = 'if ($this->options[\'strict\'] || (isset('.$var.
+                ') && method_exists('.$var .",'{$method}'))) " . $prefix;
             $var = $element->toVar($element->method);
         }
         
