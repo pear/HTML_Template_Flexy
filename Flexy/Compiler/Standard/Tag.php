@@ -170,6 +170,10 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
             foreach ($element->postfix as $e) {
                 $ret .= $e->compile($this->compiler);
             }
+        } else if ($this->element->postfix) { // if postfixed by self..
+            foreach ($this->element->postfix as $e) {
+                $ret .= $e->compile($this->compiler);
+            }
         }
         // output the children.
         
@@ -295,14 +299,24 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         
         // does it have a closetag? - you must have one - so you will have to hack in <span flexy:if=..><img></span> on tags
         // that do not have close tags - it's done this way to try and avoid mistakes.
-        if (!$this->element->close) {
-            PEAR::raiseError(
-                "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name}
-                    tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, PEAR_ERROR_DIE);
-        }
-        $this->element->close->postfix = array($this->element->factory("End",'', $this->element->line));
         
+        
+        if (!$this->element->close) {
+            //echo "<PRE>";print_R($this->element);
+            
+            if ($this->element->getAttribute('/') !== false) {
+                $this->element->postfix = array($this->element->factory("End",'', $this->element->line));
+            } else {
+            
+                PEAR::raiseError(
+                    "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name}
+                        tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                     null, PEAR_ERROR_DIE);
+                }
+        } else {
+        
+            $this->element->close->postfix = array($this->element->factory("End",'', $this->element->line));
+        }
         $this->element->clearAttribute('FLEXY:IF');
         return $ifObj->compile($this->compiler);
     }
