@@ -1,56 +1,429 @@
-<PRE>html_template_flexy_token_tag Object
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<p>Example Template for HTML_Template_Flexy</p>
+
+ a full string example ~!@#$%^&*() |": ?\][;'/.,=-_+ ~` abcd....
+ asfasfdas
+
+<h2>Variables</H2>
+
+<p>Standard variables 
+<?php echo htmlspecialchars($t->hello);?> 
+<?php echo $t->world;?>
+<?php echo urlencode($t->test);?>
+<img src="<?php echo htmlspecialchars($t->getImageDir);?>/someimage.jpg">
+<img src="<?php echo $t->getImageDir;?>/someimage.jpg">
+<img src="<?php echo urlencode($t->getImageDir);?>/someimage.jpg">
+
+<img src="<?php echo htmlspecialchars($t->getImageDir);?>/someimage.jpg">
+<img src="<?php echo htmlspecialchars($t->getImageDir);?>/someimage.jpg">
+</p>
+
+<h2>Methods</H2>
+<p>Calling a method <?php if (isset($t->a) && method_exists($t->a,'helloWorld')) echo htmlspecialchars($t->a->helloWorld());?></p>
+<p>or <?php if (isset($t) && method_exists($t,'includeBody')) echo $t->includeBody();?></P>
+<img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir());?>/someimage.jpg">
+<img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo $t->getImageDir();?>/someimage.jpg">
+<img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo urlencode($t->getImageDir());?>/someimage.jpg">
+
+<img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir());?>/someimage.jpg">
+<img src="<?php if (isset($t) && method_exists($t,'getImageDir')) echo htmlspecialchars($t->getImageDir());?>/someimage.jpg">
+
+<H2>Conditions</H2>
+<p>a condition <?php if ($t->condition)  {?> hello <?php } else {?> world <?php }?></p>
+
+
+<h2>Looping</h2>
+
+
+<p>a loop <?php if (is_array($t->loop)) foreach($t->loop as $a) {?> <?php echo htmlspecialchars($a);?> <?php }?></p>
+<p>a loop with 2 vars <?php if (is_array($t->loop)) foreach($t->loop as $a => $b) {?> 
+    <?php echo htmlspecialchars($a);?> , 
+    <?php echo htmlspecialchars($b);?>
+<?php }?></p>
+
+<table>
+    <?php if (is_array($t->xyz)) foreach($t->xyz as $abcd => $def) {?><tr>
+        <td><?php echo htmlspecialchars($abcd);?>, <?php if (isset($t) && method_exists($t,'test')) echo htmlspecialchars($t->test($def));?></td>
+    </tr><?php }?>
+</table>
+
+<h2>Full Method testing</h2>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo htmlspecialchars($t->abc($t->abc,$t->def,$t->hij));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo htmlspecialchars($t->abc($t->abc,"def","hij"));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo htmlspecialchars($t->abc($t->abc,$t->def,"hij"));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo htmlspecialchars($t->abc("abc",$t->def,$t->hij));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo $t->abc($t->abc,$t->def,$t->hij);?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo $t->abc($t->abc,"def","hij");?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo $t->abc($t->abc,$t->def,"hij");?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo $t->abc("abc",$t->def,$t->hij);?>
+
+
+<?php if (isset($t) && method_exists($t,'abc')) echo urlencode($t->abc($t->abc,$t->def,$t->hij));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo urlencode($t->abc($t->abc,"def","hij"));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo urlencode($t->abc($t->abc,$t->def,"hij"));?>
+
+<?php if (isset($t) && method_exists($t,'abc')) echo urlencode($t->abc("abc",$t->def,$t->hij));?>
+
+A Full on test!
+
+
+Invoice number: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->invoice,"number"));?> Place: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->invoice,"place"));?> Date: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->invoice,"date"));?> Payment: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->invoice,"payment"));?> Payment date: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->invoice,"payment_date"));?> Seller: Name 1: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"name1"));?> Name 2: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"name2"));?> NIP: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"nip"));?> Street: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"street"));?> City: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"code"));?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->seller,"city"));?> Buyer: Name 1: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"name1"));?> Name 2: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"name2"));?> NIP: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"nip"));?> Street: <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"street"));?> City: 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"code"));?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($t->buyer,"city"));?>
+# 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 	Netto 	VAT 	Brutto
+<?php if (is_array($t->positions)) foreach($t->positions as $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"name"));?> <?php if ($t->show_pkwiu)  {?> 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"pkwiu"));?><?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"count"));?> 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"netto"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"vat"));?> 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"brutto"));?>
+<?php }?> <?php if ($t->edit_positions)  {?> # 	Name <?php if ($t->show_pkwiu)  {?>	PKWIU<?php }?> 	Count 
+<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	Netto<?php } else {?>	<?php }?> 	VAT 
+<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($t->position,"netto_mode")) { ?>	<?php } else {?>	Brutto<?php }?>
+<?php if (is_array($t->edit_positions)) foreach($t->edit_positions as $k => $position) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($position,"nr"));?> 
+<?php if ($t->show_pkwiu)  {?> 	<?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?> 
+<?php }?> 	<?php if (isset($t) && method_exists($t,'getelem')) if ($t->getelem($position,"netto_mode")) { ?> 	<?php } else {?>	<?php }?>
+<?php }?> <?php }?> # 	
+<?php if (is_array($t->sum)) foreach($t->sum as $sum) {?> <?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"nr"));?> 		<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"netto"));?> 
+<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"vat"));?> 	<?php if (isset($t) && method_exists($t,'getelem')) echo htmlspecialchars($t->getelem($sum,"brutto"));?>
+<?php }?>
+
+
+<p>HTML tags example using foreach=&quot;loop,a&quot; or the tr</p>
+<table width="100%" border="0">
+  <tr foreach="loop,a"> 
+    <td>a is</td>
+    <td><?php echo htmlspecialchars($t->a);?></td>
+  </tr>
+</table>
+
+<p>HTML tags example using foreach=&quot;loop,a,b&quot; or the tr</p>
+<table width="100%" border="0">
+  <tr foreach="loop,a,b"> 
+    <td><?php echo htmlspecialchars($t->a);?></td>
+    <td><?php echo htmlspecialchars($t->b);?></td>
+  </tr>
+</table>
+
+<h2>Form Not Parsed</h2>
+
+<form name="test">
+    <input name=test123>
+    <select name="aaa">
+        <option>bb</option>
+    </select>
+</form>
+
+<h2>Parsed</h2>
+
+
+<?php echo $this->elements['test']->toHtmlnoClose();?>
+    Input<?php echo $this->elements['test123']->toHtml();?>
+    Checkbox <?php echo $this->elements['test123a']->toHtml();?>
+    Hidden <?php echo $this->elements['test123ab']->toHtml();?>
+    <?php echo $this->elements['fred']->toHtml();?>
+    <?php echo $this->elements['aaa1']->toHtml();?>
+    <select name="aaa2">
+        <option>aa</option>
+	<option selected>bb</option>
+        <option>cc</option>
+
+    </select>
+    <?php echo $this->elements['aaa3']->toHtml();?>
+</form>
+
+
+<p>&nbsp;</p>
+</body>
+</html>
+Array
 (
-    [token] => Tag
-    [value] => 
-    [line] => 118
-    [close] => 
-    [children] => Array
-        (
-        )
-
-    [ignoreChildren] => 
-    [tag] => INPUT
-    [oTag] => input
-    [attributes] => Array
-        (
-            [name] => test123a
-            [type] => 'hidden'
-            [value] => '123'
-        )
-
-    [ucAttributes] => Array
-        (
-            [NAME] => test123a
-            [TYPE] => 'hidden'
-            [VALUE] => '123'
-        )
-
-    [postfix] => 
-    [prefix] => 
-    [foreach] => 
-    [startChildren] => 
-    [id] => 229
 )
-</PRE>
-Notice: Undefined index:  filename in /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php on line 405
+Array
+(
+    [test] => html_template_flexy_element Object
+        (
+            [tag] => form
+            [attributes] => Array
+                (
+                    [name] => test
+                )
 
-Call Stack:
-    0.0000     111728   1. {main}() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Test.php:0
-    0.0983    1383336   2. html_template_flexy_test->html_template_flexy_test() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Test.php:116
-    0.0988    1384968   3. html_template_flexy_test->parse() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Test.php:43
-    4.3034    1969896   4. html_template_flexy_token->tostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Test.php:91
-    4.3034    1969896   5. html_template_flexy_token->childrentostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token.php:132
-    4.3151    1969984   6. html_template_flexy_token_tag->tostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token.php:160
-    4.3161    1970016   7. html_template_flexy_token_tag->childrentostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:227
-    4.3224    1970208   8. html_template_flexy_token_tag->tostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token.php:160
-    4.3233    1970240   9. html_template_flexy_token_tag->childrentostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:227
-    4.5551    1978488  10. html_template_flexy_token_tag->tostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token.php:160
-    4.5556    1978488  11. html_template_flexy_token_tag->parsetags() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:165
-    4.5557    1978520  12. html_template_flexy_token_tag->parsetagform() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:381
-    4.5565    1978696  13. html_template_flexy_token_tag->childrentostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:520
-    4.5618    1980304  14. html_template_flexy_token_tag->tostring() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token.php:160
-    4.5623    1980304  15. html_template_flexy_token_tag->parsetags() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:165
-    4.5624    1980576  16. html_template_flexy_token_tag->parsetaginput() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:381
-    4.5627    1980576  17. html_template_flexy_token_tag->aselement() /usr/src/php/pear/HTML_Template_Flexy/Flexy/Token/Tag.php:462
-Error: on Line 118 &lt;INPUT&gt;: 
-             Dynamic tags have already used ID test123a
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [test123] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [name] => test123
+                    [ruleA] => Test Text is a required field|required
+                    [ruleB] => Test TextArea must be at least 5 characters|minlength|5
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [test123a] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [name] => test123a
+                    [id] => test123ab
+                    [type] => checkbox
+                    [checked] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [test123ab] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [name] => test123ab
+                    [type] => hidden
+                    [value] => 123
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [fred] => html_template_flexy_element Object
+        (
+            [tag] => textarea
+            [attributes] => Array
+                (
+                    [name] => fred
+                )
+
+            [children] => Array
+                (
+                    [0] => some text
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [aaa1] => html_template_flexy_element Object
+        (
+            [tag] => select
+            [attributes] => Array
+                (
+                    [name] => aaa1
+                )
+
+            [children] => Array
+                (
+                    [0] => 
+        
+                    [1] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => aa
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [2] => 
+	
+                    [3] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                    [selected] => 1
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => bb
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [4] => 
+        
+                    [5] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => cc
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [6] => 
+    
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [aaa3] => html_template_flexy_element Object
+        (
+            [tag] => select
+            [attributes] => Array
+                (
+                    [name] => aaa3
+                    [static] => 1
+                )
+
+            [children] => Array
+                (
+                    [0] => 
+        
+                    [1] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => aa
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [2] => 
+	
+                    [3] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                    [selected] => 1
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => bb
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [4] => 
+        
+                    [5] => html_template_flexy_element Object
+                        (
+                            [tag] => option
+                            [attributes] => Array
+                                (
+                                )
+
+                            [children] => Array
+                                (
+                                    [0] => cc
+                                )
+
+                            [override] => 
+                            [prefix] => 
+                            [suffix] => 
+                            [value] => 
+                        )
+
+                    [6] => 
+
+    
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+)
