@@ -190,9 +190,9 @@ class HTML_Template_Flexy_QuickForm extends HTML_QuickForm {
                  
                 if (isset($defaults[$form])) {
                    
-                    $ret[$form]->setDefaults($defaults[$form]);
+                    $ret[$form]->setDefaults((array) $defaults[$form]);
                 } else if (isset($defaults[0])) {
-                    $ret[$form]->setDefaults($defaults[0]);
+                    $ret[$form]->setDefaults((array) $defaults[0]);
                 }
                 continue;
             }

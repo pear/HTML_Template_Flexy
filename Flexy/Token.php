@@ -223,14 +223,32 @@ class HTML_Template_Flexy_Token {
             $i++;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i] = $tokenizer->value;
             $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->id = $i;
+            
+            // this whole children thing needs rethinking 
+            // - I think the body of the page should be wrapped: ..
+            //  ?php if (!$this->bodyOnly) { .. <HTML> .... <BODY....>  ?php } ?
+            // 
+            
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
                 unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTART']);
             }
+            
             if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN'])) {
                 $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
                 $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
                 unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXYSTARTCHILDREN']);
+            }
+            
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:START'])) {
+                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:START']);
+            }
+            
+            if (isset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:STARTCHILDREN'])) {
+                $_HTML_TEMPLATE_FLEXY_TOKEN['base'] = $i;
+                $_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->startChildren = true;
+                unset($_HTML_TEMPLATE_FLEXY_TOKEN['tokens'][$i]->attributes['FLEXY:STARTCHILDREN']);
             }
             
             

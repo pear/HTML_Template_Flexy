@@ -855,7 +855,7 @@ FLEXY_MODIFIER      = [hur]
         $this->flexyArgs[] = substr($t,0,-1);
         return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
     }
-    $this->flexyArgs[] = substr($t,0,-1);
+    $this->flexyArgs[] = $t;
     $this->value = HTML_Template_Flexy_Token::factory('Method'  , array($this->flexyMethod,$this->flexyArgs), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
