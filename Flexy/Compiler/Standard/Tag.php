@@ -109,7 +109,7 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         $this->reWriteURL("SRC");
         
         // handle elements
-        if (($ret =$this->parseTags()) !== false) {
+        if (($ret =$this->_parseTags()) !== false) {
             //echo "PARSETAGS RET";
             return $ret;
         }
@@ -382,15 +382,15 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
     }
     
      /**
-    * Reads Tags - and ralays to parseTagXXXXXXX
+    * Reads Tags - and relays to parseTagXXXXXXX
     *
     *
     * @return   string | false = html output or ignore (just output the tag)
-    * @access   public
+    * @access   private
     */
     
     
-    function parseTags() 
+    function _parseTags() 
     {
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         // doesnt really need strtolower etc. as php functions are not case sensitive!
