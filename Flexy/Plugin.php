@@ -109,7 +109,6 @@ class HTML_Template_Flexy_Plugin {
                 return $class;
             }
         }
-          print_R($this);
         return HTML_Template_Flexy::raiseError("could not find plugin with method: '$name'");
     }
     
