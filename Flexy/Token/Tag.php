@@ -18,6 +18,9 @@
 //
 // $Id$
  
+ 
+$GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect'] = false;
+ 
 /**
 * A standard HTML Tag = eg. Table/Body etc.
 *
@@ -300,8 +303,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
                 $t, 
                 $this->getAttribute('NAME'),
-                '' //, // the text.
-                //$this->attributes // wrapper needed...
+                ''  , // the text.
+                $this->getAttributes()  // wrapper needed...
             );
         }
          
@@ -338,7 +341,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                     "\"",
                     $this->factory("Var",$name,$this->line),
                     "\"");
-                $e->setValue($this->getAttribute('VALUE'));
+                if ($e) {
+                    $e->setValue($this->getAttribute('VALUE'));
+                }
                 return;
             
             default:
@@ -407,15 +412,12 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         $this->close->postfix = $posterror;
         
         if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
-            $t =strtolower($type);
-            if (!$t) {
-                $t = 'text';
-            }
+             
             $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
                 'textarea', 
                 $this->getAttribute('NAME'),
-                '' //, // the text.
-                //$this->attributes // wrapper needed...
+                ''  , // the text.
+                $this->getAttributes()  // wrapper needed...
             );
             $e->setValue($this->childrenToString());
             $e->setWrap($this->getAttribute('WRAP'));
@@ -481,7 +483,20 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         }
          
          
+        // this ones for quickforms...
         
+        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']) {
+           
+            $e = &$GLOBALS['_HTML_TEMPLATE_FLEXY']['quickform']->addElement(
+                'select', 
+                $this->getAttribute('NAME'),
+                ''  , // the text.
+                $this->getAttributes() // wrapper needed...
+            );
+            $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect'] = &$e; 
+            $e->setSize($this->getAttribute('SIZE'));
+            $e->setMultiple($this->getAttribute('MULTIPLE'));
+        }
         
         
         
@@ -524,7 +539,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
            // just leave it allown
            $php .= "if (empty(".$this->toVar($name).")) echo ' SELECTED';";
         }
-        $value =    $this->getAttribute('value');
+        $value =    $this->getAttribute('VALUE');
         if (empty($value)) {
           
             $value = $this->childrenToString();
@@ -537,6 +552,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         $this->attributes['SELECTED'] =  $this->factory("PHP", $php, $this->line);
         
+        if ($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']) {
+            $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']->addOption(
+                $this->childrenToString(), $value);
+            if ($this->getAttribute('SELECTED')) {
+                $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TAG']['activeSelect']->setSelected( $value);
+            }
+        }
     }
     
     
@@ -573,8 +595,8 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
             $this->getAttribute('NAME'),
             $this->getAttribute('METHOD'),
             $this->getAttribute('ACTION'),
-            $this->getAttribute('TARGET') //,
-            //$this->attributes // need to do some filtering on this..
+            $this->getAttribute('TARGET') ,
+            $this->getAttributes() // need to do some filtering on this..
         ); 
     
     }
@@ -680,6 +702,13 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
     }
     
     
+    function getAttributes() {
+        $ret = array();
+        foreach($this->attributes as $k=>$v) {
+            $ret[strtolower($k)] = $this->getAttribute($k);
+        }
+        return $ret;
+    }
         
 }
 

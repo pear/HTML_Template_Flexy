@@ -19,11 +19,16 @@
 // $Id$
 //
  
+
+    
 /**
-* Class to Text - implements gettext support.
-* 
+* Global variable for gettext replacement
+* static object vars will be nice in PHP5 :)
 *
+* @var array
+* @access private
 */
+
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['clean'] = array(
     '$' => '\$',
     '"' => '\"',
@@ -35,9 +40,18 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['clean'] = array(
 );
 $GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['unclean'] = array_flip($GLOBALS['_HTML_TEMPLATE_FLEXY_TOKEN_TEXT']['clean']);
 
+/**
+* Class to Text - implements gettext support.
+* 
+*
+*/
+
 class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
     /**
     * toString - generate PHP code 
+    * this calls gettext on the string prior to outputing it.
+    * does weird things to try and make sensible strings for gettext
+    *
     * @see parent::toString(), $this->pullState()
     */
     
@@ -200,7 +214,15 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         }
         return $i - 1;
     }
-    
+     /**
+    * Simple check to see if this piece of text is a word 
+    * so that gettext and the merging tricks dont try
+    * - merge white space with a flexy tag
+    * - gettext doesnt translate &nbsp; etc.
+    *
+    * @return   boolean  true if this is a word
+    * @access   public
+    */
     function isWord() {
         if (!strlen(trim($this->value))) {
             return false;
