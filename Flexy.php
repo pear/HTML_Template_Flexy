@@ -77,7 +77,7 @@ class HTML_Template_Flexy
                                                             // rather than writing to a file.
                             'filters'       => array(),    // used by regex compiler..
                             'numberFormat'  => ",2,'.',','",  // default number format  = eg. 1,200.00
-                            
+                            'flexyIgnore'   => 0        // turn on/off the tag to element code
                         );
 
     
@@ -606,4 +606,4 @@ class HTML_Template_Flexy
     
     
 }
-?>
+

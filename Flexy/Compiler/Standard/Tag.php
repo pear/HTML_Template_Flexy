@@ -125,6 +125,21 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
         foreach ($element->attributes as $k=>$v) {
             // if it's a flexy tag ignore it.
             
+            
+            if (strtoupper($k) == 'FLEXY:RAW') {
+                if (!is_object($v)) {
+                    PEAR::raiseError(
+                    'flexy:raw only accepts a variable or method call as an argument, eg.'.
+                    ' flexy:raw="{somevalue}" you provided something else.' .
+                    " Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                     null, PEAR_ERROR_DIE);
+                }
+                 
+                $ret .= ' ' . $v->compile($this->compiler);
+            
+            
+            }
+            
             if (strtoupper(substr($k,0,6)) == 'FLEXY:') {
                 continue;
             }
@@ -604,4 +619,4 @@ class HTML_Template_Flexy_Compiler_Standard_Tag {
 
 }
 
-?>
+ 
