@@ -385,7 +385,7 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
                 );
                 break;
             
-            case "CHECKBOX":
+            case "RADIO":
                 $e = &$_HTML_TEMPLATE_FLEXY['quickform']->addElementDef(
                     array('radio',   $name,  $this->getAttribute('FLEXY:LABEL')  ,   '',
                             $this->getAttribute('VALUE')   ,    $this->getAttributes() ),
