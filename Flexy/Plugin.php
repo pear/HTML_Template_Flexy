@@ -58,7 +58,7 @@ class HTML_Template_Flexy_Plugin {
         
         if (is_a($class,'PEAR_Error')) {
             //echo $class->toString();
-            return $class;
+            return $class->toString();
         }
         
          
@@ -84,8 +84,9 @@ class HTML_Template_Flexy_Plugin {
     {
         // name can be:
         // ahref = maps to {class_prefix}_ahref::ahref
-        
+        $this->plugins = array();
         if (empty($this->plugins)) {
+          
             foreach ($this->flexy->options['plugins'] as $cname=>$file) {
                 if (!is_int($cname)) {
                     include_once $file;
@@ -108,8 +109,8 @@ class HTML_Template_Flexy_Plugin {
                 return $class;
             }
         }
-        
-        return HTML_Template_Flexy::raiseError('could not find plugin with method '. $name);
+          print_R($this);
+        return HTML_Template_Flexy::raiseError("could not find plugin with method: '$name'");
     }
     
     

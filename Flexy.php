@@ -92,7 +92,7 @@ class HTML_Template_Flexy
         
         // standard Compiler    ------------------------------------------
         'nonHTML'       => false,       // dont parse HTML tags (eg. email templates)
-        'allowPHP'      => false,       // allow PHP in template
+        'allowPHP'      => false,       // allow PHP in template (use true=allow, 'delete' = remove it.)
         
         'flexyIgnore'   => 0,           // turn on/off the tag to element code
         'numberFormat'  => ",2,'.',','",  // default number format  {xxx:n} format = eg. 1,200.00 

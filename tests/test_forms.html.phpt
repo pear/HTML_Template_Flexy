@@ -122,7 +122,7 @@ if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
 </form>
 Array
 (
-    [test] => html_template_flexy_element Object
+    [test] => HTML_Template_Flexy_Element Object
         (
             [tag] => form
             [attributes] => Array
@@ -140,7 +140,7 @@ Array
             [value] => 
         )
 
-    [test123] => html_template_flexy_element Object
+    [test123] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -158,7 +158,7 @@ Array
             [value] => 
         )
 
-    [test123a] => html_template_flexy_element Object
+    [test123a] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -179,7 +179,7 @@ Array
             [value] => 
         )
 
-    [test123ab] => html_template_flexy_element Object
+    [test123ab] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -199,7 +199,7 @@ Array
             [value] => 
         )
 
-    [fred] => html_template_flexy_element Object
+    [fred] => HTML_Template_Flexy_Element Object
         (
             [tag] => textarea
             [attributes] => Array
@@ -218,7 +218,7 @@ Array
             [value] => 
         )
 
-    [aaa1] => html_template_flexy_element Object
+    [aaa1] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -230,7 +230,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -250,7 +250,7 @@ Array
 
                     [2] => 
 	
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -271,7 +271,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -299,7 +299,7 @@ Array
             [value] => 
         )
 
-    [aaa3] => html_template_flexy_element Object
+    [aaa3] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -311,7 +311,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -331,7 +331,7 @@ Array
 
                     [2] => 
 	
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -352,7 +352,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -381,7 +381,7 @@ Array
             [value] => 
         )
 
-    [List] => html_template_flexy_element Object
+    [List] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -393,7 +393,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -414,7 +414,7 @@ Array
 
                     [2] => 
         
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -435,7 +435,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -464,7 +464,7 @@ Array
             [value] => 
         )
 
-    [_submit[4]] => html_template_flexy_element Object
+    [_submit[4]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -484,7 +484,7 @@ Array
             [value] => 
         )
 
-    [_submit[5]] => html_template_flexy_element Object
+    [_submit[5]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -504,7 +504,7 @@ Array
             [value] => 
         )
 
-    [testupload] => html_template_flexy_element Object
+    [testupload] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -523,7 +523,7 @@ Array
             [value] => 
         )
 
-    [picture] => html_template_flexy_element Object
+    [picture] => HTML_Template_Flexy_Element Object
         (
             [tag] => img
             [attributes] => Array
@@ -542,7 +542,7 @@ Array
             [value] => 
         )
 
-    [testing] => html_template_flexy_element Object
+    [testing] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -561,7 +561,7 @@ Array
             [value] => 
         )
 
-    [_submit[2]] => html_template_flexy_element Object
+    [_submit[2]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -581,7 +581,7 @@ Array
             [value] => 
         )
 
-    [testing2] => html_template_flexy_element Object
+    [testing2] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -599,7 +599,7 @@ Array
             [value] => 
         )
 
-    [_submit[1]] => html_template_flexy_element Object
+    [_submit[1]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -618,7 +618,7 @@ Array
             [value] => 
         )
 
-    [testingxhtml] => html_template_flexy_element Object
+    [testingxhtml] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -639,7 +639,7 @@ Array
             [value] => 
         )
 
-    [xhtmllisttest] => html_template_flexy_element Object
+    [xhtmllisttest] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -661,7 +661,7 @@ Array
             [value] => 
         )
 
-    [test_mix] => html_template_flexy_element Object
+    [test_mix] => HTML_Template_Flexy_Element Object
         (
             [tag] => form
             [attributes] => Array
@@ -679,7 +679,7 @@ Array
             [value] => 
         )
 
-    [testing5] => html_template_flexy_element Object
+    [testing5] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -697,7 +697,7 @@ Array
             [value] => 
         )
 
-    [_submit[3]] => html_template_flexy_element Object
+    [_submit[3]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array

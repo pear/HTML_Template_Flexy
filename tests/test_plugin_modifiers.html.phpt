@@ -3,7 +3,13 @@ Template Test: plugin_modifiers.html
 --FILE--
 <?php
 require_once 'testsuite.php';
-compilefile('plugin_modifiers.html');
+compilefile('plugin_modifiers.html', 
+	array(
+		'numbertest' =>  10000.123,
+		'datetest' =>  '2004-01-12'
+	), 
+	array('plugins'=>array('Savant'))
+);
 
 --EXPECTF--
 ===Compiling plugin_modifiers.html===
@@ -14,8 +20,9 @@ compilefile('plugin_modifiers.html');
 <H1>Testing Plugin Modifiers</H1>
 
 
-<?php echo $this->plugin("formatdate",$t->abcd);?>
-<?php echo $this->plugin("formatnumber",$t->abcd);?>
+<?php echo $this->plugin("dateformat",$t->datetest);?>
+
+<?php echo $this->plugin("numberformat",$t->numbertest);?>
 
 
 
@@ -23,8 +30,5 @@ compilefile('plugin_modifiers.html');
 <H1>Testing Plugin Modifiers</H1>
 
 
-
-Warning: Invalid argument supplied for foreach() in /var/svn_live/pear/HTML_Template_Flexy/Flexy/Plugin.php on line 105
-Object
-Warning: Invalid argument supplied for foreach() in /var/svn_live/pear/HTML_Template_Flexy/Flexy/Plugin.php on line 105
-Object
+12 Jan 2004
+10,000.12

@@ -718,14 +718,18 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             return false;
         }
         $lang = strtoupper($lang);
+        $allow = $GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['allowPHP'];
         
-        if ($GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['allowPHP']) {
+        if ($allow === true) {
+          
             return false;
         }
         
         if ($lang == "PHP") {
-            
-            return HTML_Template_Flexy::raiseError('PHP code found in script',
+            if ($allow == 'delete') {
+                return '';
+            }
+            return HTML_Template_Flexy::raiseError('PHP code found in script (script)',
                 HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,HTML_TEMPLATE_FLEXY_ERROR_RETURN
             );
         }

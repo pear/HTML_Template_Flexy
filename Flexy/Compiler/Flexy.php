@@ -100,7 +100,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         
         
-        if (isset($_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)])) {
+        if (!$this->options['forceCompile'] && isset($_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)])) {
             $res = $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)];
         } else {
         
@@ -116,14 +116,17 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
           
             require_once 'HTML/Template/Flexy/Token.php';
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-         
+            if (is_a($res,'PEAR_Error')) {
+                return $res;
+            }       
             $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)] = $res;
             
         }
-        
+        // technically we shouldnt get here as we dont cache errors..
         if (is_a($res,'PEAR_Error')) {
             return $res;
         }   
+        
         // turn tokens into Template..
         
         $data = $res->compile($this);
@@ -502,7 +505,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         $suffix = '';
         $modifier = strlen(trim($element->modifier)) ? $element->modifier : ' ';
         
-        switch ($modifier{0}) {
+        switch ($modifier) {
             case 'h':
                 break;
             case 'u':
@@ -736,6 +739,35 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         return $this->appendHtml($front . $value . $rear);
         
     }
+    
+    
+    
+      /**
+    *   HTML_Template_Flexy_Token_Cdata toString 
+    *
+    * @param    object    HTML_Template_Flexy_Token_Cdata ?
+    * 
+    * @return   string     string to build a template
+    * @access   public 
+    * @see      toString*
+    */
+
+
+
+    function toStringCdata($element) 
+    {
+        return $this->appendHtml($element->value);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
     * addStringToGettext 
     *

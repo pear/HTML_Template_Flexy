@@ -5,12 +5,14 @@ Template Test: raw_php.html
 require_once 'testsuite.php';
 compilefile('raw_php.html');
 compilefile('raw_php.html',array(), array('allowPHP'=>true));
+compilefile('raw_php.html',array(), array('allowPHP'=>'delete'));
+
 
 --EXPECTF--
 ===Compiling raw_php.html===
 
 ===Compile failure==
-[pear_error: message="HTML_Template_Flexy fatal error:PHP code found in script" code=-1 mode=return level=notice prefix="" info=""]
+[pear_error: message="HTML_Template_Flexy fatal error:PHP code found in script (Token)" code=-1 mode=return level=notice prefix="" info=""]
 
 
 ===Compiling raw_php.html===
@@ -45,3 +47,22 @@ hello world
 hello world
 hello world
 hello world
+
+
+===Compiling raw_php.html===
+
+
+
+===Compiled file: raw_php.html===
+
+
+number: 
+
+
+
+
+
+===With data file: raw_php.html===
+
+
+number:

@@ -429,20 +429,19 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <YYINITIAL>{MDO}{DSO}"CDATA"{DSO}     {
     /* <![ -- marked section */
+    $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     $this->yybegin(IN_CDATA);
-    $this->yyCdataBegin = $this->yy_buffer_end;
-    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 <IN_CDATA>([^{MSC}]+|{MSC}|{DSC}) { 
-    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+    $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
  
 <IN_CDATA>{MSC}{TAGC}      { 
     /* ]]> -- marked section end */
-    $this->value = $this->createToken('Cdata',
-        substr($this->yy_buffer,$this->yyCdataBegin ,$this->yy_buffer_end - $this->yyCdataBegin - 3 ),
-        $this->yyline, $this->yyCdataBegin);
+    $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 
@@ -1008,23 +1007,23 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 // foreach (borks on incorrect syntax...
 
 
-<YYINITIAL>"{foreach:"{FLEXY_VAR}"}" {
+<YYINITIAL,IN_CDATA>"{foreach:"{FLEXY_VAR}"}" {
     return $this->raiseError('invalid syntax for Foreach','',true);
 }
-<YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
+<YYINITIAL,IN_CDATA>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}"}" {
     $this->value = $this->createToken('Foreach', explode(',',substr($this->yytext(),9,-1)));
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
-<YYINITIAL>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}","{FLEXY_SIMPLEVAR}"}" {
+<YYINITIAL,IN_CDATA>"{foreach:"{FLEXY_VAR}","{FLEXY_SIMPLEVAR}","{FLEXY_SIMPLEVAR}"}" {
     $this->value = $this->createToken('Foreach',  explode(',',substr($this->yytext(),9,-1)));
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
-<YYINITIAL>"{end:}" {
+<YYINITIAL,IN_CDATA>"{end:}" {
     $this->value = $this->createToken('End', '');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<YYINITIAL>"{else:}" {
+<YYINITIAL,IN_CDATA>"{else:}" {
     $this->value = $this->createToken('Else', '');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
@@ -1053,7 +1052,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<YYINITIAL>("{"{FLEXY_VAR}":"{FLEXY_MODIFIER}"}")|("{"{FLEXY_VAR}"}") {
+<YYINITIAL,IN_CDATA>("{"{FLEXY_VAR}":"{FLEXY_MODIFIER}"}")|("{"{FLEXY_VAR}"}") {
     $t =  $this->yytext();
     $t = substr($t,1,-1);
 
