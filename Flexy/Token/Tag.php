@@ -256,6 +256,9 @@ class HTML_Template_Flexy_Token_Tag extends HTML_Template_Flexy_Token {
         
         switch ($type) {
             case "CHECKBOX":
+                // technically this should be a bit more complex
+                // it needs to compare the 'value' field of the checkbox 
+                // against the current value.
                 $this->attributes['CHECKED'] = 
                     $this->factory("PHP",
                     "<?php if (". $this->toVar($name).") { ?>CHECKED<?php } ?>",

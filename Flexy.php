@@ -304,6 +304,9 @@ class HTML_Template_Flexy
     *   @param      string  $file   relative to the 'templateDir' which you set when calling the constructor
     *   @return
     */
+    
+    
+    
     function compile( $file )
     {
         if (!$file) {
@@ -410,6 +413,33 @@ class HTML_Template_Flexy
         return true;
     }
 
+     /**
+    *  compiles all templates
+    *  used for offline batch compilation (eg. if your server doesnt have write access to the filesystem)
+    *
+    *   @access     public
+    *   @author     Alan Knowles <alan@akbkhome.com>
+    *
+    */
+    function compileAll($dir = '')
+    {
+        $base =  $this->options['templateDir'];
+        $dh = opendir($base . DIRECTORY_SEPARATOR  . $dir);
+        while (($name = readdir($dh)) !== false) {
+            if (!$name) {  // empty!?
+                continue;
+            }
+            if ($name{0} == '.') {
+                continue;
+            }
+            
+            if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
+                $this->compileAll($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name);
+            }
+            $this->compile($dir . DIRECTORY_SEPARATOR  . $name);
+        }
+        
+    }
     /**
     *   checks if the compiled template is still up to date
     *
