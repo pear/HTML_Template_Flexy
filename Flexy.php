@@ -312,8 +312,14 @@ class HTML_Template_Flexy
                             HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         if (isset($this->assign)) {
+            if (!$t) {
+                $t = (object) $this->assign->variables;
+            }
             extract($this->assign->variables);
         }
+        
+        
+        
         include($this->compiledTemplate);
         
         // Return the error handler to its previous state. 
