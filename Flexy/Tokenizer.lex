@@ -213,7 +213,7 @@ LITERAL                 = ({LIT}[^\"]*{LIT})|({LITA}[^\']*{LITA})
 FLEXY_START         = ("%7B"|"%7b"|"{")
 
 FLEXY_SIMPLEVAR     = ({NAME_START_CHARACTER}({LCLETTER}|{UCLETTER}|"_"|{DIGIT})*)
-FLEXY_ARRAY         = ("["({DIGIT}|{NAME_START_CHARACTER}|"_")+"]")
+FLEXY_ARRAY         = (("["|"%5B"|"%5b")({DIGIT}|{NAME_START_CHARACTER}|"_")+("]"|"%5D"|"%5d"))
 FLEXY_VAR           = ({FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}?)*)
 FLEXY_METHOD        = ({FLEXY_SIMPLEVAR}|{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*("."{FLEXY_SIMPLEVAR}{FLEXY_ARRAY}*)*"."{FLEXY_SIMPLEVAR})
 FLEXY_END           = ("%7D"|"%7d"|"}")
