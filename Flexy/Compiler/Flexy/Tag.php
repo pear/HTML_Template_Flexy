@@ -589,6 +589,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         global $_HTML_TEMPLATE_FLEXY;
         static $tmpId=0;
+        
+        
+        
         if (!$id) {
             
             return HTML_Template_Flexy::raiseError(
@@ -633,11 +636,47 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         $ret = '';
         $unset = '';
-
+        
+        //echo '<PRE>';print_r($this->element);echo '</PRE>';
+        if (isset($this->element->ucAttributes['FLEXY:USE'])) {
+            $ar = $this->element->ucAttributes['FLEXY:USE'];
+            $str = '';
+            
+            for($i =1; $i < count($ar) -1; $i++) {
+                switch(true) {
+                    case is_a($ar[$i], 'HTML_Template_Flexy_Token_Var'):
+                        $str .= '. ' . $ar[$i]->toVar($ar[$i]->value). ' ';
+                        break;
+                    case is_string($ar[$i]):
+                        $str .= '. ' . $ar[0] . $ar[$i] . $ar[0];
+                        break;
+                    default: 
+                        return HTML_Template_Flexy::raiseError(
+                            "unsupported type found in attribute, use flexy:ignore to prevent parsing or remove it. " . 
+                                print_r($this->element,true),
+                            null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                }
+            }
+            $str = trim(ltrim($str,'.'));
+            $_HTML_TEMPLATE_FLEXY['elements'][$id] = $this->toElement($this->element);
+        
+            return  $ret . 
+                '
+                if (!isset($this->elements['.$str.'])) {
+                    echo "ELEMENT MISSING $str";
+                }
+                echo $this->elements['.$str.']->toHtml();' .$unset; 
+        }
+            
+        
+        
         if ($this->elementUsesDynamic($this->element)) {
             $used = array();
             foreach ($this->element->attributes as $attribute => $attributeValue) {
                 if (!is_array($attributeValue)) {
+                    continue;
+                }
+                if (strtoupper(substr($attribute,0,6)) == 'FLEXY:') {
                     continue;
                 }
                 unset($this->element->attributes[$attribute]);
@@ -703,17 +742,19 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                 $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
                 $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
                 echo $this->elements['.$var.']->toHtml();' .$unset; 
-        } elseif ($mergeWithName) {
+        }
+        
+        
+        if ($mergeWithName) {
             $name = $this->element->getAttribute('NAME');
             return  $ret . 
                 '$element = $this->elements[\''.$id.'\'];
                 $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
                 echo  $element->toHtml();' . $unset; 
         
-        
-        } else {
-           return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();'. $unset;
         }
+        return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();'. $unset;
+        
     }
     
     /**

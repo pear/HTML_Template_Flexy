@@ -167,7 +167,9 @@ class HTML_Template_Flexy_Element {
                     $strAttr .= ' ' . $key;
                 }
             } else {
-                $strAttr .= ' ' . $key . '="' . htmlspecialchars($value) . '"';
+                // dont replace & with &amp;
+                $strAttr .= ' ' . $key . '="' . 
+                    str_replace('&amp;','&',htmlspecialchars($value)) . '"';
             }
             
         }
