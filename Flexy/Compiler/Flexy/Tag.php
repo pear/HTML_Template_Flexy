@@ -362,6 +362,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     
     function parseAttributeForeach() 
     {
+        global  $_HTML_TEMPLATE_FLEXY;
         $foreach = $this->element->getAttribute('FLEXY:FOREACH');
         if ($foreach === false) {
             return '';
@@ -394,8 +395,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             
             
                 return HTML_Template_Flexy::raiseError(
-                    "A flexy:foreach attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
-                        tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                    "A flexy:foreach attribute was found in &lt;{$this->element->tag} tag without a corresponding &lt;/{$this->element->tag}
+                        tag on {$_HTML_TEMPLATE_FLEXY['filename']}:{$this->element->line} ",
                      null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             // it's an xhtml tag!
