@@ -9,4 +9,4 @@ compilefile('globals.html');
 ===Compiling globals.html===
 
 ===Compile failure==
-[pear_error: message="HTML_Template_Flexy fatal error:HTML_Template_Flexy::Attempt to access private variable: on line 2 of /mnt/webdav/pear/HTML_Template_Flexy/tests/templates/globals.html, Use options[privates] to allow this." code=-1 mode=return level=notice prefix="" info=""]
+[pear_error: message="HTML_Template_Flexy fatal error:HTML_Template_Flexy::Attempt to access private variable: on line %d of %s, Use options[privates] to allow this." code=-1 mode=return level=notice prefix="" info=""]

@@ -314,6 +314,9 @@ class HTML_Template_Flexy_Plugin_Savant {
 
     function numberformat($number, $dec=false,$point=false,$thousands=false)
     {
+        if (!strlen(trim($number))) {
+            return;
+        }
         // numberformat int decimals, string dec_point, string thousands_sep
         $dec = ($dec !== false) ? $dec : (
             isset($this->flexy->options['plugin.numberformat.decimals']) ?
