@@ -685,14 +685,8 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<IN_SCRIPT>([^<]+) {
+<IN_SCRIPT>([^<]+|{STAGO}) {
     // general text in script..
-    $this->value = $this->createToken('Text');
-    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
-}
-
-<IN_SCRIPT>{STAGO} {
-    // just < .. 
     $this->value = $this->createToken('Text');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }

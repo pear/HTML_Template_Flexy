@@ -122,6 +122,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)] = $res;
             
         }
+        
+        
         // technically we shouldnt get here as we dont cache errors..
         if (is_a($res,'PEAR_Error')) {
             return $res;
@@ -325,7 +327,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         if ($this->options['debug'] > 1) {
             $x = $element;
             unset($x->children);
-            echo htmlspecialchars(print_r($x,true))."<BR>\n";
+            //echo htmlspecialchars(print_r($x,true))."<BR>\n";
         }
         if ($element->token == 'GetTextStart') {
             $this->inGetTextBlock = true;

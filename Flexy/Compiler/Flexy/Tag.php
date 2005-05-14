@@ -379,6 +379,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         
         if ($foreachObj === false) {
+            
             return HTML_Template_Flexy::raiseError(
                 "Missing Arguments: An flexy:foreach attribute was foundon Line {$this->element->line} 
                 in tag &lt;{$this->element->tag} flexy:foreach=&quot;$foreach&quot; .....&gt;<BR>
@@ -392,7 +393,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         if (!$this->element->close) {
         
             if ($this->element->getAttribute('/') === false) {
-            
+               
             
                 return HTML_Template_Flexy::raiseError(
                     "A flexy:foreach attribute was found in &lt;{$this->element->tag} tag without a corresponding &lt;/{$this->element->tag}

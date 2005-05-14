@@ -323,12 +323,13 @@ class HTML_Template_Flexy_Token {
         //
         //
         //echo '<PRE>' . htmlspecialchars(print_R($res,true));//exit;
-       
+        //echo '<PRE>';
         for($i=1;$i<$total;$i++) {
-            //echo "Checking TAG $i\n";
+            
             if (empty($res[$i]->tag)) {
                 continue;
             }
+            //echo "Checking TAG $i {$res[$i]->tag}\n";
             if ($res[$i]->tag{0} == '/') { // it's a close tag..
                 //echo "GOT END TAG: {$res[$i]->tag}\n";
                 $tag = strtoupper(substr($res[$i]->tag,1));

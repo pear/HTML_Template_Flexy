@@ -52,10 +52,11 @@ class HTML_Template_Flexy_Plugin {
     function call($args)
     {
         
+        
         $method = $args[0];
         // attempt to load the plugin on-the-fly
         $class = $this->_loadPlugins($method);
-        
+         
         if (is_a($class,'PEAR_Error')) {
             //echo $class->toString();
             return $class->toString();
