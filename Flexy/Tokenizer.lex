@@ -1166,7 +1166,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     
     $t = $this->yytext();
     if ($p = strpos($t,':')) {
-        $this->flexyMethod .= substr($t,$p,2);
+        $this->flexyMethod .= substr($t,$p,-1);
     }
     $this->attrVal[] = $this->createToken('Method'  , array($this->flexyMethod,$this->flexyArgs));
     $this->yybegin($this->flexyMethodState);

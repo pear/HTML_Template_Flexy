@@ -583,6 +583,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
 
               
         // set up the modifier at present!!
+        print_R($element);
         list($prefix,$suffix) = $this->getModifierWrapper($element);
         
         // add the '!' to if
