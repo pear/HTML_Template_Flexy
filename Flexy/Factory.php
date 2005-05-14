@@ -106,7 +106,11 @@ class HTML_Template_Flexy_Factory {
     * @access   public
     */
   
-    function &setErrors(&$ret,$set,$format='<span class="error">%s</span>') {
+    function &setErrors(&$ret,$set,$format='<span class="error">%s</span>') 
+    {
+        if (empty($ret) || !is_array($ret)) {
+            $ret = array();
+        }
         // check what you send this.. !!!
         if (!is_array($set)) {
             return HTML_Template_Flexy::raiseError(
@@ -143,10 +147,13 @@ class HTML_Template_Flexy_Factory {
     * @access   public
     */
   
-    function &setRequired(&$ret,$set,$format='<span class="required">*</span>') {
+    function &setRequired(&$ret,$set,$format='<span class="required">*</span>') 
+    {
         
         
-        $ret = array();
+        if (empty($ret) || !is_array($ret)) {
+            $ret = array();
+        }
         foreach($set as $k=>$v) {
             if (!$v) {
                 continue;
@@ -171,7 +178,7 @@ class HTML_Template_Flexy_Factory {
     *               seperated into a rendering toolkit
     * 
     *
-    * @param   array   (return by referncekey(tag name) => HTML_Element
+    * @param   array   (return by referencekey(tag name) => HTML_Element
     *
     * @return   array    Array of HTML_Elements
     * @access   public
