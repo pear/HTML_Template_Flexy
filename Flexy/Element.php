@@ -334,6 +334,17 @@ class HTML_Template_Flexy_Element {
                             isset($this->attributes['flexy:xhtml']) ? 'selected' : true;;
                         continue;
                     }
+                    // no value attribute try and use the contents.
+                    if (!isset($child->attributes['value'])
+                        && is_string($child->children[0])
+                        && in_array((string) $child->children[0], $value))
+                    {
+                        
+                        $this->children[$i]->attributes['selected'] =
+                            isset($this->attributes['flexy:xhtml']) ? 'selected' : true;
+                        continue;
+                    }
+                     
                     if (isset($child->attributes['value']) && 
                         isset($this->children[$i]->attributes['selected'])) 
                     {
