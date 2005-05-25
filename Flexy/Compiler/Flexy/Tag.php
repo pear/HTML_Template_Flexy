@@ -814,6 +814,17 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         // radio
         $mergeWithName = false;
         $id = $this->element->getAttribute('NAME');
+        
+        
+        if (isset($this->element->ucAttributes['FLEXY:RAW'])) {
+            return HTML_Template_Flexy::raiseError(
+                    "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} ".
+                    "in Tag &lt;{$this->element->tag}&gt;:<BR>".
+                    "Flexy:raw can only be used with flexy:ignore, to prevent conversion of html ".
+                    "elements to flexy elements",
+                    null, HTML_TEMPLATE_FLEXY_ERROR_DIE
+            );
+        }
         // checkboxes need more work.. - at the momemnt assume one with the same value...
         if (in_array(strtoupper($this->element->getAttribute('TYPE')), array('RADIO'))) {
             
@@ -835,7 +846,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
             $id = $this->element->getAttribute('ID');
             if (!$id) {
                 return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;: 
-                 Radio Input's require an ID tag..",
+                 Radio Input's require an ID attribute (eg &lt;input type='radio' id='1' name='xxxx' value='yyy'&gt;..",
                  null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             $mergeWithName = true;
