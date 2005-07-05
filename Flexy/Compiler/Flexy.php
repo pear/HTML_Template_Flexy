@@ -583,7 +583,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
 
               
         // set up the modifier at present!!
-        print_R($element);
+         
         list($prefix,$suffix) = $this->getModifierWrapper($element);
         
         // add the '!' to if
@@ -940,6 +940,12 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             $this->addStringToGettext($original);
             $quote = $element->ucAttributes['ALT']{0};
             $element->ucAttributes['ALT'] = $quote  . $this->translateString($original). $quote;
+        }
+        $original = $element->getAttribute('TITLE');
+        if (($element->tag == 'A') && is_string($original) && strlen($original)) {
+            $this->addStringToGettext($original);
+            $quote = $element->ucAttributes['TITLE']{0};
+            $element->ucAttributes['TITLE'] = $quote  . $this->translateString($original). $quote;
         }
         
         
