@@ -202,6 +202,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             
             fwrite($cfp,serialize(array_unique($gettextStrings)));
             fclose($cfp);
+            chmod($flexy->getTextStringsFile,0664);
         }
         
         // elements
@@ -213,6 +214,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             ($cfp = fopen( $flexy->elementsFile, 'w') ) ) {
             fwrite($cfp,serialize( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements']));
             fclose($cfp);
+            chmod($flexy->elementsFile,0664);
             // now clear it.
         
         }
