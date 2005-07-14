@@ -49,7 +49,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     * @return   string   filename of template
     * @access   public
     */
-    function compile(&$flexy,$string=false) 
+    function compile(&$flexy, $string=false) 
     {
         // read the entire file into one variable
         
@@ -92,7 +92,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
          
         // PRE PROCESS {_(.....)} translation markers.
-        if (strpos($data,'{_(') !== false) {
+        if (strpos($data, '{_(') !== false) {
             $data = $this->preProcessTranslation($data);
         }
         
@@ -116,7 +116,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
           
             require_once 'HTML/Template/Flexy/Token.php';
             $res = HTML_Template_Flexy_Token::buildTokens($tokenizer);
-            if (is_a($res,'PEAR_Error')) {
+            if (is_a($res, 'PEAR_Error')) {
                 return $res;
             }       
             $_HTML_TEMPLATE_FLEXY_COMPILER['cache'][md5($data)] = $res;
@@ -125,7 +125,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         
         // technically we shouldnt get here as we dont cache errors..
-        if (is_a($res,'PEAR_Error')) {
+        if (is_a($res, 'PEAR_Error')) {
             return $res;
         }   
         
@@ -133,7 +133,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         $data = $res->compile($this);
         
-        if (is_a($data,'PEAR_Error')) {
+        if (is_a($data, 'PEAR_Error')) {
             return $data;
         }
         
@@ -144,7 +144,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
 
         if ($this->options['nonHTML']) {
-           $data =  str_replace("?>\n","?>\n\n",$data);
+           $data =  str_replace("?>\n", "?>\n\n", $data);
         }
         
          
@@ -166,22 +166,22 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // error checking?
         $file  = $flexy->compiledTemplate;
         if (isset($flexy->options['output.block'])) {
-            list($file,$part) = explode('#',$file  );
+            list($file, $part) = explode('#', $file);
         }
         
-        if( ($cfp = fopen( $file , 'w' )) ) {
+        if( ($cfp = fopen($file, 'w')) ) {
             if ($flexy->options['debug']) {
                 echo "<B>Writing: </B>$file<BR>\n";
             }
-            fwrite($cfp,$data);
+            fwrite($cfp, $data);
             fclose($cfp);
             
-            chmod($file,0775);
+            chmod($file, 0775);
             // make the timestamp of the two items match.
             clearstatcache();
             touch($file, filemtime($flexy->currentTemplate));
             if ($file != $flexy->compiledTemplate) {
-                chmod($flexy->compiledTemplate,0775);
+                chmod($flexy->compiledTemplate, 0775);
                 // make the timestamp of the two items match.
                 clearstatcache();
                 touch($flexy->compiledTemplate, filemtime($flexy->currentTemplate));
@@ -190,7 +190,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             
         } else {
             return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to write to '.$flexy->compiledTemplate,
-                HTML_TEMPLATE_FLEXY_ERROR_FILE ,HTML_TEMPLATE_FLEXY_ERROR_RETURN);
+                HTML_TEMPLATE_FLEXY_ERROR_FILE, HTML_TEMPLATE_FLEXY_ERROR_RETURN);
         }
         // gettext strings
          
@@ -200,9 +200,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         if($gettextStrings && ($cfp = fopen( $flexy->getTextStringsFile, 'w') ) ) {
             
-            fwrite($cfp,serialize(array_unique($gettextStrings)));
+            fwrite($cfp, serialize(array_unique($gettextStrings)));
             fclose($cfp);
-            chmod($flexy->getTextStringsFile,0664);
+            chmod($flexy->getTextStringsFile, 0664);
         }
         
         // elements
@@ -212,9 +212,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         if( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements'] &&
             ($cfp = fopen( $flexy->elementsFile, 'w') ) ) {
-            fwrite($cfp,serialize( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements']));
+            fwrite($cfp, serialize( $GLOBALS['_HTML_TEMPLATE_FLEXY']['elements']));
             fclose($cfp);
-            chmod($flexy->elementsFile,0664);
+            chmod($flexy->elementsFile, 0664);
             // now clear it.
         
         }
@@ -243,13 +243,13 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             );
         }
                 
-        if (is_a($this->options['Translation2'],'Translation2')) {
+        if (is_a($this->options['Translation2'], 'Translation2')) {
             $this->options['Translation2']->setLang($this->options['locale']);
             // fixme - needs to be more specific to which template to use..
             foreach ($this->options['templateDir'] as $tt) {
                 $n = basename($this->currentTemplate);
-                if (substr($this->currentTemplate,0,strlen($tt)) == $tt) {
-                    $n = substr($this->currentTemplate,strlen($tt)+1);
+                if (substr($this->currentTemplate, 0, strlen($tt)) == $tt) {
+                    $n = substr($this->currentTemplate, strlen($tt)+1);
                 }
                 //echo $n;
             }
@@ -277,10 +277,10 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         array_shift($lmatches);
         // shift the first..
         foreach ($lmatches as $k) {
-            if (false === strpos($k,')_}')) {
+            if (false === strpos($k, ')_}')) {
                 continue;
             }
-            $x = explode(')_}',$k);
+            $x = explode(')_}', $k);
             $matches[] = $x[0];
         }
     
@@ -294,7 +294,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // ** leaving in the tag (which should be ignored by the parser..
         // we then get rid of the tags during the toString method in this class.
         foreach($matches as $v) {
-            $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}',$data);
+            $data = str_replace('{_('.$v.')_}', '{_('.$this->translateString($v).')_}', $data);
         }
         return $data;
     }    
@@ -343,20 +343,20 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             
         $class = get_class($element);
         if (strlen($class) >= $len) {
-            $type = substr($class,$len);
+            $type = substr($class, $len);
             return $this->{'toString'.$type}($element);
         }
         
         $ret = $element->value;
         $add = $element->compileChildren($this);
-        if (is_a($add,'PEAR_Error')) {
+        if (is_a($add, 'PEAR_Error')) {
             return $add;
         }
         $ret .= $add;
         
         if ($element->close) {
             $add = $element->close->compile($this);
-            if (is_a($add,'PEAR_Error')) {
+            if (is_a($add, 'PEAR_Error')) {
                 return $add;
             }
             $ret .= $add;
@@ -447,7 +447,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     {
     
         $loopon = $element->toVar($element->loopOn);
-        if (is_a($loopon,'PEAR_Error')) {
+        if (is_a($loopon, 'PEAR_Error')) {
             return $loopon;
         }
         
@@ -482,7 +482,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     {
         
         $var = $element->toVar($element->condition);
-        if (is_a($var,'PEAR_Error')) {
+        if (is_a($var, 'PEAR_Error')) {
             return $var;
         }
         
@@ -544,7 +544,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             
         }
         
-        return array($prefix,$suffix);
+        return array($prefix, $suffix);
     }
 
 
@@ -564,10 +564,10 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // ignore modifier at present!!
         
         $var = $element->toVar($element->value);
-        if (is_a($var,'PEAR_Error')) {
+        if (is_a($var, 'PEAR_Error')) {
             return $var;
         }
-        list($prefix,$suffix) = $this->getModifierWrapper($element);
+        list($prefix, $suffix) = $this->getModifierWrapper($element);
         return $this->appendPhp( $prefix . $var . $suffix .';');
     }
    /**
@@ -586,7 +586,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
               
         // set up the modifier at present!!
          
-        list($prefix,$suffix) = $this->getModifierWrapper($element);
+        list($prefix, $suffix) = $this->getModifierWrapper($element);
         
         // add the '!' to if
         
@@ -599,13 +599,13 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         
         // check that method exists..
         // if (method_exists($object,'method');
-        $bits = explode('.',$element->method);
+        $bits = explode('.', $element->method);
         $method = array_pop($bits);
         
-        $object = implode('.',$bits);
+        $object = implode('.', $bits);
         
         $var = $element->toVar($object);
-        if (is_a($var,'PEAR_Error')) {
+        if (is_a($var, 'PEAR_Error')) {
             return $var;
         }
         
@@ -615,12 +615,12 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             $var = $method;
         } else {
             $prefix = 'if ($this->options[\'strict\'] || (isset('.$var.
-                ') && method_exists('.$var .",'{$method}'))) " . $prefix;
+                ') && method_exists('.$var .", '{$method}'))) " . $prefix;
             $var = $element->toVar($element->method);
         }
         
 
-        if (is_a($var,'PEAR_Error')) {
+        if (is_a($var, 'PEAR_Error')) {
             return $var;
         }
         
@@ -637,16 +637,16 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             }
             $s =1;
             if ($a{0} == '#') {
-                if (is_numeric(substr($a,1,-1))) {
-                    $ret .= substr($a,1,-1);
+                if (is_numeric(substr($a, 1, -1))) {
+                    $ret .= substr($a, 1, -1);
                 } else {
-                    $ret .= '"'. addslashes(substr($a,1,-1)) . '"';
+                    $ret .= '"'. addslashes(substr($a, 1, -1)) . '"';
                 }
                 continue;
             }
             
             $var = $element->toVar($a);
-            if (is_a($var,'PEAR_Error')) {
+            if (is_a($var, 'PEAR_Error')) {
                 return $var;
             }
             $ret .= $var;
@@ -681,8 +681,8 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     function toStringProcessing($element) 
     {
         // if it's XML then quote it..
-        if (strtoupper(substr($element->value,2,3)) == 'XML') { 
-            return $this->appendPhp("echo '" . str_replace("'","\\"."'", $element->value) . "';");
+        if (strtoupper(substr($element->value, 2, 3)) == 'XML') { 
+            return $this->appendPhp("echo '" . str_replace("'", "\\"."'", $element->value) . "';");
         }
         // otherwise it's PHP code - so echo it..
         return $element->value;
@@ -713,7 +713,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
         // dont add comments to translation lists.
          
-        if (substr($element->value,0,4) == '<!--') {
+        if (substr($element->value, 0, 4) == '<!--') {
             return $this->appendHtml($element->value);
         }
         // ignore anything wrapped with {_( .... )_}
@@ -729,9 +729,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // grab the white space at start and end (and keep it!
         
         $value = ltrim($element->value);
-        $front = substr($element->value,0,-strlen($value));
+        $front = substr($element->value, 0, -strlen($value));
         $value = rtrim($element->value);
-        $rear  = substr($element->value,strlen($value));
+        $rear  = substr($element->value, strlen($value));
         $value = trim($element->value);
         
         
@@ -799,7 +799,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
         $string = trim($string);
         
-        if (substr($string,0,4) == '<!--') {
+        if (substr($string, 0, 4) == '<!--') {
             return;
         }
         
@@ -825,7 +825,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
          
         
         
-        if (is_a($this->options['Translation2'],'Translation2')) {
+        if (is_a($this->options['Translation2'], 'Translation2')) {
             $result = $this->options['Translation2']->get($string);
             if (!empty($result)) {
                 return $result;
@@ -897,7 +897,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
                 return $string;
             }
             
-            $GLOBALS['_'.__CLASS__]['PO'][$pofile] = File_Gettext::factory('PO',$pofile);
+            $GLOBALS['_'.__CLASS__]['PO'][$pofile] = File_Gettext::factory('PO', $pofile);
             $GLOBALS['_'.__CLASS__]['PO'][$pofile]->load();
             //echo '<PRE>'.htmlspecialchars(print_r($GLOBALS['_'.__CLASS__]['PO'][$pofile]->strings,true));
             
@@ -905,7 +905,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         $po = &$GLOBALS['_'.__CLASS__]['PO'][$pofile];
         // we should have it loaded now...
         // this is odd - data is a bit messed up with CR's
-        $string = str_replace('\n',"\n",$string);
+        $string = str_replace('\n', "\n", $string);
         
         if (isset($po->strings[$prefix.$string])) {
             return $po->strings[$prefix.$string];
@@ -951,23 +951,23 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         }
         
         
-        if (strpos($element->tag,':') === false) {
+        if (strpos($element->tag, ':') === false) {
             $namespace = 'Tag';
         } else {
-            $bits =  explode(':',$element->tag);
+            $bits =  explode(':', $element->tag);
             $namespace = $bits[0];
         }
         if ($namespace{0} == '/') {
-            $namespace = substr($namespace,1);
+            $namespace = substr($namespace, 1);
         }
         if (empty($this->tagHandlers[$namespace])) {
             
             require_once 'HTML/Template/Flexy/Compiler/Flexy/Tag.php';
-            $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Flexy_Tag::factory($namespace,$this);
+            $this->tagHandlers[$namespace] = &HTML_Template_Flexy_Compiler_Flexy_Tag::factory($namespace, $this);
             if (!$this->tagHandlers[$namespace] ) {
                 return HTML_Template_Flexy::raiseError('HTML_Template_Flexy::failed to create Namespace Handler '.$namespace . 
                     ' in file ' . $GLOBALS['_HTML_TEMPLATE_FLEXY']['filename'],
-                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX ,HTML_TEMPLATE_FLEXY_ERROR_RETURN);
+                    HTML_TEMPLATE_FLEXY_ERROR_SYNTAX, HTML_TEMPLATE_FLEXY_ERROR_RETURN);
             }
                 
         }
