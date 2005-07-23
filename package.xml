@@ -63,20 +63,32 @@
     </maintainer>
   </maintainers>
  
-      <release>
-     <version>1.2.1</version>
-      <date>2004-12-28</date>
+     <release>
+     <version>1.2.2</version>
+      <date>2005-01-27</date>
       <notes><![CDATA[
       Minor Bugfix Release
           
+        - Support Variables in Attributes of Flexy Elements (I would not recomend doing this, but
+          it appears to work!)
+        - Removed support for merging text and variables automatically for creating translation strings
+         (It never worked very well) the recommend way to mix variables and text for translation is to 
+         use the  translation markers {_( translation block with {flexy} {methods()} )_}
+          * Note these do not work correcty inside attributes values yet! - but will be fixed in the next release.
+        - Support for translator storing title= attribute values from <a> tags.
+        - Unix privaliges are 0664 for translation strings and element data.
+        
         
        Features / Fixes
-        #---- - Pass by reference warning fixed.
-        #---- - Left debuging code in plugins
-        
-        A very nice introduction to plugin's exists here:
-            http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
+        bug #4103 - & replaced with &amp; in attribute values of flexy elements 
+            (&nbsp; is still broken however.)
+        bug #3885 - Flexy_Factory::setRequired() did not reset return values correctly (note this feature is depreciated)
+        --- ----- - Fixed Number format modifier (found by new test suite)
+        --- ----- - Fixed Attribute method calls modifiers being chopped.
+        bug #3946 - Using flexy:raw (to put stuff like "checked" in) now produces a warning when used
+                   with dynamic elements (use flexy:ignore="yes") to stop them being dynamic.
             
+         
         
         
      ]]></notes>
@@ -244,6 +256,28 @@
      
    <changelog>
    
+   
+   <release>
+     <version>1.2.1</version>
+      <date>2005-01-27</date>
+      <notes><![CDATA[
+      Minor Bugfix Release
+          
+        
+       Features / Fixes
+        #---- - Pass by reference warning fixed.
+        #---- - Left debuging code in plugins
+        
+        A very nice introduction to plugin's exists here:
+            http://seagull.phpkitchen.com/docs/wakka.php?wakka=Howto/Flexy/Plugins
+            
+        
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+     
+     
     <release>
      <version>1.2.0</version>
       <date>2004-12-28</date>

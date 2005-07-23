@@ -1,6 +1,66 @@
 
+2005-07-14 Thursday  alan_k
+
+	* few CS fixes (thanks martin) - Im sure theres more
+
+2005-07-13 Wednesday  alan_k
+
+	* set privaliges on other generated files
+
+2005-07-05 Tuesday  alan_k
+
+	* remove debugging code, support <a title= translation
+
+2005-06-29 Wednesday  alan_k
+
+	* bug #4687 - usesname test (unable to reproduce)
+	* make error message more sensible
+	* support for non-valued select options, not sure if this is
+	actually needed.. or just an old BC hack
+
+2005-05-14 Saturday  alan_k
+
+	* fix bug #3946 - flexy:raw with plugin modifiers, and mixing
+	flexy:raw with dynamic elements produces error now (use
+	flexy:ignore to turn of parsing here..
+	* fix chopping of modifier in attribute method calls
+	* simplify tokenizer syntax, and a few minor changes, synced from
+	local repo (mostly debugging comments)
+	* fix test suite failures (including numberformat bug)
+	* Fix bug #3885 - setRequired doesnt reset return values.
+
+2005-05-05 Thursday  alan_k
+
+	* remove warning, improve error message
+
+2005-04-13 Wednesday  alan_k
+
+	* fix bug #4103 & replaced with &amp; in attribute values.
+
+2005-02-15 Tuesday  alan_k
+
+	* only allow variables in attributes.. - still needs more testing
+	(basically methods would be a nightmare to support here)
+	* oops missed a .
+	* add warning to Old Standard Compiler
+
+2005-01-31 Monday  alan_k
+
+	* remove sprintf code from tree - was made redundant by removing
+	old gettext merging
+
+2005-01-27 Thursday  alan_k
+
+	* prep for another release
+	* oops left print_r in there
+
 2005-01-25 Tuesday  alan_k
 
+	* another one of them (pass by reference)
+	* oops how did that one creep in.. - pass by reference
+	* fix a few typos - post release..
+	* adding Changelog as its normally quite informative
+	* prep for release
 	* fix cdata with variables/looping
 	* passes all tests atm
 	* adding allowPHP=>delete to remove php code from a template.,
