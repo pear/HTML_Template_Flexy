@@ -76,7 +76,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         $filename = 'HTML/Template/Flexy/Compiler/Flexy/' . ucfirst(strtolower($type)) . '.php';
         if (!HTML_Template_Flexy_Compiler_Flexy_Tag::fileExistsInPath($filename)) {
-            return HTML_Template_Flexy_Compiler_Flexy_Tag::factory('Tag',$compiler);
+            $ret = HTML_Template_Flexy_Compiler_Flexy_Tag::factory('Tag',$compiler);
+            return $ret; 
         }
         // if we dont have a handler - just use the basic handler.
         if (!file_exists(dirname(__FILE__) . '/'. ucfirst(strtolower($type)) . '.php')) {
@@ -87,9 +88,11 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         
         $class = 'HTML_Template_Flexy_Compiler_Flexy_' . $type;
         if (!class_exists($class)) {
-            return false;
+            $ret = false;
+            return $ret;
         }
-        return HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,$compiler);
+        $ret = HTML_Template_Flexy_Compiler_Flexy_Tag::factory($type,$compiler);
+        return $ret;
     }
     /**
     *   
