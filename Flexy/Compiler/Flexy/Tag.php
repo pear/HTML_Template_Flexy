@@ -34,7 +34,8 @@ if ( (substr(phpversion(),0,1) < 5) && !function_exists('clone')) {
 * @version    $Id$
 */
 
-class HTML_Template_Flexy_Compiler_Flexy_Tag {
+class HTML_Template_Flexy_Compiler_Flexy_Tag 
+{
 
         
     /**
@@ -617,9 +618,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
-        if ((strtolower($this->element->getAttribute('type')) == 'checkbox' ) && 
-                (substr($this->element->getAttribute('name'),-2) == '[]')) {
-            if ($this->element->getAttribute('id') === false) {
+        if ((strtolower($this->element->getAttribute('TYPE')) == 'checkbox' ) && 
+                (substr($this->element->getAttribute('NAME'),-2) == '[]')) {
+            if ($this->element->getAttribute('ID') === false) {
                 $id = 'tmpId'. (++$tmpId);
                 $this->element->attributes['id'] = $id;
                 $this->element->ucAttributes['ID'] = $id;
@@ -740,18 +741,30 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
         }
         
         if ($var = $this->element->getAttribute('FLEXY:NAMEUSES')) {
+            // force var to use name (as radio buttons pick up id.)
             
-            $var = 'sprintf(\''.$id .'\','.$this->element->toVar($var) .')';
+            $ename = $this->element->getAttribute('NAME');
+            $printfvar = 'sprintf(\''.$ename .'\','.$this->element->toVar($var) .')';
+            // support id replacement as well ...
+            $idreplace = '';
+            if ($this->element->getAttribute('ID')) {
+                $idvar     = 'sprintf(\''.$this->element->getAttribute('ID') .'\','.$this->element->toVar($var) .')';
+                $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
+            }
             return  $ret . 
-                'if (!isset($this->elements['.$var.'])) $this->elements['.$var.']= $this->elements[\''.$id.'\'];
-                $this->elements['.$var.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$var.']);
-                $this->elements['.$var.']->attributes[\'name\'] = '.$var. ';
-                echo $this->elements['.$var.']->toHtml();' .$unset; 
+                'if (!isset($this->elements['.$printfvar.'])) $this->elements['.$printfvar.']= $this->elements[\''.$id.'\'];
+                $this->elements['.$printfvar.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$printfvar.']);
+                $this->elements['.$printfvar.']->attributes[\'name\'] = '.$printfvar. ';
+                ' . $idreplace . '
+                echo $this->elements['.$printfvar.']->toHtml();' .$unset; 
         }
         
         
         if ($mergeWithName) {
             $name = $this->element->getAttribute('NAME');
+            //if ((strtolower($this->element->getAttribute('TYPE')) == 'checkbox') && (substr($name,-2) == '[]')) {
+            //    $name = substr($name,0,-2);
+            //}
             return  $ret . 
                 '$element = $this->elements[\''.$id.'\'];
                 $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
@@ -768,7 +781,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     * @return   false|PEAR_Error 
     * @access   public
     */
-    function parseTagScript() {
+    function parseTagScript() 
+    {
         
         
         $lang = $this->element->getAttribute('LANGUAGE');
@@ -994,7 +1008,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     * @return   object HTML_Template_Flexy_Element
     * @access   public
     */
-    function toElement($element) {
+    function toElement($element) 
+    {
         require_once 'HTML/Template/Flexy/Element.php';
         $ret = new HTML_Template_Flexy_Element;
         
@@ -1084,7 +1099,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag {
     */
   
     
-    function elementUsesDynamic($e) {
+    function elementUsesDynamic($e) 
+    {
         if (is_a($e,'HTML_Template_Flexy_Token_Var')) {
             return true;
         }
