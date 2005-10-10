@@ -265,7 +265,11 @@ class HTML_Template_Flexy_Element {
                         if (isset($this->attributes['checked'])) {
                             unset($this->attributes['checked']);
                         }
-                        
+                        // if we dont have values associated yet, store it..
+                        if (!isset($this->attributes['value'])) {
+                            $this->value = $value;
+                            return;
+                        }
                         if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] =  true;
                         }
