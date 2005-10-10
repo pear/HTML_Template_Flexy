@@ -744,17 +744,28 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             // force var to use name (as radio buttons pick up id.)
             
             $ename = $this->element->getAttribute('NAME');
-            $printfvar = 'sprintf(\''.$ename .'\','.$this->element->toVar($var) .')';
+            $printfnamevar = $printfvar = 'sprintf(\''.$ename .'\','.$this->element->toVar($var) .')';
             // support id replacement as well ...
             $idreplace = '';
+           
+            
+            if (strtolower($this->element->getAttribute('TYPE')) == 'radio') {
+                $ename = $this->element->getAttribute('ID');
+                $printfvar = 'sprintf(\''.$ename .'\','.$this->element->toVar($var) .')';
+            }
             if ($this->element->getAttribute('ID')) {
                 $idvar     = 'sprintf(\''.$this->element->getAttribute('ID') .'\','.$this->element->toVar($var) .')';
                 $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
             }
-            return  $ret . 
-                'if (!isset($this->elements['.$printfvar.'])) $this->elements['.$printfvar.']= $this->elements[\''.$id.'\'];
-                $this->elements['.$printfvar.'] = $this->mergeElement($this->elements[\''.$id.'\'],$this->elements['.$printfvar.']);
-                $this->elements['.$printfvar.']->attributes[\'name\'] = '.$printfvar. ';
+            return  $ret . '
+                if (!isset($this->elements['.$printfvar.'])) {
+                   $this->elements['.$printfvar.']= $this->elements[\''.$id.'\'];
+                }
+                $this->elements['.$printfvar.'] = $this->mergeElement(
+                    $this->elements[\''.$id.'\'],
+                    $this->elements['.$printfnamevar .']
+                );
+                $this->elements['.$printfvar.']->attributes[\'name\'] = '.$printfnamevar. ';
                 ' . $idreplace . '
                 echo $this->elements['.$printfvar.']->toHtml();' .$unset; 
         }
