@@ -532,6 +532,11 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
                 // add language ?
                 $suffix = '))';
                 break;
+            case 'e':
+                $prefix = 'echo htmlentities(';
+                // add language ?
+                $suffix = ')';
+                break;
             case ' ':
                 $prefix = 'echo htmlspecialchars(';
                 // add language ?
