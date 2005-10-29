@@ -1,4 +1,34 @@
 
+2005-10-25 Tuesday  alan_k
+
+	* fix bug #5752 - add support for :e modifier == htmlentities()
+	call.
+
+2005-10-10 Monday  alan_k
+
+	* dont bork with error if value is not set when setValue() on a
+	radio button is called.
+	* fix up nameuses with radio buttons.
+
+2005-10-08 Saturday  alan_k
+
+	* id replacement fix (last commit didnt quite work correctly)
+
+2005-09-23 Friday  alan_k
+
+	* php4.4 compatibility issues
+
+2005-08-16 Tuesday  alan_k
+
+	* oops message typo
+	* summarize security issues with SimpleTags
+	* removing old Xipe backend - its not supported or security checked
+	correctly, so off it goes...
+
+2005-07-23 Saturday  alan_k
+
+	* prep for release
+
 2005-07-14 Thursday  alan_k
 
 	* few CS fixes (thanks martin) - Im sure theres more

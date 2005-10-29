@@ -47,10 +47,7 @@
   
   - examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/
   
-  ** The long term plan for Flexy is to be integrated as a backend for the 
-  Future Template Package (A BC wrapper will be made available - as I need 
-  to use it too!)
-  
+   
   
 </description>
   <license>PHP License</license>
@@ -64,32 +61,23 @@
   </maintainers>
  
      <release>
-     <version>1.2.2</version>
-      <date>2005-01-27</date>
+     <version>1.2.3</version>
+      <date>2005-07-23</date>
       <notes><![CDATA[
       Minor Bugfix Release
           
-        - Support Variables in Attributes of Flexy Elements (I would not recomend doing this, but
-          it appears to work!)
-        - Removed support for merging text and variables automatically for creating translation strings
-         (It never worked very well) the recommend way to mix variables and text for translation is to 
-         use the  translation markers {_( translation block with {flexy} {methods()} )_}
-          * Note these do not work correcty inside attributes values yet! - but will be fixed in the next release.
-        - Support for translator storing title= attribute values from <a> tags.
-        - Unix privaliges are 0664 for translation strings and element data.
+          
+        Feature Requests:
+            bug #5752 - add support for :e modifier == htmlentities() call.
+            * flexy:nameuses also replaces in id (obviously if %s in included)
         
-        
-       Features / Fixes
-        bug #4103 - & replaced with &amp; in attribute values of flexy elements 
-            (&nbsp; is still broken however.)
-        bug #3885 - Flexy_Factory::setRequired() did not reset return values correctly (note this feature is depreciated)
-        --- ----- - Fixed Number format modifier (found by new test suite)
-        --- ----- - Fixed Attribute method calls modifiers being chopped.
-        bug #3946 - Using flexy:raw (to put stuff like "checked" in) now produces a warning when used
-                   with dynamic elements (use flexy:ignore="yes") to stop them being dynamic.
-            
-         
-        
+        Fixes
+            * dont bork with error if value is not set when setValue() on a
+              radio button is called.
+            * fix up flexy:nameuses with radio buttons.
+            * php4.4 compatibility issues (return by ref stuff)
+            * summarize security issues with SimpleTags backend
+             
         
      ]]></notes>
       <state>stable</state>
@@ -256,7 +244,38 @@
      
    <changelog>
    
-   
+    <release>
+     <version>1.2.2</version>
+      <date>2005-07-23</date>
+      <notes><![CDATA[
+      Minor Bugfix Release
+          
+        - Support Variables in Attributes of Flexy Elements (I would not recomend doing this, but
+          it appears to work!)
+        - Removed support for merging text and variables automatically for creating translation strings
+         (It never worked very well) the recommend way to mix variables and text for translation is to 
+         use the  translation markers {_( translation block with {flexy} {methods()} )_}
+          * Note these do not work correcty inside attributes values yet! - but will be fixed in the next release.
+        - Support for translator storing title= attribute values from <a> tags.
+        - Unix privaliges are 0664 for translation strings and element data.
+        
+        
+       Features / Fixes
+        bug #4103 - & replaced with &amp; in attribute values of flexy elements 
+            (&nbsp; is still broken however.)
+        bug #3885 - Flexy_Factory::setRequired() did not reset return values correctly (note this feature is depreciated)
+        --- ----- - Fixed Number format modifier (found by new test suite)
+        --- ----- - Fixed Attribute method calls modifiers being chopped.
+        bug #3946 - Using flexy:raw (to put stuff like "checked" in) now produces a warning when used
+                   with dynamic elements (use flexy:ignore="yes") to stop them being dynamic.
+            
+         
+        
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+     
    <release>
      <version>1.2.1</version>
       <date>2005-01-27</date>
