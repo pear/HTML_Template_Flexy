@@ -247,7 +247,7 @@ class HTML_Template_Flexy_Element {
                             return;
                         }
                         //print_r($this); echo "SET TO "; serialize($value);
-                        if (substr($this->attributes['name'],-2) == '[]') {
+                        if (isset($this->attributes['name']) && (substr($this->attributes['name'],-2) == '[]')) {
                             if (is_array($value) && 
                                 in_array((string) $this->attributes['value'],$value)
                                 ) {
@@ -328,11 +328,11 @@ class HTML_Template_Flexy_Element {
                     // standard option value...
                     //echo "testing {$child->attributes['value']} against ". print_r($value,true)."\n";
                     // does the value exist and match..
-                    
+                     
                     if (isset($child->attributes['value']) 
                         && in_array((string) $child->attributes['value'], $value)) 
                     {
-                       // echo "MATCH!\n";
+                        
                       
                         $this->children[$i]->attributes['selected'] = 
                             isset($this->attributes['flexy:xhtml']) ? 'selected' : true;;
