@@ -380,14 +380,11 @@ class HTML_Template_Flexy_Element {
                 
             // XUL elements
             case 'menulist':
+            case 'textbox':
+            case 'checkbox':
                 require_once 'HTML/Template/Flexy/Element/Xul.php';
                 HTML_Template_Flexy_Element_Xul::setValue($this,$value);
                 return ;
-            
-            case 'textbox':
-                require_once 'HTML/Template/Flexy/Element/Xul.php';
-                HTML_Template_Flexy_Element_Xul::setValue($this,$value);
-                return;
                 
             default:
                 if (is_array($value)) {
