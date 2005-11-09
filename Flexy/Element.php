@@ -168,8 +168,12 @@ class HTML_Template_Flexy_Element {
                 }
             } else {
                 // dont replace & with &amp;
-                $strAttr .= ' ' . $key . '="' . 
-                    str_replace('&amp;','&',htmlspecialchars($value)) . '"';
+                if ($this->tag == 'textbox') {  // XUL linefeed fix.
+                    $value = str_replace("\n", '&#13;', htmlspecialchars($value));
+                } else {
+                    $value = htmlspecialchars($value);
+                }
+                $strAttr .= ' ' . $key . '="' . str_replace('&amp;','&',$value) . '"';
             }
             
         }
