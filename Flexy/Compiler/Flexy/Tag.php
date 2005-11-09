@@ -557,10 +557,14 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             $bits = explode(':',$tag);
             $tag = $bits[1];
         }
-         
-        $method = 'parseTag'.$tag;
-        if (!method_exists($this,$method)) {
-            return false;
+        
+        if (in_array(strtolower($tag), array('menulist','textbox','checkbox'))) {
+            $method = 'parseXulTag';
+        } else {
+            $method = 'parseTag'.$tag;
+            if (!method_exists($this,$method)) {
+                return false;
+            }
         }
         
         if (($this->element->getAttribute('NAME') === false) &&
@@ -1092,13 +1096,13 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
     
     
      /**
-    * Deal with XUL MenuItems
+    * Deal with XUL tags
     *
     * @return   string | false = html output or ignore (just output the tag)
     * @access   public
     */
   
-    function parseTagMenuList() 
+    function parseXulTag() 
     {
         
         // does it contain any flexy tags??
@@ -1109,24 +1113,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         return $this->compiler->appendPhp(
             $this->getElementPhp( $this->element->getAttribute('ID')));
     }
-     /**
-    * Deal with XUL Textbox
-    *
-    * @return   string | false = html output or ignore (just output the tag)
-    * @access   public
-    */
-  
-    function parseTagTextbox() 
-    {
-        
-        // does it contain any flexy tags??
-        if ($this->elementUsesDynamic($this->element)) {
-            return false;
-        } 
-        
-        return $this->compiler->appendPhp(
-            $this->getElementPhp( $this->element->getAttribute('ID')));
-    }
+     
      /**
     * Recursively search for any flexy:if flexy:foreach or {xxxx} tags inside tags..
     *
