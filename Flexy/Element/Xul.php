@@ -99,6 +99,13 @@ class HTML_Template_Flexy_Element_Xul {
                 $this->attributes['value'] = $value;
                 return;
                 
+            case 'checkbox':
+                if (!isset($this->attributes['value'])) {
+                    return; // should be an error condition really...
+                }
+                $this->attributes['checked'] = ($value == $this->attributes['value']) ? 'true' : 'false';
+                return;
+                
         }
             
         
