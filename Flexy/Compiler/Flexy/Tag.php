@@ -1019,10 +1019,11 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
     * @return   object HTML_Template_Flexy_Element
     * @access   public
     */
-    function toElement($element) 
+    function toElement($element,$stripspaces  = false) 
     {
         require_once 'HTML/Template/Flexy/Element.php';
         $ret = new HTML_Template_Flexy_Element;
+        
         
         if (strtolower(get_class($element)) != 'html_template_flexy_token_tag') {
             $this->compiler->addStringToGettext($element->value);
@@ -1031,6 +1032,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         
         $ret->tag = strtolower($element->tag);
+        
+        if ($ret->tag == 'menulist') {  // for XUL menulist, remove the white space between tags..
+            $stripspaces = true;
+        }
         
         $ats = $element->getAttributes();
         
@@ -1054,7 +1059,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             if (!is_object($element->children[$i])) {
                 continue;
             }
-            $ret->children[] = $this->toElement($element->children[$i]);
+            if ($stripspaces && (strtolower(get_class($element->children[$i])) != 'html_template_flexy_token_tag')) {
+                continue;
+            }
+            $ret->children[] = $this->toElement($element->children[$i],$stripspaces);
         }
         return $ret;
     }
@@ -1091,6 +1099,24 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
     */
   
     function parseTagMenuList() 
+    {
+        
+        // does it contain any flexy tags??
+        if ($this->elementUsesDynamic($this->element)) {
+            return false;
+        } 
+        
+        return $this->compiler->appendPhp(
+            $this->getElementPhp( $this->element->getAttribute('ID')));
+    }
+     /**
+    * Deal with XUL Textbox
+    *
+    * @return   string | false = html output or ignore (just output the tag)
+    * @access   public
+    */
+  
+    function parseTagTextbox() 
     {
         
         // does it contain any flexy tags??

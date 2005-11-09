@@ -57,7 +57,8 @@ class HTML_Template_Flexy_Element_Xul {
                 if (!is_a($element->children[0],'HTML_Template_Flexy_Element')) {
                     // oh sh*t big problem!
                     return HTML_Template_Flexy::raiseError(
-                        __CLASS__ . '::setValue expected a menupopup as the child of a menuitem?', 
+                        __CLASS__ . '::setValue expected a Flexy Element as the child of a menuitem but got something else! '. 
+                            print_r($element,true), 
                         HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,
                         HTML_TEMPLATE_FLEXY_ERROR_DIE);
                 }
@@ -93,7 +94,11 @@ class HTML_Template_Flexy_Element_Xul {
                 }
                  
                 return;
-             
+            
+            case 'textbox':
+                $this->attributes['value'] = $value;
+                return;
+                
         }
             
         
