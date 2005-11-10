@@ -171,9 +171,9 @@ class HTML_Template_Flexy_Element {
                 if ($this->tag == 'textbox') {  // XUL linefeed fix.
                     $value = str_replace("\n", '&#13;', htmlspecialchars($value));
                 } else {
-                    $value = htmlspecialchars($value);
+                    $value = str_replace('&amp;','&',htmlspecialchars($value));
                 }
-                $strAttr .= ' ' . $key . '="' . str_replace('&amp;','&',$value) . '"';
+                $strAttr .= ' ' . $key . '="' . $value  . '"';
             }
             
         }
