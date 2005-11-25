@@ -20,6 +20,19 @@ $elements["testingcheckbox"] = new HTML_Template_Flexy_Element;
 $elements["testingcheckbox"]->setValue(123);
 
 
+#bug6058
+$elements['payment_1_type'] = new HTML_Template_Flexy_Element;
+$elements['payment_1_type']->attributes['flexy:xhtml'] = true;
+$elements['payment_1_type']->setValue('cq');
+
+// this exhibits unusual behavior, but is not really a bug
+// actually the correct usage is to use '' where 'input' is.
+$elements['payment_2_type'] = new HTML_Template_Flexy_Element('input',
+				array('flexy:xhtml' => true));
+$elements['payment_2_type']->setValue('cq');
+
+
+
 
 compilefile('forms.html',
     array(),
@@ -62,14 +75,52 @@ compilefile('forms.html',
     </select>
     <?php echo $this->elements['aaa3']->toHtml();?>
     
-    
-    
+    <!-- bug 5267 -->
+    <?php $element = $this->elements['opt_1'];
+                $element = $this->mergeElement($element,$this->elements['opt[]']);
+                echo  $element->toHtml();?>
+    <label for="opt_1">option 1</label>
+    <?php $element = $this->elements['opt_2'];
+                $element = $this->mergeElement($element,$this->elements['opt[]']);
+                echo  $element->toHtml();?>
+    <label for="opt_3">option 2</label>
+    <?php $element = $this->elements['opt_3'];
+                $element = $this->mergeElement($element,$this->elements['opt[]']);
+                echo  $element->toHtml();?>
+    <label for="opt_3">option 3</label>
+
+
+
     
     <?php echo $this->elements['List']->toHtml();?>
     <?php echo $this->elements['_submit[4]']->toHtml();?>
     <?php echo $this->elements['_submit[5]']->toHtml();?>
     
     <?php echo $this->elements['testupload']->toHtml();?>
+    
+    #bug  bug6058    
+
+    <br /><?php $element = $this->elements['1'];
+                $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+                echo  $element->toHtml();?>
+        Credit card
+    <br /><?php $element = $this->elements['2'];
+                $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+                echo  $element->toHtml();?>
+        Cheque
+
+    <br /><?php $element = $this->elements['3'];
+                $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+                echo  $element->toHtml();?>
+        Credit card
+    <br /><?php $element = $this->elements['4'];
+                $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+                echo  $element->toHtml();?>
+        Cheque
+    
+    
+    
+    
 </form>
 
 <?php echo $this->elements['picture']->toHtml();?>
@@ -102,6 +153,10 @@ if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
 
 <H2> Bug 4005 Checkboxes </H2>
 <?php echo $this->elements['testingcheckbox']->toHtml();?>
+
+
+
+
 
 
 
@@ -390,6 +445,72 @@ Array
             [value] => 
         )
 
+    [opt_1] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [id] => opt_1
+                    [type] => checkbox
+                    [name] => opt[]
+                    [value] => 1
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [opt_2] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [id] => opt_2
+                    [type] => checkbox
+                    [name] => opt[]
+                    [value] => 2
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [opt_3] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [id] => opt_3
+                    [type] => checkbox
+                    [name] => opt[]
+                    [value] => 3
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
     [List] => html_template_flexy_element Object
         (
             [tag] => select
@@ -520,6 +641,96 @@ Array
                 (
                     [type] => file
                     [name] => testupload
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [payment_1_type] => 
+    [1] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                    [name] => payment_1_type
+                    [id] => 1
+                    [value] => cc
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [2] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                    [name] => payment_1_type
+                    [id] => 2
+                    [value] => cq
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [payment_2_type] => 
+    [3] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                    [name] => payment_2_type
+                    [id] => 3
+                    [value] => cc
+                    [/] => 1
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [4] => html_template_flexy_element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                    [name] => payment_2_type
+                    [id] => 4
+                    [value] => cq
+                    [/] => 1
                 )
 
             [children] => Array
@@ -778,15 +989,32 @@ Array
         <option>cc</option>
 
     </select>    
-    
-    
+    <!-- bug 5267 -->
+    <input id="opt_1" type="checkbox" name="opt[]" value="1" />    <label for="opt_1">option 1</label>
+    <input id="opt_2" type="checkbox" name="opt[]" value="2" />    <label for="opt_3">option 2</label>
+    <input id="opt_3" type="checkbox" name="opt[]" value="3" />    <label for="opt_3">option 3</label>
+
+
+
     
     <select name="List">
         <option value="2000" selected>2000</option>
         <option value="2001">2001</option>
         <option value="2002">2002</option>
     </select>    <input type="submit" name="_submit[4]" value="Next &gt;&gt;">    <input type="submit" name="_submit[5]" value="Next &gt;&gt;">    
-    <input type="file" name="testupload"></form>
+    <input type="file" name="testupload">    
+    #bug  bug6058    
+
+    <br /><input type="radio" name="payment_1_type" id="1" value="cc" />        Credit card
+    <br /><input type="radio" name="payment_1_type" id="2" value="cq" checked="checked" />        Cheque
+
+    <br /><input type="radio" name="payment_2_type" id="3" value="cq" checked="checked" />        Credit card
+    <br /><input type="radio" name="payment_2_type" id="4" value="cq" checked="checked" />        Cheque
+    
+    
+    
+    
+</form>
 
 <img name="picture" id="picture">
 <h2>Bug 1120:</h2>
@@ -803,6 +1031,10 @@ Array
 
 <H2> Bug 4005 Checkboxes </H2>
 <input type="checkbox" name="testingcheckbox" value="123" checked>
+
+
+
+
 
 
 <form name="test_mix" action=""><input name="testing5" value=""><input type="submit" name="_submit[3]"></form>

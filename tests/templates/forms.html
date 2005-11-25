@@ -34,8 +34,16 @@
 
     </select>
     
-    
-    
+    <!-- bug 5267 -->
+    <input id="opt_1" type="checkbox" name="opt[]" value="1" />
+    <label for="opt_1">option 1</label>
+    <input id="opt_2" type="checkbox" name="opt[]" value="2" />
+    <label for="opt_3">option 2</label>
+    <input id="opt_3" type="checkbox" name="opt[]" value="3" />
+    <label for="opt_3">option 3</label>
+
+
+
     
     <select name="List">
         <option value="2000">2000</option>
@@ -46,6 +54,22 @@
     <input type="submit" name="_submit[5]" value="Next &gt;&gt;">
     
     <input type="file" name="testupload">
+    
+    #bug  bug6058    
+
+    <br /><input type="radio" name="payment_1_type" id="1" value="cc" />
+        Credit card
+    <br /><input type="radio" name="payment_1_type" id="2" value="cq" />
+        Cheque
+
+    <br /><input type="radio" name="payment_2_type" id="3" value="cc" />
+        Credit card
+    <br /><input type="radio" name="payment_2_type" id="4" value="cq" />
+        Cheque
+    
+    
+    
+    
 </form>
 
 <img name="picture" id="picture" flexy:dynamic>
@@ -70,6 +94,10 @@
 
 <H2> Bug 4005 Checkboxes </H2>
 <input type="checkbox" name="testingcheckbox" value="123">
+
+
+
+
 
 
 
