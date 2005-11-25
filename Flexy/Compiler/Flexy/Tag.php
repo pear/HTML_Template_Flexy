@@ -628,7 +628,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 $id = 'tmpId'. (++$tmpId);
                 $this->element->attributes['id'] = $id;
                 $this->element->ucAttributes['ID'] = $id;
-            } 
+            } else {
+                $id = $this->element->getAttribute('ID');
+            }
             $mergeWithName =  true;
         }
         
@@ -757,6 +759,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 $ename = $this->element->getAttribute('ID');
                 $printfvar = 'sprintf(\''.$ename .'\','.$this->element->toVar($var) .')';
             }
+            
+            
             if ($this->element->getAttribute('ID')) {
                 $idvar     = 'sprintf(\''.$this->element->getAttribute('ID') .'\','.$this->element->toVar($var) .')';
                 $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
