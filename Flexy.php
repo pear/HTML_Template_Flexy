@@ -168,7 +168,7 @@ class HTML_Template_Flexy
     * @var string
     * @access public
     */
-    var $gettextStringsFile;
+    var $getTextStringsFile;
     /**
     * The serialized elements array file.
     *
