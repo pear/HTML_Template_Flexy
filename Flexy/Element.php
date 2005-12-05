@@ -445,8 +445,10 @@ class HTML_Template_Flexy_Element {
                 $child = new HTML_Template_Flexy_Element($namespace . 'optgroup',array('label'=>$k));
                 foreach($v as $kk=>$vv) {
                     $atts=array();
-                    if (($kk != $vv) && !$noValue) {
+                    if (($kk !== $vv) && !$noValue) {
                         $atts = array('value'=>$kk);
+                    } else {
+                        $atts = array('value'=>$vv);
                     }
                     $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
                     $add->children = array(htmlspecialchars($vv));
