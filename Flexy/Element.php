@@ -141,7 +141,7 @@ class HTML_Template_Flexy_Element {
     {
         $strAttr = '';
         $xhtmlclose = '';
-        
+        $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
         foreach ($this->attributes as $key => $value) {
         
             // you shouldn't do this, but It shouldnt barf when you do..
@@ -169,9 +169,9 @@ class HTML_Template_Flexy_Element {
             } else {
                 // dont replace & with &amp;
                 if ($this->tag == 'textbox') {  // XUL linefeed fix.
-                    $value = str_replace("\n", '&#13;', htmlspecialchars($value));
+                    $value = str_replace("\n", '&#13;', htmlspecialchars($value,ENT_COMPAT,$charset));
                 } else {
-                    $value = str_replace('&amp;nbsp;','&nbsp;',htmlspecialchars($value));
+                    $value = str_replace('&amp;nbsp;','&nbsp;',htmlspecialchars($value,ENT_COMPAT,$charset));
                 }
                 $strAttr .= ' ' . $key . '="' . $value  . '"';
             }
@@ -372,7 +372,8 @@ class HTML_Template_Flexy_Element {
                 }
                 return;
             case 'textarea':
-                $this->children = array(htmlspecialchars($value));
+                $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
+                $this->children = array(htmlspecialchars($value,ENT_COMPAT,$charset));
                 return;
             case '':  // dummy objects.
                 $this->value = $value;
@@ -424,6 +425,7 @@ class HTML_Template_Flexy_Element {
             return;
         }
         
+        $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
         
         $tag = strtolower($this->tag);
         $namespace = '';
@@ -451,7 +453,7 @@ class HTML_Template_Flexy_Element {
                         $atts = array('value'=>$vv);
                     }
                     $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
-                    $add->children = array(htmlspecialchars($vv));
+                    $add->children = array(htmlspecialchars($vv,ENT_COMPAT,$charset));
                     $child->children[] = $add;
                 }
                 $this->children[] = $child;
@@ -464,7 +466,7 @@ class HTML_Template_Flexy_Element {
                 $atts = array('value'=>$v);
             }
             $add = new HTML_Template_Flexy_Element($namespace . 'option',$atts);
-            $add->children = array(htmlspecialchars($v));
+            $add->children = array(htmlspecialchars($v,ENT_COMPAT,$charset));
             $this->children[] = $add;
         }
        

@@ -133,6 +133,8 @@ class HTML_Template_Flexy
                                         //  'Translation2' => new Translation2('dataobjectsimple','')
                                         
       
+        'charset'       => 'ISO-8859-1',    // charset used with htmlspecialchars to render data.
+                                            // experimental
         
         // output options           ------------------------------------------
         'strict'        => false,       // All elements in the template must be defined - 
@@ -510,6 +512,8 @@ class HTML_Template_Flexy
                 $$_k = &$this->assign->references[$_k];
             }
         }
+        // used by Flexy ELements etc..
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['config']  = $this->config;
         
         include($this->compiledTemplate);
         
