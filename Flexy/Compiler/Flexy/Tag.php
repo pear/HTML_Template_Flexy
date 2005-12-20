@@ -785,8 +785,11 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             //    $name = substr($name,0,-2);
             //}
             return  $ret . 
-                '$element = $this->elements[\''.$id.'\'];
-                $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
+                '
+                $element = $this->elements[\''.$id.'\'];
+                if (isset($this->elements[\''.$name.'\'])) {
+                    $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
+                }
                 echo  $element->toHtml();' . $unset; 
         
         }
