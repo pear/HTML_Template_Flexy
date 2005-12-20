@@ -141,7 +141,7 @@ class HTML_Template_Flexy_Element {
     {
         $strAttr = '';
         $xhtmlclose = '';
-        $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
+        $charset = empty($GLOBALS['HTML_Template_Flexy']['options']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['options']['charset'];
         foreach ($this->attributes as $key => $value) {
         
             // you shouldn't do this, but It shouldnt barf when you do..
@@ -372,7 +372,7 @@ class HTML_Template_Flexy_Element {
                 }
                 return;
             case 'textarea':
-                $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
+                $charset = empty($GLOBALS['HTML_Template_Flexy']['options']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['options']['charset'];
                 $this->children = array(htmlspecialchars($value,ENT_COMPAT,$charset));
                 return;
             case '':  // dummy objects.
@@ -425,7 +425,7 @@ class HTML_Template_Flexy_Element {
             return;
         }
         
-        $charset = empty($GLOBALS['HTML_Template_Flexy']['config']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['config']['charset'];
+        $charset = empty($GLOBALS['HTML_Template_Flexy']['options']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['options']['charset'];
         
         $tag = strtolower($this->tag);
         $namespace = '';

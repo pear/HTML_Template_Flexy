@@ -512,8 +512,8 @@ class HTML_Template_Flexy
                 $$_k = &$this->assign->references[$_k];
             }
         }
-        // used by Flexy ELements etc..
-        $GLOBALS['_HTML_TEMPLATE_FLEXY']['config']  = $this->config;
+        // used by Flexy Elements etc..
+        $GLOBALS['_HTML_TEMPLATE_FLEXY']['options']  = $this->options;
         
         include($this->compiledTemplate);
         
