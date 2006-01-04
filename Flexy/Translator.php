@@ -54,7 +54,7 @@ class HTML_Template_Flexy_Translator {
         'appURL'            => '',              // url to translation too : eg. /admin/translator.php
         'Translation2'      => array(
                                 'driver' => 'dataobjectsimple', 
-                                'options' => 'translation'
+                                'options' => 'translations'
                             ),
 
     );
@@ -274,6 +274,9 @@ class HTML_Template_Flexy_Translator {
                  
             }
             
+        }
+        if ($usingGT) {
+            $trd->storage->commit();
         }
         $t = explode(' ',microtime()); $total= $t[0] + $t[1] -  $start;
         //printf("Built All in %0.2fs<BR>",$total);
