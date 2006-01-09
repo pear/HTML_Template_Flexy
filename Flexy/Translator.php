@@ -214,10 +214,18 @@ class HTML_Template_Flexy_Translator {
             $status[$page] = array();
             $tr->setPageID($page);
             // pages....
-            
+            if (isset($post['_clear']) && !PEAR::isError($p = $trd->getPage($page, $displayLang))) {
+                $diff = array_diff(array_keys($p), $words);
+                if (count($diff)) {
+                    foreach ($diff as $string) {
+                        $trd->remove($string, $page);
+                    }
+                }
+            }
+
             foreach ($words as $word) {
             
-                if (!trim(strlen($word))) { 
+                if (!strlen(trim($word))) { 
                     continue;
                 }
                 
