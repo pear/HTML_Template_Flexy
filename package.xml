@@ -61,22 +61,50 @@
   </maintainers>
  
      <release>
-     <version>1.2.3</version>
-      <date>2005-07-23</date>
+     <version>1.2.4</version>
+      <date>2006-01-20</date>
       <notes><![CDATA[
-      Minor Bugfix Release
+      Minor Bugfix / New Feature Release
           
           
-        Feature Requests:
-            bug #5752 - add support for :e modifier == htmlentities() call.
-            * flexy:nameuses also replaces in id (obviously if %s in included)
+        Bugs  
+        ----
+        #6152 - default to using key in optgroup when novalue not set
+        #5267 - checkboxes using [], with ids
+        #5752 - add support for :e modifier == htmlentities() call.
         
-        Fixes
-            * dont bork with error if value is not set when setValue() on a
-              radio button is called.
-            * fix up flexy:nameuses with radio buttons.
-            * php4.4 compatibility issues (return by ref stuff)
-            * summarize security issues with SimpleTags backend
+        
+        Features/Changes and Fixes
+        --------------------------
+        * add ability to remove unused translations (in HTML_Template_Flexy_Translator,
+          tidy up javascript a little (ivan)
+          
+        * add support for gettext Translation2 backend - Requires uptodate version of 
+          Gettext/Translation2 packages ... (ivan)
+          
+        * remove warning from compiled template, when trying to merge possibly 
+          non-existant elements
+        
+        * remove short tags output from Simpletags compiler backend. + lots of 
+          whitespace changes, for some reason... (Demian Turner)
+        
+        * basic charset support in HTML_Template_Flexy_Element ... this is
+          a todo for the rendering layer though... (eg. utf8 / big5 sent to htmlspecialchars)
+          
+        * de-escaping of &amp;nbsp; only used in select option text - removed this feature from
+          other elements
+          
+        * add XUL checkbox support.
+        
+        * correctly replace linefeeds on XUL textbox's
+        
+        * better handling of XUL textbox and menulist elements converted to
+          Flexy XUL Elements
+          
+        * flexy:nameuses also replaces in id (obviously if %s is included)
+
+        
+
              
         
      ]]></notes>
@@ -244,6 +272,31 @@
      
    <changelog>
    
+     <release>
+     <version>1.2.3</version>
+      <date>2005-10-29</date>
+      <notes><![CDATA[
+      Minor Bugfix Release
+          
+          
+        Feature Requests:
+            bug #5752 - add support for :e modifier == htmlentities() call.
+            * flexy:nameuses also replaces in id (obviously if %s in included)
+        
+        Fixes
+            * dont bork with error if value is not set when setValue() on a
+              radio button is called.
+            * fix up flexy:nameuses with radio buttons.
+            * php4.4 compatibility issues (return by ref stuff)
+            * summarize security issues with SimpleTags backend
+             
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+    
+     
+     
     <release>
      <version>1.2.2</version>
       <date>2005-07-23</date>

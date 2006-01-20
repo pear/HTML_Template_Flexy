@@ -1,4 +1,68 @@
 
+2006-01-09 Monday  alan_k
+
+	* add ability to remove unused translations, tidy up javascript a
+	little
+
+2006-01-04 Wednesday  alan_k
+
+	* small typo in last commit, and it missed a bit..
+	* add support for gettext Translation2 backend - which needs
+	patches too...
+
+2005-12-20 Tuesday  alan_k
+
+	* use correct name for config options
+	* remove warning from compiled template, when trying to merge
+	possibly non-existant elements
+
+2005-12-14 Wednesday  alan_k
+
+	* Fix by Demian Turner - remove short tags output from Simpletags
+	compiler backend. + lots of whitespace changes, for some reason...
+
+2005-12-08 Thursday  alan_k
+
+	* basic charset support in HTML_Template_Flexy_Element ... this is
+	a todo for the rendering layer though...
+
+2005-12-05 Monday  alan_k
+
+	* fix bug #6152 - default to using key in optgroup when novalue not
+	set
+	* variable declared as wrong case
+
+2005-11-25 Friday  alan_k
+
+	* tests for bugs #6058 and #5267
+	* hopefully fix bug #5267 - checkboxes using [] , with ids
+
+2005-11-10 Thursday  alan_k
+
+	* the de-escaping is only really needed for select option elements
+	that want to use spaces, everything else is handled ok...
+	* no need to de-escape & signs in textboxes - this may apply to
+	other xul stuff...
+
+2005-11-09 Wednesday  alan_k
+
+	* rationalize xul element support in compiler
+	* rationalize xul support in element.
+	* add XUL checkbox support.
+	* correctly replace linefeeds on XUL textboxs
+	* better handling of XUL textbox and menulist elements converted to
+	Flexy XUL Elements
+	* better handling of XUL textbox and menulist elements converted to
+	Flexy XUL Elements
+
+2005-11-01 Tuesday  alan_k
+
+	* fix warning when name not defined on setting value
+
+2005-10-29 Saturday  alan_k
+
+	* prep for release
+
 2005-10-25 Tuesday  alan_k
 
 	* fix bug #5752 - add support for :e modifier == htmlentities()
