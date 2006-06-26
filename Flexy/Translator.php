@@ -196,8 +196,6 @@ class HTML_Template_Flexy_Translator {
             $this->clearTemplateCache($displayLang);
         }
         //DB_DataObject::debugLevel(1);
-        $this->loadTranslations();
-        $this->loadTranslations($displayLang);
         if ($usingDO) {
             $this->loadTranslations();
             $this->loadTranslations($displayLang);
