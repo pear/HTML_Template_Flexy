@@ -277,9 +277,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
             $aOutput[$varName]      = $varVal;
         }
 
-        $varsOutput =
-            "\$oOutput = clone \$t;
-        ";
+        $varsOutput = "\n\$oOutput = clone \$t;\n";
 
         foreach ($aOutput as $key=>$val) {
             $varsOutput .= "\$oOutput->{$key} = {$val};\n";
