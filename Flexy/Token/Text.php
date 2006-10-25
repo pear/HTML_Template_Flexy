@@ -45,7 +45,7 @@ class HTML_Template_Flexy_Token_Text extends HTML_Template_Flexy_Token {
         if (preg_match('/^\&[a-z0-9]+;$/i',trim($this->value))) {
             return false;
         }
-        return  preg_match('/[a-z]/i',$this->value);
+        return  preg_match('/\w/i',$this->value);
     }
      
 }
