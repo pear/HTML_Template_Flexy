@@ -60,52 +60,26 @@
     </maintainer>
   </maintainers>
  
+ 
+ 
+	 
+ 
+ 
      <release>
-     <version>1.2.4</version>
-      <date>2006-01-20</date>
+     <version>1.2.5</version>
+      <date>2006-11-10</date>
       <notes><![CDATA[
-      Minor Bugfix / New Feature Release
-          
-          
-        Bugs  
-        ----
-        #6152 - default to using key in optgroup when novalue not set
-        #5267 - checkboxes using [], with ids
-        #5752 - add support for :e modifier == htmlentities() call.
-        
-        
-        Features/Changes and Fixes
-        --------------------------
-        * add ability to remove unused translations (in HTML_Template_Flexy_Translator,
-          tidy up javascript a little (ivan)
-          
-        * add support for gettext Translation2 backend - Requires uptodate version of 
-          Gettext/Translation2 packages ... (ivan)
-          
-        * remove warning from compiled template, when trying to merge possibly 
-          non-existant elements
-        
-        * remove short tags output from Simpletags compiler backend. + lots of 
-          whitespace changes, for some reason... (Demian Turner)
-        
-        * basic charset support in HTML_Template_Flexy_Element ... this is
-          a todo for the rendering layer though... (eg. utf8 / big5 sent to htmlspecialchars)
-          
-        * de-escaping of &amp;nbsp; only used in select option text - removed this feature from
-          other elements
-          
-        * add XUL checkbox support.
-        
-        * correctly replace linefeeds on XUL textbox's
-        
-        * better handling of XUL textbox and menulist elements converted to
-          Flexy XUL Elements
-          
-        * flexy:nameuses also replaces in id (obviously if %s is included)
-
-        
-
+      Minor Bugfix / Minor Feature Release 
              
+	* Bugs
+	#9157 - fix regex that tests translation strings - support multilanguage text
+
+	* Feature Request 
+	#7483 - implement subtemplating with variable passing support Thanks to anil at m3
+	
+	Fixes
+	* gettext based translationns using Translation2 now work
+	
         
      ]]></notes>
       <state>stable</state>
@@ -271,6 +245,61 @@
    
      
    <changelog>
+   
+   
+     <release>
+     <version>1.2.4</version>
+      <date>2006-01-20</date>
+      <notes><![CDATA[
+      Minor Bugfix / New Feature Release
+          
+          
+        Bugs  
+        ----
+        #6152 - default to using key in optgroup when novalue not set
+        #5267 - checkboxes using [], with ids
+        #5752 - add support for :e modifier == htmlentities() call.
+        
+        
+        Features/Changes and Fixes
+        --------------------------
+        * add ability to remove unused translations (in HTML_Template_Flexy_Translator,
+          tidy up javascript a little (ivan)
+          
+        * add support for gettext Translation2 backend - Requires uptodate version of 
+          Gettext/Translation2 packages ... (ivan)
+          
+        * remove warning from compiled template, when trying to merge possibly 
+          non-existant elements
+        
+        * remove short tags output from Simpletags compiler backend. + lots of 
+          whitespace changes, for some reason... (Demian Turner)
+        
+        * basic charset support in HTML_Template_Flexy_Element ... this is
+          a todo for the rendering layer though... (eg. utf8 / big5 sent to htmlspecialchars)
+          
+        * de-escaping of &amp;nbsp; only used in select option text - removed this feature from
+          other elements
+          
+        * add XUL checkbox support.
+        
+        * correctly replace linefeeds on XUL textbox's
+        
+        * better handling of XUL textbox and menulist elements converted to
+          Flexy XUL Elements
+          
+        * flexy:nameuses also replaces in id (obviously if %s is included)
+
+        
+
+             
+        
+     ]]></notes>
+      <state>stable</state>
+     </release>
+    
+     
+   
    
      <release>
      <version>1.2.3</version>
