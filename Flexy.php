@@ -572,13 +572,19 @@ class HTML_Template_Flexy
     function debug($string) 
     {  
         
+        
+        $_error_reporting = error_reporting(E_ALL ^ E_STRICT);
+        
         if (is_a($this,'HTML_Template_Flexy')) {
+            error_reporting( $_error_reporting );
             if (!$this->options['debug']) {
                 return;
             }
         } else if (!@$GLOBALS['_HTML_TEMPLATE_FLEXY']['debug']) {
+            error_reporting( $_error_reporting );
             return;
         }
+        error_reporting( $_error_reporting );
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
         
     }
