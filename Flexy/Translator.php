@@ -137,7 +137,8 @@ class HTML_Template_Flexy_Translator {
     */
     
     
-    function process($get,$post) {
+    function process($get,$post)
+    {
         //DB_DataObject::debugLevel(1);
         
         $displayLang = isset($get['translate']) ? $get['translate'] : 
@@ -234,7 +235,10 @@ class HTML_Template_Flexy_Translator {
                 // we posted something..
                 if (isset($post[$displayLangClean][$md5])) {
                     // eak we shouldnt really deal with magic_quotes!!!
-                    $nval = str_replace("\r\n", "\n", get_magic_quotes_gpc() ? stripslashes($post[$_displayLang][$md5]) : $post[$_displayLang][$md5]);
+                    $nval = str_replace("\r\n", "\n", 
+                        get_magic_quotes_gpc() ? 
+                            stripslashes($post[$displayLangClean][$md5]) : 
+                            $post[$displayLangClean][$md5]);
                     
                     if ($value != $nval) {
                         $trd->add($word,$page,array($displayLang=>$nval));
