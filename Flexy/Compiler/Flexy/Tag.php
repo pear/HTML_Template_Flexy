@@ -167,6 +167,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         $this->reWriteURL("HREF");
         $this->reWriteURL("SRC");
+        $this->reWriteURL("BACKGROUND");
         
         // handle elements
         if (($ret =$this->_parseTags()) !== false) {
