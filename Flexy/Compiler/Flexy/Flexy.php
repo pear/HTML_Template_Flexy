@@ -14,6 +14,7 @@
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Authors:  Alan Knowles <alan@akkbhome.com>                           |
+// | Authors:  Tobias dot eberle at gmx dot de (include with vars)        |
 // +----------------------------------------------------------------------+
 //
 // $Id$
@@ -114,7 +115,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
     /**
     * include handler
     * <flexy:include src="test.html">
-    * 
+    * <flexy:include src="{test}">
+    * <flexy:include src="{test}.html">
     * @see parent::toString()
     */
     function includeToString($element) 
@@ -125,10 +127,55 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
     
     
        
-        $arg = $element->getAttribute('SRC');
-        if (!$arg) {
-            return $this->compiler->appendHTML("<B>Flexy:Include without a src=filename</B>");
+        
+        if (!isset($element->ucAttributes['SRC'])) {
+            return $this->compiler->appendHTML("<B>Flexy:Include without a src=filename (Line: {$element->line})</B>");
         }
+        $arg = $element->ucAttributes['SRC'];
+         
+        // it's a string so its easy to handle
+        switch (true) {
+            case is_string($arg):
+                if ($arg == '""') {
+                    return $this->compiler->appendHTML("<B>Flexy:Include src attribute is empty. (Line: {$element->line})</B>");
+                }
+                $arg = "'{$element->getAttribute('SRC')}'";
+                break;
+            
+            case is_array($arg): // it's an array -> strings and variables possible
+                $string = '"';
+                foreach($arg as $item) {
+                    //it's a string
+                    if (is_string($item)) {
+                        if ($item != '' && $item != '"' && $item != '""' && 
+                            $item != "''") {
+                            $string .= $item;
+                        }
+                    } else {
+                        //it's a variable
+                        if (is_a($item, 'HTML_Template_Flexy_Token_Var')) {
+                            $value = $item->toVar($item->value);
+                            if (is_a($value, 'PEAR_Error')) {
+                                return $value;
+                            }
+                            $string .= "{{$value}}";
+                        }
+                    }
+                }
+                $arg = $string . '"';
+                break;
+            
+            default:
+            //something unexspected
+                return HTML_Template_Flexy::raiseError(
+                    ' Flexy:Include SRC needs a string or variable/method as value. '.
+                    " Error on Line {$element->line} &lt;{$element->tag}&gt;",
+                    null, HTML_TEMPLATE_FLEXY_ERROR_DIE); 
+            
+                
+            
+        }
+ 
         // ideally it would be nice to embed the results of one template into another.
         // however that would involve some complex test which would have to stat
         // the child templates anyway..
@@ -136,7 +183,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
         // output... include $this->options['compiled_templates'] . $arg . $this->options['locale'] . '.php'
         return $this->compiler->appendPHP( "\n".
                 "\$x = new HTML_Template_Flexy(\$this->options);\n".
-                "\$x->compile('{$arg}');\n".
+                "\$x->compile({$arg});\n".
                 "\$_t = function_exists('clone') ? clone(\$t) : \$t;\n".
                 "foreach(get_defined_vars()  as \$k=>\$v) {\n" .
                 "    if (\$k != 't') { \$_t->\$k = \$v; }\n" .
