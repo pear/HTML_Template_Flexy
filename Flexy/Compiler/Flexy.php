@@ -799,7 +799,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             return;
         }
         
-        if (!preg_match('/[a-z]+/i', $string)) {
+        if (!preg_match('/\w+/i', $string)) {
             return;
         }
         $string = trim($string);
