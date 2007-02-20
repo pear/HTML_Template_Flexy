@@ -120,7 +120,7 @@ class HTML_Template_Flexy_Assign {
         if (is_array($args[0]) && $count == 1) {
             
             foreach ($args[0] as $key=>$val) {
-                $this->assign($key, $val);
+                $this->assign(array($key, $val));
             }
             
             // done!
@@ -133,7 +133,7 @@ class HTML_Template_Flexy_Assign {
             // get the object properties
             $data = get_object_vars($args[0]);
             foreach ($data as $key=>$val) {
-                $this->assign($key, $val);
+                $this->assign(array($key, $val));
             }
             
             // done!
