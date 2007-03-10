@@ -178,7 +178,125 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         $ret  = $this->parseAttributeForeach();
         $ret .= $this->parseAttributeIf();
         
-        // spit ou the tag and attributes.
+        // support Custom Attributes...
+        require_once 'HTML/Template/Flexy/Compiler/Flexy/CustomFlexyAttributes.php';
+		$customFlexyAttributes = new HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes();
+		$customFlexyAttributes->doCustomAttributes($element);
+		
+        
+        $add = $this->toStringOpenTag($element,$ret);
+        
+        if (is_a($add,'PEAR_Error')) {
+            return $add;
+        }
+        
+        
+        
+        
+         
+        // post stuff this is probably in the wrong place...
+        
+        if ($element->postfix) {
+            foreach ($element->postfix as $e) {
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+                $ret .= $add;
+            }
+        } else if ($this->element->postfix) { // if postfixed by self..
+            foreach ($this->element->postfix as $e) {
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error')) {
+                    return $add;
+                }
+            
+                $ret .= $add;
+            }
+        }
+        // dump contents of script raw - to prevent gettext additions..
+        //  print_r($element);
+        if ($element->tag == 'SCRIPT') {
+            foreach($element->children as $c) {
+                //print_R($c);
+                if (!$c) {
+                    continue;
+                }
+                if ($c->token == 'Text') {
+                    $ret .= $c->value;
+                    continue;
+                }
+                // techically we shouldnt have anything else inside of script tags.
+                // as the tokeinzer is supposted to ignore it..
+            }
+        } else {
+            $add = $element->compileChildren($this->compiler);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
+        }
+        
+        
+        
+        // output the closing tag.
+        
+        if ($element->close) {
+            $add = $element->close->compile($this->compiler);
+            if (is_a($add,'PEAR_Error')) {
+                return $add;
+            }
+            $ret .= $add;
+        }
+        
+        $tmp = $this->toStringChildren($element,$ret);
+        if (is_a($tmp,'PEAR_Error')) {
+            return  $tmp;
+        }
+        $tmp = $this->toStringCloseTag($element,$ret);
+        if (is_a($tmp,'PEAR_Error')) {
+            return  $tmp;
+        }
+        
+        
+        // reset flexyignore
+        
+        $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = $flexyignore;
+        
+        if (isset($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block']) && 
+            ($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block'] == $element->getAttribute('ID'))) {
+                
+           // echo $_HTML_TEMPLATE_FLEXY['compiledTemplate'];
+            
+            $fh = fopen($_HTML_TEMPLATE_FLEXY['compiledTemplate'],'w');
+            fwrite($fh,$ret);
+            fclose($fh);   
+           
+        }
+            
+        
+        
+        return $ret;
+    }
+    
+    /**
+     * convert a tag into compiled version
+     * @arg object Element 
+     * @arg inout output string to template
+     * @return none? or pear error.
+     * 
+     */
+    
+    function toStringOpenTag(&$element,&$ret)
+	{
+		// START ADDITION...
+		if ((empty($element->tag)) || (empty($element->oTag))) {
+			return;
+		}
+		// ...END ADDITION
+
+
+		// spit ou the tag and attributes.
         
         if ($element->oTag{0} == '?') {
             $ret .= '<?php echo "<"; ?>';
@@ -259,30 +377,21 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             }
         }
         $ret .= ">";
-        
-        // post stuff this is probably in the wrong place...
-        
-        if ($element->postfix) {
-            foreach ($element->postfix as $e) {
-                $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
-                    return $add;
-                }
-                $ret .= $add;
-            }
-        } else if ($this->element->postfix) { // if postfixed by self..
-            foreach ($this->element->postfix as $e) {
-                $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
-                    return $add;
-                }
-            
-                $ret .= $add;
-            }
-        }
-        // dump contents of script raw - to prevent gettext additions..
+	}
+    /**
+     * compile children to string.
+     * @arg object Element 
+     * @arg inout output string to template
+     * @return none? or pear error.
+     */
+	
+	function toStringChildren(&$element,&$ret)
+	{
+		 // dump contents of script raw - to prevent gettext additions..
         //  print_r($element);
-        if ($element->tag == 'SCRIPT') {
+		//  make sure tag isn't empty because it wouldn't make sense to output script without script tags
+        if (((! empty($element->tag)) && ($element->tag == 'SCRIPT')) 
+			|| ((! empty($element->oTag)) && ($element->oTag == 'SCRIPT'))) {
             foreach($element->children as $c) {
                 //print_R($c);
                 if (!$c) {
@@ -295,45 +404,68 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 // techically we shouldnt have anything else inside of script tags.
                 // as the tokeinzer is supposted to ignore it..
             }
-        } else {
-            $add = $element->compileChildren($this->compiler);
-            if (is_a($add,'PEAR_Error')) {
-                return $add;
-            }
-            $ret .= $add;
+            return;
+        } 
+        $add = $element->compileChildren($this->compiler);
+        if (is_a($add,'PEAR_Error')) {
+            return $add;
         }
-        
-        
-        
-        // output the closing tag.
-        
-        if ($element->close) {
+        $ret .= $add;
+
+	}
+  /**
+     * compile closing tag to string.
+     * @arg object Element 
+     * @arg inout output string to template
+     * @return none? or pear error.
+     */
+	
+	function toStringCloseTag(&$element,&$ret)
+	{
+		// output the closing tag.
+		//  If the tag is empty don't output closing tags, just output postfixes if any exist...
+        if ( !$element->close) {
+            return;
+        }
+    
+        if ((! empty($element->tag)) && (! empty($element->oTag)))
+        {
             $add = $element->close->compile($this->compiler);
             if (is_a($add,'PEAR_Error')) {
                 return $add;
             }
             $ret .= $add;
-        }
-        
-        // reset flexyignore
-        
-        $_HTML_TEMPLATE_FLEXY_TOKEN['flexyIgnore'] = $flexyignore;
-        
-        if (isset($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block']) && 
-            ($_HTML_TEMPLATE_FLEXY['currentOptions']['output.block'] == $element->getAttribute('ID'))) {
-                
-           // echo $_HTML_TEMPLATE_FLEXY['compiledTemplate'];
+            return;
+        } 
+        // RICK - added by me
+        // element has a seperate closing tag (eg. </something>) and opening and closing tags should be removed 
+        // because FLEXY:OMITTAG element attribute is set, but still need postfix stuff like for ending ifs and foreach
+        // so this is NOT OPTIONAL if foreach and if are not optional.
+        if ($element->close->postfix)  {
+            foreach ($element->close->postfix as $e)  {
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error'))  {
+                    return $add;
+                }
+                $ret .= $add;
+            }
+            return;
+        }  
+        if ($this->element->close->postfix)  { // if postfixed by self..
+            foreach ($this->element->close->postfix as $e)  {
+                $add = $e->compile($this->compiler);
+                if (is_a($add,'PEAR_Error'))  {
+                    return $add;
+                }
             
-            $fh = fopen($_HTML_TEMPLATE_FLEXY['compiledTemplate'],'w');
-            fwrite($fh,$ret);
-            fclose($fh);   
-           
+                $ret .= $add;
+            }
+            return;
         }
-            
-        
-        
-        return $ret;
-    }
+		
+	}
+
+    
     /**
     * Reads an flexy:foreach attribute - 
     *
