@@ -998,35 +998,34 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             );
         }
         // checkboxes need more work.. - at the momemnt assume one with the same value...
-        if (in_array(strtoupper($this->element->getAttribute('TYPE')), array('RADIO'))) {
-            
-            if (!isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
-                // register it..  - so we dont overwrite it...
-                $_HTML_TEMPLATE_FLEXY['elements'][$id] = false;
-            } else if ($_HTML_TEMPLATE_FLEXY['elements'][$id] != false) {
-                
-           
-                return HTML_Template_Flexy::raiseError(
-                    "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} ".
-                    "in Tag &lt;{$this->element->tag}&gt;:<BR>".
-                    "The Dynamic tag Name '$id' has already been used previously by ".
-                    "tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
-                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE
-                );
-            }
-           
-            $id = $this->element->getAttribute('ID');
+        if (!in_array(strtoupper($this->element->getAttribute('TYPE')), array('RADIO'))) {
             if (!$id) {
-                return HTML_Template_Flexy::raiseError("Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;: 
-                 Radio Input's require an ID attribute (eg &lt;input type='radio' id='1' name='xxxx' value='yyy'&gt;..",
-                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                return false;
             }
-            $mergeWithName = true;
+            return $this->compiler->appendPhp($this->getElementPhp( $id,$mergeWithName));
+             
+        }
+        // now we are only dealing with radio buttons.. which are a bit odd...
+        
+        // we need to create a generic holder for this based on the name..
+        // this is only really available for use with setting stuff...
+        
+        if (!isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
+            $_HTML_TEMPLATE_FLEXY['elements'][$id] = new HTML_Template_Flexy_Element("input", 
+                array('type'=>'radio'));
             
         }
+        // we dont really care if it is getting reused loads of times.. (expected as each radio button will use it.
+        $name = $id;
+        $id = $this->element->getAttribute('ID');
         if (!$id) {
-            return false;
+            $id = $name . '_' . $this->element->getAttribute('VALUE');
         }
+        // this get's tricky as we could end up with elements with the same name... (if value was not set..,
+        // or two elements have the same name..
+         
+        $mergeWithName = true;
+         
         return $this->compiler->appendPhp($this->getElementPhp( $id,$mergeWithName));
 
     }
