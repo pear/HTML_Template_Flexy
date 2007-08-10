@@ -255,7 +255,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
             }
             $this->options['Translation2']->setPageID($n);
         } else {
-            setlocale(LC_ALL, $this->options['locale']);
+            setlocale(LC_MESSAGES, $this->options['locale']);
         }
         
     }
