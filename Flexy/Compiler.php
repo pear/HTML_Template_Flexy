@@ -56,7 +56,7 @@ class HTML_Template_Flexy_Compiler {
         if (empty($options['compiler'])) {
             $options['compiler'] = 'Flexy';
         }
-        if ( is_object($options['compiler']) &&  is_a($options['compiler'], 'HTML_Template_Flexy_Compiler')) {
+        if ( is_object($options['compiler']) &&  $this->is_a($options['compiler'], 'HTML_Template_Flexy_Compiler')) {
             $options['compiler']->options = $options;
             return $options['compiler'];
         }
@@ -67,7 +67,20 @@ class HTML_Template_Flexy_Compiler {
         $ret->options = $options;
         return $ret;
     }
-    
+    /**
+     * Php4 is_a compat !
+     */
+    function is_a($obj, $class)  // which f***wit depreciated is_a....
+    {
+        if (version_compare(phpversion(),"5","<")) {
+           return is_a($obj, $class);
+           
+        } 
+        $test=false; 
+        @eval("\$test = \$obj instanceof ".$class.";");
+        return $test;
+
+    }
     
     /**
     * The compile method.
