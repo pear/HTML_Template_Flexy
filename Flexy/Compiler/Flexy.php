@@ -943,13 +943,16 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     function toStringTag($element) {
         
         $original = $element->getAttribute('ALT');
-        if (($element->tag == 'IMG') && is_string($original) && strlen($original)) {
+        // techncially only input type=(submit|button|input) alt=.. applies, but we may 
+        // as well translate any occurance...
+        if ( (($element->tag == 'IMG') || ($element->tag == 'INPUT'))
+                && is_string($original) && strlen($original)) {
             $this->addStringToGettext($original);
             $quote = $element->ucAttributes['ALT']{0};
             $element->ucAttributes['ALT'] = $quote  . $this->translateString($original). $quote;
         }
         $original = $element->getAttribute('TITLE');
-        if (($element->tag == 'A') && is_string($original) && strlen($original)) {
+        if (is_string($original) && strlen($original)) {
             $this->addStringToGettext($original);
             $quote = $element->ucAttributes['TITLE']{0};
             $element->ucAttributes['TITLE'] = $quote  . $this->translateString($original). $quote;
