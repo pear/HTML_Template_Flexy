@@ -473,6 +473,73 @@ class HTML_Template_Flexy_Element {
         }
        
     }
+    
+    
+    
+    /**
+     *  Returns THIS select element's options as an associative array
+     *  Validates that $this element is "select"
+     * @return array $options
+     * @access public
+    */
+    function getOptions()
+    {
+
+        $tag = strtolower($this->tag);
+        $namespace = '';
+        if (false !== strpos($this->tag, ':')) {
+            $bits = explode(':',$this->tag);
+            $namespace = $bits[0] . ':';
+            $tag = strtolower($bits[1]);
+        }
+
+        // this is not a select element
+        if (strlen($tag) && ($tag != 'select'))  {
+            return false;
+        }
+
+        // creates an associative array that can be used by setOptions()
+        // null does work for no value ( a "Please Choose" option, for example)
+        foreach ($this->children as $child) {
+            if (is_object($child)) {
+                $child->attributes['value'] = isset($child->attributes['value']) ? $child->attributes['value'] : '';
+                $children[$child->attributes['value']] = $child->children[0];
+            }
+        }
+        return $children;
+    }
+
+     /**
+     *  Removes all of this element's options
+     *  Validates that $this element is "select"
+     * @return bool result
+     * @access public
+    */
+    function clearOptions($children = array())
+    {
+        $tag = strtolower($this->tag);
+        $namespace = '';
+        if (false !== strpos($this->tag, ':')) {
+            $bits = explode(':',$this->tag);
+            $namespace = $bits[0] . ':';
+            $tag = strtolower($bits[1]);
+        }
+
+        // this is not a select element
+        if (strlen($tag) && ($tag != 'select')) {
+            return false;
+        }
+
+        // clear this select's options
+        $this->children = array(null);
+        $this->values = array(null);
+
+        // If called with an array of new options go ahead and set them
+        $this->setOptions($children);
+
+        return true;
+    }
+    
     /**
      * Sets the HTML attributes
      * @param    mixed   $attributes     Either a typical HTML attribute string or an associative array
