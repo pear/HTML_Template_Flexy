@@ -372,6 +372,7 @@ class HTML_Template_Flexy_Element {
                 }
                 return;
             case 'textarea':
+            case 'label':
                 $charset = empty($GLOBALS['HTML_Template_Flexy']['options']['charset']) ? 'ISO-8859-1' : $GLOBALS['HTML_Template_Flexy']['options']['charset'];
                 $this->children = array(htmlspecialchars($value,ENT_COMPAT,$charset));
                 return;
@@ -419,7 +420,8 @@ class HTML_Template_Flexy_Element {
      * @access   public
      */
      
-    function setOptions($array,$noValue=false) {
+    function setOptions($array,$noValue=false) 
+    {
         if (!is_array($array)) {
             $this->children = array();
             return;
