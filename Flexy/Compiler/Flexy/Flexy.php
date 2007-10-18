@@ -112,6 +112,54 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
         $ret .= $this->compiler->appendHTML("</script>");
         return $ret;
     }
+    
+    /**
+    * toJavascript handler
+    * <flexy:toJSON  javascriptval="php.val" ....>
+    * 
+    * @see parent::toString()
+    */
+    
+    function toJSONToString($element) 
+    {
+        // maybe should use extnsion_exists....
+        if (!function_exists('json_encode')) {
+            $ret = $this->compiler->appendPhp( 
+                'require_once "Services/JSON.php"; $_json = new Services_JSON();'
+            );
+        } 
+        
+        //$ret = $this->compiler->appendPhp( "require_once 'HTML/Javascript/Convert.php';");
+        $ret .= $this->compiler->appendHTML("\n<script type='text/javascript'>\n");
+        //$prefix = ''. $element->getAttribute('FLEXY:PREFIX');
+        
+        
+        foreach ($element->attributes as $k=>$v) {
+            // skip directives..
+            if (strpos($k,':')) {
+                continue;
+            }
+            if ($k == '/') {
+                continue;
+            }
+            $v = substr($v,1,-1);
+            if (!function_exists('json_encode')) {
+                $ret .= $this->compiler->appendPhp(
+                    'echo $k . "=" . json_encode('.$element->toVar($v).') . "\n";'
+                );
+                $ret .= $this->compiler->appendHTML("\n");
+                continue;
+            }
+            $ret .= $this->compiler->appendPhp(
+                    'echo "'.$k.'=" . $_json->encode('.$element->toVar($v).') . "\n";'
+            );
+           
+            $ret .= $this->compiler->appendHTML("\n");
+        }
+        $ret .= $this->compiler->appendHTML("</script>");
+        return $ret;
+    }
+    
     /**
     * include handler
     * <flexy:include src="test.html">
