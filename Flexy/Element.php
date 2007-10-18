@@ -549,7 +549,7 @@ class HTML_Template_Flexy_Element {
         }
         // tags that never should have closers  
         $close = "</{$ret->tag}>";
-        if (in_array(strtoupper($tag),array("INPUT","IMG"))) {
+        if (in_array(strtoupper($tag),array("INPUT","IMG", "LINK", "META", "HR", "BR"))) {
             $close = '';
         }
         if (isset($this->attributes['/'])) {
