@@ -56,7 +56,11 @@ class HTML_Template_Flexy_Compiler {
         if (empty($options['compiler'])) {
             $options['compiler'] = 'Flexy';
         }
-    
+        if ( is_object($options['compiler']) &&  is_a($options['compiler'], 'HTML_Template_Flexy_Compiler')) {
+            $options['compiler']->options = $options;
+            return $options['compiler'];
+        }
+       
         require_once 'HTML/Template/Flexy/Compiler/'.ucfirst( $options['compiler'] ) .'.php';
         $class = 'HTML_Template_Flexy_Compiler_'.$options['compiler'];
         $ret = new $class;
