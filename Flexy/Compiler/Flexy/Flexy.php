@@ -123,6 +123,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
     function toJSONToString($element) 
     {
         // maybe should use extnsion_exists....
+        $ret = "";
         if (!function_exists('json_encode')) {
             $ret = $this->compiler->appendPhp( 
                 'require_once "Services/JSON.php"; $_json = new Services_JSON();'
@@ -143,7 +144,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
                 continue;
             }
             $v = substr($v,1,-1);
-            if (!function_exists('json_encode')) {
+            if (function_exists('json_encode')) {
                 $ret .= $this->compiler->appendPhp(
                     'echo $k . "=" . json_encode('.$element->toVar($v).') . "\n";'
                 );
