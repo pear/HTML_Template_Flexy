@@ -24,45 +24,47 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
 
     /**
     * doCustomAttributes 
-	* - for every flexy namespaced attribute found in the element parameter, 
-	*	if there is a method here to handle it then call the method.
-	*
-	* @params   object HTML_Template_Flexy_Token
-	* @return   none 
+    * - for every flexy namespaced attribute found in the element parameter, 
+    *	if there is a method here to handle it then call the method.
+    *
+    * @params   object HTML_Template_Flexy_Token
+    * @return   none 
     * @access   public 
     */
     function doCustomAttributes(&$element) 
     {
-		
-		foreach ($element->ucAttributes as $key=>$value) {
+        
+        foreach ($element->ucAttributes as $key=>$value) {
             
-			list($namespace,$attribute) = explode(':',$key);
-            $method = strtolower($attribute).'Attribute';
-            
-			if ((strlen($attribute)) && (method_exists($this,$method))) {
-				$this->{$method}($element, $element->getAttribute($key));
-			}
-		}  
+            list($namespace,$attribute) = (strpos($key, ":") > -1) ? explode(':',$key) : array("", $key);
+            $method = strtolower($attribute) . 'Attribute';
+            if (strtolower($namespace) != 'flexy') {
+                return;
+            }
+            if ((strlen($attribute)) && (method_exists($this,$method))) {
+                $this->{$method}($element, $element->getAttribute($key));
+            }
+        }  
     }
 
    /**
     * flexy:content attribute handler
-	*
-	* Examples:
+    *
+    * Examples:
     * <anyTag... flexy:content="methodOrVariableOrNothing" .../>
-	* <anyTag... flexy:content="methodOrVariableOrNothing" ...></anyTag>
-	* <anyTag... flexy:content="methodOrVariableOrNothing" ...>All this <b>CONTENT</b> will be <i>replaced<i> by
-	* the result of methodOrVariableOrNothing</anyTag>
-	*
-	* Replaces element content with the result of the variable or method call or empty string. 
-	* Useful for replacing example content/html from the compiled template, while keeping it in the source 
-	* template for viewing when not running php. The example content/html will be replaced by dynamic content at run-time.
-	*
-	* Substitute for <anyTag...>{methodOrVariable}</anyTag>
+    * <anyTag... flexy:content="methodOrVariableOrNothing" ...></anyTag>
+    * <anyTag... flexy:content="methodOrVariableOrNothing" ...>All this <b>CONTENT</b> will be <i>replaced<i> by
+    * the result of methodOrVariableOrNothing</anyTag>
+    *
+    * Replaces element content with the result of the variable or method call or empty string. 
+    * Useful for replacing example content/html from the compiled template, while keeping it in the source 
+    * template for viewing when not running php. The example content/html will be replaced by dynamic content at run-time.
+    *
+    * Substitute for <anyTag...>{methodOrVariable}</anyTag>
     * 
-	* @params   object HTML_Template_Flexy_Token
-	* @params   string attribute value
-	* @return   none 
+    * @params   object HTML_Template_Flexy_Token
+    * @params   string attribute value
+    * @return   none 
     * @access   private 
     */
     function contentAttribute(&$element,$val) 
@@ -70,17 +72,17 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
         // assign method or variable $val as the child token of this element, potentially replacing any existing children
         // default: special case if $val is empty - simply set children to null
         $element->children = null;
-		if (! empty($val)) {
-			$this->replaceChildren($element,$val);
-		}  
+        if (! empty($val)) {
+            $this->replaceChildren($element,$val);
+        }  
 
-		// do we have to add a seperate closing tag token to surround the content within...
-		if ($element->close)  {
+        // do we have to add a seperate closing tag token to surround the content within...
+        if ($element->close)  {
             return;
         }
         if ($element->getAttribute('/') !== false)  {
-				// valid xhtml (eg. <tag />)
-				// remove the '/' since we must add a seperate closing tag token to surround the content within
+                // valid xhtml (eg. <tag />)
+                // remove the '/' since we must add a seperate closing tag token to surround the content within
             unset($element->attributes['/']);
             unset($element->ucAttributes['/']);
         }  else {
@@ -90,77 +92,77 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
         // add a seperate closing tag token to surround the content within
         $element->close = $element->factory("EndTag",array('/'.$element->oTag), $element->line);
     } 
-	
-	/**
+    
+    /**
     * flexy:replace attribute handler
-	*
-	* Examples:
+    *
+    * Examples:
     * <anyTag... flexy:replace="methodOrVariableOrNothing" .../>
-	* <anyTag... flexy:replace="methodOrVariableOrNothing" ...></anyTag>
-	* <anyTag... flexy:replace="methodOrVariableOrNothing" ...>Entire <b>element</b> including tag <i>replaced<i> by 
-	* the result of methodOrVariableOrNothing</anyTag>
-	*
-	* Replaces entire element with the result of the variable or method call or empty string. 
-	* Useful for removing example html from the compiled template, while keeping it in the source template for viewing
-	* when not running php. The example html will be replaced by dynamic content at run-time.
-	*
-	* Substitute for {methodOrVariable}
+    * <anyTag... flexy:replace="methodOrVariableOrNothing" ...></anyTag>
+    * <anyTag... flexy:replace="methodOrVariableOrNothing" ...>Entire <b>element</b> including tag <i>replaced<i> by 
+    * the result of methodOrVariableOrNothing</anyTag>
+    *
+    * Replaces entire element with the result of the variable or method call or empty string. 
+    * Useful for removing example html from the compiled template, while keeping it in the source template for viewing
+    * when not running php. The example html will be replaced by dynamic content at run-time.
+    *
+    * Substitute for {methodOrVariable}
     * 
-	* @params   object HTML_Template_Flexy_Token
-	* @params   string attribute value
-	* @return   none 
+    * @params   object HTML_Template_Flexy_Token
+    * @params   string attribute value
+    * @return   none 
     * @access   private 
     */
-	function replaceAttribute(&$element,$val) 
+    function replaceAttribute(&$element,$val) 
     {
         // Setting tag to empty will prevent the opening and closing tags from beinging displayed
         $element->tag = null;
-		$element->oTag = null;
+        $element->oTag = null;
 
-		// assign method or variable $val as the child token of this element, potentially replacing any existing children
+        // assign method or variable $val as the child token of this element, potentially replacing any existing children
         // special case if $val is empty - simply set children to null
         $element->children = null;
-		if (! empty($val)) {
-			//echo '<br/>VAL IS: ' . $val;
-			$this->replaceChildren($element,$val);
-		}	
+        if (! empty($val)) {
+            //echo '<br/>VAL IS: ' . $val;
+            $this->replaceChildren($element,$val);
+        }	
     }
 
-	/**
+    /**
     * flexy:omittag attribute handler
     * <... flexy:omittag ...>
-	* <... flexy:omittag="" ...>
-	* <... flexy:omittag="anything" ...>
-	* Removes the tag but keeps the contents of the element including child elements. This is
-	* useful for flexy:if and flexy:foreach when the tag isn't wanted but you would
-	* prefer not to use {} placeholders for conditionals and loops.
+    * <... flexy:omittag="" ...>
+    * <... flexy:omittag="anything" ...>
+    * Removes the tag but keeps the contents of the element including child elements. This is
+    * useful for flexy:if and flexy:foreach when the tag isn't wanted but you would
+    * prefer not to use {} placeholders for conditionals and loops.
     * 
-	* @params   object HTML_Template_Flexy_Token
-	* @params   string attribute value
-	* @return   none 
+    * @params   object HTML_Template_Flexy_Token
+    * @params   string attribute value
+    * @return   none 
     * @access   private 
     */
-	function omittagAttribute(&$element,$val) 
+    function omittagAttribute(&$element,$val) 
     {
-		// Setting tag to empty will prevent the opening and closing tags from beinging displayed
+        // Setting tag to empty will prevent the opening and closing tags from beinging displayed
         $element->tag = null;
-		$element->oTag = null;
+        $element->oTag = null;
     }
 
-	/**
+    /**
     * replaceChildren 
-	* - replaces element children with the method or variable Token generated from the $val parameter
+    * - replaces element children with the method or variable Token generated from the $val parameter
     * 
-	* @params   object HTML_Template_Flexy_Token
-	* @params   string attribute value
-	* @return   none 
+    * @params   object HTML_Template_Flexy_Token
+    * @params   string attribute value
+    * @return   none 
     * @access   private 
     */
-	function replaceChildren(&$element,&$val)
-	{
-		// Most of the this method is borrowed from parseAttributeIf() in HTML_Template_Flexy_Compiler_Flexy_Tag
+    function replaceChildren(&$element,&$val)
+    {
+        // Most of the this method is borrowed from parseAttributeIf() in HTML_Template_Flexy_Compiler_Flexy_Tag
         
-		// If this is a method, not a variable (last character is ')' )...
+        // If this is a method, not a variable (last character is ')' )...
         if (substr($val,-1) == ')') {
             // grab args..
             $args = substr($val,strpos($val,'(')+1,-1);
@@ -171,7 +173,7 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
             
             // this is nasty... - we need to check for quotes = eg. # at beg. & end..
             $args_clean = array();
-			// clean all method arguments...
+            // clean all method arguments...
             for ($i=0; $i<count($args); $i++) {
                 if ($args[$i]{0} != '#') {
                     $args_clean[] = $args[$i];
@@ -195,13 +197,13 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
             $childToken =  $element->factory('Method',array(substr($val,0,strpos($val,'(')), $args_clean), $element->line);
         } else {
 
-			//echo('<br/>VAL: ' . $val . ' is seen as var');
+            //echo('<br/>VAL: ' . $val . ' is seen as var');
             $childToken =  $element->factory('Var', '{'.$val.'}', $element->line);
         }
 
-		$element->children = array($childToken);
+        $element->children = array($childToken);
         
-	}
+    }
 }
 
  
