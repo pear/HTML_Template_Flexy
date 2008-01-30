@@ -1,4 +1,66 @@
 
+2008-01-30 Wednesday  alan_k
+
+	* fix bug #7609 - user defined compilers causing warnings
+
+2007-10-22 Monday  alan_k
+
+	* fix bug #11751 - E_NOTICE in CustomFlexyAttributes, fix WS/TAB
+	issue.
+
+2007-10-18 Thursday  alan_k
+
+	* oops wrong logic on the use of json_encode
+	* fix PHP5/4 warning issues with is_a
+	* fix req #7609 - support user defined compilers as compiler object
+	* fix bug #10830 - support title= on most tags, and alt= on input
+	tags.
+	* feature request #11741 - getOptions / clearOptions - thx to
+	justdev
+	* add experimental toJSON feature.
+	* fix feature request #12036 - prevent generation of closing tags
+	for link, meta, hr, br
+	* fix feature request #12265 - support label in Element
+
+2007-08-10 Friday  alan_k
+
+	* change setlocale to use LC_MESSAGES to prevent bugs with
+	strtoupper
+	* fix feature req / bug #9591 and #11740 - radio buttons can auto
+	generate ID if none given
+
+2007-03-10 Saturday  alan_k
+
+	* feature request #10248 - attributes: flexy:content,
+	flexy:replace, flexy:omittag
+
+2007-02-20 Tuesday  alan_k
+
+	* fix bug #10002 - setData with array/object
+	* remove strange char in file ^M?
+	* fix bug #9157 - native language regex support
+
+2006-11-30 Thursday  alan_k
+
+	* feature request #8008 - flexy:include src= allow variables { }
+
+2006-11-28 Tuesday  alan_k
+
+	* Feature Request #9436 - support background for url rewriting
+
+2006-11-24 Friday  alan_k
+
+	* minor CS fix, fix bug with wrong variable name in translator tool
+
+2006-11-16 Thursday  alan_k
+
+	* bug #9336 - nasty kludge fix to workaround stupidest decision in
+	PHP history ;)
+
+2006-11-10 Friday  alan_k
+
+	* prep for release
+
 2006-10-25 Wednesday  alan_k
 
 	* fix bug #9157 regex testing allowing multilanguage text
