@@ -60,10 +60,10 @@ Features:
  
  
  
- <date>2008-01-30</date>
- < 
+ <date>2008-01-31</date>
+ 
  <version>
-  <release>1.3.0</release>
+  <release>1.3.1</release>
   <api>1.3.0</api>
  </version>
  <stability>
@@ -73,29 +73,11 @@ Features:
  <license uri="http://www.php.net/license">PHP License</license>
  <notes><![CDATA[
  
-    Bug Fix and Minor Feature release
+      Minor Bug Fix release 
  
     Bug Fixes	
-        #7609  - user defined compilers causing warnings
-        #11751 - E_NOTICE in CustomFlexyAttributes, fix WS/TAB issue.
-        #9336  - nasty kludge fix to workaround stupidest decision in PHP history ;)
-               -fix PHP5/4 warning issues with is_a
-        #10830 - support title= on most tags, and alt= on input tags.
-        #12036 - prevent generation of closing tags for link, meta, hr, br
-        #9591 / #11740 - radio buttons can auto generate ID if none given        
-        #10002 - setData with array/object
-        #9157 - native language regex support
-        
-    New Features
-        #7609  - support user defined compilers as compiler object
-        #11741 - getOptions / clearOptions - thx to justdev
-        #----  - add experimental toJSON feature. flexy:toJSON
-        #12265 - support label in Element
-        #----- - change setlocale to use LC_MESSAGES to prevent bugs with strtoupper
-        #10248 - attributes: flexy:content, flexy:replace, flexy:omittag
-        #8008 - flexy:include src= allow variables { }
-        #9436 - support background for url rewriting
- 
+        #13010  - Missing CustomFlexyAttributes.php file
+         
   
  ]]></notes>
  
@@ -109,6 +91,7 @@ Features:
      <dir name="Flexy">
       <file baseinstalldir="HTML/Template" name="Flexy.php" role="php" />
       <file baseinstalldir="HTML/Template" name="Tag.php" role="php" />
+      <file baseinstalldir="HTML/Template" name="CustomFlexyAttributes.php" role="php" />
      </dir> <!-- /Flexy/Compiler/Flexy -->
      <dir name="Regex">
       <file baseinstalldir="HTML/Template" name="BodyOnly.php" role="php" />
@@ -241,6 +224,51 @@ Features:
  </dependencies>
  <phprelease />
  <changelog>
+ 
+ 
+  <release>
+ <date>2008-01-30</date>
+ 
+ <version>
+  <release>1.3.0</release>
+  <api>1.3.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes><![CDATA[
+ 
+    Bug Fix and Minor Feature release
+ 
+    Bug Fixes	
+        #7609  - user defined compilers causing warnings
+        #11751 - E_NOTICE in CustomFlexyAttributes, fix WS/TAB issue.
+        #9336  - nasty kludge fix to workaround stupidest decision in PHP history ;)
+               -fix PHP5/4 warning issues with is_a
+        #10830 - support title= on most tags, and alt= on input tags.
+        #12036 - prevent generation of closing tags for link, meta, hr, br
+        #9591 / #11740 - radio buttons can auto generate ID if none given        
+        #10002 - setData with array/object
+        #9157 - native language regex support
+        
+    New Features
+        #7609  - support user defined compilers as compiler object
+        #11741 - getOptions / clearOptions - thx to justdev
+        #----  - add experimental toJSON feature. flexy:toJSON
+        #12265 - support label in Element
+        #----- - change setlocale to use LC_MESSAGES to prevent bugs with strtoupper
+        #10248 - attributes: flexy:content, flexy:replace, flexy:omittag
+        #8008 - flexy:include src= allow variables { }
+        #9436 - support background for url rewriting
+ 
+  
+ ]]></notes>
+ 
+  </release>
+ 
+ 
  
  <release>
  
