@@ -571,9 +571,11 @@ class HTML_Template_Flexy
     */
     function debug($string) 
     {  
-        
-        
-        $_error_reporting = error_reporting(E_ALL ^ E_STRICT);
+        $newlvl = E_ALL;
+        if (defined("E_STRICT")) {
+           $newlvl = $newlvl & ~E_STRICT;
+        }
+        $_error_reporting = error_reporting($newlvl);
         
         if (is_a($this,'HTML_Template_Flexy')) {
             error_reporting( $_error_reporting );
