@@ -31,6 +31,23 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY'] = array();
 
 // ERRORS:
 
+/**
+ * Workaround for stupid depreciation of is_a...
+ */
+function HTML_Template_Flexy_is_a($obj, $class)  // which f***wit depreciated is_a....
+{
+    if (version_compare(phpversion(),"5","<")) {
+       return is_a($obj, $class);
+       
+    } 
+    $test=false; 
+    @eval("\$test = \$obj instanceof ".$class.";");
+    return $test;
+
+}
+
+
+
 define('HTML_TEMPLATE_FLEXY_ERROR_SYNTAX',-1);  // syntax error in template.
 define('HTML_TEMPLATE_FLEXY_ERROR_INVALIDARGS',-2);  // bad arguments to methods.
 define('HTML_TEMPLATE_FLEXY_ERROR_FILE',-2);  // file access problem
@@ -64,6 +81,9 @@ define('HTML_TEMPLATE_FLEXY_ERROR_DIE',8);  // FATAL DEATH
 *
 * @version    $Id$
 */
+
+
+
 class HTML_Template_Flexy  
 {
 
@@ -403,7 +423,7 @@ class HTML_Template_Flexy
         require_once 'HTML/Template/Flexy/Compiler.php';
         $compiler = HTML_Template_Flexy_Compiler::factory($this->options);
         $ret = $compiler->compile($this);
-        if (is_a($ret,'PEAR_Error')) {
+        if (HTML_Template_Flexy_is_a($ret,'PEAR_Error')) {
             return $this->raiseError('HTML_Template_Flexy fatal error:' .$ret->message,
                 $ret->code,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
@@ -571,26 +591,23 @@ class HTML_Template_Flexy
     */
     function debug($string) 
     {  
-        $newlvl = E_ALL;
-        if (defined("E_STRICT")) {
-           $newlvl = $newlvl & ~E_STRICT;
-        }
-        $_error_reporting = error_reporting($newlvl);
         
-        if (is_a($this,'HTML_Template_Flexy')) {
-            error_reporting( $_error_reporting );
+        
+        if (HTML_Template_Flexy_is_a($this,'HTML_Template_Flexy')) {
             if (!$this->options['debug']) {
                 return;
             }
-        } else if (!@$GLOBALS['_HTML_TEMPLATE_FLEXY']['debug']) {
-            error_reporting( $_error_reporting );
+        } else if (empty($GLOBALS['_HTML_TEMPLATE_FLEXY']['debug'])) {
             return;
         }
-        error_reporting( $_error_reporting );
+        
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
         
     }
-     
+ 
+   
+ 
+    
     /**
      * A general Utility method that merges HTML_Template_Flexy_Elements
      * Static method - no native debug avaiable..
@@ -691,7 +708,7 @@ class HTML_Template_Flexy
     {
         HTML_Template_Flexy::debug("<B>HTML_Template_Flexy::raiseError</B>$message");
         require_once 'PEAR.php';
-        if (is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
+        if (HTML_Template_Flexy_is_a($this,'HTML_Template_Flexy') &&  ($fatal == HTML_TEMPLATE_FLEXY_ERROR_DIE)) {
             // rewrite DIE!
             return PEAR::raiseError($message, $type, $this->options['fatalError']);
         }
