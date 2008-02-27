@@ -62,10 +62,10 @@ Features:
  
  
  
- <date>2008-01-31</date>
+ <date>2008-02-27</date>
  
  <version>
-  <release>1.3.2</release>
+  <release>1.3.3</release>
   <api>1.3.0</api>
  </version>
  <stability>
@@ -75,11 +75,10 @@ Features:
  <license uri="http://www.php.net/license">PHP License</license>
  <notes><![CDATA[
  
-    Major Bug Fix release 
+    Minor Bug Fix release 
  
     Bug Fixes	
-        #13016  - Version 1.3.1 (and probably 1.3.0) where completely broken by CustomFlexyAttributes change
-                  Patch has been reverted - pending re-implementation.
+        #9336, #13016, #13022, #13076, #13179  - is_a depreciation fix (hang internals for this!)
          
   
  ]]></notes>
@@ -230,12 +229,15 @@ Features:
  <changelog>
  
  
- <release>
+ 
+    <release>
+     
+          
  
  <date>2008-01-31</date>
  
  <version>
-  <release>1.3.1</release>
+  <release>1.3.2</release>
   <api>1.3.0</api>
  </version>
  <stability>
@@ -245,17 +247,48 @@ Features:
  <license uri="http://www.php.net/license">PHP License</license>
  <notes><![CDATA[
  
-      Minor Bug Fix release 
+    Major Bug Fix release 
  
     Bug Fixes	
-        #13010  - Missing CustomFlexyAttributes.php file
+        #13016  - Version 1.3.1 (and probably 1.3.0) where completely broken by CustomFlexyAttributes change
+                  Patch has been reverted - pending re-implementation.
          
   
  ]]></notes>
  
- </release>
  
  
+         
+     </release>
+ 
+ 
+ 
+    <release>
+     
+         <date>2008-01-31</date>
+         
+         <version>
+          <release>1.3.1</release>
+          <api>1.3.0</api>
+         </version>
+         <stability>
+          <release>stable</release>
+          <api>stable</api>
+         </stability>
+         <license uri="http://www.php.net/license">PHP License</license>
+         <notes><![CDATA[
+         
+              Minor Bug Fix release 
+         
+            Bug Fixes	
+                #13010  - Missing CustomFlexyAttributes.php file
+                 
+          
+         ]]></notes>
+         
+     </release>
+     
+     
  
  
   <release>
