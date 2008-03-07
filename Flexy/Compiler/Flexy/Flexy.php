@@ -146,13 +146,13 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
             $v = substr($v,1,-1);
             if (function_exists('json_encode')) {
                 $ret .= $this->compiler->appendPhp(
-                    'echo $k . "=" . json_encode('.$element->toVar($v).') . "\n";'
+                    'echo "var '. $k .'=" . json_encode('.$element->toVar($v).') . ";\n";'
                 );
                 $ret .= $this->compiler->appendHTML("\n");
                 continue;
             }
             $ret .= $this->compiler->appendPhp(
-                    'echo "'.$k.'=" . $_json->encode('.$element->toVar($v).') . "\n";'
+                    'echo "var '.$k.'=" . $_json->encode('.$element->toVar($v).') . ";\n";'
             );
            
             $ret .= $this->compiler->appendHTML("\n");
