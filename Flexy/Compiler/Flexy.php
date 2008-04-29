@@ -127,7 +127,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
         // technically we shouldnt get here as we dont cache errors..
         if (is_a($res, 'PEAR_Error')) {
             return $res;
-        }   
+        }
         
         // turn tokens into Template..
         
@@ -254,8 +254,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
                 //echo $n;
             }
             $this->options['Translation2']->setPageID($n);
-        } else {
-            setlocale(LC_MESSAGES, $this->options['locale']);
+        } elseif (defined('LC_ALL'))  {
+            // not sure what we should really use here... - used to be LC_MESSAGES.. but that did not make sense...
+            setlocale(LC_ALL, $this->options['locale']);
         }
         
     }
