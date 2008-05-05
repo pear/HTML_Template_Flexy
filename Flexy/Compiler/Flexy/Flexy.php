@@ -188,7 +188,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
                 if ($arg == '""') {
                     return $this->compiler->appendHTML("<B>Flexy:Include src attribute is empty. (Line: {$element->line})</B>");
                 }
-                $arg = "'{$element->getAttribute('SRC')}'";
+                $arg = "'". $element->getAttribute('SRC')."'";
                 break;
             
             case is_array($arg): // it's an array -> strings and variables possible
