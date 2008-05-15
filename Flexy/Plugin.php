@@ -106,7 +106,7 @@ class HTML_Template_Flexy_Plugin {
         
         foreach ($this->plugins as $class=>$o) {
             //echo "checking :". get_class($o). ":: $name\n";
-            if (method_exists($o,$name)) {
+            if (is_callable($o,$name)) {
                 return $class;
             }
         }
