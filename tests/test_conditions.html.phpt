@@ -16,13 +16,13 @@ compilefile('conditions.html');
 <H2>Conditions</H2>
 <p>a condition <?php if ($t->condition)  {?> hello <?php } else {?> world <?php }?></p>
 <p>a negative condition <?php if (!$t->condition)  {?> hello <?php } else {?> world <?php }?></p>
-<p>a conditional method <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'condition'))) if ($t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
-<p>a negative conditional method <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'condition'))) if (!$t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
+<p>a conditional method <?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'condition'))) if ($t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
+<p>a negative conditional method <?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'condition'))) if (!$t->condition()) { ?> hello <?php } else {?> world <?php }?></p>
 
 
 <?php if ($t->test)  {?><span>test</span><?php }?>
-<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'test'))) if ($t->test()) { ?><span>test</span><?php }?>
-<?php if ($this->options['strict'] || (isset($t) && method_exists($t,'test'))) if ($t->test("aaa bbb",$t->ccc,"asdfasdf asdf ")) { ?><span>test</span><?php }?>
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'test'))) if ($t->test()) { ?><span>test</span><?php }?>
+<?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'test'))) if ($t->test("aaa bbb",$t->ccc,"asdfasdf asdf ")) { ?><span>test</span><?php }?>
 
 
 

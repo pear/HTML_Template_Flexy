@@ -101,11 +101,7 @@ if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
                     </html:select>
         
         <!-- test toElement  -->
-         <menulist id="supplier_id">
-            <menupopup>
-                    <menuitem id="itemSubCatAll" label="-- Select --" value="0" />
-            </menupopup>
-        </menulist>        
+         <menulist id="supplier_id"><menupopup><menuitem id="itemSubCatAll" label="-- Select --" value="0" /></menupopup></menulist>        
         <!-- test using flexy stuff -->
         <menulist id="supplier_id2">
             <menupopup>
@@ -113,9 +109,5 @@ if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
         </menulist>
         
         <!-- test args on menupopup -->
-           <menulist id="product_category">
-            <menupopup onpopuphiding="cTree.categorySelect(this.parentNode.value,1);">
-                <menuitem id="prodCatAll" label="-- All --" value="0" />
-            </menupopup>
-        </menulist>        
+           <menulist id="product_category"><menupopup onpopuphiding="cTree.categorySelect(this.parentNode.value,1);"><menuitem id="prodCatAll" label="-- All --" value="0" /></menupopup></menulist>        
 </window>

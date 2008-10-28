@@ -24,7 +24,7 @@ compilefile('looping.html',array('list'=>array(1,2,3,4)));
 
 Bug #84
 <?php if ($this->options['strict'] || (is_array($t->list)  || is_object($t->list))) foreach($t->list as $i) {?>
-  <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'method'))) echo htmlspecialchars($t->method($i));?>
+  <?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'method'))) echo htmlspecialchars($t->method($i));?>
 <?php }?>
 
 <?php if ($this->options['strict'] || (is_array($t->list)  || is_object($t->list))) foreach($t->list as $i => $j) {?>
@@ -33,7 +33,7 @@ Bug #84
 
 <table>
     <?php if ($this->options['strict'] || (is_array($t->xyz)  || is_object($t->xyz))) foreach($t->xyz as $abcd => $def) {?><tr>
-        <td><?php echo htmlspecialchars($abcd);?>, <?php if ($this->options['strict'] || (isset($t) && method_exists($t,'test'))) echo htmlspecialchars($t->test($def));?></td>
+        <td><?php echo htmlspecialchars($abcd);?>, <?php if ($this->options['strict'] || (isset($t) && method_exists($t, 'test'))) echo htmlspecialchars($t->test($def));?></td>
     </tr><?php }?>
 </table>
 

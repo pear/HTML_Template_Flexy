@@ -76,16 +76,25 @@ compilefile('forms.html',
     <?php echo $this->elements['aaa3']->toHtml();?>
     
     <!-- bug 5267 -->
-    <?php $element = $this->elements['opt_1'];
-                $element = $this->mergeElement($element,$this->elements['opt[]']);
+    <?php 
+                $element = $this->elements['opt_1'];
+                if (isset($this->elements['opt[]'])) {
+                    $element = $this->mergeElement($element,$this->elements['opt[]']);
+                }
                 echo  $element->toHtml();?>
     <label for="opt_1">option 1</label>
-    <?php $element = $this->elements['opt_2'];
-                $element = $this->mergeElement($element,$this->elements['opt[]']);
+    <?php 
+                $element = $this->elements['opt_2'];
+                if (isset($this->elements['opt[]'])) {
+                    $element = $this->mergeElement($element,$this->elements['opt[]']);
+                }
                 echo  $element->toHtml();?>
     <label for="opt_3">option 2</label>
-    <?php $element = $this->elements['opt_3'];
-                $element = $this->mergeElement($element,$this->elements['opt[]']);
+    <?php 
+                $element = $this->elements['opt_3'];
+                if (isset($this->elements['opt[]'])) {
+                    $element = $this->mergeElement($element,$this->elements['opt[]']);
+                }
                 echo  $element->toHtml();?>
     <label for="opt_3">option 3</label>
 
@@ -100,21 +109,33 @@ compilefile('forms.html',
     
     #bug  bug6058    
 
-    <br /><?php $element = $this->elements['1'];
-                $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+    <br /><?php 
+                $element = $this->elements['1'];
+                if (isset($this->elements['payment_1_type'])) {
+                    $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+                }
                 echo  $element->toHtml();?>
         Credit card
-    <br /><?php $element = $this->elements['2'];
-                $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+    <br /><?php 
+                $element = $this->elements['2'];
+                if (isset($this->elements['payment_1_type'])) {
+                    $element = $this->mergeElement($element,$this->elements['payment_1_type']);
+                }
                 echo  $element->toHtml();?>
         Cheque
 
-    <br /><?php $element = $this->elements['3'];
-                $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+    <br /><?php 
+                $element = $this->elements['3'];
+                if (isset($this->elements['payment_2_type'])) {
+                    $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+                }
                 echo  $element->toHtml();?>
         Credit card
-    <br /><?php $element = $this->elements['4'];
-                $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+    <br /><?php 
+                $element = $this->elements['4'];
+                if (isset($this->elements['payment_2_type'])) {
+                    $element = $this->mergeElement($element,$this->elements['payment_2_type']);
+                }
                 echo  $element->toHtml();?>
         Cheque
     
@@ -186,7 +207,7 @@ if (isset($_attributes_used)) {  foreach($_attributes_used as $_a) {
 </form>
 Array
 (
-    [test] => html_template_flexy_element Object
+    [test] => HTML_Template_Flexy_Element Object
         (
             [tag] => form
             [attributes] => Array
@@ -204,7 +225,7 @@ Array
             [value] => 
         )
 
-    [test123] => html_template_flexy_element Object
+    [test123] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -222,7 +243,7 @@ Array
             [value] => 
         )
 
-    [test123a] => html_template_flexy_element Object
+    [test123a] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -243,7 +264,7 @@ Array
             [value] => 
         )
 
-    [test123ab] => html_template_flexy_element Object
+    [test123ab] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -263,7 +284,7 @@ Array
             [value] => 
         )
 
-    [fred] => html_template_flexy_element Object
+    [fred] => HTML_Template_Flexy_Element Object
         (
             [tag] => textarea
             [attributes] => Array
@@ -282,7 +303,7 @@ Array
             [value] => 
         )
 
-    [aaa1] => html_template_flexy_element Object
+    [aaa1] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -294,7 +315,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -314,7 +335,7 @@ Array
 
                     [2] => 
 	
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -335,7 +356,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -363,7 +384,7 @@ Array
             [value] => 
         )
 
-    [aaa3] => html_template_flexy_element Object
+    [aaa3] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -375,7 +396,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -395,7 +416,7 @@ Array
 
                     [2] => 
 	
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -416,7 +437,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -445,7 +466,7 @@ Array
             [value] => 
         )
 
-    [opt_1] => html_template_flexy_element Object
+    [opt_1] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -467,7 +488,7 @@ Array
             [value] => 
         )
 
-    [opt_2] => html_template_flexy_element Object
+    [opt_2] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -489,7 +510,7 @@ Array
             [value] => 
         )
 
-    [opt_3] => html_template_flexy_element Object
+    [opt_3] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -511,7 +532,7 @@ Array
             [value] => 
         )
 
-    [List] => html_template_flexy_element Object
+    [List] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -523,7 +544,7 @@ Array
                 (
                     [0] => 
         
-                    [1] => html_template_flexy_element Object
+                    [1] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -544,7 +565,7 @@ Array
 
                     [2] => 
         
-                    [3] => html_template_flexy_element Object
+                    [3] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -565,7 +586,7 @@ Array
 
                     [4] => 
         
-                    [5] => html_template_flexy_element Object
+                    [5] => HTML_Template_Flexy_Element Object
                         (
                             [tag] => option
                             [attributes] => Array
@@ -594,7 +615,7 @@ Array
             [value] => 
         )
 
-    [_submit[4]] => html_template_flexy_element Object
+    [_submit[4]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -614,7 +635,7 @@ Array
             [value] => 
         )
 
-    [_submit[5]] => html_template_flexy_element Object
+    [_submit[5]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -634,7 +655,7 @@ Array
             [value] => 
         )
 
-    [testupload] => html_template_flexy_element Object
+    [testupload] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -653,8 +674,25 @@ Array
             [value] => 
         )
 
-    [payment_1_type] => 
-    [1] => html_template_flexy_element Object
+    [payment_1_type] => HTML_Template_Flexy_Element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [1] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -676,7 +714,7 @@ Array
             [value] => 
         )
 
-    [2] => html_template_flexy_element Object
+    [2] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -698,8 +736,25 @@ Array
             [value] => 
         )
 
-    [payment_2_type] => 
-    [3] => html_template_flexy_element Object
+    [payment_2_type] => HTML_Template_Flexy_Element Object
+        (
+            [tag] => input
+            [attributes] => Array
+                (
+                    [type] => radio
+                )
+
+            [children] => Array
+                (
+                )
+
+            [override] => 
+            [prefix] => 
+            [suffix] => 
+            [value] => 
+        )
+
+    [3] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -721,7 +776,7 @@ Array
             [value] => 
         )
 
-    [4] => html_template_flexy_element Object
+    [4] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -743,7 +798,7 @@ Array
             [value] => 
         )
 
-    [picture] => html_template_flexy_element Object
+    [picture] => HTML_Template_Flexy_Element Object
         (
             [tag] => img
             [attributes] => Array
@@ -762,7 +817,7 @@ Array
             [value] => 
         )
 
-    [testing] => html_template_flexy_element Object
+    [testing] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -781,7 +836,7 @@ Array
             [value] => 
         )
 
-    [_submit[2]] => html_template_flexy_element Object
+    [_submit[2]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -801,7 +856,7 @@ Array
             [value] => 
         )
 
-    [testing2] => html_template_flexy_element Object
+    [testing2] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -819,7 +874,7 @@ Array
             [value] => 
         )
 
-    [_submit[1]] => html_template_flexy_element Object
+    [_submit[1]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -838,7 +893,7 @@ Array
             [value] => 
         )
 
-    [testingxhtml] => html_template_flexy_element Object
+    [testingxhtml] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -859,7 +914,7 @@ Array
             [value] => 
         )
 
-    [xhtmllisttest] => html_template_flexy_element Object
+    [xhtmllisttest] => HTML_Template_Flexy_Element Object
         (
             [tag] => select
             [attributes] => Array
@@ -881,7 +936,7 @@ Array
             [value] => 
         )
 
-    [testingcheckbox] => html_template_flexy_element Object
+    [testingcheckbox] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -901,7 +956,7 @@ Array
             [value] => 
         )
 
-    [test_mix] => html_template_flexy_element Object
+    [test_mix] => HTML_Template_Flexy_Element Object
         (
             [tag] => form
             [attributes] => Array
@@ -919,7 +974,7 @@ Array
             [value] => 
         )
 
-    [testing5] => html_template_flexy_element Object
+    [testing5] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
@@ -937,7 +992,7 @@ Array
             [value] => 
         )
 
-    [_submit[3]] => html_template_flexy_element Object
+    [_submit[3]] => HTML_Template_Flexy_Element Object
         (
             [tag] => input
             [attributes] => Array
