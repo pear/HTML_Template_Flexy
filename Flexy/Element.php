@@ -616,8 +616,11 @@ class HTML_Template_Flexy_Element {
         }
         // tags that never should have closers  
         $close = "</{$ret->tag}>";
+        $tagEnd = '>';
         if (in_array(strtoupper($tag),array("INPUT","IMG", "LINK", "META", "HR", "BR"))) {
             $close = '';
+            $tagEnd = isset($ret->attributes['flexy:xhtml']) ? '/>' : '>';
+
         }
         if (isset($this->attributes['/'])) {
             $close = '';
@@ -625,7 +628,7 @@ class HTML_Template_Flexy_Element {
 
         $close .= $suffix ;
        
-        return "{$prefix}<{$ret->tag}".$ret->attributesToHTML() . '>'.$ret->childrenToHTML() .$close;
+        return "{$prefix}<{$ret->tag}" . $ret->attributesToHTML() . $tagEnd . $ret->childrenToHTML() . $close;
         
          
     } // end func toHtml
