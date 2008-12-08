@@ -621,7 +621,16 @@ class HTML_Template_Flexy
      
     function mergeElement($original,$new)
     {
-     
+       	    // Clone objects is possible to avoid creating references between elements
+        if (version_compare(PHP_VERSION,'5.0.0',">="))  { 
+            if ($original) { 
+                $original = clone($original);
+            }
+            if ($new) {
+                $new = clone($new); 
+            }
+ 	    }
+
         // no original - return new
         if (!$original) {
             return $new;
