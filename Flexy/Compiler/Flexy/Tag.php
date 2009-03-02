@@ -69,7 +69,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         }
         
         $class = 'HTML_Template_Flexy_Compiler_Flexy_' . $type;
-        if (class_exists($class)) {
+        if ($compiler->classExists($class)) {
             $ret = new $class;
             $ret->compiler = &$compiler;
             return $ret;    
@@ -88,7 +88,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         include_once 'HTML/Template/Flexy/Compiler/Flexy/' . ucfirst(strtolower($type)) . '.php';
         
         $class = 'HTML_Template_Flexy_Compiler_Flexy_' . $type;
-        if (!class_exists($class)) {
+        if (!$compiler->classExists($class)) {
             $ret = false;
             return $ret;
         }
@@ -1280,5 +1280,6 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                    " in Tag &lt;{$this->element->tag}&gt;:<BR>\n" . $message;
         return HTML_Template_Flexy::raiseError($message, $type, $fatal);
     }
-
+    
+   
 }

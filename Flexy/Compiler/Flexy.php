@@ -988,7 +988,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
      * PHP5 compat - arg...
      * - where else does this affect
      */
-    function _classExists($class)
+    function classExists($class)
     {
         return (substr(phpversion(),0,1) < 5) ? class_exists($class) :  class_exists($class,false);
     }
