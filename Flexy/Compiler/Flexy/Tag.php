@@ -278,10 +278,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             
             if (strtoupper($k) == 'FLEXY:RAW') {
                 if (!is_array($v) || !isset($v[1]) || !is_object($v[1])) {
-                    return HTML_Template_Flexy::raiseError(
+                    return $this->_raiseErrorWithPositionAndTag(
                         'flexy:raw only accepts a variable or method call as an argument, eg.'.
                         ' flexy:raw="{somevalue}" you provided something else.' .
-                        " Error on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                      
                          null,   HTML_TEMPLATE_FLEXY_ERROR_DIE);
                 }
                 $add = $v[1]->compile($this->compiler);
@@ -484,10 +484,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         if ($foreachObj === false) {
             
-            return HTML_Template_Flexy::raiseError(
-                "Missing Arguments: An flexy:foreach attribute was foundon Line {$this->element->line} 
-                in tag &lt;{$this->element->tag} flexy:foreach=&quot;$foreach&quot; .....&gt;<BR>
-                the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
+            return $this->_raiseErrorWithPositionAndTag(
+                "Missing Arguments: An flexy:foreach attribute was found. flexy:foreach=&quot;$foreach&quot;<BR>
+                 the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
                  null,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
@@ -499,10 +498,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             if ($this->element->getAttribute('/') === false) {
                
             
-                return HTML_Template_Flexy::raiseError(
-                    "A flexy:foreach attribute was found in &lt;{$this->element->tag} tag without a corresponding &lt;/{$this->element->tag}
-                        tag on {$_HTML_TEMPLATE_FLEXY['filename']}:{$this->element->line} ",
-                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                return $this->_raiseErrorWithPositionAndTag(
+                    "A flexy:foreach attribute was found without a corresponding &lt;/{$this->element->tag} tag",
+                    null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             // it's an xhtml tag!
             $this->element->postfix = array($this->element->factory("End", '', $this->element->line));
@@ -531,9 +529,8 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         }
         
         if (isset($this->element->hasForeach)) {
-            return HTML_Template_Flexy::raiseError(
-                "You may not use FOREACH and IF tags in the same tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+            return $this->_raiseErrorWithPositionAndTag("You may not use FOREACH and IF tags in the same tag",
+                  null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         // allow if="!somevar"
@@ -551,11 +548,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         if (!preg_match('/^[_A-Z][A-Z0-9_]*(\[[0-9]+\])?((\[|%5B)[A-Z0-9_]+(\]|%5D))*'.
                 '(\.[_A-Z][A-Z0-9_]*((\[|%5B)[A-Z0-9_]+(\]|%5D))*)*(\\([^)]*\))?$/i',$if)) {
-            return HTML_Template_Flexy::raiseError(
-                "IF tags only accept simple object.variable or object.method() values on 
-                    Line {$this->element->line} &lt;{$this->element->tag}&gt;
-                    {$if}",
-                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+            return $this->_raiseErrorWithPositionAndTag(
+                "IF tags only accept simple object.variable or object.method() values. {$if}",
+                null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+
         }
         
         if (substr($if,-1) == ')') {
@@ -606,10 +602,10 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 $this->element->postfix = array($this->element->factory("End",'', $this->element->line));
             } else {
             
-                return HTML_Template_Flexy::raiseError(
-                    "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name}
-                        tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
-                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                 return $this->_raiseErrorWithPositionAndTag(
+                    "An flexy:if attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->name} tag",
+                    null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+
                 }
         } else {
         
@@ -704,18 +700,16 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         if (!$id) {
             
-            return HTML_Template_Flexy::raiseError(
-                "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
-                " Dynamic tags require an ID value",
-                null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+              return $this->_raiseErrorWithPositionAndTag("Dynamic tags require an ID value",
+                 null, HTML_TEMPLATE_FLEXY_ERROR_DIE);
+
         }
         
         // dont mix and match..
         if (($this->element->getAttribute('FLEXY:IF') !== false) || 
             ($this->element->getAttribute('FLEXY:FOREACH') !== false) )
         {
-            return HTML_Template_Flexy::raiseError(
-                "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} &lt;{$this->element->tag}&gt;: " .
+            return $this->_raiseErrorWithPositionAndTag(
                 " You can not mix flexy:if= or flexy:foreach= with dynamic form elements  " . 
                 " (turn off tag to element code with flexyIgnore=0, use flexy:ignore=&quot;yes&quot; in the tag" .
                 " or put the conditional outside in a span tag",
@@ -740,10 +734,9 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         if (isset($_HTML_TEMPLATE_FLEXY['elements'][$id])) {
            // echo "<PRE>";print_r($this);print_r($_HTML_TEMPLATE_FLEXY['elements']);echo "</PRE>";
-            return HTML_Template_Flexy::raiseError(
-                "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} in Tag &lt;{$this->element->tag}&gt;:<BR> " . 
-                 "The Dynamic tag Name '$id' has already been used previously by  tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
-                 null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
+            return $this->_raiseErrorWithPositionAndTag(
+                "The Dynamic tag Name '$id' has already been used previously by  tag &lt;{$_HTML_TEMPLATE_FLEXY['elements'][$id]->tag}&gt;",
+                null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
         }
         
         $ret = '';
@@ -763,7 +756,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                         $str .= '. ' . $ar[0] . $ar[$i] . $ar[0];
                         break;
                     default: 
-                        return HTML_Template_Flexy::raiseError(
+                        return $this->_raiseErrorWithPositionAndTag(
                             "unsupported type found in attribute, use flexy:ignore to prevent parsing or remove it. " . 
                                 print_r($this->element,true),
                             null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
@@ -808,7 +801,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                         continue;
                     }
                     if (!is_object($item) || !is_a($item, 'HTML_Template_Flexy_Token_Var')) {
-                        return HTML_Template_Flexy::raiseError(
+                        return $this->_raiseErrorWithPositionAndTag(
                             "unsupported type found in attribute, use flexy:ignore to prevent parsing or remove it. " . 
                                 print_r($this->element,true),
                             null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
@@ -923,7 +916,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             if ($allow == 'delete') {
                 return '';
             }
-            return HTML_Template_Flexy::raiseError('PHP code found in script (script)',
+           return $this->_raiseErrorWithPositionAndTag('PHP code found in script (script)',
                 HTML_TEMPLATE_FLEXY_ERROR_SYNTAX,HTML_TEMPLATE_FLEXY_ERROR_RETURN
             );
         }
@@ -956,9 +949,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         
         if (isset($this->element->ucAttributes['FLEXY:RAW'])) {
-            return HTML_Template_Flexy::raiseError(
-                    "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line} ".
-                    "in Tag &lt;{$this->element->tag}&gt;:<BR>".
+            return $this->_raiseErrorWithPositionAndTag(
                     "Flexy:raw can only be used with flexy:ignore, to prevent conversion of html ".
                     "elements to flexy elements",
                     null, HTML_TEMPLATE_FLEXY_ERROR_DIE
@@ -1109,7 +1100,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             }
             $parts = explode (':', $bit);
             if (!isset($parts[1])) {
-                return HTML_Template_Flexy::raiseError('HTML_Template_Flexy: url_rewrite syntax incorrect'. 
+                return $this->_raiseErrorWithPositionAndTag('HTML_Template_Flexy: url_rewrite syntax incorrect'. 
                     print_r(array($bits,$bits),true),null,HTML_TEMPLATE_FLEXY_ERROR_DIE);
             }
             $new = preg_replace('#^'.$parts[0].'#',$parts[1], $new);
@@ -1269,5 +1260,19 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
     }
       
     
+    /**
+    * calls HTML_Template_Flexy::raiseError() with the current file, line and tag
+    * @param    string  Message to display
+    * @param    type   (see HTML_Template_Flexy::raiseError())
+    * @param    boolean  isFatal.
+    * 
+    * @access   private
+    */
+    function _raiseErrorWithPositionAndTag($message, $type = null, $fatal = HTML_TEMPLATE_FLEXY_ERROR_RETURN ) {
+        global $_HTML_TEMPLATE_FLEXY;
+        $message = "Error:{$_HTML_TEMPLATE_FLEXY['filename']} on Line {$this->element->line}" .
+                   " in Tag &lt;{$this->element->tag}&gt;:<BR>\n" . $message;
+        return HTML_Template_Flexy::raiseError($message, $type, $fatal);
+    }
 
 }
