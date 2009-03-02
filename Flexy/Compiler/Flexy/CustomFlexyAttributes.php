@@ -203,6 +203,13 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
 
         $element->children = array($childToken);
         
+        // move flexy:if's End postfix of the start tag to the child token
+        if (!$element->close && $element->postfix) {
+            $element->children = array_merge($element->children, $element->postfix);
+            $element->postfix = '';
+        }
+
+
     }
 }
 
