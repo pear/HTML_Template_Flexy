@@ -257,7 +257,8 @@ class HTML_Template_Flexy_Element {
                                 ) {
                                 $this->attributes['checked'] =  true;
                             }
-                            return;
+                            // removed - see bug 15279 - not sure if there is any knock on effects from this.
+                            ///return;
                         }
                         if ($this->attributes['value'] == $value) {
                             $this->attributes['checked'] =  true;
