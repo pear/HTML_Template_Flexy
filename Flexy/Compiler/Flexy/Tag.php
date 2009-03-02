@@ -859,16 +859,16 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
             }
             return  $ret . '
-                if (!isset($this->elements['.$printfvar.'])) {
-                   $this->elements['.$printfvar.']= $this->elements[\''.$id.'\'];
-                }
-                $this->elements['.$printfvar.'] = $this->mergeElement(
+            
+                $_element = $this->elements[\''.$id.'\'];
+                $_element = $this->mergeElement(
                     $this->elements[\''.$id.'\'],
                     $this->elements['.$printfnamevar .']
                 );
-                $this->elements['.$printfvar.']->attributes[\'name\'] = '.$printfnamevar. ';
+                $_element->attributes[\'name\'] = '.$printfnamevar. ';
                 ' . $idreplace . '
-                echo $this->elements['.$printfvar.']->toHtml();' .$unset; 
+                echo $_element->toHtml();' .$unset; 
+ 
         }
         
         
@@ -877,14 +877,20 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             //if ((strtolower($this->element->getAttribute('TYPE')) == 'checkbox') && (substr($name,-2) == '[]')) {
             //    $name = substr($name,0,-2);
             //}
-            return  $ret . 
-                '
-                $element = $this->elements[\''.$id.'\'];
-                if (isset($this->elements[\''.$name.'\'])) {
-                    $element = $this->mergeElement($element,$this->elements[\''.$name.'\']);
-                }
-                echo  $element->toHtml();' . $unset; 
-        
+            if (!$name) {
+                return $ret .'
+                    $_element = $this->elements[\''.$id.'\'];
+                    echo  $_element->toHtml();' . $unset; 
+            } else {
+                return  $ret . 
+                    '
+                    $_element = $this->elements[\''.$id.'\'];
+                    if (isset($this->elements[\''.$name.'\'])) {
+                        $_element = $this->mergeElement($_element,$this->elements[\''.$name.'\']);
+                    }
+                    echo  $_element->toHtml();' . $unset; 
+            }
+
         }
         return $ret . 'echo $this->elements[\''.$id.'\']->toHtml();'. $unset;
         
