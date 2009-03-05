@@ -859,8 +859,6 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
                 $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
             }
             return  $ret . '
-            
-                $_element = $this->elements[\''.$id.'\'];
                 $_element = $this->mergeElement(
                     $this->elements[\''.$id.'\'],
                     $this->elements['.$printfnamevar .']
