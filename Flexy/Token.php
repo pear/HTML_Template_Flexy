@@ -592,6 +592,28 @@ class HTML_Template_Flexy_Token {
     }
     
      /**
+    * get the scoped variables as an array of strings so that it can 
+    * be passed to child templates...
+    *
+    * 
+    * @access   public
+    */
+    
+    function scopeVarsToArrayString()
+    {
+        global $_HTML_TEMPLATE_FLEXY_TOKEN;
+        $ar = array();
+        for ($s = $_HTML_TEMPLATE_FLEXY_TOKEN['state']; $s > 0; $s--) {
+            $ar = array_merge($ar, $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s]);
+        }
+        if (empty($ar)) {
+            return 'array()';
+        }
+        return "array('". implode("','", $ar). "')";
+        
+    }
+    
+       /**
     * dump to text ATM
     *
     * 
