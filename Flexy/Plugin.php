@@ -25,7 +25,8 @@
 // @author Paul M. Jones <pmjones@ciaweb.net>
  
  
-class HTML_Template_Flexy_Plugin {
+class HTML_Template_Flexy_Plugin 
+{
     
     /**
     * reference to main engine..
@@ -106,7 +107,7 @@ class HTML_Template_Flexy_Plugin {
         
         foreach ($this->plugins as $class=>$o) {
             //echo "checking :". get_class($o). ":: $name\n";
-            if (is_callable($o,$name)) {
+            if (is_callable(array($o,$name),true) {
                 return $class;
             }
         }
