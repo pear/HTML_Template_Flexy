@@ -586,6 +586,9 @@ class HTML_Template_Flexy_Token {
     
     function pushVar($string) 
     {
+        if (empty($string)) {
+            return;
+        }
         global $_HTML_TEMPLATE_FLEXY_TOKEN;
         $s = $_HTML_TEMPLATE_FLEXY_TOKEN['state'];
         $_HTML_TEMPLATE_FLEXY_TOKEN['statevars'][$s][] = $string;
