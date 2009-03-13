@@ -60,10 +60,10 @@ Features:
  
  
  
- <date>2009-03-12</date>
+ <date>2009-03-13</date>
  
  <version>
-  <release>1.3.6</release>
+  <release>1.3.7</release>
   <api>1.3.0</api>
  </version>
  <stability>
@@ -73,28 +73,14 @@ Features:
  <license uri="http://www.php.net/license">PHP License</license>
  <notes><![CDATA[
  
-    Minor Bug Fix release 
+    Friday the 13th Release - Minor Bug Fixes
  
     Bug Fixes	
     
-	#----- - fix include to only pass variables created by template, rather than 
-                flood the subtemplate - fixes various segfaults.
-	#----- - Add scopeVars fetch for better include
-	#----- - add some extra checks for writing merging elements
-	#14105 - Empty element tag ending with /> and flexy:replace
-	#15961 - customflexyattributes  ignores multiple flexy attributes.
-	#14984 - PHP5 class_exists compat
-	#15272 - inherrited namesues checkboxes get wrong names - patch by Heikki Uusitalo
-	#15279 - early return from checkbox code with [] in name. - may have knock on effects
-	#15874 - single API for error reporting in Compiler/Flexy/Tag.php - to show
-             filename/line/tag etc.
-	#15263 - php5 merge elements needs to clone objects
-	#14899 - flexy:xhtml honored by element - fix by Geoff Beaumon
-    
+	#16026 - Fix is_callable in plugins - (refix to #13887)
+    #----- - Fix new include feature adding blank vars
 	
-	#14897 - xhtml not honored by element input etc.
-	#13887 - use is_callable on plugins
-    Request #14893 - improve PHPCS (clockwerx)
+	 
 
    
          
@@ -253,8 +239,52 @@ Features:
  
     <release>
     
+ <date>2009-03-12</date>
+ 
+ <version>
+  <release>1.3.6</release>
+  <api>1.3.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes><![CDATA[
+ 
+    Minor Bug Fix release 
+ 
+    Bug Fixes	
     
+	#----- - fix include to only pass variables created by template, rather than 
+                flood the subtemplate - fixes various segfaults.
+	#----- - Add scopeVars fetch for better include
+	#----- - add some extra checks for writing merging elements
+	#14105 - Empty element tag ending with /> and flexy:replace
+	#15961 - customflexyattributes  ignores multiple flexy attributes.
+	#14984 - PHP5 class_exists compat
+	#15272 - inherrited namesues checkboxes get wrong names - patch by Heikki Uusitalo
+	#15279 - early return from checkbox code with [] in name. - may have knock on effects
+	#15874 - single API for error reporting in Compiler/Flexy/Tag.php - to show
+             filename/line/tag etc.
+	#15263 - php5 merge elements needs to clone objects
+	#14899 - flexy:xhtml honored by element - fix by Geoff Beaumon
     
+	
+	#14897 - xhtml not honored by element input etc.
+	#13887 - use is_callable on plugins
+    Request #14893 - improve PHPCS (clockwerx)
+
+   
+         
+  
+ ]]></notes>
+ 
+    
+     
+ </release>
+ 
+ <release>
     
  
  
