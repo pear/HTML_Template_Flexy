@@ -107,7 +107,7 @@ class HTML_Template_Flexy_Plugin
         
         foreach ($this->plugins as $class=>$o) {
             //echo "checking :". get_class($o). ":: $name\n";
-            if (is_callable(array($o,$name),true) {
+            if (is_callable(array($o,$name),true)) {
                 return $class;
             }
         }
