@@ -106,6 +106,7 @@ class HTML_Template_Flexy
         // compiling conditions ------------------------------------------
         'compiler'      => 'Flexy',  // which compiler to use. (Flexy,Regex, Raw,Xipe)
         'forceCompile'  =>  false,      // only suggested for debugging
+        'dontCompile'	=> false,		// never compile - use this if you're manually compiling your templates
 
         // regex Compiler       ------------------------------------------
         'filters'       => array(),     // used by regex compiler.
@@ -386,13 +387,17 @@ class HTML_Template_Flexy
         if (isset($this->options['output.block'])) {
             $this->compiledTemplate    .= '#'.$this->options['output.block'];
         }
-          
+        
+        if (!empty($this->options['dontCompile'])) {
+            return true;
+        }
+        
         $recompile = false;
         
         $isuptodate = file_exists($this->compiledTemplate)   ?
             (filemtime($this->currentTemplate) == filemtime( $this->compiledTemplate)) : 0;
             
-        if( @$this->options['forceCompile'] || !$isuptodate ) {
+        if( !empty($this->options['forceCompile']) || !$isuptodate ) {
             $recompile = true;
         } else {
             $this->debug("File looks like it is uptodate.");
