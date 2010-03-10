@@ -60,7 +60,7 @@ class HTML_Template_Flexy_Token_Foreach extends HTML_Template_Flexy_Token {
             return false;
         }
         $this->key=$value[1];
-        $this->value=@$value[2];
+        $this->value= isset($value[2]) ? $value[2] : '';
     }
      
 
