@@ -51,4 +51,5 @@ Bug #3946 - inside raw!
 
 ===Compiling flexy_raw_with_element.html===
 
-Error:/home/clockwerx/pear/HTML_Template_Flexy/tests/templates/flexy_raw_with_element.html on Line 5 in Tag &lt;INPUT&gt;:<BR>Flexy:raw can only be used with flexy:ignore, to prevent conversion of html elements to flexy elements
+Error:%s/tests/templates/flexy_raw_with_element.html on Line 5 in Tag &lt;INPUT&gt;:<BR>
+Flexy:raw can only be used with flexy:ignore, to prevent conversion of html elements to flexy elements
