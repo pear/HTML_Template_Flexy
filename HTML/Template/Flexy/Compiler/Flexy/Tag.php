@@ -475,9 +475,25 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         
         $this->element->hasForeach = true;
         // create a foreach element to wrap this with.
-        
+        $foreachTokens = explode( ",", $foreach ); //usual
+        $first = array_shift($foreachTokens);
+        // we will accept first argument as a method call.. with arguments.
+        // this however does not  deal with  '#' with commas and braces insed very weill..
+        if (strpos($first, '(') !== false) {
+            while (strpos($first, ')') === false) {
+                if (!count($foreachTokens)) {
+                    return $this->_raiseErrorWithPositionAndTag(
+                        "Missing Closer on functin call: An flexy:foreach attribute was found. flexy:foreach=&quot;$foreach&quot;<BR>
+                        the syntax is  &lt;sometag flexy:foreach=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
+                        null,  HTML_TEMPLATE_FLEXY_ERROR_DIE);
+                }
+                $first .= ',' . array_shift($foreachTokens);
+            }
+        }
+        array_unshift($foreachTokens, $first);
+
         $foreachObj =  $this->element->factory('Foreach',
-                explode(',',$foreach),
+                $foreachTokens,
                 $this->element->line);
         // failed = probably not enough variables..    
         
