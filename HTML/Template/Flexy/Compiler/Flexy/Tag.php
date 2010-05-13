@@ -872,7 +872,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
             
             if ($this->element->getAttribute('ID')) {
                 $idvar     = 'sprintf(\''.$this->element->getAttribute('ID') .'\','.$this->element->toVar($var) .')';
-                $idreplace = '$this->elements['.$printfvar.']->attributes[\'id\'] = '.$idvar.';';
+                $idreplace = '$_element->attributes[\'id\'] = '.$idvar.';';
             }
             return  $ret . '
                 $_element = $this->mergeElement(
