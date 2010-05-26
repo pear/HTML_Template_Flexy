@@ -792,10 +792,9 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     
     function addStringToGettext($string) 
     {
-    
-        
-        
-        
+        if (!empty($this->options['disableTranslate'])) {
+            return;
+        }
         if (!is_string($string)) {
             return;
         }
@@ -828,8 +827,10 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
   
     function translateString($string)
     {
-         
         
+        if (!empty($this->options['disableTranslate'])) {
+            return;
+        }
         
         if (is_a($this->options['Translation2'], 'Translation2')) {
             $result = $this->options['Translation2']->get($string);

@@ -134,6 +134,7 @@ class HTML_Template_Flexy
          
         // get text/transalation suppport ------------------------------------------
         //  (flexy compiler only)
+        'disableTranslate' => false,    // if true, skips the translation functionality completely
         'locale'        => 'en',        // works with gettext or File_Gettext
         'textdomain'    => '',          // for gettext emulation with File_Gettext
                                         // eg. 'messages' (or you can use the template name.
