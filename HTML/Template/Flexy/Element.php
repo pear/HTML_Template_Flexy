@@ -113,6 +113,15 @@ class HTML_Template_Flexy_Element {
      */
     var $value = null;
     /**
+     * If an input element has a label element associated to it
+     * *and* the 'useElementLabels' option is true, then you can
+     * optionally set the text of this label. This permits
+     * to set custom strings for doing translations.
+     * @var string | null
+     * @access   public
+     */
+    var $label = null;
+    /**
      * Class constructor
      * @param    mixed   $attributes     Associative array of table tag attributes 
      *                                   or HTML attributes name="value" pairs

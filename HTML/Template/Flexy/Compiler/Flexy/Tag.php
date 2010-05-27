@@ -1073,7 +1073,37 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
     
     }       
        
-       
+    /**
+    * Deal with Label - build a element object for it (unless flexyignore is set)
+    *
+    *
+    * @return   string | false = html output or ignore (just output the tag)
+    * @access   public
+    */
+
+    function parseTagLabel()
+    {
+
+        if (empty($GLOBALS['_HTML_TEMPLATE_FLEXY']['currentOptions']['useElementLabels'])) {
+            return false;
+        }
+        // this may need some protection for general usage.....
+        
+        $for = $this->element->getAttribute('FOR');
+        $ret = '';
+        $tmp = $this->toStringChildren($this->element, $ret);
+        if (is_a($tmp,'PEAR_Error')) {
+            return $tmp;
+        }
+
+        return $this->compiler->appendPhp(
+                'echo "<label for="' . $for . '">";' . 
+                'if (!empty($this->elements[\'' . $for . '\']->label)) ' .
+                ' { echo htmlspecialchars($this->elements[\'' . $for . '\']->label); } else { ?>' .
+                htmlspecialchars($ret) . '<? } ' .
+                'echo "</label>";'
+            );
+    }    
         
     
     

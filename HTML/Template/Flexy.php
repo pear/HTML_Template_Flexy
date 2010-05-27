@@ -131,7 +131,10 @@ class HTML_Template_Flexy
         'globalfunctions' => false,     // allow GLOBALS.date(#d/m/Y#) to have access to all PHP's methods
                                         // warning dont use unless you trust the template authors
                                         // exec() becomes exposed.
-         
+        'useElementLabels' => true,     // WARNING DO NOT ENABLE THIS UNLESS YOU TRUST THE TEMPLATE AUTHORS
+                                        // look for label elements referring to input elements
+                                        // you can then set (replace) the label of the corresponding input
+                                        // element by $element->label="my new label text";
         // get text/transalation suppport ------------------------------------------
         //  (flexy compiler only)
         'disableTranslate' => false,    // if true, skips the translation functionality completely
