@@ -362,11 +362,11 @@ class HTML_Template_Flexy
             DIRECTORY_SEPARATOR  .basename($tmplDirUsed) . '_' .md5($tmplDirUsed) : '';
         
         
-        $compileDest = @$this->options['compileDir'];
+        $compileDest = isset($this->options['compileDir']) ? $this->options['compileDir'] : '';
         
         $isTmp = false;
         // Use a default compile directory if one has not been set. 
-        if (!@$compileDest) {
+        if (!$compileDest) {
             // Use session.save_path + 'compiled_templates_' + md5(of sourcedir)
             $compileDest = ini_get('session.save_path') .  DIRECTORY_SEPARATOR . 'flexy_compiled_templates';
             if (!file_exists($compileDest)) {
@@ -510,7 +510,7 @@ class HTML_Template_Flexy
             }
             // Call the clever element merger - that understands form values and 
             // how to display them...
-            $this->elements[$k] = $this->mergeElement($this->elements[$k] ,$v);
+            $this->elements[$k] = $this->elements[$k]->merge($v);
         }
         //echo '<PRE>'; print_r(array($elements,$this->elements));
       
@@ -618,68 +618,22 @@ class HTML_Template_Flexy
  
     
     /**
-     * A general Utility method that merges HTML_Template_Flexy_Elements
-     * Static method - no native debug avaiable..
+     * @depreciated
+     * See element->merge
      *
-     * @param    HTML_Template_Flexy_Element   $original  (eg. from getElements())
-     * @param    HTML_Template_Flexy_Element   $new (with data to replace/merge)
-     * @return   HTML_Template_Flexy_Element   the combined/merged data.
-     * @static
      * @access   public
      */
      
     function mergeElement($original,$new)
     {
        	    // Clone objects is possible to avoid creating references between elements
-        if (version_compare(PHP_VERSION,'5.0.0',">="))  { 
-            if ($original) { 
-                $original = clone($original);
-            }
-            if ($new) {
-                $new = clone($new); 
-            }
- 	    }
-
+         
         // no original - return new
         if (!$original) {
-            return $new;
+            return clone($new); 
         }
-        // no new - return original
-        if (!$new) {
-            return $original;
-        }
-        // If the properties of $original differ from those of $new and 
-        // they are set on $new, set them to $new's. Otherwise leave them 
-        // as they are.
-
-        if ($new->tag && ($new->tag != $original->tag)) {
-            $original->tag = $new->tag;
-        }
+        return $original->merge($new);
         
-        if ($new->override !== false) {
-            $original->override = $new->override;
-        }
-        
-        if (count($new->children)) {
-            //echo "<PRE> COPY CHILDREN"; print_r($from->children);
-            $original->children = $new->children;
-        }
-        
-        if (is_array($new->attributes)) {
-        
-            foreach ($new->attributes as $key => $value) {
-                $original->attributes[$key] = $value;
-            }
-        }
-        // originals never have prefixes or suffixes..
-        $original->prefix = $new->prefix;
-        $original->suffix = $new->suffix;  
-
-        if ($new->value !== null) {
-            $original->setValue($new->value);
-        } 
-       
-        return $original;
         
     }  
      

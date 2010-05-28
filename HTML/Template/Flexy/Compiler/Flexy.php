@@ -829,7 +829,7 @@ class HTML_Template_Flexy_Compiler_Flexy extends HTML_Template_Flexy_Compiler {
     {
         
         if (!empty($this->options['disableTranslate'])) {
-            return;
+            return $string;
         }
         
         if (is_a($this->options['Translation2'], 'Translation2')) {
