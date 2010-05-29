@@ -1097,7 +1097,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Tag
         }
 
         return $this->compiler->appendPhp(
-                'echo "<label for="' . $for . '">";' . 
+                'echo "<label for=\"' . $for . '\">";' . 
                 'if (!empty($this->elements[\'' . $for . '\']->label)) ' .
                 ' { echo htmlspecialchars($this->elements[\'' . $for . '\']->label); } else { ?>' .
                 htmlspecialchars($ret) . '<? } ' .
