@@ -50,25 +50,43 @@ Features:
   <email>alan@akbkhome.com</email>
   <active>yes</active>
  </lead>
- <date>2010-04-28</date>
- <time>04:34:27</time>
- <version>
-  <release>1.3.9</release>
-  <api>1.3.0</api>
- </version>
- <stability>
-  <release>stable</release>
-  <api>stable</api>
- </stability>
- <license uri="http://www.php.net/license">PHP License</license>
- <notes>
-Fix The Unlucky Release - Minor Bug Fixes
 
-   Bug Fixes	
-   
+
+ 	<date>2010-06-07</date>
+ 	 <version>
+	  <release>1.3.10</release>
+	  <api>1.3.0</api>
+	 </version>
+	 <stability>
+	  <release>stable</release>
+	  <api>stable</api>
+	 </stability>
 	
-   #----- - Plugin was broken by last fix in last release.
- </notes>
+	 <license uri="http://www.php.net/license">PHP License</license>
+	 <notes>
+Minor fixes and feature release
+
+Bug Fixes	
+
+   #17390 - id nameuses replacement got broken on previous commit (Christophe Husson)
+   #17210 - remove error suppression
+   #16978 - support non-ascii vars
+   #14895 - local environment settings in test  (clockwerx)
+ 
+
+
+New Features/Changes		
+  #16554 - support dontCompile option
+  #----- - provisional support for label property of elements outputing as associated
+           label content (Stephane Matamontero)
+  #----- - new option disableTranslate - blocks all translation features, 
+           like writing .serial files. (Stephane Matamontero)
+  #----- - Element merge code moved element class - reducing size of base class (Alan)
+  #----- - SVN layout changed. (clockwerx)
+	 </notes>
+
+
+
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" md5sum="60b08ae3889ed2f7557141cb7e1dde5a" name="examples/EMPTY_FOLDERS_NOTHING_IN_HERE" role="doc" />
@@ -232,6 +250,13 @@ Fix The Unlucky Release - Minor Bug Fixes
  </dependencies>
  <phprelease />
  <changelog>
+
+
+ 
+
+<!-- these are all in the wrong order now!!! -->
+
+
   <release>
    <version>
     <release>0.1</release>
@@ -256,6 +281,10 @@ First PEAR release,
       - changed to DIRECTORY_SEPERATOR and removed base directory check in windows.
    </notes>
   </release>
+
+
+
+
   <release>
    <version>
     <release>0.2</release>
@@ -1339,7 +1368,7 @@ Friday the 13th Release - Minor Bug Fixes
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2010-04-28</date>
+   <date>2009-03-24</date>
    <license uri="http://www.php.net/license">PHP License</license>
    <notes>
 Fix The Unlucky Release - Minor Bug Fixes
