@@ -73,7 +73,7 @@ class HTML_Template_Flexy_Compiler {
     function is_a($obj, $class)  // which f***wit depreciated is_a....
     {
         if (version_compare(phpversion(),"5","<")) {
-           return is_a($obj, $class);
+           return is_object($obj) && is_a($obj, $class);
            
         } 
         $test=false; 

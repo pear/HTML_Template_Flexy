@@ -37,7 +37,7 @@ $GLOBALS['_HTML_TEMPLATE_FLEXY'] = array();
 function HTML_Template_Flexy_is_a($obj, $class)  // which f***wit depreciated is_a....
 {
     if (version_compare(phpversion(),"5","<")) {
-       return is_a($obj, $class);
+       return is_object($obj) &&  is_a($obj, $class);
        
     } 
     $test=false; 

@@ -110,7 +110,8 @@ class HTML_Template_Flexy_Tree {
         $t->tokens[0]->id =0;
         
         // process
-        if (is_a($r = $t->tokenize($data),'PEAR_Error')) {
+        $r = $t->tokenize($data);
+        if (is_object($r) && is_a($r,'PEAR_Error')) {
             return $r;
         }
         

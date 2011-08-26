@@ -58,7 +58,7 @@ class HTML_Template_Flexy_Plugin
         // attempt to load the plugin on-the-fly
         $class = $this->_loadPlugins($method);
          
-        if (is_a($class,'PEAR_Error')) {
+        if (is_object($class) && is_a($class,'PEAR_Error')) {
             //echo $class->toString();
             return $class->toString();
         }
