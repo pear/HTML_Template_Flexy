@@ -52,9 +52,9 @@ Features:
  </lead>
 
 
- 	<date>2011-01-11</date>
+ 	<date>2011-08-29</date>
  	 <version>
-	  <release>1.3.11</release>
+	  <release>1.3.12</release>
 	  <api>1.3.0</api>
 	 </version>
 	 <stability>
@@ -67,9 +67,13 @@ Features:
 Minor fixes and feature release
 
 Bug Fixes	
+    
+   #18763 - Fix is_a() for 5.3.7+ due to php-core stupidity
+   #----- - Support for new PEAR5 class.
+   
+Features
+   #----- - support for CommonPageID when using Translation2
 
-   #----- - PHP5 E_STRICT warnings removed
- 
 	 </notes>
 
 
@@ -238,7 +242,33 @@ Bug Fixes
  <phprelease />
  <changelog>
 
+ 
+ 
+  <release>
+ 
+ 	<date>2011-01-11</date>
+ 	 <version>
+	  <release>1.3.11</release>
+	  <api>1.3.0</api>
+	 </version>
+	 <stability>
+	  <release>stable</release>
+	  <api>stable</api>
+	 </stability>
+	
+	 <license uri="http://www.php.net/license">PHP License</license>
+	 <notes>
+Minor fixes and feature release
 
+Bug Fixes	
+
+   #----- - PHP5 E_STRICT warnings removed
+ 
+	 </notes>
+
+ 
+  </release>
+ 
  
   <release>
 
