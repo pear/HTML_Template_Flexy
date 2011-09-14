@@ -43,7 +43,7 @@ Features:
 - support for urlencoded braces {} in HTML attributes.  
 - documentation in the pear manual
 
-- examples at http://cvs.php.net/cvs.php/pear/HTML_Template_Flexy/tests/</description>
+- examples at http://svn.php.net/pear/packages/HTML_Template_Flexy/trunk/tests/</description>
  <lead>
   <name>Alan Knowles</name>
   <user>alan_k</user>
