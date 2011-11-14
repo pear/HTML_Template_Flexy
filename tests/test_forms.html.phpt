@@ -77,25 +77,25 @@ compilefile('forms.html',
     
     <!-- bug 5267 -->
     <?php 
-                $element = $this->elements['opt_1'];
-                if (isset($this->elements['opt[]'])) {
-                    $element = $this->mergeElement($element,$this->elements['opt[]']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['opt_1'];
+                    if (isset($this->elements['opt[]'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['opt[]']);
+                    }
+                    echo  $_element->toHtml();?>
     <label for="opt_1">option 1</label>
     <?php 
-                $element = $this->elements['opt_2'];
-                if (isset($this->elements['opt[]'])) {
-                    $element = $this->mergeElement($element,$this->elements['opt[]']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['opt_2'];
+                    if (isset($this->elements['opt[]'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['opt[]']);
+                    }
+                    echo  $_element->toHtml();?>
     <label for="opt_3">option 2</label>
     <?php 
-                $element = $this->elements['opt_3'];
-                if (isset($this->elements['opt[]'])) {
-                    $element = $this->mergeElement($element,$this->elements['opt[]']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['opt_3'];
+                    if (isset($this->elements['opt[]'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['opt[]']);
+                    }
+                    echo  $_element->toHtml();?>
     <label for="opt_3">option 3</label>
 
 
@@ -110,33 +110,33 @@ compilefile('forms.html',
     #bug  bug6058    
 
     <br /><?php 
-                $element = $this->elements['1'];
-                if (isset($this->elements['payment_1_type'])) {
-                    $element = $this->mergeElement($element,$this->elements['payment_1_type']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['1'];
+                    if (isset($this->elements['payment_1_type'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['payment_1_type']);
+                    }
+                    echo  $_element->toHtml();?>
         Credit card
     <br /><?php 
-                $element = $this->elements['2'];
-                if (isset($this->elements['payment_1_type'])) {
-                    $element = $this->mergeElement($element,$this->elements['payment_1_type']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['2'];
+                    if (isset($this->elements['payment_1_type'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['payment_1_type']);
+                    }
+                    echo  $_element->toHtml();?>
         Cheque
 
     <br /><?php 
-                $element = $this->elements['3'];
-                if (isset($this->elements['payment_2_type'])) {
-                    $element = $this->mergeElement($element,$this->elements['payment_2_type']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['3'];
+                    if (isset($this->elements['payment_2_type'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['payment_2_type']);
+                    }
+                    echo  $_element->toHtml();?>
         Credit card
     <br /><?php 
-                $element = $this->elements['4'];
-                if (isset($this->elements['payment_2_type'])) {
-                    $element = $this->mergeElement($element,$this->elements['payment_2_type']);
-                }
-                echo  $element->toHtml();?>
+                    $_element = $this->elements['4'];
+                    if (isset($this->elements['payment_2_type'])) {
+                        $_element = $this->mergeElement($_element,$this->elements['payment_2_type']);
+                    }
+                    echo  $_element->toHtml();?>
         Cheque
     
     
@@ -223,6 +223,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [test123] => HTML_Template_Flexy_Element Object
@@ -241,6 +242,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [test123a] => HTML_Template_Flexy_Element Object
@@ -262,6 +264,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [test123ab] => HTML_Template_Flexy_Element Object
@@ -282,6 +285,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [fred] => HTML_Template_Flexy_Element Object
@@ -301,6 +305,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [aaa1] => HTML_Template_Flexy_Element Object
@@ -331,6 +336,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [2] => 
@@ -352,6 +358,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [4] => 
@@ -372,6 +379,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [6] => 
@@ -382,6 +390,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [aaa3] => HTML_Template_Flexy_Element Object
@@ -412,6 +421,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [2] => 
@@ -433,6 +443,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [4] => 
@@ -453,6 +464,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [6] => 
@@ -464,6 +476,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [opt_1] => HTML_Template_Flexy_Element Object
@@ -486,6 +499,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [opt_2] => HTML_Template_Flexy_Element Object
@@ -508,6 +522,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [opt_3] => HTML_Template_Flexy_Element Object
@@ -530,6 +545,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [List] => HTML_Template_Flexy_Element Object
@@ -561,6 +577,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [2] => 
@@ -582,6 +599,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [4] => 
@@ -603,6 +621,7 @@ Array
                             [prefix] => 
                             [suffix] => 
                             [value] => 
+                            [label] => 
                         )
 
                     [6] => 
@@ -613,6 +632,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [_submit[4]] => HTML_Template_Flexy_Element Object
@@ -633,6 +653,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [_submit[5]] => HTML_Template_Flexy_Element Object
@@ -653,6 +674,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testupload] => HTML_Template_Flexy_Element Object
@@ -672,6 +694,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [payment_1_type] => HTML_Template_Flexy_Element Object
@@ -690,6 +713,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [1] => HTML_Template_Flexy_Element Object
@@ -712,6 +736,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [2] => HTML_Template_Flexy_Element Object
@@ -734,6 +759,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [payment_2_type] => HTML_Template_Flexy_Element Object
@@ -752,6 +778,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [3] => HTML_Template_Flexy_Element Object
@@ -774,6 +801,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [4] => HTML_Template_Flexy_Element Object
@@ -796,6 +824,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [picture] => HTML_Template_Flexy_Element Object
@@ -815,6 +844,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testing] => HTML_Template_Flexy_Element Object
@@ -834,6 +864,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [_submit[2]] => HTML_Template_Flexy_Element Object
@@ -854,6 +885,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testing2] => HTML_Template_Flexy_Element Object
@@ -872,6 +904,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [_submit[1]] => HTML_Template_Flexy_Element Object
@@ -891,6 +924,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testingxhtml] => HTML_Template_Flexy_Element Object
@@ -912,6 +946,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [xhtmllisttest] => HTML_Template_Flexy_Element Object
@@ -934,6 +969,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testingcheckbox] => HTML_Template_Flexy_Element Object
@@ -954,6 +990,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [test_mix] => HTML_Template_Flexy_Element Object
@@ -972,6 +1009,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [testing5] => HTML_Template_Flexy_Element Object
@@ -990,6 +1028,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
     [_submit[3]] => HTML_Template_Flexy_Element Object
@@ -1009,6 +1048,7 @@ Array
             [prefix] => 
             [suffix] => 
             [value] => 
+            [label] => 
         )
 
 )
@@ -1080,7 +1120,7 @@ Array
 <input name="testing2" value=""><input type="submit" name="_submit[1]"></form>
 
 <H2> Bug 1275 XHTML output </H2>
-<input type="checkbox" name="testingxhtml"><select name="xhtmllisttest">
+<input type="checkbox" name="testingxhtml" /><select name="xhtmllisttest">
 
 </select>
 

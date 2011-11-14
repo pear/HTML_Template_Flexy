@@ -36,16 +36,13 @@ compilefile('usesname.html', array('data'=>$obj->data),array(), $elem);
     <?php echo $this->elements['formtest']->toHtmlnoClose();?>
 <?php if ($this->options['strict'] || (is_array($t->data)  || is_object($t->data))) foreach($t->data as $key => $row) {?>
       <?php echo htmlspecialchars($key);?>: <?php 
-                if (!isset($this->elements[sprintf('data%s',$key)])) {
-                   $this->elements[sprintf('data%s',$key)]= $this->elements['data%s'];
-                }
-                $this->elements[sprintf('data%s',$key)] = $this->mergeElement(
+                $_element = $this->mergeElement(
                     $this->elements['data%s'],
-                    $this->elements[sprintf('data%s',$key)]
+                    isset($key) && isset($this->elements[sprintf('data%s',$key)]) ? $this->elements[sprintf('data%s',$key)] : false
                 );
-                $this->elements[sprintf('data%s',$key)]->attributes['name'] = sprintf('data%s',$key);
+                $_element->attributes['name'] = sprintf('data%s',$key);
                 
-                echo $this->elements[sprintf('data%s',$key)]->toHtml();?><br>
+                echo $_element->toHtml();?><br>
 <?php }?>
     </form>
   </body>

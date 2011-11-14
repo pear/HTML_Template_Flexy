@@ -1,5 +1,13 @@
 --TEST--
 Template Test: flexy_tojavascript.html
+--SKIPIF--
+<?php
+$ar  = get_included_files();
+@include 'HTML/Javascript/Convert.php';
+if (count($ar) == count(get_included_files())) {
+    die("skip html javascript not available");    
+}
+?>
 --FILE--
 <?php
 require_once 'testsuite.php';
@@ -21,9 +29,9 @@ compilefile('flexy_tojavascript.html');
  
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
-<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (is_object($__tmp) && is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
-<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (is_object($__tmp) && is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
-<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (is_object($__tmp) && is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcg',true);echo (is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_abcd',true);echo (is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'test_abc_srcXxx',true);echo (is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
 
 
@@ -31,7 +39,7 @@ compilefile('flexy_tojavascript.html');
 
 <?php require_once 'HTML/Javascript/Convert.php';?>
 <script type='text/javascript'>
-<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'abcg',true);echo (is_object($__tmp) && is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
+<?php $__tmp = HTML_Javascript_Convert::convertVar($t->xyz,'abcg',true);echo (is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;?>
 </script>
 
 
