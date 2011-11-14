@@ -165,7 +165,8 @@ class HTML_Template_Flexy_Tree {
             if ($t == HTML_TEMPLATE_FLEXY_TOKEN_NONE) {
                 continue;
             }
-            if ($t->token == 'Php') {
+            // not sure why this might happen...
+            if ($t !=  HTML_TEMPLATE_FLEXY_TOKEN_OK && $t->token == 'Php') {
                 continue;
             }
             $i++;
