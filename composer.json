@@ -1,0 +1,34 @@
+{
+    "authors": [
+        {
+            "email": "alan@akbkhome.com",
+            "name": "Alan Knowles",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "HTML": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/HTML_Template_Flexy",
+    "include-path": [
+        "./"
+    ],
+    "license": "PHP License",
+    "name": "pear/html_template_flexy",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Template_Flexy",
+        "source": "https://github.com/pear/HTML_Template_Flexy"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "suggest": {
+        "pear/html_javascript": "Install optionally via your project's composer.json"
+    }
+}
